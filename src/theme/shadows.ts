@@ -1,6 +1,8 @@
 // src/theme/shadows.ts
 
-export const shadows = [
+import type { Shadows } from "@mui/material/styles";
+
+export const shadows: Shadows = [
     "none",
 
     "0 2px 8px rgba(0, 0, 0, 0.08)",
@@ -16,7 +18,25 @@ export const shadows = [
     "0 20px 45px rgba(0, 0, 0, 0.18)",
 
     "0 24px 60px rgba(0, 0, 0, 0.20)",
-] as const;
+
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+];
 
 export const clinovaGlow = {
     primary: "0 0 40px rgba(142, 168, 232, 0.12)",

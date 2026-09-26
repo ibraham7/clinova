@@ -1,5 +1,4 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
-import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 
 const locations = [
     {

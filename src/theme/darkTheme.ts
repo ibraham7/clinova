@@ -44,7 +44,7 @@ export const darkTheme = createTheme({
 
     typography,
 
-    shadows: [...shadows],
+    shadows,
 
     components: {
         MuiCssBaseline: {
@@ -94,17 +94,17 @@ export const darkTheme = createTheme({
                     padding: "12px 20px",
                     minHeight: 48,
                     fontWeight: 600,
-                },
 
-                containedPrimary: {
-                    background:
-                        "linear-gradient(135deg, #8EA8E8 0%, #7894D2 100%)",
-
-                    color: "#0B111B",
-
-                    "&:hover": {
+                    "&.MuiButton-containedPrimary": {
                         background:
-                            "linear-gradient(135deg, #B8C8EF 0%, #8EA8E8 100%)",
+                            "linear-gradient(135deg, #8EA8E8 0%, #7894D2 100%)",
+
+                        color: "#0B111B",
+
+                        "&:hover": {
+                            background:
+                                "linear-gradient(135deg, #B8C8EF 0%, #8EA8E8 100%)",
+                        },
                     },
                 },
 

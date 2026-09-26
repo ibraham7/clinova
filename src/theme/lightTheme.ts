@@ -44,7 +44,7 @@ export const lightTheme = createTheme({
 
     typography,
 
-    shadows: [...shadows],
+    shadows,
 
     components: {
         MuiCssBaseline: {
@@ -94,17 +94,17 @@ export const lightTheme = createTheme({
                     padding: "12px 20px",
                     minHeight: 48,
                     fontWeight: 600,
-                },
 
-                containedPrimary: {
-                    background:
-                        "linear-gradient(135deg, #5F78B5 0%, #7894D2 100%)",
-
-                    color: "#FFFFFF",
-
-                    "&:hover": {
+                    "&.MuiButton-containedPrimary": {
                         background:
-                            "linear-gradient(135deg, #4B6398 0%, #5F78B5 100%)",
+                            "linear-gradient(135deg, #5F78B5 0%, #7894D2 100%)",
+
+                        color: "#FFFFFF",
+
+                        "&:hover": {
+                            background:
+                                "linear-gradient(135deg, #4B6398 0%, #5F78B5 100%)",
+                        },
                     },
                 },
 
@@ -132,7 +132,8 @@ export const lightTheme = createTheme({
                     backgroundImage: "none",
                     backgroundColor: colors.light.surface,
                     border: `1px solid ${colors.light.border}`,
-                    boxShadow: "0 16px 36px rgba(16, 24, 39, 0.08)",
+                    boxShadow:
+                        "0 16px 36px rgba(16, 24, 39, 0.08)",
                 },
             },
         },
@@ -152,7 +153,8 @@ export const lightTheme = createTheme({
                         },
 
                         "&:hover fieldset": {
-                            borderColor: "rgba(95, 120, 181, 0.35)",
+                            borderColor:
+                                "rgba(95, 120, 181, 0.35)",
                         },
 
                         "&.Mui-focused fieldset": {
