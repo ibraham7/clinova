@@ -1,6 +1,14 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { useLayoutEffect, useRef, useState } from "react";
 import { Box, Typography } from "@mui/material";
+import { keyframes } from "@emotion/react";
+
+const tickerScroll = keyframes`
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+`;
+
+const pixelsPerSecond = 48;
 
 const items = [
     "طب الأسنان",
@@ -18,6 +26,7 @@ function MedicalTicker() {
     const viewportRef = useRef<HTMLDivElement>(null);
     const unitRef = useRef<HTMLDivElement>(null);
     const [repetitions, setRepetitions] = useState(1);
+    const [duration, setDuration] = useState(25);
 
     useLayoutEffect(() => {
         const viewport = viewportRef.current;
@@ -30,7 +39,10 @@ function MedicalTicker() {
 
             // Each half of the track must cover the viewport on its own.
             // Also remeasure when responsive typography or web fonts change.
-            setRepetitions(Math.max(1, Math.ceil(viewport.clientWidth / unitWidth)));
+            const nextRepetitions = Math.max(1, Math.ceil(viewport.clientWidth / unitWidth));
+            setRepetitions(nextRepetitions);
+            // Keep the same readable speed across viewport sizes and languages.
+            setDuration((unitWidth * nextRepetitions) / pixelsPerSecond);
         };
 
         updateRepetitions();
@@ -51,21 +63,20 @@ function MedicalTicker() {
                 borderTop: "1px solid rgba(142, 168, 232, 0.08)",
                 borderBottom: "1px solid rgba(142, 168, 232, 0.08)",
                 direction: "ltr",
-                "& .clinova-ticker": {
-                    display: "flex",
-                    width: "max-content",
-                    animation: "clinovaTicker 25s linear infinite",
-                },
-                "@keyframes clinovaTicker": {
-                    from: { transform: "translateX(0)" },
-                    to: { transform: "translateX(-50%)" },
-                },
-                "@media (prefers-reduced-motion: reduce)": {
-                    "& .clinova-ticker": { animation: "none" },
-                },
             }}
         >
-            <Box className="clinova-ticker">
+            <Box
+                className="clinova-ticker"
+                sx={{
+                    display: "flex",
+                    width: "max-content",
+                    willChange: "transform",
+                    animation: `${tickerScroll} ${duration}s linear infinite`,
+                    "@media (prefers-reduced-motion: reduce)": {
+                        animation: "none",
+                    },
+                }}
+            >
                 {[0, 1].map((group) => (
                     <Box
                         key={group}
