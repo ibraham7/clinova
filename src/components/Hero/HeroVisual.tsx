@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { keyframes } from "@emotion/react";
+import clinovaLogo from "../../../public/logo/logo.png";
 
 const float = keyframes`
     0%, 100% { transform: translateY(0); }
@@ -57,10 +58,6 @@ export default function HeroVisual() {
                         <stop stopColor="#24344F" />
                         <stop offset="1" stopColor="#101925" />
                     </linearGradient>
-                    <linearGradient id="clinova-hero-cross" x1="220" y1="220" x2="300" y2="300" gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#DCE6FF" />
-                        <stop offset="1" stopColor="#8EA8E8" />
-                    </linearGradient>
                 </defs>
 
                 <circle className="hero-halo" cx="260" cy="260" r="245" fill="url(#clinova-hero-glow)" />
@@ -73,7 +70,7 @@ export default function HeroVisual() {
                     <rect x="184" y="184" width="152" height="160" rx="38" fill="#050A12" fillOpacity="0.25" />
                     <rect x="184" y="176" width="152" height="160" rx="38" fill="url(#clinova-hero-panel)" stroke="#8EA8E8" strokeOpacity="0.35" />
                     <rect x="193" y="185" width="134" height="142" rx="31" stroke="#B8C8EF" strokeOpacity="0.07" />
-                    <path d="M248 214H272V244H302V268H272V298H248V268H218V244H248V214Z" fill="url(#clinova-hero-cross)" />
+                    <image href={clinovaLogo} x="194" y="225" width="132" height="62" preserveAspectRatio="xMidYMid meet" />
                     <circle cx="260" cy="315" r="2" fill="#B8C8EF" fillOpacity="0.6" />
                 </g>
 

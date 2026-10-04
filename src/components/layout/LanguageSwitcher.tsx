@@ -1,7 +1,6 @@
 import { useId, useState } from "react";
-import { Button, Menu, MenuItem } from "@mui/material";
-import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import TranslateRoundedIcon from "@mui/icons-material/TranslateRounded";
 import { languages } from "../../i18n";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 
@@ -14,28 +13,27 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
 
     return (
         <>
-            <Button
+            <IconButton
                 id={buttonId}
-                variant="outlined"
                 aria-label={t("اختيار اللغة")}
                 aria-haspopup="menu"
                 aria-controls={anchor ? menuId : undefined}
                 aria-expanded={Boolean(anchor)}
                 onClick={(event) => setAnchor(event.currentTarget)}
-                startIcon={compact ? undefined : <LanguageRoundedIcon />}
-                endIcon={compact ? undefined : <KeyboardArrowDownRoundedIcon />}
                 sx={{
                     borderRadius: "999px",
-                    minWidth: compact ? 44 : 118,
+                    width: compact ? 42 : 48,
                     height: compact ? 42 : 48,
-                    px: compact ? 1 : 2,
+                    p: 1,
+                    flexShrink: 0,
+                    border: "1px solid",
                     color: "text.secondary",
                     borderColor: "rgba(142,168,232,0.18)",
                     whiteSpace: "nowrap",
                 }}
             >
-                {compact ? selected.code.toUpperCase() : selected.name}
-            </Button>
+                <TranslateRoundedIcon fontSize="small" />
+            </IconButton>
             <Menu
                 id={menuId}
                 anchorEl={anchor}

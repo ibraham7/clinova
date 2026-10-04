@@ -308,50 +308,11 @@ function MobileHeader() {
                 }}
             >
                 <Box
-                    sx={{
-                        width: 38,
-                        height: 38,
-
-                        borderRadius: "11px",
-
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-
-                        background:
-                            "linear-gradient(135deg, #B8C8EF 0%, #7894D2 100%)",
-
-                        color: "#0B111B",
-
-                        fontWeight: 700,
-                        fontSize: "1.3rem",
-                    }}
-                >
-                    +
-                </Box>
-
-                <Box>
-                    <Typography
-                        sx={{
-                            fontSize: "1.1rem",
-                            fontWeight: 600,
-                            lineHeight: 1,
-                        }}
-                    >
-                        Clinova
-                    </Typography>
-
-                    <Typography
-                        sx={{
-                            mt: 0.4,
-                            fontSize: "0.43rem",
-                            letterSpacing: "0.25em",
-                            color: "text.secondary",
-                        }}
-                    >
-                        HEALTHCARE
-                    </Typography>
-                </Box>
+                    component="img"
+                    src={clinovaLogo}
+                    alt="Clinova Healthcare"
+                    sx={{ width: { xs: 108, sm: 135 }, height: "auto", display: "block", objectFit: "contain" }}
+                />
             </Box>
 
             <Box sx={{ mx: 0.5 }}>
