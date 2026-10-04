@@ -7,10 +7,15 @@ const tmp = fs.mkdtempSync(path.join(root, 'node_modules/.profile-check-'));
 (async () => {
     try {
         for (const name of ['profileLeads','contact']) fs.writeFileSync(path.join(tmp, name + '.js'), ts.transpileModule(fs.readFileSync(path.join(root, 'src/config/' + name + '.ts'), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText);
-        fs.copyFileSync(path.join(root,'src/config/profile-leads.json'),path.join(tmp,'profile-leads.json'));
+        fs.writeFileSync(path.join(tmp,'profile-leads.json'), JSON.stringify({endpoint:''}));
         const { detectContactType, parseContact, submitProfileLead, profileLeadsEnabled } = require(path.join(tmp,'profileLeads.js'));
         const { bottomBookingLinkProps, bookingLinkProps } = require(path.join(tmp,'contact.js'));
         assert.equal(profileLeadsEnabled, false, 'No collection without a configured receiver');
+        delete require.cache[require.resolve(path.join(tmp,'profileLeads.js'))];
+        delete require.cache[require.resolve(path.join(tmp,'profile-leads.json'))];
+        fs.copyFileSync(path.join(root,'src/config/profile-leads.json'),path.join(tmp,'profile-leads.json'));
+        const configured = require(path.join(tmp,'profile-leads.json'));
+        assert.equal(require(path.join(tmp,'profileLeads.js')).profileLeadsEnabled, configured.endpoint.startsWith('https://'), 'Collection follows configured HTTPS receiver');
         assert.equal(detectContactType('1234'),'unknown');
         assert.equal(detectContactType('55168'),'phone');
         assert.equal(detectContactType('test@example.com'),'email');
