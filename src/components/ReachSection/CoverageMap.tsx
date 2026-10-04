@@ -5,8 +5,18 @@ import { keyframes } from "@emotion/react";
 import { countryBoundaries, coverageLocations } from "./coverageData";
 
 const pulse = keyframes`
-    0%, 100% { opacity: 0.25; transform: scale(0.85); }
-    50% { opacity: 0.65; transform: scale(1.2); }
+    0%, 65%, 100% { opacity: 0.12; transform: scale(0.8); }
+    25%, 40% { opacity: 0.8; transform: scale(1.3); }
+`;
+
+export const coverageLight = keyframes`
+    0%, 65%, 100% { opacity: 0.25; }
+    25%, 40% { opacity: 1; }
+`;
+
+const regionGlow = keyframes`
+    0%, 65%, 100% { fill: rgba(142,168,232,0.08); }
+    25%, 40% { fill: rgba(142,168,232,0.3); }
 `;
 
 export default function CoverageMap() {
@@ -33,8 +43,13 @@ export default function CoverageMap() {
                     transformOrigin: "center",
                     animation: `${pulse} 5s ease-in-out infinite`,
                 },
+                "& .coverage-light": {
+                    animation: `${coverageLight} 5s ease-in-out infinite`,
+                    filter: "drop-shadow(0 0 4px #8EA8E8)",
+                },
+                "& .coverage-region": { animation: `${regionGlow} 5s ease-in-out infinite` },
                 "@media (prefers-reduced-motion: reduce)": {
-                    "& .coverage-pulse": { animation: "none" },
+                    "& .coverage-pulse, & .coverage-light, & .coverage-region": { animation: "none" },
                 },
             }}
         >
@@ -42,10 +57,13 @@ export default function CoverageMap() {
                 {t("Clinova coverage: Türkiye, Syria, Saudi Arabia, UAE, Qatar and Kuwait")}
                         </title>
             {countryBoundaries.map((country) => {
-                const active = coverageLocations.some((location) => location.code === country.code);
+                const activeIndex = coverageLocations.findIndex((location) => location.code === country.code);
+                const active = activeIndex >= 0;
                 return (
                     <path
                         key={country.code}
+                        className={active ? "coverage-region" : undefined}
+                        style={active ? { animationDelay: `${activeIndex * -0.8}s` } : undefined}
                         d={country.path}
                         fill={active ? "rgba(142,168,232,0.18)" : "rgba(142,168,232,0.035)"}
                         stroke={active ? "rgba(142,168,232,0.65)" : "rgba(142,168,232,0.18)"}
@@ -55,7 +73,10 @@ export default function CoverageMap() {
                     />
                 );
             })}
-            {coverageLocations.map((location, index) => (
+            {coverageLocations.map((location, index) => {
+                const labelWidth = location.name.length * 8 + 28;
+                const labelX = Math.min(600 - labelWidth - 8, location.x + location.dx - (location.dx > 30 ? 0 : labelWidth / 2));
+                return (
                 <g key={location.code}>
                     <circle
                         className="coverage-pulse"
@@ -67,7 +88,7 @@ export default function CoverageMap() {
                         strokeWidth="0.8"
                         style={{ animationDelay: `${index * -0.8}s` }}
                     />
-                    <circle cx={location.x} cy={location.y} r="3.5" fill="#B8C8EF" />
+                    <circle className="coverage-light" cx={location.x} cy={location.y} r="3.5" fill="#DCE6FF" style={{ animationDelay: `${index * -0.8}s` }} />
                     {Math.abs(location.dx) > 30 && (
                         <path
                             d={`M${location.x + 7},${location.y}L${location.x + location.dx - 8},${location.y + location.dy - 4}`}
@@ -75,23 +96,16 @@ export default function CoverageMap() {
                             strokeWidth="1"
                         />
                     )}
-                    <text
-                        x={location.x + location.dx}
-                        y={location.y + location.dy}
-                        textAnchor={location.dx > 30 ? "start" : "middle"}
-                        fill="#DCE6FF"
-                        fontSize="15"
-                        fontWeight="500"
-                        fontFamily="Plus Jakarta Sans, sans-serif"
-                        stroke="#0D1623"
-                        strokeWidth="4"
-                        strokeLinejoin="round"
-                        paintOrder="stroke"
-                    >
-                        {t(location.name)}
-                    </text>
+                    <g transform={`translate(${labelX}, ${location.y + location.dy})`}>
+                        <rect x="-3" y="-17" width={labelWidth + 6} height="24" rx="5" fill="#0D1623" fillOpacity="0.85" />
+                        <image href={location.flag} x="0" y="-12" width="20" height="15" aria-hidden="true" />
+                        <text x="27" y="0" textAnchor="start" fill="#DCE6FF" fontSize="14" fontWeight="500" fontFamily="Plus Jakarta Sans, sans-serif">
+                            {t(location.name)}
+                        </text>
+                    </g>
                 </g>
-            ))}
+            );
+            })}
         </Box>
     );
 }

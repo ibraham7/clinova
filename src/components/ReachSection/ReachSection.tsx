@@ -1,7 +1,7 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { Box, Container, Stack, Typography } from "@mui/material";
 
-import CoverageMap from "./CoverageMap";
+import CoverageMap, { coverageLight } from "./CoverageMap";
 import { coverageLocations } from "./coverageData";
 
 function ReachSection() {
@@ -290,7 +290,7 @@ function ReachSection() {
                                         "1px solid rgba(142,168,232,0.10)",
                                 }}
                             >
-                                {coverageLocations.map((location) => (
+                                {coverageLocations.map((location, index) => (
                                     <Box
                                         key={location.code}
                                         sx={{
@@ -332,7 +332,15 @@ function ReachSection() {
                                                         "primary.main",
                                                 }}
                                             >
-                                                {location.status}
+                                                <Box component="span" aria-hidden="true" sx={{
+                                                    display: "inline-block", width: 5, height: 5,
+                                                    borderRadius: "50%", backgroundColor: "primary.main",
+                                                    marginInlineEnd: "6px", boxShadow: "0 0 7px rgba(142,168,232,0.8)",
+                                                    animation: `${coverageLight} 5s ease-in-out infinite`,
+                                                    animationDelay: `${index * -0.8}s`,
+                                                    "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                                                }} />
+                                                {t(location.status)}
                                             </Typography>
 
                                             <Typography
@@ -356,6 +364,9 @@ function ReachSection() {
                                         <Typography
                                             sx={{
                                                 mt: 0.5,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 1,
 
                                                 fontFamily:
                                                     '"Plus Jakarta Sans", sans-serif',
@@ -366,6 +377,7 @@ function ReachSection() {
                                                     "rgba(245,247,250,0.75)",
                                             }}
                                         >
+                                            <Box component="img" src={location.flag} alt="" aria-hidden="true" width={20} height={15} sx={{ flexShrink: 0, borderRadius: "2px", objectFit: "cover" }} />
                                             {t(location.name)}
                                         </Typography>
                                     </Box>

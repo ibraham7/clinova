@@ -3,6 +3,7 @@
 export const coverageLocations = [
     {
         "code": "TUR",
+        "flag": "/flags/tr.svg",
         "name": "Türkiye",
         "dx": 0,
         "dy": -18,
@@ -12,6 +13,7 @@ export const coverageLocations = [
     },
     {
         "code": "SYR",
+        "flag": "/flags/sy.svg",
         "name": "Syria",
         "dx": 0,
         "dy": -18,
@@ -21,6 +23,7 @@ export const coverageLocations = [
     },
     {
         "code": "SAU",
+        "flag": "/flags/sa.svg",
         "name": "Saudi Arabia",
         "dx": -30,
         "dy": 30,
@@ -30,6 +33,7 @@ export const coverageLocations = [
     },
     {
         "code": "ARE",
+        "flag": "/flags/ae.svg",
         "name": "UAE",
         "dx": 35,
         "dy": 28,
@@ -39,6 +43,7 @@ export const coverageLocations = [
     },
     {
         "code": "QAT",
+        "flag": "/flags/qa.svg",
         "name": "Qatar",
         "dx": 62,
         "dy": -16,
@@ -48,6 +53,7 @@ export const coverageLocations = [
     },
     {
         "code": "KWT",
+        "flag": "/flags/kw.svg",
         "name": "Kuwait",
         "dx": 38,
         "dy": -15,
