@@ -13,6 +13,7 @@ type Service = {
     id: string;
     number: string;
     title: string;
+    navLabel: string;
     categoryTitle?: string;
     subtitle: string;
     description: string;
@@ -27,6 +28,7 @@ const services: Service[] = [
     {
         id: "ads",
         number: "01",
+        navLabel: "جذب المريض",
         title: "نوصل عيادتك إلى المرضى المناسبين",
         categoryTitle: "إدارة المحتوى والتسويق",
         subtitle: "جذب المرضى",
@@ -61,6 +63,7 @@ const services: Service[] = [
     {
         id: "content",
         number: "02",
+        navLabel: "استجابة فورية",
         title: "نضمن استجابة فورية لكل استفسار",
         categoryTitle: "تأهيل ومتابعة المرضى",
         subtitle: "التواصل الذكي",
@@ -95,6 +98,7 @@ const services: Service[] = [
     {
         id: "growth",
         number: "03",
+        navLabel: "تأهيل المريض",
         title: "نحوّل الاستفسارات إلى مواعيد",
         categoryTitle: "نمو العيادة",
         subtitle: "تأهيل وحجز",
@@ -129,6 +133,7 @@ const services: Service[] = [
     {
         id: "crm",
         number: "04",
+        navLabel: "حجز الموعد",
         title: "كل مريض وفرصة في مكان واحد",
         subtitle: "إدارة ونمو العيادة",
         description:
@@ -162,6 +167,7 @@ const services: Service[] = [
     {
         id: "booking",
         number: "05",
+        navLabel: "متابعة وتحويل",
         title: "نساعد المريض على اتخاذ القرار",
         subtitle: "تنسيق علاجي ومبيعات",
         description:
@@ -195,6 +201,7 @@ const services: Service[] = [
     {
         id: "creative",
         number: "06",
+        navLabel: "إعادة تنشيط",
         title: "نستعيد الفرص التي لم تكتمل",
         subtitle: "إعادة تنشيط المرضى",
         description:
@@ -674,7 +681,7 @@ function ServicesSection() {
                                             "nowrap",
                                     }}
                                 >
-                                    {service.subtitle}
+                                    {service.navLabel}
                                 </Typography>
                             </Box>
                         );
