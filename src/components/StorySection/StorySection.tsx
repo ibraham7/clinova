@@ -140,7 +140,7 @@ function StorySection() {
                         <StoryCard
                             eyebrow="المرحلة الأولى"
                             title="حلول رقمية"
-                            description="بدأت Clinova بفكرة بسيطة: جعل الحضور الرقمي للعيادات أكثر احترافية ووضوحًا."
+                            description="بدأت Clinova مع نظام CRM لمتابعة مرضى عيادات الأسنان."
                             number="01"
                             year="البداية"
                         />
