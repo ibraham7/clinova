@@ -364,6 +364,9 @@ function Hero() {
                             </Button>
 
                             <Button
+                                href="https://clisis.novanoai.online/"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 variant="outlined"
                                 endIcon={
                                     <ArrowBackRoundedIcon />
@@ -380,7 +383,7 @@ function Hero() {
                                         '"IBM Plex Sans Arabic", sans-serif',
                                 }}
                             >
-                                اكتشف المزيد
+                                جرّب نظام الـ <Box component="span" dir="ltr">CRM</Box>
                             </Button>
                         </Stack>
                     </Box>
