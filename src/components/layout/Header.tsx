@@ -1,388 +1,139 @@
-import { useState } from "react";
-import { useSiteTranslation } from "../../i18n/useSiteTranslation";
-import {
-    AppBar,
-    Drawer,
-    List,
-    ListItemButton,
-    ListItemText,
-    Box,
-    Button,
-    Container,
-    IconButton,
-    Stack,
-    Toolbar,
-    Typography,
-    useMediaQuery,
-    useTheme,
-} from "@mui/material";
+import { useEffect, useId, useState } from "react";
+import { AppBar, Box, Button, Container, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Toolbar, Typography, useMediaQuery } from "@mui/material";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
+import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
+import WidgetsRoundedIcon from "@mui/icons-material/WidgetsRounded";
+import RouteRoundedIcon from "@mui/icons-material/RouteRounded";
+import MedicalServicesRoundedIcon from "@mui/icons-material/MedicalServicesRounded";
+import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
+import HandshakeRoundedIcon from "@mui/icons-material/HandshakeRounded";
+import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
+import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import clinovaLogo from "../../../public/logo/logo.png";
-
+import { bookingLinkProps } from "../../config/contact";
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
-import { bookingLinkProps } from "../../config/contact";
-import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
-
 const navItems = [
-    {
-        label: "الرئيسية",
-        href: "#home",
-    },
-    {
-        label: "من نحن",
-        href: "#about",
-    },
-    {
-        label: "خدماتنا",
-        href: "#services",
-    },
-    {
-        label: "الأطباء",
-        href: "#specialties",
-    },
-    {
-        label: "تواصل معنا",
-        href: "#contact-cta",
-    },
+    { label: "الرئيسية", href: "#home", icon: HomeRoundedIcon, primary: true },
+    { label: "من نحن", href: "#about", icon: InfoRoundedIcon, primary: true },
+    { label: "لماذا Clinova؟", href: "#reach", icon: AutoAwesomeRoundedIcon, primary: false },
+    { label: "خدماتنا", href: "#services", icon: WidgetsRoundedIcon, primary: true },
+    { label: "رحلة المريض", href: "#contact-system", icon: RouteRoundedIcon, primary: true },
+    { label: "تخصصاتنا", href: "#specialties", icon: MedicalServicesRoundedIcon, primary: true },
+    { label: "قصص النجاح", href: "#case-studies", icon: TrendingUpRoundedIcon, primary: true },
+    { label: "شركاؤنا", href: "#partners", icon: HandshakeRoundedIcon, primary: false },
+    { label: "الأسئلة الشائعة", href: "#faq", icon: HelpOutlineRoundedIcon, primary: false },
+    { label: "تواصل معنا", href: "#contact-cta", icon: PhoneRoundedIcon, primary: false },
 ];
 
-function Header() {
-    const { isRtl } = useSiteTranslation();
-    const theme = useTheme();
+const bookingStyle = {
+    borderRadius: "999px", flexShrink: 0, minHeight: 44,
+    background: "linear-gradient(135deg, #B8C8EF, #8EA8E8 55%, #7894D2)",
+    color: "#0B111B", boxShadow: "0 4px 20px rgba(142,168,232,0.16)",
+    "& .MuiButton-endIcon": { margin: 0, marginInlineStart: "10px" },
+    "&:hover": { background: "#B8C8EF", boxShadow: "0 6px 24px rgba(142,168,232,0.24)" },
+};
 
-    const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+function Logo({ compact = false }: { compact?: boolean }) {
+    return <Box component="a" href="#home" sx={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+        <Box component="img" src={clinovaLogo} alt="Clinova Healthcare" sx={{ width: compact ? { xs: 108, sm: 130 } : 145, height: "auto", display: "block" }} />
+    </Box>;
+}
 
-    return (
-        <AppBar
-            position="absolute"
-            elevation={0}
-            sx={{
-                top: 0,
-                left: 0,
-                right: 0,
-                background: "transparent",
-                boxShadow: "none",
-                py: { xs: 1.5, md: 2.5 },
-            }}
-        >
-            <Container maxWidth="xl">
-                <Toolbar
-                    disableGutters
-                    sx={{
-                        minHeight: { xs: 64, md: 76 },
-                        direction: "ltr",
-                        flexDirection: isMobile || isRtl ? "row" : "row-reverse",
-                        px: { xs: 1.5, md: 2.5 },
+export default function Header() {
+    const { t, isRtl, direction } = useSiteTranslation();
+    const compact = useMediaQuery("(max-width:1399px)");
+    const [active, setActive] = useState("#home");
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [moreAnchor, setMoreAnchor] = useState<HTMLElement | null>(null);
+    const moreId = useId();
+    const drawerId = useId();
+    const moreActive = navItems.some((item) => !item.primary && item.href === active);
 
-                        borderRadius: "999px",
+    useEffect(() => {
+        // A narrow viewport band tracks the section the visitor is reading.
+        const observer = new IntersectionObserver((entries) => {
+            const visible = entries.filter((entry) => entry.isIntersecting)
+                .sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
+            if (visible[0]) setActive(`#${visible[0].target.id}`);
+        }, { rootMargin: "-15% 0px -65% 0px", threshold: 0 });
+        navItems.forEach((item) => {
+            const section = document.getElementById(item.href.slice(1));
+            if (section) observer.observe(section);
+        });
+        return () => observer.disconnect();
+    }, []);
 
-                        background:
-                            "rgba(11, 17, 27, 0.72)",
+    const select = (href: string) => {
+        setActive(href);
+        setDrawerOpen(false);
+        setMoreAnchor(null);
+    };
 
-                        border:
-                            "1px solid rgba(142, 168, 232, 0.16)",
-
-                        backdropFilter: "blur(18px)",
-                        WebkitBackdropFilter: "blur(18px)",
-
-                        boxShadow:
-                            "0 12px 40px rgba(0, 0, 0, 0.22)",
-
-                        position: "relative",
-
-                        overflow: "hidden",
-
-                        "&::before": {
-                            content: '""',
-                            position: "absolute",
-                            top: 0,
-                            left: "8%",
-                            width: "35%",
-                            height: "100%",
-
-                            background:
-                                "radial-gradient(circle, rgba(142,168,232,0.08), transparent 70%)",
-
-                            pointerEvents: "none",
-                        },
-                    }}
-                >
-                    {isMobile ? (
-                        <MobileHeader />
-                    ) : (
-                        <DesktopHeader />
-                    )}
+    return <>
+        <AppBar position="fixed" elevation={0} sx={{ background: "transparent", py: { xs: 1.25, md: 2 }, pointerEvents: "none" }}>
+            <Container maxWidth="xl" sx={{ px: { xs: 1.5, sm: 3 } }}>
+                <Toolbar disableGutters sx={{
+                    minHeight: { xs: 64, md: 76 }, px: { xs: 1.25, md: 2.5 }, gap: { xs: 0.75, sm: 1.5 },
+                    direction: "ltr", flexDirection: compact || isRtl ? "row" : "row-reverse",
+                    borderRadius: "999px", border: "1px solid rgba(142,168,232,0.22)",
+                    background: "linear-gradient(115deg, rgba(26,38,59,0.94), rgba(11,17,27,0.94) 58%)",
+                    backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+                    boxShadow: "0 12px 40px rgba(0,0,0,0.28), inset 0 1px 0 rgba(184,200,239,0.06)",
+                    pointerEvents: "auto",
+                }}>
+                    {compact ? <>
+                        <Box sx={{ flex: 1, minWidth: 0 }}><Logo compact /></Box>
+                        <LanguageSwitcher compact />
+                        <Button {...bookingLinkProps} endIcon={<PhoneRoundedIcon />} sx={{ ...bookingStyle, px: { xs: 1.4, sm: 2 }, fontSize: "0.8rem" }}>{t("احجز")}</Button>
+                        <IconButton aria-label={t("فتح قائمة التنقل")} aria-expanded={drawerOpen} aria-controls={drawerOpen ? drawerId : undefined} onClick={() => setDrawerOpen(true)} sx={{ width: 42, height: 42, color: "primary.light", backgroundColor: "rgba(142,168,232,0.08)", border: "1px solid rgba(142,168,232,0.16)" }}><MenuRoundedIcon /></IconButton>
+                    </> : <>
+                        <Button {...bookingLinkProps} endIcon={<PhoneRoundedIcon />} sx={{ ...bookingStyle, px: 2.5 }}>{t("احجز موعد")}</Button>
+                        <LanguageSwitcher />
+                        <Box component="nav" dir={direction} aria-label={t("التنقل الرئيسي")} sx={{ flex: 1, minWidth: 0, display: "flex", justifyContent: "center" }}>
+                            <Stack direction="row" sx={{ alignItems: "center", gap: 0.25 }}>
+                                {navItems.filter((item) => item.primary).map((item) => <Button
+                                    component="a" href={item.href} key={item.href} onClick={() => select(item.href)} aria-current={active === item.href ? "location" : undefined}
+                                    sx={{ minWidth: 0, px: { lg: 1.2, xl: 1.7 }, py: 1.2, whiteSpace: "nowrap", borderRadius: "999px", fontSize: "0.85rem", fontWeight: active === item.href ? 600 : 500,
+                                        color: active === item.href ? "primary.light" : "rgba(245,247,250,0.72)", backgroundColor: active === item.href ? "rgba(142,168,232,0.12)" : "transparent",
+                                        "&:hover": { color: "#F5F7FA", backgroundColor: "rgba(142,168,232,0.08)" } }}
+                                >{t(item.label)}</Button>)}
+                                <Button id={`${moreId}-button`} aria-haspopup="menu" aria-expanded={Boolean(moreAnchor)} aria-controls={moreAnchor ? moreId : undefined} onClick={(event) => setMoreAnchor(event.currentTarget)} endIcon={<KeyboardArrowDownRoundedIcon />} sx={{ minWidth: 0, px: 1.5, borderRadius: "999px", color: moreActive ? "primary.light" : "text.secondary", backgroundColor: moreActive ? "rgba(142,168,232,0.12)" : "transparent", "& .MuiButton-endIcon": { margin: 0, marginInlineStart: "4px" } }}>{t("المزيد")}</Button>
+                            </Stack>
+                        </Box>
+                        <Box sx={{ borderLeft: "1px solid rgba(142,168,232,0.16)", pl: 2.5 }}><Logo /></Box>
+                    </>}
                 </Toolbar>
             </Container>
         </AppBar>
-    );
+        <Menu id={moreId} anchorEl={moreAnchor} open={Boolean(moreAnchor)} onClose={() => setMoreAnchor(null)} slotProps={{
+            list: { "aria-labelledby": `${moreId}-button` },
+            paper: { dir: direction, sx: { mt: 1.5, p: 0.75, minWidth: 240, borderRadius: 3, border: "1px solid rgba(142,168,232,0.2)", background: "#111B2A", boxShadow: "0 18px 50px rgba(0,0,0,0.4)" } },
+        }}>
+            {navItems.filter((item) => !item.primary).map((item) => <MenuItem component="a" href={item.href} key={item.href} selected={active === item.href} aria-current={active === item.href ? "location" : undefined} onClick={() => select(item.href)} sx={{ borderRadius: 2, py: 1.5, gap: 1.5 }}>
+                <item.icon sx={{ fontSize: 20, color: "primary.main" }} /><Typography variant="body2">{t(item.label)}</Typography>
+            </MenuItem>)}
+        </Menu>
+        <Drawer anchor={isRtl ? "right" : "left"} open={drawerOpen} onClose={() => setDrawerOpen(false)} slotProps={{ paper: { dir: direction, sx: { width: { xs: "min(350px, 92vw)", sm: 380 }, p: 2.5, background: "linear-gradient(160deg, #18243A, #0B111B 65%)", borderInlineStart: "1px solid rgba(142,168,232,0.18)" } } }}>
+            <Stack direction="row" sx={{ alignItems: "center", justifyContent: "space-between", mb: 3 }}>
+                <Logo compact /><IconButton aria-label={t("إغلاق القائمة")} onClick={() => setDrawerOpen(false)} sx={{ color: "text.secondary", backgroundColor: "rgba(142,168,232,0.08)" }}><CloseRoundedIcon /></IconButton>
+            </Stack>
+            <Typography sx={{ fontSize: "0.72rem", color: "primary.main", mb: 1.5 }}>{t("التنقل الرئيسي")}</Typography>
+            <Box component="nav" id={drawerId} aria-label={t("التنقل الرئيسي")}>
+                <List disablePadding>
+                    {navItems.map((item, index) => <ListItemButton component="a" href={item.href} key={item.href} selected={active === item.href} aria-current={active === item.href ? "location" : undefined} onClick={() => select(item.href)} sx={{ borderRadius: 2.5, mb: 0.5, py: 1.1, px: 1.5, gap: 1.5, textAlign: "start", "&.Mui-selected": { backgroundColor: "rgba(142,168,232,0.13)", boxShadow: "inset 0 0 0 1px rgba(142,168,232,0.18)" } }}>
+                        <ListItemIcon sx={{ minWidth: 0, color: active === item.href ? "primary.light" : "rgba(142,168,232,0.6)" }}><item.icon sx={{ fontSize: 21 }} /></ListItemIcon>
+                        <ListItemText primary={t(item.label)} slotProps={{ primary: { sx: { fontSize: "0.92rem", fontWeight: active === item.href ? 600 : 400 } } }} />
+                        <Typography aria-hidden="true" dir="ltr" sx={{ color: "rgba(142,168,232,0.3)", fontSize: "0.65rem" }}>{String(index + 1).padStart(2, "0")}</Typography>
+                    </ListItemButton>)}
+                </List>
+            </Box>
+            <Box sx={{ mt: "auto", pt: 3 }}><Button fullWidth {...bookingLinkProps} endIcon={<PhoneRoundedIcon />} sx={bookingStyle}>{t("احجز موعد")}</Button></Box>
+        </Drawer>
+    </>;
 }
-
-function DesktopHeader() {
-    const { t, direction } = useSiteTranslation();
-
-    return (
-        <>
-            {/* CTA */}
-            <Button
-                {...bookingLinkProps}
-                variant="contained"
-                color="primary"
-                endIcon={<PhoneRoundedIcon />}
-                sx={{
-                    flexShrink: 0,
-
-                    minWidth: 145,
-                    height: 48,
-
-                    borderRadius: "999px",
-
-                    background:
-                        "linear-gradient(135deg, #8EA8E8 0%, #7894D2 100%)",
-
-                    color: "#0B111B",
-
-                    boxShadow:
-                        "0 0 30px rgba(142, 168, 232, 0.16)",
-
-                    "&:hover": {
-                        background:
-                            "linear-gradient(135deg, #B8C8EF 0%, #8EA8E8 100%)",
-
-                        boxShadow:
-                            "0 0 40px rgba(142, 168, 232, 0.25)",
-                    },
-
-                    transition:
-                        "all 0.3s ease",
-                }}
-            >
-                {t("احجز موعد")}
-                        </Button>
-
-            <Box sx={{ mx: 2 }}>
-                <LanguageSwitcher />
-            </Box>
-
-            {/* Navigation */}
-            <Box
-                component="nav"
-                dir={direction}
-                aria-label={t("التنقل الرئيسي")}
-                sx={{
-                    flex: 1,
-
-                    display: "flex",
-                    justifyContent: "center",
-
-                    mr: 4,
-                    ml: 4,
-                }}
-            >
-                <Stack
-                    sx={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: { md: 2, lg: 4.5 },
-                    }}
-                >
-                    {navItems.map((item) => (
-                        <Typography
-                            key={item.href}
-                            component="a"
-                            href={item.href}
-                            variant="body2"
-                            sx={{
-                                color:
-                                    "rgba(245, 247, 250, 0.72)",
-
-                                textDecoration: "none",
-
-                                whiteSpace: "nowrap",
-
-                                fontSize: "0.95rem",
-
-                                fontWeight: 500,
-
-                                position: "relative",
-
-                                transition:
-                                    "color 0.25s ease",
-
-                                "&::after": {
-                                    content: '""',
-
-                                    position: "absolute",
-
-                                    bottom: -8,
-                                    left: "50%",
-
-                                    width: 0,
-                                    height: 2,
-
-                                    borderRadius: "999px",
-
-                                    backgroundColor:
-                                        "primary.main",
-
-                                    transform:
-                                        "translateX(-50%)",
-
-                                    transition:
-                                        "width 0.25s ease",
-                                },
-
-                                "&:hover": {
-                                    color:
-                                        "text.primary",
-
-                                    "&::after": {
-                                        width: 18,
-                                    },
-                                },
-                            }}
-                        >
-                            {t(item.label)}
-                        </Typography>
-                    ))}
-                </Stack>
-            </Box>
-
-            {/* Logo */}
-            <Box
-                component="a"
-                href="#home"
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-
-                    textDecoration: "none",
-
-                    flexShrink: 0,
-                }}
-            >
-                <Box
-                    component="img"
-                    src={clinovaLogo}
-                    alt="Clinova Healthcare"
-                    sx={{
-                        width: 145,
-                        height: "auto",
-
-                        display: "block",
-
-                        objectFit: "contain",
-                    }}
-                />
-
-    
-
-
-                </Box>
-
-        </>
-    );
-}
-
-function MobileHeader() {
-    const { t, direction, isRtl } = useSiteTranslation();
-    const [menuOpen, setMenuOpen] = useState(false);
-
-    return (
-        <>
-            {/* Mobile Logo */}
-            <Box
-                component="a"
-                href="#home"
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-
-                    textDecoration: "none",
-
-                    color: "inherit",
-
-                    flex: 1,
-                }}
-            >
-                <Box
-                    component="img"
-                    src={clinovaLogo}
-                    alt="Clinova Healthcare"
-                    sx={{ width: { xs: 108, sm: 135 }, height: "auto", display: "block", objectFit: "contain" }}
-                />
-            </Box>
-
-            <Box sx={{ mx: 0.5 }}>
-                <LanguageSwitcher compact />
-            </Box>
-
-            {/* Mobile CTA */}
-            <Button
-                endIcon={<PhoneRoundedIcon />}
-                {...bookingLinkProps}
-                variant="contained"
-                color="primary"
-                sx={{
-                    minWidth: 0,
-                    minHeight: 42,
-                    px: 2,
-
-                    borderRadius: "999px",
-
-                    fontSize: "0.8rem",
-                }}
-            >
-                {t("احجز")}
-                        </Button>
-
-            {/* Menu */}
-            <IconButton
-                aria-label={t("فتح قائمة التنقل")}
-                aria-expanded={menuOpen}
-                onClick={() => setMenuOpen(true)}
-                sx={{
-                    ml: 1,
-
-                    width: 44,
-                    height: 44,
-
-                    color: "text.primary",
-
-                    border:
-                        "1px solid rgba(142, 168, 232, 0.14)",
-
-                    borderRadius: "50%",
-                }}
-            >
-                <MenuRoundedIcon />
-            </IconButton>
-            <Drawer
-                anchor={isRtl ? "right" : "left"}
-                open={menuOpen}
-                onClose={() => setMenuOpen(false)}
-                slotProps={{ paper: { dir: direction, sx: { width: 280, p: 2 } } }}
-            >
-                <Box component="nav" aria-label={t("التنقل الرئيسي")}>
-                    <List>
-                        {navItems.map((item) => (
-                            <ListItemButton
-                                key={item.href}
-                                component="a"
-                                href={item.href}
-                                onClick={() => setMenuOpen(false)}
-                                sx={{ textAlign: "start", borderRadius: 2 }}
-                            >
-                                <ListItemText primary={t(item.label)} />
-                            </ListItemButton>
-                        ))}
-                    </List>
-                </Box>
-            </Drawer>
-        </>
-    );
-}
-
-export default Header;

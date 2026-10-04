@@ -21,3 +21,6 @@ body {
     "IBM Plex Sans Arabic",
     sans-serif;
 }
+section[id] {
+  scroll-margin-top: 120px;
+}
