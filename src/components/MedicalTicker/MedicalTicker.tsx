@@ -59,9 +59,9 @@ function MedicalTicker() {
                 width: "100%",
                 overflow: "hidden",
                 py: 2.2,
-                backgroundColor: "#101525",
-                borderTop: "1px solid rgba(142, 168, 232, 0.08)",
-                borderBottom: "1px solid rgba(142, 168, 232, 0.08)",
+                backgroundColor: "var(--clinova-color-101525)",
+                borderTop: "1px solid var(--clinova-rgba-142-168-232-0_08)",
+                borderBottom: "1px solid var(--clinova-rgba-142-168-232-0_08)",
                 direction: "ltr",
             }}
         >
@@ -115,7 +115,7 @@ function MedicalTicker() {
                                                 fontFamily: "var(--clinova-font-family)",
                                                 fontSize: { xs: "0.85rem", md: "1rem" },
                                                 fontWeight: 500,
-                                                color: "rgba(245, 247, 250, 0.65)",
+                                                color: "var(--clinova-rgba-245-247-250-0_65)",
                                                 whiteSpace: "nowrap",
                                             }}
                                         >

@@ -22,7 +22,7 @@ function AboutSection() {
                 pb: { xs: 4, md: 6 },
 
                 background:
-                    "radial-gradient(circle at 50% 0%, rgba(95,120,181,0.10), transparent 38%), #0B111B",
+                    "radial-gradient(circle at 50% 0%, var(--clinova-rgba-95-120-181-0_1), transparent 38%), var(--clinova-color-0b111b)",
             }}
         >
             {/* Background glow */}
@@ -50,7 +50,7 @@ function AboutSection() {
                     borderRadius: "50%",
 
                     background:
-                        "radial-gradient(circle, rgba(142,168,232,0.10), transparent 68%)",
+                        "radial-gradient(circle, var(--clinova-rgba-142-168-232-0_1), transparent 68%)",
 
                     filter: "blur(30px)",
 
@@ -91,10 +91,10 @@ function AboutSection() {
                             borderRadius: "999px",
 
                             border:
-                                "1px solid rgba(142,168,232,0.18)",
+                                "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                             backgroundColor:
-                                "rgba(142,168,232,0.04)",
+                                "var(--clinova-rgba-142-168-232-0_04)",
 
                             backdropFilter: "blur(10px)",
                         }}
@@ -110,7 +110,7 @@ function AboutSection() {
                                     "primary.main",
 
                                 boxShadow:
-                                    "0 0 12px rgba(142,168,232,0.7)",
+                                    "0 0 12px var(--clinova-rgba-142-168-232-0_7)",
                             }}
                         />
 
@@ -155,7 +155,7 @@ function AboutSection() {
 
                             letterSpacing: 0,
 
-                            color: "#F5F7FA",
+                            color: "var(--clinova-color-f5f7fa)",
                         }}
                     >
                         {t("نبني أنظمة نمو متكاملة")}<Box

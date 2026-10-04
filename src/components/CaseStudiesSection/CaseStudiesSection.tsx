@@ -172,7 +172,7 @@ function CaseStudiesSection() {
                 },
 
                 background:
-                    "radial-gradient(circle at 70% 50%, rgba(142,168,232,0.07), transparent 35%), #0B111B",
+                    "radial-gradient(circle at 70% 50%, var(--clinova-rgba-142-168-232-0_07), transparent 35%), var(--clinova-color-0b111b)",
 
                 direction: direction,
             }}
@@ -220,10 +220,10 @@ function CaseStudiesSection() {
                             borderRadius: "999px",
 
                             border:
-                                "1px solid rgba(142,168,232,0.18)",
+                                "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                             backgroundColor:
-                                "rgba(142,168,232,0.04)",
+                                "var(--clinova-rgba-142-168-232-0_04)",
                         }}
                     >
                         <Box
@@ -237,7 +237,7 @@ function CaseStudiesSection() {
                                     "primary.main",
 
                                 boxShadow:
-                                    "0 0 12px rgba(142,168,232,0.7)",
+                                    "0 0 12px var(--clinova-rgba-142-168-232-0_7)",
                             }}
                         />
 
@@ -277,7 +277,7 @@ function CaseStudiesSection() {
 
                             letterSpacing: 0,
 
-                            color: "#F5F7FA",
+                            color: "var(--clinova-color-f5f7fa)",
                         }}
                     >
                         {t("نجاحات حقيقية.")}<Box
@@ -425,12 +425,12 @@ function CaseItem({
                 borderRadius: 2.5,
 
                 border: active
-                    ? "1px solid rgba(142,168,232,0.45)"
-                    : "1px solid rgba(142,168,232,0.09)",
+                    ? "1px solid var(--clinova-rgba-142-168-232-0_45)"
+                    : "1px solid var(--clinova-rgba-142-168-232-0_09)",
 
                 backgroundColor: active
-                    ? "rgba(142,168,232,0.07)"
-                    : "rgba(11,17,27,0.35)",
+                    ? "var(--clinova-rgba-142-168-232-0_07)"
+                    : "var(--clinova-rgba-11-17-27-0_35)",
 
                 cursor: "pointer",
 
@@ -445,10 +445,10 @@ function CaseItem({
 
                 "&:hover": {
                     borderColor:
-                        "rgba(142,168,232,0.28)",
+                        "var(--clinova-rgba-142-168-232-0_28)",
 
                     backgroundColor:
-                        "rgba(142,168,232,0.045)",
+                        "var(--clinova-rgba-142-168-232-0_045)",
                 },
             }}
         >
@@ -464,7 +464,7 @@ function CaseItem({
 
                     color: active
                         ? "primary.main"
-                        : "rgba(245,247,250,0.38)",
+                        : "var(--clinova-rgba-245-247-250-0_38)",
                 }}
             >
                 {caseStudy.number}
@@ -516,7 +516,7 @@ function CaseItem({
                         fontSize: "0.58rem",
 
                         color:
-                            "rgba(245,247,250,0.35)",
+                            "var(--clinova-rgba-245-247-250-0_35)",
 
                         whiteSpace:
                             "nowrap",
@@ -541,7 +541,7 @@ function CaseItem({
 
                     color: active
                         ? "primary.main"
-                        : "rgba(245,247,250,0.18)",
+                        : "var(--clinova-rgba-245-247-250-0_18)",
 
                     transform: "rotate(180deg)",
                 }}
@@ -570,9 +570,9 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                 minWidth: 0,
                 p: { xs: 3, sm: 4, md: 5 },
                 borderRadius: 4,
-                border: "1px solid rgba(142,168,232,0.18)",
+                border: "1px solid var(--clinova-rgba-142-168-232-0_18)",
                 background:
-                    "linear-gradient(145deg, rgba(142,168,232,0.08), rgba(21,31,45,0.65))",
+                    "linear-gradient(145deg, var(--clinova-rgba-142-168-232-0_08), var(--clinova-rgba-21-31-45-0_65))",
                 direction: direction,
             }}
         >
@@ -614,8 +614,8 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                         sx={{
                             p: 2,
                             borderRadius: 2,
-                            backgroundColor: "rgba(11,17,27,0.35)",
-                            border: "1px solid rgba(142,168,232,0.10)",
+                            backgroundColor: "var(--clinova-rgba-11-17-27-0_35)",
+                            border: "1px solid var(--clinova-rgba-142-168-232-0_1)",
                         }}
                     >
                         <Typography sx={{ color: "text.secondary", fontSize: "0.7rem", mb: 0.7 }}>
@@ -658,8 +658,8 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                     mt: 3,
                     p: { xs: 2, sm: 3 },
                     borderRadius: 3,
-                    border: "1px solid rgba(142,168,232,0.14)",
-                    backgroundColor: "rgba(142,168,232,0.04)",
+                    border: "1px solid var(--clinova-rgba-142-168-232-0_14)",
+                    backgroundColor: "var(--clinova-rgba-142-168-232-0_04)",
                 }}
             >
                 <Typography
@@ -694,7 +694,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                             p: 2,
                             textAlign: "center",
                             borderRadius: 2,
-                            border: "1px solid rgba(142,168,232,0.10)",
+                            border: "1px solid var(--clinova-rgba-142-168-232-0_1)",
                         }}
                     >
                         <Typography

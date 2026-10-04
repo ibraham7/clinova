@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import MouseGlow from "./components/layout/MouseGlow";
 import Header from "./components/layout/Header";
 import Hero from "./components/Hero/Hero";
 import MedicalTicker from "./components/MedicalTicker/MedicalTicker";
@@ -22,9 +23,10 @@ function App() {
         minHeight: "100vh",
 
         background:
-          "radial-gradient(circle at 15% 0%, rgba(142,168,232,0.10), transparent 30%), #0B111B",
+          "radial-gradient(circle at 15% 0%, var(--clinova-rgba-142-168-232-0_1), transparent 30%), var(--clinova-color-0b111b)",
       }}
     >
+      <MouseGlow />
       <Header />
       <Hero />
       <MedicalTicker />

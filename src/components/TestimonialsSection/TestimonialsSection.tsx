@@ -93,7 +93,7 @@ function TestimonialsSection() {
                 },
 
                 background:
-                    "radial-gradient(circle at 50% 40%, rgba(142,168,232,0.07), transparent 38%), #0B111B",
+                    "radial-gradient(circle at 50% 40%, var(--clinova-rgba-142-168-232-0_07), transparent 38%), var(--clinova-color-0b111b)",
 
                 direction: direction,
             }}
@@ -145,10 +145,10 @@ function TestimonialsSection() {
                                 "999px",
 
                             border:
-                                "1px solid rgba(142,168,232,0.18)",
+                                "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                             backgroundColor:
-                                "rgba(142,168,232,0.04)",
+                                "var(--clinova-rgba-142-168-232-0_04)",
                         }}
                     >
                         <Box
@@ -163,7 +163,7 @@ function TestimonialsSection() {
                                     "primary.main",
 
                                 boxShadow:
-                                    "0 0 12px rgba(142,168,232,0.7)",
+                                    "0 0 12px var(--clinova-rgba-142-168-232-0_7)",
                             }}
                         />
 
@@ -206,7 +206,7 @@ function TestimonialsSection() {
 
                             letterSpacing: 0,
 
-                            color: "#F5F7FA",
+                            color: "var(--clinova-color-f5f7fa)",
                         }}
                     >
                         {t("تجارب حقيقية.")}<Box
@@ -268,10 +268,10 @@ function TestimonialsSection() {
                         borderRadius: 4,
 
                         border:
-                            "1px solid rgba(142,168,232,0.18)",
+                            "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                         background:
-                            "linear-gradient(145deg, rgba(142,168,232,0.08), rgba(11,17,27,0.75))",
+                            "linear-gradient(145deg, var(--clinova-rgba-142-168-232-0_08), var(--clinova-rgba-11-17-27-0_75))",
 
                         overflow: "hidden",
                     }}
@@ -299,7 +299,7 @@ function TestimonialsSection() {
                             overflow: "hidden",
 
                             background:
-                                "radial-gradient(circle at center, rgba(142,168,232,0.12), transparent 42%), #090F18",
+                                "radial-gradient(circle at center, var(--clinova-rgba-142-168-232-0_12), transparent 42%), var(--clinova-color-090f18)",
 
                             "&::before": {
                                 content: '""',
@@ -311,12 +311,12 @@ function TestimonialsSection() {
 
                                 backgroundImage: `
                                     linear-gradient(
-                                        rgba(142,168,232,0.035) 1px,
+                                        var(--clinova-rgba-142-168-232-0_035) 1px,
                                         transparent 1px
                                     ),
                                     linear-gradient(
                                         90deg,
-                                        rgba(142,168,232,0.035) 1px,
+                                        var(--clinova-rgba-142-168-232-0_035) 1px,
                                         transparent 1px
                                     )
                                 `,
@@ -363,7 +363,7 @@ function TestimonialsSection() {
                                     "ltr",
 
                                 borderBottom:
-                                    "1px solid rgba(142,168,232,0.08)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_08)",
                             }}
                         >
                             <Typography
@@ -378,7 +378,7 @@ function TestimonialsSection() {
                                         "0.16em",
 
                                     color:
-                                        "rgba(245,247,250,0.3)",
+                                        "var(--clinova-rgba-245-247-250-0_3)",
                                 }}
                             >
                                 {t("CLINOVA / TESTIMONIAL")}
@@ -435,16 +435,16 @@ function TestimonialsSection() {
                                     "50%",
 
                                 border:
-                                    "1px solid rgba(142,168,232,0.45)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_45)",
 
                                 background:
-                                    "rgba(142,168,232,0.10)",
+                                    "var(--clinova-rgba-142-168-232-0_1)",
 
                                 backdropFilter:
                                     "blur(10px)",
 
                                 boxShadow:
-                                    "0 0 50px rgba(142,168,232,0.14)",
+                                    "0 0 50px var(--clinova-rgba-142-168-232-0_14)",
 
                                 cursor:
                                     "default",
@@ -558,7 +558,7 @@ function TestimonialsSection() {
                                         "0.12em",
 
                                     color:
-                                        "rgba(245,247,250,0.28)",
+                                        "var(--clinova-rgba-245-247-250-0_28)",
                                 }}
                             >
                                 {t("VIDEO 01")}
@@ -589,7 +589,7 @@ function TestimonialsSection() {
                             },
 
                             borderTop:
-                                "1px solid rgba(142,168,232,0.10)",
+                                "1px solid var(--clinova-rgba-142-168-232-0_1)",
                         }}
                     >
                         <FormatQuoteRoundedIcon
@@ -597,7 +597,7 @@ function TestimonialsSection() {
                                 fontSize: 40,
 
                                 color:
-                                    "rgba(142,168,232,0.35)",
+                                    "var(--clinova-text-rgba-142-168-232-0_35)",
                             }}
                         />
 
@@ -614,7 +614,7 @@ function TestimonialsSection() {
                                 lineHeight: 1.9,
 
                                 color:
-                                    "rgba(245,247,250,0.75)",
+                                    "var(--clinova-rgba-245-247-250-0_75)",
 
                                 textAlign: "start",
                             }}
@@ -663,7 +663,7 @@ function TestimonialsSection() {
                                 "0.12em",
 
                             color:
-                                "rgba(245,247,250,0.3)",
+                                "var(--clinova-rgba-245-247-250-0_3)",
                         }}
                     >
                         {String(
@@ -752,13 +752,13 @@ function TestimonialsSection() {
 
                                         border:
                                             active
-                                                ? "1px solid rgba(142,168,232,0.45)"
-                                                : "1px solid rgba(142,168,232,0.09)",
+                                                ? "1px solid var(--clinova-rgba-142-168-232-0_45)"
+                                                : "1px solid var(--clinova-rgba-142-168-232-0_09)",
 
                                         background:
                                             active
-                                                ? "rgba(142,168,232,0.08)"
-                                                : "rgba(11,17,27,0.4)",
+                                                ? "var(--clinova-rgba-142-168-232-0_08)"
+                                                : "var(--clinova-rgba-11-17-27-0_4)",
 
                                         cursor:
                                             "pointer",
@@ -774,7 +774,7 @@ function TestimonialsSection() {
 
                                         "&:hover": {
                                             borderColor:
-                                                "rgba(142,168,232,0.3)",
+                                                "var(--clinova-rgba-142-168-232-0_3)",
                                         },
                                     }}
                                 >
@@ -788,7 +788,7 @@ function TestimonialsSection() {
                                             inset: 0,
 
                                             background:
-                                                "linear-gradient(135deg, rgba(142,168,232,0.06), transparent)",
+                                                "linear-gradient(135deg, var(--clinova-rgba-142-168-232-0_06), transparent)",
 
                                             "&::after":
                                                 {
@@ -811,7 +811,7 @@ function TestimonialsSection() {
                                                         "50%",
 
                                                     border:
-                                                        "1px solid rgba(142,168,232,0.25)",
+                                                        "1px solid var(--clinova-rgba-142-168-232-0_25)",
                                                 },
                                         }}
                                     />
@@ -857,7 +857,7 @@ function TestimonialsSection() {
                                                     "0.52rem",
 
                                                 color:
-                                                    "rgba(245,247,250,0.32)",
+                                                    "var(--clinova-rgba-245-247-250-0_32)",
                                             }}
                                         >
                                             {t(testimonial.specialty)}
@@ -900,13 +900,13 @@ function ArrowButton({
                 borderRadius: "50%",
 
                 border:
-                    "1px solid rgba(142,168,232,0.16)",
+                    "1px solid var(--clinova-rgba-142-168-232-0_16)",
 
                 backgroundColor:
-                    "rgba(142,168,232,0.035)",
+                    "var(--clinova-rgba-142-168-232-0_035)",
 
                 color:
-                    "rgba(245,247,250,0.6)",
+                    "var(--clinova-rgba-245-247-250-0_6)",
 
                 cursor: "pointer",
 
@@ -915,13 +915,13 @@ function ArrowButton({
 
                 "&:hover": {
                     borderColor:
-                        "rgba(142,168,232,0.4)",
+                        "var(--clinova-rgba-142-168-232-0_4)",
 
                     color:
                         "primary.main",
 
                     backgroundColor:
-                        "rgba(142,168,232,0.07)",
+                        "var(--clinova-rgba-142-168-232-0_07)",
                 },
             }}
         >

@@ -22,7 +22,7 @@ function StorySection() {
                 pt: { xs: 4, md: 6 },
 
                 background:
-                    "radial-gradient(circle at 50% 45%, rgba(95,120,181,0.08), transparent 38%), #0B111B",
+                    "radial-gradient(circle at 50% 45%, var(--clinova-rgba-95-120-181-0_08), transparent 38%), var(--clinova-color-0b111b)",
 
                 direction: direction,
             }}
@@ -159,12 +159,12 @@ function StorySection() {
                                 borderRadius: "50%",
 
                                 background:
-                                    "linear-gradient(135deg, #8EA8E8, #5F78B5)",
+                                    "linear-gradient(135deg, var(--clinova-color-8ea8e8), var(--clinova-color-5f78b5))",
 
-                                color: "#0B111B",
+                                color: "var(--clinova-color-0b111b)",
 
                                 boxShadow:
-                                    "0 0 35px rgba(142,168,232,0.18)",
+                                    "0 0 35px var(--clinova-rgba-142-168-232-0_18)",
 
                                 transform: {
                                     xs: "rotate(-90deg)",
@@ -229,10 +229,10 @@ function StoryCard({
                 borderRadius: 4,
 
                 border:
-                    "1px solid rgba(142,168,232,0.16)",
+                    "1px solid var(--clinova-rgba-142-168-232-0_16)",
 
                 background:
-                    "linear-gradient(145deg, rgba(21,31,45,0.75), rgba(16,25,37,0.45))",
+                    "linear-gradient(145deg, var(--clinova-rgba-21-31-45-0_75), var(--clinova-rgba-16-25-37-0_45))",
 
                 backdropFilter: "blur(14px)",
 
@@ -252,7 +252,7 @@ function StoryCard({
                     borderRadius: "50%",
 
                     background:
-                        "radial-gradient(circle, rgba(142,168,232,0.12), transparent 70%)",
+                        "radial-gradient(circle, var(--clinova-rgba-142-168-232-0_12), transparent 70%)",
 
                     pointerEvents: "none",
                 },
@@ -264,7 +264,7 @@ function StoryCard({
                     transform: "translateY(-6px)",
 
                     borderColor:
-                        "rgba(142,168,232,0.30)",
+                        "var(--clinova-rgba-142-168-232-0_3)",
                 },
             }}
         >
@@ -283,7 +283,7 @@ function StoryCard({
 
                     fontWeight: 600,
 
-                    color: "rgba(142,168,232,0.55)",
+                    color: "var(--clinova-text-rgba-142-168-232-0_55)",
                 }}
             >
                 {number}

@@ -91,7 +91,7 @@ function FAQSection() {
                 },
 
                 background:
-                    "radial-gradient(circle at 75% 25%, rgba(142,168,232,0.06), transparent 35%), #0B111B",
+                    "radial-gradient(circle at 75% 25%, var(--clinova-rgba-142-168-232-0_06), transparent 35%), var(--clinova-color-0b111b)",
 
                 direction: direction,
             }}
@@ -143,10 +143,10 @@ function FAQSection() {
                                 "999px",
 
                             border:
-                                "1px solid rgba(142,168,232,0.18)",
+                                "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                             backgroundColor:
-                                "rgba(142,168,232,0.04)",
+                                "var(--clinova-rgba-142-168-232-0_04)",
                         }}
                     >
                         <Box
@@ -161,7 +161,7 @@ function FAQSection() {
                                     "primary.main",
 
                                 boxShadow:
-                                    "0 0 12px rgba(142,168,232,0.7)",
+                                    "0 0 12px var(--clinova-rgba-142-168-232-0_7)",
                             }}
                         />
 
@@ -204,7 +204,7 @@ function FAQSection() {
 
                             letterSpacing: 0,
 
-                            color: "#F5F7FA",
+                            color: "var(--clinova-color-f5f7fa)",
                         }}
                     >
                         {t("أسئلة تطرحها العيادات.")}
@@ -299,12 +299,12 @@ function FAQItem({
                 borderRadius: 2.5,
 
                 border: active
-                    ? "1px solid rgba(142,168,232,0.45)"
-                    : "1px solid rgba(142,168,232,0.10)",
+                    ? "1px solid var(--clinova-rgba-142-168-232-0_45)"
+                    : "1px solid var(--clinova-rgba-142-168-232-0_1)",
 
                 backgroundColor: active
-                    ? "rgba(142,168,232,0.055)"
-                    : "rgba(11,17,27,0.35)",
+                    ? "var(--clinova-rgba-142-168-232-0_055)"
+                    : "var(--clinova-rgba-11-17-27-0_35)",
 
                 overflow: "hidden",
 
@@ -327,7 +327,7 @@ function FAQItem({
                         : "transparent",
 
                     boxShadow: active
-                        ? "0 0 18px rgba(142,168,232,0.5)"
+                        ? "0 0 18px var(--clinova-rgba-142-168-232-0_5)"
                         : "none",
 
                     transition:
@@ -336,7 +336,7 @@ function FAQItem({
 
                 "&:hover": {
                     borderColor:
-                        "rgba(142,168,232,0.28)",
+                        "var(--clinova-rgba-142-168-232-0_28)",
                 },
             }}
         >
@@ -410,7 +410,7 @@ function FAQItem({
 
                         color: active
                             ? "primary.main"
-                            : "rgba(245,247,250,0.28)",
+                            : "var(--clinova-rgba-245-247-250-0_28)",
                     }}
                 >
                     {id}
@@ -466,12 +466,12 @@ function FAQItem({
                             "50%",
 
                         border:
-                            "1px solid rgba(142,168,232,0.16)",
+                            "1px solid var(--clinova-rgba-142-168-232-0_16)",
 
                         backgroundColor:
                             active
-                                ? "rgba(142,168,232,0.12)"
-                                : "rgba(142,168,232,0.035)",
+                                ? "var(--clinova-rgba-142-168-232-0_12)"
+                                : "var(--clinova-rgba-142-168-232-0_035)",
 
                         color: active
                             ? "primary.main"
@@ -544,7 +544,7 @@ function FAQItem({
                                 mb: 2,
 
                                 backgroundColor:
-                                    "rgba(142,168,232,0.08)",
+                                    "var(--clinova-rgba-142-168-232-0_08)",
                             }}
                         />
 

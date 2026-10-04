@@ -37,7 +37,7 @@ function PartnersSection() {
                 },
 
                 background:
-                    "radial-gradient(circle at 20% 50%, rgba(142,168,232,0.06), transparent 35%), #0B111B",
+                    "radial-gradient(circle at 20% 50%, var(--clinova-rgba-142-168-232-0_06), transparent 35%), var(--clinova-color-0b111b)",
 
                 direction: direction,
             }}
@@ -102,10 +102,10 @@ function PartnersSection() {
                                 borderRadius: "999px",
 
                                 border:
-                                    "1px solid rgba(142,168,232,0.18)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                                 backgroundColor:
-                                    "rgba(142,168,232,0.04)",
+                                    "var(--clinova-rgba-142-168-232-0_04)",
                             }}
                         >
                             <Box
@@ -119,7 +119,7 @@ function PartnersSection() {
                                         "primary.main",
 
                                     boxShadow:
-                                        "0 0 12px rgba(142,168,232,0.7)",
+                                        "0 0 12px var(--clinova-rgba-142-168-232-0_7)",
                                 }}
                             />
 
@@ -159,7 +159,7 @@ function PartnersSection() {
 
                                 letterSpacing: 0,
 
-                                color: "#F5F7FA",
+                                color: "var(--clinova-color-f5f7fa)",
                             }}
                         >
                             {t("عيادات تنمو معنا.")}
@@ -201,14 +201,14 @@ function PartnersSection() {
                             },
 
                             border:
-                                "1px solid rgba(142,168,232,0.16)",
+                                "1px solid var(--clinova-rgba-142-168-232-0_16)",
 
                             borderRadius: 3,
 
                             overflow: "hidden",
 
                             backgroundColor:
-                                "rgba(11,17,27,0.45)",
+                                "var(--clinova-rgba-11-17-27-0_45)",
 
                             direction: "ltr",
                         }}
@@ -257,7 +257,7 @@ function PartnersSection() {
                         },
 
                         background:
-                            "linear-gradient(90deg, #0B111B, transparent)",
+                            "linear-gradient(90deg, var(--clinova-color-0b111b), transparent)",
 
                         pointerEvents: "none",
                     },
@@ -279,7 +279,7 @@ function PartnersSection() {
                         },
 
                         background:
-                            "linear-gradient(270deg, #0B111B, transparent)",
+                            "linear-gradient(270deg, var(--clinova-color-0b111b), transparent)",
 
                         pointerEvents: "none",
                     },
@@ -419,20 +419,20 @@ function PartnerPlaceholder() {
                 borderRadius: 3,
 
                 border:
-                    "1px solid rgba(142,168,232,0.10)",
+                    "1px solid var(--clinova-rgba-142-168-232-0_1)",
 
                 background:
-                    "linear-gradient(145deg, rgba(142,168,232,0.035), rgba(255,255,255,0.01))",
+                    "linear-gradient(145deg, var(--clinova-rgba-142-168-232-0_035), var(--clinova-rgba-255-255-255-0_01))",
 
                 transition:
                     "border-color 0.3s ease, background-color 0.3s ease",
 
                 "&:hover": {
                     borderColor:
-                        "rgba(142,168,232,0.22)",
+                        "var(--clinova-rgba-142-168-232-0_22)",
 
                     backgroundColor:
-                        "rgba(142,168,232,0.035)",
+                        "var(--clinova-rgba-142-168-232-0_035)",
                 },
             }}
         >
@@ -445,7 +445,7 @@ function PartnerPlaceholder() {
                     borderRadius: 1,
 
                     border:
-                        "1px dashed rgba(142,168,232,0.14)",
+                        "1px dashed var(--clinova-rgba-142-168-232-0_14)",
 
                     opacity: 0.5,
                 }}
@@ -484,7 +484,7 @@ function PartnerStat({
 
                 borderLeft: last
                     ? "none"
-                    : "1px solid rgba(142,168,232,0.10)",
+                    : "1px solid var(--clinova-rgba-142-168-232-0_1)",
             }}
         >
             <Typography

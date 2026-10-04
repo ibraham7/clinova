@@ -22,7 +22,7 @@ function ReachSection() {
                 },
 
                 background:
-                    "radial-gradient(circle at 15% 50%, rgba(142,168,232,0.07), transparent 35%), #0B111B",
+                    "radial-gradient(circle at 15% 50%, var(--clinova-rgba-142-168-232-0_07), transparent 35%), var(--clinova-color-0b111b)",
 
                 direction: direction,
             }}
@@ -78,13 +78,13 @@ function ReachSection() {
                                 overflow: "hidden",
 
                                 border:
-                                    "1px solid rgba(142,168,232,0.18)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                                 background:
-                                    "linear-gradient(145deg, #111B2A 0%, #0D1623 100%)",
+                                    "linear-gradient(145deg, var(--clinova-color-111b2a) 0%, var(--clinova-color-0d1623) 100%)",
 
                                 boxShadow:
-                                    "0 25px 80px rgba(0,0,0,0.25)",
+                                    "0 25px 80px var(--clinova-rgba-0-0-0-0_25)",
                             }}
                         >
                             {/* =================================
@@ -102,10 +102,10 @@ function ReachSection() {
                                     px: 2,
 
                                     borderBottom:
-                                        "1px solid rgba(142,168,232,0.10)",
+                                        "1px solid var(--clinova-rgba-142-168-232-0_1)",
 
                                     backgroundColor:
-                                        "rgba(142,168,232,0.025)",
+                                        "var(--clinova-rgba-142-168-232-0_025)",
                                 }}
                             >
                                 <Typography
@@ -118,7 +118,7 @@ function ReachSection() {
                                         letterSpacing: "0.18em",
 
                                         color:
-                                            "rgba(245,247,250,0.45)",
+                                            "var(--clinova-rgba-245-247-250-0_45)",
                                     }}
                                 >
                                     {t("CLINOVA / COVERAGE")}
@@ -142,7 +142,7 @@ function ReachSection() {
                                                 "primary.main",
 
                                             boxShadow:
-                                                "0 0 10px rgba(142,168,232,0.8)",
+                                                "0 0 10px var(--clinova-rgba-142-168-232-0_8)",
                                         }}
                                     />
 
@@ -180,16 +180,16 @@ function ReachSection() {
 
                                     overflow: "hidden",
 
-                                    backgroundColor: "#0D1623",
+                                    backgroundColor: "var(--clinova-color-0d1623)",
 
                                     backgroundImage: `
                                         linear-gradient(
-                                            rgba(142,168,232,0.045) 1px,
+                                            var(--clinova-rgba-142-168-232-0_045) 1px,
                                             transparent 1px
                                         ),
                                         linear-gradient(
                                             90deg,
-                                            rgba(142,168,232,0.045) 1px,
+                                            var(--clinova-rgba-142-168-232-0_045) 1px,
                                             transparent 1px
                                         )
                                     `,
@@ -205,7 +205,7 @@ function ReachSection() {
                                         inset: 0,
 
                                         background:
-                                            "radial-gradient(circle at 50% 48%, rgba(142,168,232,0.12), transparent 48%)",
+                                            "radial-gradient(circle at 50% 48%, var(--clinova-rgba-142-168-232-0_12), transparent 48%)",
 
                                         pointerEvents: "none",
                                     }}
@@ -266,7 +266,7 @@ function ReachSection() {
                                         letterSpacing: "0.18em",
 
                                         color:
-                                            "rgba(245,247,250,0.35)",
+                                            "var(--clinova-rgba-245-247-250-0_35)",
                                     }}
                                 >
                                     {t("CLINOVA NETWORK")}
@@ -287,7 +287,7 @@ function ReachSection() {
                                     },
 
                                     borderTop:
-                                        "1px solid rgba(142,168,232,0.10)",
+                                        "1px solid var(--clinova-rgba-142-168-232-0_1)",
                                 }}
                             >
                                 {coverageLocations.map((location, index) => (
@@ -302,7 +302,7 @@ function ReachSection() {
                                             minHeight: 52,
 
                                             borderLeft:
-                                                "1px solid rgba(142,168,232,0.08)",
+                                                "1px solid var(--clinova-rgba-142-168-232-0_08)",
 
                                             "&:nth-of-type(3n)": {
                                                 borderLeft: "none",
@@ -335,7 +335,7 @@ function ReachSection() {
                                                 <Box component="span" aria-hidden="true" sx={{
                                                     display: "inline-block", width: 5, height: 5,
                                                     borderRadius: "50%", backgroundColor: "primary.main",
-                                                    marginInlineEnd: "6px", boxShadow: "0 0 7px rgba(142,168,232,0.8)",
+                                                    marginInlineEnd: "6px", boxShadow: "0 0 7px var(--clinova-rgba-142-168-232-0_8)",
                                                     animation: `${coverageLight} 5s ease-in-out infinite`,
                                                     animationDelay: `${index * -0.8}s`,
                                                     "@media (prefers-reduced-motion: reduce)": { animation: "none" },
@@ -354,7 +354,7 @@ function ReachSection() {
                                                         "0.12em",
 
                                                     color:
-                                                        "rgba(245,247,250,0.35)",
+                                                        "var(--clinova-rgba-245-247-250-0_35)",
                                                 }}
                                             >
                                                 {location.code}
@@ -374,7 +374,7 @@ function ReachSection() {
                                                 fontSize: "0.72rem",
 
                                                 color:
-                                                    "rgba(245,247,250,0.75)",
+                                                    "var(--clinova-rgba-245-247-250-0_75)",
                                             }}
                                         >
                                             <Box component="img" src={location.flag} alt="" aria-hidden="true" width={20} height={15} sx={{ flexShrink: 0, borderRadius: "2px", objectFit: "cover" }} />
@@ -423,10 +423,10 @@ function ReachSection() {
                                 borderRadius: "999px",
 
                                 border:
-                                    "1px solid rgba(142,168,232,0.18)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                                 backgroundColor:
-                                    "rgba(142,168,232,0.04)",
+                                    "var(--clinova-rgba-142-168-232-0_04)",
 
                                 backdropFilter: "blur(10px)",
                             }}
@@ -442,7 +442,7 @@ function ReachSection() {
                                         "primary.main",
 
                                     boxShadow:
-                                        "0 0 12px rgba(142,168,232,0.7)",
+                                        "0 0 12px var(--clinova-rgba-142-168-232-0_7)",
                                 }}
                             />
 
@@ -487,7 +487,7 @@ function ReachSection() {
 
                                 letterSpacing: 0,
 
-                                color: "#F5F7FA",
+                                color: "var(--clinova-color-f5f7fa)",
                             }}
                         >
                             {t("نعرف كيف نصل إلى")}<Box
@@ -563,7 +563,7 @@ function ReachSection() {
                                     flexShrink: 0,
 
                                     backgroundColor:
-                                        "rgba(142,168,232,0.15)",
+                                        "var(--clinova-rgba-142-168-232-0_15)",
                                 }}
                             />
 
@@ -606,10 +606,10 @@ function Corner({
                 height: 18,
 
                 borderTop:
-                    "1px solid rgba(142,168,232,0.35)",
+                    "1px solid var(--clinova-rgba-142-168-232-0_35)",
 
                 borderLeft:
-                    "1px solid rgba(142,168,232,0.35)",
+                    "1px solid var(--clinova-rgba-142-168-232-0_35)",
 
                 transform: `rotate(${rotate ?? "0deg"})`,
 

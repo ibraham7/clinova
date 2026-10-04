@@ -76,7 +76,7 @@ function SpecialtiesSection() {
                 },
 
                 background:
-                    "radial-gradient(circle at 80% 20%, rgba(142,168,232,0.08), transparent 32%), #0B111B",
+                    "radial-gradient(circle at 80% 20%, var(--clinova-rgba-142-168-232-0_08), transparent 32%), var(--clinova-color-0b111b)",
 
                 direction: direction,
             }}
@@ -125,10 +125,10 @@ function SpecialtiesSection() {
                             borderRadius: "999px",
 
                             border:
-                                "1px solid rgba(142,168,232,0.18)",
+                                "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                             backgroundColor:
-                                "rgba(142,168,232,0.04)",
+                                "var(--clinova-rgba-142-168-232-0_04)",
 
                             backdropFilter: "blur(10px)",
                         }}
@@ -144,7 +144,7 @@ function SpecialtiesSection() {
                                     "primary.main",
 
                                 boxShadow:
-                                    "0 0 12px rgba(142,168,232,0.7)",
+                                    "0 0 12px var(--clinova-rgba-142-168-232-0_7)",
                             }}
                         />
 
@@ -186,7 +186,7 @@ function SpecialtiesSection() {
 
                             letterSpacing: 0,
 
-                            color: "#F5F7FA",
+                            color: "var(--clinova-color-f5f7fa)",
                         }}
                     >
                         {t("تخصصات نعرفها بعمق.")}
@@ -228,7 +228,7 @@ function SpecialtiesSection() {
                         },
 
                         border:
-                            "1px solid rgba(142,168,232,0.12)",
+                            "1px solid var(--clinova-rgba-142-168-232-0_12)",
 
                         borderRadius: 5,
 
@@ -308,19 +308,19 @@ function SpecialtyCard({
                     xs: "none",
                     md: first
                         ? "none"
-                        : "1px solid rgba(142,168,232,0.10)",
+                        : "1px solid var(--clinova-rgba-142-168-232-0_1)",
                 },
 
                 borderBottom: {
-                    xs: "1px solid rgba(142,168,232,0.10)",
+                    xs: "1px solid var(--clinova-rgba-142-168-232-0_1)",
                     md: "none",
                 },
 
                 cursor: "pointer",
 
                 background: active
-                    ? "linear-gradient(145deg, rgba(142,168,232,0.16), rgba(95,120,181,0.07))"
-                    : "rgba(11,17,27,0.35)",
+                    ? "linear-gradient(145deg, var(--clinova-rgba-142-168-232-0_16), var(--clinova-rgba-95-120-181-0_07))"
+                    : "var(--clinova-rgba-11-17-27-0_35)",
 
                 color: "inherit",
 
@@ -333,8 +333,8 @@ function SpecialtyCard({
 
                 "&:hover": {
                     background: active
-                        ? "linear-gradient(145deg, rgba(142,168,232,0.18), rgba(95,120,181,0.08))"
-                        : "rgba(142,168,232,0.045)",
+                        ? "linear-gradient(145deg, var(--clinova-rgba-142-168-232-0_18), var(--clinova-rgba-95-120-181-0_08))"
+                        : "var(--clinova-rgba-142-168-232-0_045)",
                 },
 
                 "&::before": {
@@ -349,11 +349,11 @@ function SpecialtyCard({
                     height: 2,
 
                     background: active
-                        ? "linear-gradient(90deg, transparent, #8EA8E8)"
+                        ? "linear-gradient(90deg, transparent, var(--clinova-color-8ea8e8))"
                         : "transparent",
 
                     boxShadow: active
-                        ? "0 0 20px rgba(142,168,232,0.35)"
+                        ? "0 0 20px var(--clinova-rgba-142-168-232-0_35)"
                         : "none",
                 },
             }}
@@ -394,10 +394,10 @@ function SpecialtyCard({
                         borderRadius: "50%",
 
                         border:
-                            "1px solid rgba(142,168,232,0.15)",
+                            "1px solid var(--clinova-rgba-142-168-232-0_15)",
 
                         backgroundColor:
-                            "rgba(142,168,232,0.03)",
+                            "var(--clinova-rgba-142-168-232-0_03)",
                     }}
                 >
                     <Typography
@@ -408,7 +408,7 @@ function SpecialtyCard({
                             fontSize: "0.55rem",
 
                             color:
-                                "rgba(245,247,250,0.35)",
+                                "var(--clinova-rgba-245-247-250-0_35)",
                         }}
                     >
                         {specialty.number}
@@ -464,8 +464,8 @@ function SpecialtyCard({
                     lineHeight: 1.4,
 
                     color: active
-                        ? "#F5F7FA"
-                        : "rgba(245,247,250,0.82)",
+                        ? "var(--clinova-color-f5f7fa)"
+                        : "var(--clinova-rgba-245-247-250-0_82)",
 
                     transition:
                         "color 0.3s ease",
@@ -518,7 +518,7 @@ function SpecialtyCard({
                     gap: 0.8,
 
                     borderTop:
-                        "1px solid rgba(142,168,232,0.10)",
+                        "1px solid var(--clinova-rgba-142-168-232-0_1)",
                 }}
             >
                 {specialty.tags.map((tag) => (
@@ -531,13 +531,13 @@ function SpecialtyCard({
                             borderRadius: "999px",
 
                             border: active
-                                ? "1px solid rgba(142,168,232,0.28)"
-                                : "1px solid rgba(142,168,232,0.10)",
+                                ? "1px solid var(--clinova-rgba-142-168-232-0_28)"
+                                : "1px solid var(--clinova-rgba-142-168-232-0_1)",
 
                             backgroundColor:
                                 active
-                                    ? "rgba(142,168,232,0.06)"
-                                    : "rgba(255,255,255,0.015)",
+                                    ? "var(--clinova-rgba-142-168-232-0_06)"
+                                    : "var(--clinova-rgba-255-255-255-0_015)",
 
                             transition:
                                 "all 0.3s ease",

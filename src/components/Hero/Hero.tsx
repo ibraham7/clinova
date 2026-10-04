@@ -32,7 +32,7 @@ function Hero() {
                 },
 
                 background:
-                    "radial-gradient(circle at 8% 18%, rgba(142,168,232,0.22), transparent 30%), radial-gradient(circle at 82% 55%, rgba(95,120,181,0.10), transparent 35%), #0B111B",
+                    "radial-gradient(circle at 8% 18%, var(--clinova-rgba-142-168-232-0_22), transparent 30%), radial-gradient(circle at 82% 55%, var(--clinova-rgba-95-120-181-0_1), transparent 35%), var(--clinova-color-0b111b)",
             }}
         >
             {/* Background glow */}
@@ -46,7 +46,7 @@ function Hero() {
                     borderRadius: "50%",
 
                     background:
-                        "radial-gradient(circle, rgba(142,168,232,0.16), transparent 70%)",
+                        "radial-gradient(circle, var(--clinova-rgba-142-168-232-0_16), transparent 70%)",
 
                     filter: "blur(30px)",
                     pointerEvents: "none",
@@ -140,10 +140,10 @@ function Hero() {
                                 borderRadius: "999px",
 
                                 border:
-                                    "1px solid rgba(142,168,232,0.18)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                                 backgroundColor:
-                                    "rgba(142,168,232,0.04)",
+                                    "var(--clinova-rgba-142-168-232-0_04)",
 
                                 backdropFilter: "blur(10px)",
                             }}
@@ -160,7 +160,7 @@ function Hero() {
                                         "primary.main",
 
                                     boxShadow:
-                                        "0 0 12px rgba(142,168,232,0.7)",
+                                        "0 0 12px var(--clinova-rgba-142-168-232-0_7)",
                                 }}
                             />
 
@@ -231,7 +231,7 @@ function Hero() {
                                     lineHeight: "inherit",
                                     letterSpacing: 0,
 
-                                    color: "#F5F7FA",
+                                    color: "var(--clinova-color-f5f7fa)",
                                 }}
                             >
                                 {t("نرتقي")}
@@ -252,7 +252,7 @@ function Hero() {
                                     letterSpacing: 0,
 
                                     background:
-                                        "linear-gradient(110deg, #FFFFFF 10%, #B8C8EF 45%, #8EA8E8 85%)",
+                                        "linear-gradient(110deg, var(--clinova-color-ffffff) 10%, var(--clinova-color-b8c8ef) 45%, var(--clinova-color-8ea8e8) 85%)",
 
                                     WebkitBackgroundClip:
                                         "text",

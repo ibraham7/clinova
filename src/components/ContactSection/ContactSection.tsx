@@ -55,7 +55,7 @@ function ContactSection() {
                 },
 
                 background:
-                    "radial-gradient(circle at 80% 60%, rgba(142,168,232,0.08), transparent 35%), #0B111B",
+                    "radial-gradient(circle at 80% 60%, var(--clinova-rgba-142-168-232-0_08), transparent 35%), var(--clinova-color-0b111b)",
 
                 direction: direction,
             }}
@@ -103,10 +103,10 @@ function ContactSection() {
                                 borderRadius: "999px",
 
                                 border:
-                                    "1px solid rgba(142,168,232,0.18)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                                 backgroundColor:
-                                    "rgba(142,168,232,0.04)",
+                                    "var(--clinova-rgba-142-168-232-0_04)",
 
                                 backdropFilter: "blur(10px)",
                             }}
@@ -122,7 +122,7 @@ function ContactSection() {
                                         "primary.main",
 
                                     boxShadow:
-                                        "0 0 12px rgba(142,168,232,0.7)",
+                                        "0 0 12px var(--clinova-rgba-142-168-232-0_7)",
                                 }}
                             />
 
@@ -167,7 +167,7 @@ function ContactSection() {
 
                                 letterSpacing: 0,
 
-                                color: "#F5F7FA",
+                                color: "var(--clinova-color-f5f7fa)",
                             }}
                         >
                             {t("لا ندير الإعلانات فقط،")}<Box
@@ -191,7 +191,7 @@ function ContactSection() {
                                     fontFamily:
                                         "var(--clinova-font-family)",
 
-                                    color: "#F5F7FA",
+                                    color: "var(--clinova-color-f5f7fa)",
                                 }}
                             >
                                 {t("من أول تواصل إلى الحجز.")}
@@ -265,13 +265,13 @@ function ContactSection() {
                         borderRadius: 5,
 
                         border:
-                            "1px solid rgba(142,168,232,0.20)",
+                            "1px solid var(--clinova-rgba-142-168-232-0_2)",
 
                         background:
-                            "linear-gradient(135deg, rgba(142,168,232,0.12) 0%, rgba(95,120,181,0.07) 45%, rgba(142,168,232,0.04) 100%)",
+                            "linear-gradient(135deg, var(--clinova-rgba-142-168-232-0_12) 0%, var(--clinova-rgba-95-120-181-0_07) 45%, var(--clinova-rgba-142-168-232-0_04) 100%)",
 
                         boxShadow:
-                            "0 30px 90px rgba(0,0,0,0.20)",
+                            "0 30px 90px var(--clinova-rgba-0-0-0-0_2)",
 
                         overflow: "hidden",
 
@@ -289,7 +289,7 @@ function ContactSection() {
                             borderRadius: "50%",
 
                             background:
-                                "radial-gradient(circle, rgba(142,168,232,0.13), transparent 68%)",
+                                "radial-gradient(circle, var(--clinova-rgba-142-168-232-0_13), transparent 68%)",
 
                             filter: "blur(20px)",
 
@@ -317,10 +317,10 @@ function ContactSection() {
                             borderRadius: 3,
 
                             border:
-                                "1px solid rgba(142,168,232,0.16)",
+                                "1px solid var(--clinova-rgba-142-168-232-0_16)",
 
                             backgroundColor:
-                                "rgba(11,17,27,0.72)",
+                                "var(--clinova-rgba-11-17-27-0_72)",
 
                             backdropFilter: "blur(14px)",
 
@@ -340,7 +340,7 @@ function ContactSection() {
                                 height: 38,
 
                                 borderBottom:
-                                    "1px solid rgba(142,168,232,0.10)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_1)",
 
                                 direction: "ltr",
                             }}
@@ -362,7 +362,7 @@ function ContactSection() {
                                         letterSpacing: "0.15em",
 
                                         color:
-                                            "rgba(245,247,250,0.4)",
+                                            "var(--clinova-rgba-245-247-250-0_4)",
                                     }}
                                 >
                                     {t("ACTIVE")}
@@ -399,7 +399,7 @@ function ContactSection() {
                                         letterSpacing: "0.15em",
 
                                         color:
-                                            "rgba(245,247,250,0.4)",
+                                            "var(--clinova-rgba-245-247-250-0_4)",
                                     }}
                                 >
                                     {t("LIVE QUEUE")}
@@ -416,7 +416,7 @@ function ContactSection() {
                                             "primary.main",
 
                                         boxShadow:
-                                            "0 0 10px rgba(142,168,232,0.8)",
+                                            "0 0 10px var(--clinova-rgba-142-168-232-0_8)",
 
                                         animation:
                                             "clinovaPulse 1.5s ease-in-out infinite",
@@ -466,7 +466,7 @@ function ContactSection() {
                                 height: 34,
 
                                 borderTop:
-                                    "1px solid rgba(142,168,232,0.08)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_08)",
 
                                 direction: "ltr",
                             }}
@@ -481,7 +481,7 @@ function ContactSection() {
                                     letterSpacing: "0.08em",
 
                                     color:
-                                        "rgba(245,247,250,0.3)",
+                                        "var(--clinova-rgba-245-247-250-0_3)",
                                 }}
                             >
                                 {t("COVERAGE")}
@@ -532,10 +532,10 @@ function ContactSection() {
                                 borderRadius: "999px",
 
                                 border:
-                                    "1px solid rgba(142,168,232,0.20)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_2)",
 
                                 backgroundColor:
-                                    "rgba(142,168,232,0.05)",
+                                    "var(--clinova-rgba-142-168-232-0_05)",
                             }}
                         >
                             <PhoneRoundedIcon
@@ -581,7 +581,7 @@ function ContactSection() {
 
                                 letterSpacing: 0,
 
-                                color: "#F5F7FA",
+                                color: "var(--clinova-color-f5f7fa)",
                             }}
                         >
                             {t("مركز اتصال داخلي")}
@@ -636,7 +636,7 @@ function ContactSection() {
                                 pt: 3,
 
                                 borderTop:
-                                    "1px solid rgba(142,168,232,0.12)",
+                                    "1px solid var(--clinova-rgba-142-168-232-0_12)",
                             }}
                         >
                             <Stat
@@ -716,22 +716,22 @@ function Conversation({
                 borderRadius: 1.5,
 
                 border: active
-                    ? "1px solid rgba(142,168,232,0.32)"
-                    : "1px solid rgba(142,168,232,0.07)",
+                    ? "1px solid var(--clinova-rgba-142-168-232-0_32)"
+                    : "1px solid var(--clinova-rgba-142-168-232-0_07)",
 
                 backgroundColor: active
-                    ? "rgba(142,168,232,0.07)"
-                    : "rgba(255,255,255,0.015)",
+                    ? "var(--clinova-rgba-142-168-232-0_07)"
+                    : "var(--clinova-rgba-255-255-255-0_015)",
 
                 transition:
                     "border-color 0.25s ease, background-color 0.25s ease",
 
                 "&:hover": {
                     borderColor:
-                        "rgba(142,168,232,0.24)",
+                        "var(--clinova-rgba-142-168-232-0_24)",
 
                     backgroundColor:
-                        "rgba(142,168,232,0.04)",
+                        "var(--clinova-rgba-142-168-232-0_04)",
                 },
             }}
         >
@@ -759,11 +759,11 @@ function Conversation({
 
                         color:
                             status === "REFERRED"
-                                ? "#8EA8E8"
-                                : "#8EA8E8",
+                                ? "var(--clinova-color-8ea8e8)"
+                                : "var(--clinova-color-8ea8e8)",
 
                         border:
-                            "1px solid rgba(142,168,232,0.25)",
+                            "1px solid var(--clinova-rgba-142-168-232-0_25)",
                     }}
                 >
                     {t(status)}
@@ -779,7 +779,7 @@ function Conversation({
                         fontSize: "0.42rem",
 
                         color:
-                            "rgba(245,247,250,0.3)",
+                            "var(--clinova-rgba-245-247-250-0_3)",
                     }}
                 >
                     {time}
@@ -804,7 +804,7 @@ function Conversation({
                         fontWeight: 600,
 
                         color:
-                            "rgba(245,247,250,0.82)",
+                            "var(--clinova-rgba-245-247-250-0_82)",
 
                         whiteSpace: "nowrap",
 
@@ -826,7 +826,7 @@ function Conversation({
                         fontSize: "0.48rem",
 
                         color:
-                            "rgba(245,247,250,0.35)",
+                            "var(--clinova-rgba-245-247-250-0_35)",
 
                         whiteSpace: "nowrap",
                     }}

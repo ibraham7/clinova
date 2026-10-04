@@ -9,8 +9,8 @@ export const lightTheme = createTheme({
         mode: "light",
 
         primary: {
-            main: colors.primaryDark,
-            light: colors.primary,
+            main: "#3F5F9E",
+            light: "#47679F",
             dark: "#4B6398",
             contrastText: colors.white,
         },
@@ -97,7 +97,7 @@ export const lightTheme = createTheme({
 
                     "&.MuiButton-containedPrimary": {
                         background:
-                            "linear-gradient(135deg, #5F78B5 0%, #7894D2 100%)",
+                            "linear-gradient(135deg, #3F5F9E 0%, #4767A0 100%)",
 
                         color: "#FFFFFF",
 

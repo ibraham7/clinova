@@ -28,7 +28,7 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
                     flexShrink: 0,
                     border: "1px solid",
                     color: "text.secondary",
-                    borderColor: "rgba(142,168,232,0.18)",
+                    borderColor: "var(--clinova-rgba-142-168-232-0_18)",
                     whiteSpace: "nowrap",
                 }}
             >

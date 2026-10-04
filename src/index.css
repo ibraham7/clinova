@@ -24,3 +24,24 @@ body {
 section[id] {
   scroll-margin-top: 120px;
 }
+
+.clinova-mouse-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 220px;
+  z-index: 1200;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle, var(--clinova-pointer-light) 0%, transparent 70%);
+  border-radius: 50%;
+  transition: opacity 180ms ease;
+  will-change: transform;
+}
+@media (hover: none), (pointer: coarse) {
+  .clinova-mouse-glow { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .clinova-mouse-glow { transition: none; }
+}

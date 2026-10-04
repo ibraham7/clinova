@@ -259,7 +259,7 @@ function ServicesSection() {
                 },
 
                 background:
-                    "radial-gradient(circle at 50% 45%, rgba(142,168,232,0.07), transparent 38%), #0B111B",
+                    "radial-gradient(circle at 50% 45%, var(--clinova-rgba-142-168-232-0_07), transparent 38%), var(--clinova-color-0b111b)",
 
                 direction: direction,
             }}
@@ -325,10 +325,10 @@ function ServicesSection() {
                         borderRadius: 5,
 
                         border:
-                            "1px solid rgba(142,168,232,0.20)",
+                            "1px solid var(--clinova-rgba-142-168-232-0_2)",
 
                         background:
-                            "linear-gradient(135deg, rgba(142,168,232,0.08), rgba(21,31,45,0.72))",
+                            "linear-gradient(135deg, var(--clinova-rgba-142-168-232-0_08), var(--clinova-rgba-21-31-45-0_72))",
 
                         overflow: "hidden",
 
@@ -346,7 +346,7 @@ function ServicesSection() {
                             borderRadius: "50%",
 
                             background:
-                                "radial-gradient(circle, rgba(142,168,232,0.12), transparent 68%)",
+                                "radial-gradient(circle, var(--clinova-rgba-142-168-232-0_12), transparent 68%)",
 
                             pointerEvents: "none",
                         },
@@ -412,10 +412,10 @@ function ServicesSection() {
                                     borderRadius: "999px",
 
                                     border:
-                                        "1px solid rgba(142,168,232,0.20)",
+                                        "1px solid var(--clinova-rgba-142-168-232-0_2)",
 
                                     backgroundColor:
-                                        "rgba(142,168,232,0.05)",
+                                        "var(--clinova-rgba-142-168-232-0_05)",
                                 }}
                             >
                                 <Box
@@ -429,7 +429,7 @@ function ServicesSection() {
                                             "primary.main",
 
                                         boxShadow:
-                                            "0 0 10px rgba(142,168,232,0.7)",
+                                            "0 0 10px var(--clinova-rgba-142-168-232-0_7)",
                                     }}
                                 />
 
@@ -469,7 +469,7 @@ function ServicesSection() {
 
                                     letterSpacing: 0,
 
-                                    color: "#F5F7FA",
+                                    color: "var(--clinova-color-f5f7fa)",
                                 }}
                             >
                                 {t(active.title)}
@@ -581,7 +581,7 @@ function ServicesSection() {
                         mt: 3,
 
                         borderTop:
-                            "1px solid rgba(142,168,232,0.10)",
+                            "1px solid var(--clinova-rgba-142-168-232-0_1)",
                     }}
                 >
                     {services.map((service, index) => {
@@ -637,7 +637,7 @@ function ServicesSection() {
 
                                         boxShadow:
                                             isActive
-                                                ? "0 0 12px rgba(142,168,232,0.45)"
+                                                ? "0 0 12px var(--clinova-rgba-142-168-232-0_45)"
                                                 : "none",
 
                                         transition:
@@ -666,7 +666,7 @@ function ServicesSection() {
                                         color:
                                             isActive
                                                 ? "primary.main"
-                                                : "rgba(245,247,250,0.3)",
+                                                : "var(--clinova-rgba-245-247-250-0_3)",
                                     }}
                                 >
                                     {service.number}
@@ -700,7 +700,7 @@ function ServicesSection() {
                                             fontSize: 18,
                                             color: isActive
                                                 ? "primary.main"
-                                                : "rgba(142,168,232,0.45)",
+                                                : "var(--clinova-rgba-142-168-232-0_45)",
                                             pointerEvents: "none",
                                             display: {
                                                 xs: (index + 1) % 2 === 0 ? "none" : "block",
@@ -760,12 +760,12 @@ function ServiceTopTab({
                 borderRadius: 3,
 
                 border: active
-                    ? "1px solid rgba(142,168,232,0.55)"
-                    : "1px solid rgba(142,168,232,0.12)",
+                    ? "1px solid var(--clinova-rgba-142-168-232-0_55)"
+                    : "1px solid var(--clinova-rgba-142-168-232-0_12)",
 
                 background: active
-                    ? "linear-gradient(135deg, rgba(142,168,232,0.12), rgba(95,120,181,0.05))"
-                    : "rgba(11,17,27,0.35)",
+                    ? "linear-gradient(135deg, var(--clinova-rgba-142-168-232-0_12), var(--clinova-rgba-95-120-181-0_05))"
+                    : "var(--clinova-rgba-11-17-27-0_35)",
 
                 cursor: "pointer",
 
@@ -776,7 +776,7 @@ function ServiceTopTab({
 
                 "&:hover": {
                     borderColor:
-                        "rgba(142,168,232,0.35)",
+                        "var(--clinova-rgba-142-168-232-0_35)",
                 },
             }}
         >
@@ -837,13 +837,13 @@ function ServiceTopTab({
 
                     backgroundColor: active
                         ? "primary.main"
-                        : "rgba(142,168,232,0.04)",
+                        : "var(--clinova-rgba-142-168-232-0_04)",
 
                     border:
-                        "1px solid rgba(142,168,232,0.18)",
+                        "1px solid var(--clinova-rgba-142-168-232-0_18)",
 
                     color: active
-                        ? "#0B111B"
+                        ? "var(--clinova-color-0b111b)"
                         : "text.secondary",
                 }}
             >
@@ -890,10 +890,10 @@ function AnalyticsPanel({
                 borderRadius: 3,
 
                 border:
-                    "1px solid rgba(142,168,232,0.16)",
+                    "1px solid var(--clinova-rgba-142-168-232-0_16)",
 
                 backgroundColor:
-                    "rgba(11,17,27,0.68)",
+                    "var(--clinova-rgba-11-17-27-0_68)",
 
                 overflow: "hidden",
 
@@ -928,7 +928,7 @@ function AnalyticsPanel({
                         letterSpacing: "0.15em",
 
                         color:
-                            "rgba(245,247,250,0.4)",
+                            "var(--clinova-rgba-245-247-250-0_4)",
                     }}
                 >
                     {t("CLINOVA / ANALYTICS")}
@@ -954,7 +954,7 @@ function AnalyticsPanel({
                                 "0.12em",
 
                             color:
-                                "rgba(245,247,250,0.35)",
+                                "var(--clinova-rgba-245-247-250-0_35)",
                         }}
                     >
                         {t("LIVE")}
@@ -971,7 +971,7 @@ function AnalyticsPanel({
                                 "primary.main",
 
                             boxShadow:
-                                "0 0 10px rgba(142,168,232,0.8)",
+                                "0 0 10px var(--clinova-rgba-142-168-232-0_8)",
                         }}
                     />
                 </Stack>
@@ -1015,7 +1015,7 @@ function AnalyticsPanel({
                                     "0.08em",
 
                                 color:
-                                    "rgba(245,247,250,0.55)",
+                                    "var(--clinova-rgba-245-247-250-0_55)",
                             }}
                         >
                             {t(stat.label)}
@@ -1032,7 +1032,7 @@ function AnalyticsPanel({
                                     "999px",
 
                                 backgroundColor:
-                                    "rgba(142,168,232,0.08)",
+                                    "var(--clinova-rgba-142-168-232-0_08)",
 
                                 overflow: "hidden",
                             }}
@@ -1047,10 +1047,10 @@ function AnalyticsPanel({
                                         "999px",
 
                                     background:
-                                        "linear-gradient(90deg, #5F78B5, #8EA8E8)",
+                                        "linear-gradient(90deg, var(--clinova-color-5f78b5), var(--clinova-color-8ea8e8))",
 
                                     boxShadow:
-                                        "0 0 16px rgba(142,168,232,0.18)",
+                                        "0 0 16px var(--clinova-rgba-142-168-232-0_18)",
 
                                     animation:
                                         `clinovaBar 0.8s ease ${index * 0.08
@@ -1108,7 +1108,7 @@ function AnalyticsPanel({
                         "0.12em",
 
                     color:
-                        "rgba(245,247,250,0.28)",
+                        "var(--clinova-rgba-245-247-250-0_28)",
                 }}
             >
                 {t("PERFORMANCE / THIS MONTH")}
@@ -1124,7 +1124,7 @@ function AnalyticsPanel({
                     fontSize: 17,
 
                     color:
-                        "rgba(245,247,250,0.22)",
+                        "var(--clinova-rgba-245-247-250-0_22)",
                 }}
             />
         </Box>

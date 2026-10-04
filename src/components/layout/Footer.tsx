@@ -43,10 +43,10 @@ function Footer() {
                 },
 
                 background:
-                    "radial-gradient(circle at 85% 0%, rgba(142,168,232,0.055), transparent 30%), #0B111B",
+                    "radial-gradient(circle at 85% 0%, var(--clinova-rgba-142-168-232-0_055), transparent 30%), var(--clinova-color-0b111b)",
 
                 borderTop:
-                    "1px solid rgba(142,168,232,0.08)",
+                    "1px solid var(--clinova-rgba-142-168-232-0_08)",
 
                 direction: direction,
             }}
@@ -120,7 +120,7 @@ function Footer() {
 
                             <Box
                                 component="img"
-                                src={clinovaLogo}
+                                src={clinovaLogo} style={{ filter: "var(--clinova-logo-filter)" }}
                                 alt="Clinova Healthcare"
                                 sx={{
                                     width: {
@@ -237,7 +237,7 @@ function Footer() {
                                 fontWeight: 500,
 
                                 color:
-                                    "rgba(245,247,250,0.42)",
+                                    "var(--clinova-rgba-245-247-250-0_42)",
                             }}
                         >
                             {t("تواصل")}
@@ -285,7 +285,7 @@ function Footer() {
                         pt: 2.5,
 
                         borderTop:
-                            "1px solid rgba(142,168,232,0.08)",
+                            "1px solid var(--clinova-rgba-142-168-232-0_08)",
 
                         display: "flex",
 
@@ -312,7 +312,7 @@ function Footer() {
                                 "0.62rem",
 
                             color:
-                                "rgba(245,247,250,0.3)",
+                                "var(--clinova-rgba-245-247-250-0_3)",
 
                             direction:
                                 "ltr",
@@ -331,7 +331,7 @@ function Footer() {
                                 "0.62rem",
 
                             color:
-                                "rgba(245,247,250,0.3)",
+                                "var(--clinova-rgba-245-247-250-0_3)",
                         }}
                     >
                         {t("نصنع نموًا حقيقيًا للقطاع الطبي.")}
@@ -382,7 +382,7 @@ function FooterColumn({
                     fontWeight: 500,
 
                     color:
-                        "rgba(245,247,250,0.42)",
+                        "var(--clinova-rgba-245-247-250-0_42)",
                 }}
             >
                 {t(title)}
@@ -462,13 +462,13 @@ function SocialButton({
                 borderRadius: 2,
 
                 border:
-                    "1px solid rgba(142,168,232,0.15)",
+                    "1px solid var(--clinova-rgba-142-168-232-0_15)",
 
                 backgroundColor:
-                    "rgba(142,168,232,0.025)",
+                    "var(--clinova-rgba-142-168-232-0_025)",
 
                 color:
-                    "rgba(245,247,250,0.5)",
+                    "var(--clinova-rgba-245-247-250-0_5)",
 
                 transition:
                     "all 0.25s ease",
@@ -482,10 +482,10 @@ function SocialButton({
                         "primary.main",
 
                     borderColor:
-                        "rgba(142,168,232,0.4)",
+                        "var(--clinova-rgba-142-168-232-0_4)",
 
                     backgroundColor:
-                        "rgba(142,168,232,0.07)",
+                        "var(--clinova-rgba-142-168-232-0_07)",
 
                     transform:
                         "translateY(-2px)",

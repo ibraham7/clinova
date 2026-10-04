@@ -26,7 +26,7 @@ function CTASection() {
                     lg: 14,
                 },
 
-                backgroundColor: "#0B111B",
+                backgroundColor: "var(--clinova-color-0b111b)",
 
                 direction: direction,
             }}
@@ -62,13 +62,13 @@ function CTASection() {
                         borderRadius: 5,
 
                         border:
-                            "1px solid rgba(142,168,232,0.20)",
+                            "1px solid var(--clinova-rgba-142-168-232-0_2)",
 
                         background:
-                            "linear-gradient(135deg, rgba(95,120,181,0.18) 0%, rgba(142,168,232,0.09) 42%, rgba(21,31,45,0.72) 100%)",
+                            "linear-gradient(135deg, var(--clinova-rgba-95-120-181-0_18) 0%, var(--clinova-rgba-142-168-232-0_09) 42%, var(--clinova-rgba-21-31-45-0_72) 100%)",
 
                         boxShadow:
-                            "0 30px 80px rgba(0,0,0,0.20)",
+                            "0 30px 80px var(--clinova-rgba-0-0-0-0_2)",
 
                         isolation: "isolate",
 
@@ -86,7 +86,7 @@ function CTASection() {
                             borderRadius: "50%",
 
                             background:
-                                "radial-gradient(circle, rgba(142,168,232,0.18), transparent 68%)",
+                                "radial-gradient(circle, var(--clinova-rgba-142-168-232-0_18), transparent 68%)",
 
                             filter: "blur(10px)",
 
@@ -109,7 +109,7 @@ function CTASection() {
                             borderRadius: "50%",
 
                             background:
-                                "radial-gradient(circle, rgba(95,120,181,0.16), transparent 68%)",
+                                "radial-gradient(circle, var(--clinova-rgba-95-120-181-0_16), transparent 68%)",
 
                             filter: "blur(10px)",
 
@@ -163,7 +163,7 @@ function CTASection() {
 
                                 letterSpacing: 0,
 
-                                color: "#F5F7FA",
+                                color: "var(--clinova-color-f5f7fa)",
                             }}
                         >
                             {t("لنملأ دفتر مواعيدك.")}
@@ -186,7 +186,7 @@ function CTASection() {
                                 lineHeight: 2,
 
                                 color:
-                                    "rgba(245,247,250,0.62)",
+                                    "var(--clinova-rgba-245-247-250-0_62)",
                             }}
                         >
                             {t("مكالمة استراتيجية مجانية لمدة 30 دقيقة. نراجع تسويقك الحالي، نحدد مكامن النمو، ونترك لك خطة واضحة تبدأ بها.")}
@@ -219,10 +219,10 @@ function CTASection() {
                                     "999px",
 
                                 background:
-                                    "linear-gradient(135deg, #8EA8E8 0%, #7894D2 100%)",
+                                    "linear-gradient(135deg, var(--clinova-color-8ea8e8) 0%, var(--clinova-color-7894d2) 100%)",
 
                                 color:
-                                    "#0B111B",
+                                    "var(--clinova-color-0b111b)",
 
                                 fontFamily:
                                     "var(--clinova-font-family)",
@@ -235,20 +235,20 @@ function CTASection() {
                                 cursor: "pointer",
 
                                 boxShadow:
-                                    "0 10px 35px rgba(142,168,232,0.18)",
+                                    "0 10px 35px var(--clinova-rgba-142-168-232-0_18)",
 
                                 transition:
                                     "transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease",
 
                                 "&:hover": {
                                     background:
-                                        "linear-gradient(135deg, #B8C8EF 0%, #8EA8E8 100%)",
+                                        "linear-gradient(135deg, var(--clinova-color-b8c8ef) 0%, var(--clinova-color-8ea8e8) 100%)",
 
                                     transform:
                                         "translateY(-2px)",
 
                                     boxShadow:
-                                        "0 14px 40px rgba(142,168,232,0.28)",
+                                        "0 14px 40px var(--clinova-rgba-142-168-232-0_28)",
                                 },
 
                                 "&:active": {
@@ -280,12 +280,12 @@ function CTASection() {
 
                             backgroundImage: `
                                 linear-gradient(
-                                    rgba(142,168,232,0.07) 1px,
+                                    var(--clinova-rgba-142-168-232-0_07) 1px,
                                     transparent 1px
                                 ),
                                 linear-gradient(
                                     90deg,
-                                    rgba(142,168,232,0.07) 1px,
+                                    var(--clinova-rgba-142-168-232-0_07) 1px,
                                     transparent 1px
                                 )
                             `,

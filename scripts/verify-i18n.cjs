@@ -56,16 +56,20 @@ function compile(directory) {
         const React = require('react');
         const { renderToStaticMarkup } = require('react-dom/server');
         const { ThemeProvider, createTheme } = require('@mui/material/styles');
-        const { darkTheme } = require(path.join(workspace, 'src/theme/index.js'));
+        const { darkTheme, lightTheme } = require(path.join(workspace, 'src/theme/index.js'));
         const { default: App } = require(path.join(workspace, 'src/App.js'));
-        global.document = { documentElement: { style: { setProperty() {} } } };
-        for (const locale of locales) {
+        const { ColorModeProvider, readColorMode, syncColorMode } = require(path.join(workspace, "src/theme/ColorMode.js"));
+        global.document = { documentElement: { dataset: {}, style: { setProperty() {} } } };
+        for (const mode of ["dark", "light"]) for (const locale of locales) {
+            syncColorMode(mode);
+            assert.equal(readColorMode(), mode);
+            assert.equal(document.documentElement.dataset.theme, mode);
             await i18n.changeLanguage(locale);
             const direction = locale === 'ar' ? 'rtl' : 'ltr';
             assert.equal(document.documentElement.lang, locale);
             assert.equal(document.documentElement.dir, direction);
             assert.equal(saved.get('clinova.language'), locale);
-            const html = renderToStaticMarkup(React.createElement(ThemeProvider, { theme: createTheme(darkTheme, { direction }) }, React.createElement(App)));
+            const html = renderToStaticMarkup(React.createElement(ThemeProvider, { theme: createTheme(mode === "dark" ? darkTheme : lightTheme, { direction }) }, React.createElement(ColorModeProvider, { initialMode: mode }, React.createElement(App))));
             const content = html.replace(/<style\b[^>]*>[\s\S]*?<\/style>/g, '').replace(/<[^>]*>/g, ' ');
             assert.ok(content.includes(resources[locale]['احجز موعدًا']), locale + ': booking CTA');
             assert.ok(content.includes(resources[locale]['استجابة فورية']), locale + ': revised journey');
@@ -73,9 +77,12 @@ function compile(directory) {
             assert.ok(html.includes('https://wa.me/905516886988'), locale + ': WhatsApp link');
             assert.ok(html.includes('https://clisis.novanoai.online/'), locale + ': CRM link');
             if (locale !== 'ar') { assert.ok(!/[\u0600-\u06ff]/.test(content), locale + ': Arabic text leaked'); }
-            console.log(locale + ': complete translation, render, direction and links passed');
+            assert.ok(html.includes(resources[locale][mode === 'dark' ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن']), 'Theme toggle label');
+            console.log(mode + '/' + locale + ': complete translation, render, direction and links passed');
         }
         global.localStorage = { getItem() { throw Error('blocked'); }, setItem() { throw Error('blocked'); } };
+        assert.equal(readColorMode(), 'dark');
+        assert.doesNotThrow(() => syncColorMode('light'));
         assert.doesNotThrow(() => syncDocumentLanguage('fr'), 'Blocked storage must not break switching');
         console.log(baseKeys.length + ' translation keys validated in all four locales');
     } finally {
