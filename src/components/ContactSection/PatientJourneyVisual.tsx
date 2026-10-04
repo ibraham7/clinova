@@ -5,6 +5,14 @@ const drift = keyframes`
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-6px); }
 `;
+const gentleDrift = keyframes`
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+`;
+const stepPulse = keyframes`
+    0%, 65%, 100% { opacity: 0.35; }
+    25%, 40% { opacity: 1; }
+`;
 const signal = keyframes`
     to { stroke-dashoffset: -200; }
 `;
@@ -30,8 +38,11 @@ export default function PatientJourneyVisual() {
                 "& .journey-card-last": { animationDelay: "-4.6s" },
                 "& .journey-signal": { animation: `${signal} 9s linear infinite` },
                 "& .journey-glow": { animation: `${pulse} 6s ease-in-out infinite` },
+                "& .journey-step": { animation: `${stepPulse} 6s ease-in-out infinite` },
                 "@media (prefers-reduced-motion: reduce)": {
-                    "& .journey-card, & .journey-signal, & .journey-glow": { animation: "none" },
+                    "& .journey-card": { animationName: `${gentleDrift}`, animationDuration: "12s" },
+                    "& .journey-signal": { animationDuration: "18s" },
+                    "& .journey-glow, & .journey-step": { animationDuration: "10s" },
                 },
             }}
         >
@@ -76,10 +87,10 @@ export default function PatientJourneyVisual() {
                 </g>
 
                 <path d="M166 353H334" stroke="#8EA8E8" strokeOpacity="0.2" />
-                {[166, 250, 334].map((x) => (
+                {[166, 250, 334].map((x, index) => (
                     <g key={x}>
                         <circle cx={x} cy="353" r="9" fill="#121E30" stroke="#8EA8E8" strokeOpacity="0.5" />
-                        <circle cx={x} cy="353" r="3" fill="#BDCEF5" />
+                        <circle className="journey-step" cx={x} cy="353" r="3" fill="#BDCEF5" style={{ animationDelay: `${index * -1.2}s` }} />
                     </g>
                 ))}
             </svg>

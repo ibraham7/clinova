@@ -6,6 +6,11 @@ const float = keyframes`
     50% { transform: translateY(-8px); }
 `;
 
+const gentleFloat = keyframes`
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+`;
+
 const breathe = keyframes`
     0%, 100% { opacity: 0.35; transform: scale(0.96); }
     50% { opacity: 0.65; transform: scale(1.04); }
@@ -36,7 +41,9 @@ export default function HeroVisual() {
                 },
                 "& .hero-signal": { animation: `${travel} 16s linear infinite` },
                 "@media (prefers-reduced-motion: reduce)": {
-                    "& .hero-float, & .hero-halo, & .hero-signal": { animation: "none" },
+                    "& .hero-float": { animationName: `${gentleFloat}`, animationDuration: "12s" },
+                    "& .hero-halo": { animationDuration: "16s" },
+                    "& .hero-signal": { animationDuration: "24s" },
                 },
             }}
         >
