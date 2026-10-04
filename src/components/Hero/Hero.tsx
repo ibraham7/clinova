@@ -1,6 +1,7 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import HeroVisual from "./HeroVisual";
 
 function Hero() {
     return (
@@ -75,6 +76,8 @@ function Hero() {
                     <Box
                         sx={{
                             position: "relative",
+                            display: "flex",
+                            alignItems: "center",
 
                             minHeight: {
                                 xs: 220,
@@ -88,109 +91,7 @@ function Hero() {
                             },
                         }}
                     >
-                        {/* Main glow */}
-                        <Box
-                            sx={{
-                                position: "absolute",
-
-                                width: {
-                                    xs: 220,
-                                    md: 350,
-                                    lg: 500,
-                                },
-
-                                height: {
-                                    xs: 220,
-                                    md: 350,
-                                    lg: 500,
-                                },
-
-                                left: {
-                                    xs: "50%",
-                                    lg: "10%",
-                                },
-
-                                top: "50%",
-
-                                transform:
-                                    "translate(-50%, -50%)",
-
-                                borderRadius: "50%",
-
-                                background:
-                                    "radial-gradient(circle, rgba(142,168,232,0.18), rgba(95,120,181,0.05) 45%, transparent 70%)",
-
-                                filter: "blur(15px)",
-                            }}
-                        />
-
-                        {/* Outer ring */}
-                        <Box
-                            sx={{
-                                position: "absolute",
-
-                                width: {
-                                    xs: 180,
-                                    md: 280,
-                                    lg: 400,
-                                },
-
-                                height: {
-                                    xs: 180,
-                                    md: 280,
-                                    lg: 400,
-                                },
-
-                                left: {
-                                    xs: "50%",
-                                    lg: "12%",
-                                },
-
-                                top: "50%",
-
-                                transform:
-                                    "translate(-50%, -50%)",
-
-                                borderRadius: "50%",
-
-                                border:
-                                    "1px solid rgba(142,168,232,0.10)",
-                            }}
-                        />
-
-                        {/* Inner ring */}
-                        <Box
-                            sx={{
-                                position: "absolute",
-
-                                width: {
-                                    xs: 130,
-                                    md: 200,
-                                    lg: 300,
-                                },
-
-                                height: {
-                                    xs: 130,
-                                    md: 200,
-                                    lg: 300,
-                                },
-
-                                left: {
-                                    xs: "50%",
-                                    lg: "12%",
-                                },
-
-                                top: "50%",
-
-                                transform:
-                                    "translate(-50%, -50%)",
-
-                                borderRadius: "50%",
-
-                                border:
-                                    "1px solid rgba(142,168,232,0.08)",
-                            }}
-                        />
+                        <HeroVisual />
                     </Box>
 
                     {/* =========================
