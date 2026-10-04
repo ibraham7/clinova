@@ -218,8 +218,8 @@ function PartnersSection() {
                         />
 
                         <PartnerStat
-                            value="4"
-                            label="أسواق خليجية"
+                            value="6"
+                            label="مناطق جغرافية"
                             last
                         />
                     </Box>
