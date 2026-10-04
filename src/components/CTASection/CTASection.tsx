@@ -8,7 +8,7 @@ import {
 
 import ProfileDownloadButton from "../layout/ProfileDownloadButton";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
-import { bookingLinkProps } from "../../config/contact";
+import { bottomBookingLinkProps } from "../../config/contact";
 
 function CTASection() {
     const { direction, t } = useSiteTranslation();
@@ -197,7 +197,7 @@ function CTASection() {
                         <Stack direction={{ xs: "column", sm: "row" }} sx={{ gap: 1.5, alignItems: "center", justifyContent: "center", mt: 1 }}>
                         <Box
                             component="a"
-                            {...bookingLinkProps}
+                            {...bottomBookingLinkProps(t("مرحباً، أود الحصول على معلومات حول خدمات Clinova. هل يمكنكم مساعدتي؟"))}
                             sx={{
                                 minHeight: 50,
 

@@ -75,6 +75,8 @@ function compile(directory) {
             assert.ok(content.includes(resources[locale]['استجابة فورية']), locale + ': revised journey');
             assert.ok(content.includes(resources[locale]['مناطق جغرافية']), locale + ': revised regions');
             assert.ok(html.includes('https://wa.me/905516886988'), locale + ': WhatsApp link');
+            const expectedBottom = 'https://wa.me/905516886988?text=' + encodeURIComponent(resources[locale]['مرحباً، أود الحصول على معلومات حول خدمات Clinova. هل يمكنكم مساعدتي؟']);
+            assert.ok(html.includes(expectedBottom), locale + ': bottom WhatsApp message');
             assert.ok(html.includes('https://clisis.novanoai.online/'), locale + ': CRM link');
             const instagram = locale === 'tr' ? 'clinova_tr' : 'clinova0';
             assert.ok(html.includes('https://www.instagram.com/' + instagram + '/'), locale + ': Instagram account');
@@ -82,7 +84,7 @@ function compile(directory) {
             assert.ok(html.includes('https://www.linkedin.com/in/3nkrch/'), locale + ': LinkedIn profile');
             assert.equal((html.match(/href="\/documents\/clinova-profile.pdf"/g) || []).length, 2, locale + ': two profile download links');
             assert.equal((html.match(/download="Clinova-Company-Profile.pdf"/g) || []).length, 2, locale + ': download attributes');
-            assert.ok(content.includes(resources[locale]['تنزيل الملف التعريفي']), locale + ': translated download label');
+            assert.ok(content.includes(resources[locale]['الملف التعريفي']), locale + ': translated download label');
             if (locale !== 'ar') { assert.ok(!/[\u0600-\u06ff]/.test(content), locale + ': Arabic text leaked'); }
             assert.ok(html.includes(resources[locale][mode === 'dark' ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن']), 'Theme toggle label');
             console.log(mode + '/' + locale + ': complete translation, render, direction and links passed');

@@ -256,5 +256,16 @@
   "إغلاق القائمة": "Fermer le menu",
   "تفعيل الوضع الفاتح": "Activer le thème clair",
   "تفعيل الوضع الداكن": "Activer le thème sombre",
-  "تنزيل الملف التعريفي": "Télécharger la présentation"
+  "تنزيل الملف التعريفي": "Télécharger la présentation",
+  "الملف التعريفي": "Présentation de l’entreprise",
+  "أدخل بريدك الإلكتروني أو رقم هاتفك لتنزيل الملف مباشرة.": "Saisissez votre adresse e-mail ou votre numéro de téléphone pour télécharger la présentation immédiatement.",
+  "رمز الدولة": "Indicatif du pays",
+  "الإيميل أو رقم الهاتف": "E-mail ou numéro de téléphone",
+  "اختر دولة الرقم المحلي، أو اكتب الرقم الدولي مع علامة +.": "Sélectionnez le pays pour un numéro local ou saisissez un numéro international commençant par +.",
+  "أوافق على التواصل معي حول خدمات Clinova (اختياري).": "J’accepte d’être contacté au sujet des services Clinova (facultatif).",
+  "أدخل إيميلاً صحيحاً أو رقم هاتف صحيحاً مع رمز الدولة.": "Saisissez une adresse e-mail valide ou un numéro de téléphone valide avec son indicatif.",
+  "تعذر حفظ بياناتك. حاول مرة أخرى.": "Impossible d’enregistrer vos coordonnées. Veuillez réessayer.",
+  "جارٍ الحفظ…": "Enregistrement…",
+  "تنزيل الملف الآن": "Télécharger maintenant",
+  "مرحباً، أود الحصول على معلومات حول خدمات Clinova. هل يمكنكم مساعدتي؟": "Bonjour, je souhaite obtenir des informations sur les services Clinova. Pouvez-vous m’aider ?"
 }

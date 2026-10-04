@@ -256,5 +256,16 @@
   "إغلاق القائمة": "Close menu",
   "تفعيل الوضع الفاتح": "Switch to light mode",
   "تفعيل الوضع الداكن": "Switch to dark mode",
-  "تنزيل الملف التعريفي": "Download company profile"
+  "تنزيل الملف التعريفي": "Download company profile",
+  "الملف التعريفي": "Company profile",
+  "أدخل بريدك الإلكتروني أو رقم هاتفك لتنزيل الملف مباشرة.": "Enter your email address or phone number to download the profile immediately.",
+  "رمز الدولة": "Country code",
+  "الإيميل أو رقم الهاتف": "Email or phone number",
+  "اختر دولة الرقم المحلي، أو اكتب الرقم الدولي مع علامة +.": "Select the country for a local number, or enter an international number starting with +.",
+  "أوافق على التواصل معي حول خدمات Clinova (اختياري).": "I agree to be contacted about Clinova services (optional).",
+  "أدخل إيميلاً صحيحاً أو رقم هاتف صحيحاً مع رمز الدولة.": "Enter a valid email address or phone number with its country code.",
+  "تعذر حفظ بياناتك. حاول مرة أخرى.": "We could not save your details. Please try again.",
+  "جارٍ الحفظ…": "Saving…",
+  "تنزيل الملف الآن": "Download now",
+  "مرحباً، أود الحصول على معلومات حول خدمات Clinova. هل يمكنكم مساعدتي؟": "Hello, I would like information about Clinova services. Could you help me?"
 }

@@ -256,5 +256,16 @@
   "إغلاق القائمة": "Menüyü kapat",
   "تفعيل الوضع الفاتح": "Açık temaya geç",
   "تفعيل الوضع الداكن": "Koyu temaya geç",
-  "تنزيل الملف التعريفي": "Şirket tanıtımını indir"
+  "تنزيل الملف التعريفي": "Şirket tanıtımını indir",
+  "الملف التعريفي": "Şirket tanıtımı",
+  "أدخل بريدك الإلكتروني أو رقم هاتفك لتنزيل الملف مباشرة.": "Tanıtım dosyasını hemen indirmek için e-posta adresinizi veya telefon numaranızı girin.",
+  "رمز الدولة": "Ülke kodu",
+  "الإيميل أو رقم الهاتف": "E-posta veya telefon numarası",
+  "اختر دولة الرقم المحلي، أو اكتب الرقم الدولي مع علامة +.": "Yerel numara için ülkeyi seçin veya + ile başlayan uluslararası numarayı girin.",
+  "أوافق على التواصل معي حول خدمات Clinova (اختياري).": "Clinova hizmetleri hakkında benimle iletişime geçilmesini kabul ediyorum (isteğe bağlı).",
+  "أدخل إيميلاً صحيحاً أو رقم هاتف صحيحاً مع رمز الدولة.": "Geçerli bir e-posta adresi veya ülke koduyla birlikte geçerli bir telefon numarası girin.",
+  "تعذر حفظ بياناتك. حاول مرة أخرى.": "Bilgileriniz kaydedilemedi. Lütfen tekrar deneyin.",
+  "جارٍ الحفظ…": "Kaydediliyor…",
+  "تنزيل الملف الآن": "Şimdi indir",
+  "مرحباً، أود الحصول على معلومات حول خدمات Clinova. هل يمكنكم مساعدتي؟": "Merhaba, Clinova hizmetleri hakkında bilgi almak istiyorum. Yardımcı olabilir misiniz?"
 }
