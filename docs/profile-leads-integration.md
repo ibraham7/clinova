@@ -1,5 +1,7 @@
 # Company profile lead capture
 
+A Google Sheets pilot receiver is prepared under `integrations/google-sheets/`. It records authoritative server receipt times in UTC and Europe/Istanbul. Google authorization/deployment remains required before the form can be enabled.
+
 The download dialog is implemented, but remains disabled until a working CRM receiver is provided. Direct downloads stay available while `src/config/profile-leads.json` has an empty endpoint. Set `endpoint` to the HTTPS URL of a public, rate-limited server endpoint after verifying it against the CRM. Never put a CRM API token in this JSON or the browser bundle.
 
 Both buttons use one form. Email or phone is detected automatically. Local phone numbers use the selected country (default Türkiye); explicit + or 00 international prefixes are parsed without guessing local digits as country codes. Phones are submitted as E.164. Email domain casing is normalized. Marketing permission is optional and starts unchecked.

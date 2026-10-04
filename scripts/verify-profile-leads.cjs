@@ -33,6 +33,8 @@ const tmp = fs.mkdtempSync(path.join(root, 'node_modules/.profile-check-'));
                 return {ok:true,json:async()=>({ok:true})};
             };
             await submitProfileLead(lead,'https://receiver.example/profile');
+            global.fetch=async (url,options)=>{assert.equal(url,'https://script.google.com/macros/s/test/exec');assert.equal(options.headers['Content-Type'],'text/plain;charset=UTF-8');return{ok:true,json:async()=>({ok:true})}};
+            await submitProfileLead(lead,'https://script.google.com/macros/s/test/exec');
             await assert.rejects(submitProfileLead(lead,''));
             await assert.rejects(submitProfileLead(lead,'http://receiver.example/profile'));
             for (const response of [{ok:false,json:async()=>({ok:true})},{ok:true,json:async()=>({ok:false})},{ok:true,json:async()=>({})},{ok:true,json:async()=>{throw Error('not JSON')}}]) {

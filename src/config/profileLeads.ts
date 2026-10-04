@@ -36,9 +36,12 @@ export type ProfileLead = {
 };
 export async function submitProfileLead(lead: ProfileLead, endpoint = settings.endpoint) {
     if (!endpoint.startsWith("https://")) throw new Error("Profile lead endpoint is not configured");
+    const url = new URL(endpoint);
+    const googleAppsScript = url.hostname === "script.google.com" && /^\/macros\/s\/[^/]+\/exec$/.test(url.pathname);
     const response = await fetch(endpoint, {
         method: "POST", credentials: "omit", signal: AbortSignal.timeout(15000),
-        headers: { "Content-Type": "application/json" },
+        // text/plain allows a simple POST to Apps Script without an unsupported preflight.
+        headers: { "Content-Type": googleAppsScript ? "text/plain;charset=UTF-8" : "application/json" },
         body: JSON.stringify({ ...lead, purpose: "company_profile_download" }),
     });
     if (!response.ok) throw new Error("Profile lead could not be saved");
