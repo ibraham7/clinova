@@ -1,7 +1,10 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
 function StorySection() {
+    const { direction, t, isRtl } = useSiteTranslation();
+
     return (
         <Box
             component="section"
@@ -19,7 +22,7 @@ function StorySection() {
                 background:
                     "radial-gradient(circle at 50% 45%, rgba(95,120,181,0.08), transparent 38%), #0B111B",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -43,7 +46,7 @@ function StorySection() {
                             mb: 2,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "1.4rem",
@@ -55,14 +58,14 @@ function StorySection() {
                             color: "primary.main",
                         }}
                     >
-                        قصتنا
-                    </Typography>
+                        {t("قصتنا")}
+                        </Typography>
 
                     {/* Subtitle */}
                     <Typography
                         sx={{
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "1rem",
@@ -76,8 +79,8 @@ function StorySection() {
                             lineHeight: 1.8,
                         }}
                     >
-                        بدأنا من تخصص واحد، وتوسعنا مع نجاح عملائنا.
-                    </Typography>
+                        {t("بدأنا من تخصص واحد، وتوسعنا مع نجاح عملائنا.")}
+                        </Typography>
 
                     {/* Description */}
                     <Typography
@@ -85,7 +88,7 @@ function StorySection() {
                             mt: 3,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "0.9rem",
@@ -99,14 +102,8 @@ function StorySection() {
                             color: "text.secondary",
                         }}
                     >
-                        بدأت رحلتنا من فهم عميق للتحديات التي تواجه
-                        العيادات الطبية، وكيف يمكن للتجربة الرقمية أن
-                        تكون جزءًا أساسيًا من نجاحها. في Clinova نعمل
-                        على تطوير حلول رقمية تساعد العيادات والأطباء
-                        على بناء حضور احترافي، وتحسين تجربة المريض،
-                        وتحويل النمو الرقمي إلى نتائج واضحة وقابلة
-                        للقياس.
-                    </Typography>
+                        {t("بدأت رحلتنا من فهم عميق للتحديات التي تواجه العيادات الطبية، وكيف يمكن للتجربة الرقمية أن تكون جزءًا أساسيًا من نجاحها. في Clinova نعمل على تطوير حلول رقمية تساعد العيادات والأطباء على بناء حضور احترافي، وتحسين تجربة المريض، وتحويل النمو الرقمي إلى نتائج واضحة وقابلة للقياس.")}
+                        </Typography>
                 </Box>
 
                 {/* Timeline / Story */}
@@ -169,7 +166,7 @@ function StorySection() {
 
                                 transform: {
                                     xs: "rotate(-90deg)",
-                                    md: "none",
+                                    md: isRtl ? "none" : "rotate(180deg)",
                                 },
                             }}
                         >
@@ -204,6 +201,8 @@ function StoryCard({
     number: string;
     year: string;
 }) {
+    const { t } = useSiteTranslation();
+
     return (
         <Box
             sx={{
@@ -294,7 +293,7 @@ function StoryCard({
                     mb: 1.5,
 
                     fontFamily:
-                        '"IBM Plex Sans Arabic", sans-serif',
+                        "var(--clinova-font-family)",
 
                     fontSize: "0.8rem",
 
@@ -303,7 +302,7 @@ function StoryCard({
                     color: "primary.main",
                 }}
             >
-                {eyebrow}
+                {t(eyebrow)}
             </Typography>
 
             {/* Title */}
@@ -311,7 +310,7 @@ function StoryCard({
                 component="h3"
                 sx={{
                     fontFamily:
-                        '"IBM Plex Sans Arabic", sans-serif',
+                        "var(--clinova-font-family)",
 
                     fontSize: {
                         xs: "1.7rem",
@@ -325,7 +324,7 @@ function StoryCard({
                     color: "text.primary",
                 }}
             >
-                {title}
+                {t(title)}
             </Typography>
 
             {/* Description */}
@@ -334,7 +333,7 @@ function StoryCard({
                     mt: 2,
 
                     fontFamily:
-                        '"IBM Plex Sans Arabic", sans-serif',
+                        "var(--clinova-font-family)",
 
                     fontSize: "0.88rem",
 
@@ -343,7 +342,7 @@ function StoryCard({
                     color: "text.secondary",
                 }}
             >
-                {description}
+                {t(description)}
             </Typography>
 
             {/* Year */}
@@ -353,14 +352,14 @@ function StoryCard({
                     pt: 3,
 
                     fontFamily:
-                        '"IBM Plex Sans Arabic", sans-serif',
+                        "var(--clinova-font-family)",
 
                     fontSize: "0.75rem",
 
                     color: "text.secondary",
                 }}
             >
-                {year}
+                {t(year)}
             </Typography>
         </Box>
     );

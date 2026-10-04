@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { Box, Container, Stack, Typography } from "@mui/material";
 
 const partnersTop = [
@@ -19,6 +20,8 @@ const partnersBottom = [
 ];
 
 function PartnersSection() {
+    const { direction, t } = useSiteTranslation();
+
     return (
         <Box
             component="section"
@@ -36,7 +39,7 @@ function PartnersSection() {
                 background:
                     "radial-gradient(circle at 20% 50%, rgba(142,168,232,0.06), transparent 35%), #0B111B",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -78,7 +81,7 @@ function PartnersSection() {
 
                             textAlign: {
                                 xs: "center",
-                                md: "right",
+                                md: "start",
                             },
                         }}
                     >
@@ -123,7 +126,7 @@ function PartnersSection() {
                             <Typography
                                 sx={{
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
 
                                     fontSize: "0.72rem",
 
@@ -131,8 +134,8 @@ function PartnersSection() {
                                         "text.secondary",
                                 }}
                             >
-                                شركاؤنا
-                            </Typography>
+                                {t("شركاؤنا")}
+                        </Typography>
                         </Box>
 
                         <Typography
@@ -141,7 +144,7 @@ function PartnersSection() {
                                 m: 0,
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "2.5rem",
@@ -159,7 +162,7 @@ function PartnersSection() {
                                 color: "#F5F7FA",
                             }}
                         >
-                            عيادات تنمو معنا.
+                            {t("عيادات تنمو معنا.")}
                         </Typography>
 
                         <Typography
@@ -167,7 +170,7 @@ function PartnersSection() {
                                 mt: 3,
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "0.88rem",
@@ -180,9 +183,7 @@ function PartnersSection() {
                                     "text.secondary",
                             }}
                         >
-                            مجموعة من العيادات التي تعمل معنا في دول
-                            الخليج وتركيا، من مجموعات الأسنان إلى
-                            مراكز التجميل.
+                            {t("مجموعة من العيادات التي تعمل معنا في دول الخليج وتركيا، من مجموعات الأسنان إلى مراكز التجميل.")}
                         </Typography>
                     </Box>
 
@@ -466,6 +467,8 @@ function PartnerStat({
     label: string;
     last?: boolean;
 }) {
+    const { t } = useSiteTranslation();
+
     return (
         <Stack
             sx={{
@@ -507,7 +510,7 @@ function PartnerStat({
             <Typography
                 sx={{
                     fontFamily:
-                        '"IBM Plex Sans Arabic", sans-serif',
+                        "var(--clinova-font-family)",
 
                     fontSize: "0.62rem",
 
@@ -516,7 +519,7 @@ function PartnerStat({
                     whiteSpace: "nowrap",
                 }}
             >
-                {label}
+                {t(label)}
             </Typography>
         </Stack>
     );

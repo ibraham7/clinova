@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { useState } from "react";
 import {
     Box,
@@ -56,6 +57,8 @@ const specialties = [
 ];
 
 function SpecialtiesSection() {
+    const { direction, t } = useSiteTranslation();
+
     const [activeId, setActiveId] = useState("dental");
 
     return (
@@ -75,7 +78,7 @@ function SpecialtiesSection() {
                 background:
                     "radial-gradient(circle at 80% 20%, rgba(142,168,232,0.08), transparent 32%), #0B111B",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -97,7 +100,7 @@ function SpecialtiesSection() {
 
                         textAlign: {
                             xs: "center",
-                            lg: "right",
+                            lg: "start",
                         },
 
                         mb: {
@@ -148,7 +151,7 @@ function SpecialtiesSection() {
                         <Typography
                             sx={{
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: "0.72rem",
 
@@ -157,7 +160,7 @@ function SpecialtiesSection() {
                                 color: "text.secondary",
                             }}
                         >
-                            تخصصاتنا
+                            {t("تخصصاتنا")}
                         </Typography>
                     </Box>
 
@@ -168,7 +171,7 @@ function SpecialtiesSection() {
                             m: 0,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "2.5rem",
@@ -186,8 +189,8 @@ function SpecialtiesSection() {
                             color: "#F5F7FA",
                         }}
                     >
-                        تخصصات نعرفها بعمق.
-                    </Typography>
+                        {t("تخصصات نعرفها بعمق.")}
+                        </Typography>
 
                     {/* Description */}
                     <Typography
@@ -195,7 +198,7 @@ function SpecialtiesSection() {
                             mt: 3,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "0.88rem",
@@ -207,11 +210,8 @@ function SpecialtiesSection() {
                             color: "text.secondary",
                         }}
                     >
-                        نحن لا نعمل مع كل التخصصات الطبية، نركز على
-                        التخصصات التي تتطلب بناء ثقة عالية ورحلة قرار
-                        أطول لدى المريض، ما يمنحنا فهمًا أعمق لسلوك
-                        المرضى والتحديات التسويقية الخاصة بكل مجال.
-                    </Typography>
+                        {t("نحن لا نعمل مع كل التخصصات الطبية، نركز على التخصصات التي تتطلب بناء ثقة عالية ورحلة قرار أطول لدى المريض، ما يمنحنا فهمًا أعمق لسلوك المرضى والتحديات التسويقية الخاصة بكل مجال.")}
+                        </Typography>
                 </Box>
 
                 {/* =====================================
@@ -270,6 +270,8 @@ function SpecialtyCard({
     first: boolean;
     onClick: () => void;
 }) {
+    const { t } = useSiteTranslation();
+
     const Icon = specialty.icon;
 
     return (
@@ -298,7 +300,7 @@ function SpecialtyCard({
                     lg: 5,
                 },
 
-                textAlign: "right",
+                textAlign: "start",
 
                 border: 0,
 
@@ -450,7 +452,7 @@ function SpecialtyCard({
                 component="h3"
                 sx={{
                     fontFamily:
-                        '"IBM Plex Sans Arabic", sans-serif',
+                        "var(--clinova-font-family)",
 
                     fontSize: {
                         xs: "1.65rem",
@@ -469,7 +471,7 @@ function SpecialtyCard({
                         "color 0.3s ease",
                 }}
             >
-                {specialty.title}
+                {t(specialty.title)}
             </Typography>
 
             {/* =================================
@@ -481,7 +483,7 @@ function SpecialtyCard({
                     mt: 2.5,
 
                     fontFamily:
-                        '"IBM Plex Sans Arabic", sans-serif',
+                        "var(--clinova-font-family)",
 
                     fontSize: {
                         xs: "0.82rem",
@@ -493,7 +495,7 @@ function SpecialtyCard({
                     color: "text.secondary",
                 }}
             >
-                {specialty.description}
+                {t(specialty.description)}
             </Typography>
 
             {/* =================================
@@ -544,7 +546,7 @@ function SpecialtyCard({
                         <Typography
                             sx={{
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: "0.65rem",
 
@@ -557,7 +559,7 @@ function SpecialtyCard({
                                         : "text.secondary",
                             }}
                         >
-                            {tag}
+                            {t(tag)}
                         </Typography>
                     </Box>
                 ))}

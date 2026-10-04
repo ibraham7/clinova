@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { useState } from "react";
 import {
     Box,
@@ -235,6 +236,8 @@ const services: Service[] = [
 ];
 
 function ServicesSection() {
+    const { direction, t, isRtl } = useSiteTranslation();
+
     const [activeService, setActiveService] = useState("ads");
 
     const active =
@@ -258,7 +261,7 @@ function ServicesSection() {
                 background:
                     "radial-gradient(circle at 50% 45%, rgba(142,168,232,0.07), transparent 38%), #0B111B",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -393,7 +396,7 @@ function ServicesSection() {
                                     md: 3,
                                 },
 
-                                textAlign: "right",
+                                textAlign: "start",
                             }}
                         >
                             {/* Badge */}
@@ -433,7 +436,7 @@ function ServicesSection() {
                                 <Typography
                                     sx={{
                                         fontFamily:
-                                            '"IBM Plex Sans Arabic", sans-serif',
+                                            "var(--clinova-font-family)",
 
                                         fontSize: "0.7rem",
 
@@ -441,7 +444,7 @@ function ServicesSection() {
                                             "text.secondary",
                                     }}
                                 >
-                                    {active.number} / {active.subtitle}
+                                    {active.number} / {t(active.subtitle)}
                                 </Typography>
                             </Box>
 
@@ -452,7 +455,7 @@ function ServicesSection() {
                                     mt: 2.5,
 
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
 
                                     fontSize: {
                                         xs: "2rem",
@@ -469,7 +472,7 @@ function ServicesSection() {
                                     color: "#F5F7FA",
                                 }}
                             >
-                                {active.title}
+                                {t(active.title)}
                             </Typography>
 
                             {/* Description */}
@@ -482,7 +485,7 @@ function ServicesSection() {
                                     ml: "auto",
 
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
 
                                     fontSize: {
                                         xs: "0.85rem",
@@ -494,7 +497,7 @@ function ServicesSection() {
                                     color: "text.secondary",
                                 }}
                             >
-                                {active.description}
+                                {t(active.description)}
                             </Typography>
 
                             {/* Features */}
@@ -541,7 +544,7 @@ function ServicesSection() {
                                             <Typography
                                                 sx={{
                                                     fontFamily:
-                                                        '"IBM Plex Sans Arabic", sans-serif',
+                                                        "var(--clinova-font-family)",
 
                                                     fontSize:
                                                         "0.75rem",
@@ -550,7 +553,7 @@ function ServicesSection() {
                                                         "text.secondary",
                                                 }}
                                             >
-                                                {feature}
+                                                {t(feature)}
                                             </Typography>
                                         </Stack>
                                     ),
@@ -672,27 +675,28 @@ function ServicesSection() {
                                 <Typography
                                     sx={{
                                         fontFamily:
-                                            '"IBM Plex Sans Arabic", sans-serif',
+                                            "var(--clinova-font-family)",
 
                                         fontSize: {
                                             xs: "0.68rem",
                                             md: "0.72rem",
                                         },
 
-                                        whiteSpace:
-                                            "nowrap",
+                                        whiteSpace: "normal",
                                     }}
                                 >
-                                    {service.navLabel}
+                                    {t(service.navLabel)}
                                 </Typography>
                                 {index < services.length - 1 && (
                                     <ArrowBackRoundedIcon
                                         aria-hidden="true"
                                         sx={{
                                             position: "absolute",
-                                            left: -12,
+                                            insetInlineEnd: -12,
                                             top: "50%",
-                                            transform: "translate(-50%, -50%)",
+                                            transform: isRtl
+                                                ? "translate(-50%, -50%)"
+                                                : "translate(50%, -50%) rotate(180deg)",
                                             fontSize: 18,
                                             color: isActive
                                                 ? "primary.main"
@@ -728,6 +732,8 @@ function ServiceTopTab({
     active: boolean;
     onClick: () => void;
 }) {
+    const { t } = useSiteTranslation();
+
     return (
         <Box
             component="button"
@@ -777,13 +783,13 @@ function ServiceTopTab({
             {/* Text */}
             <Box
                 sx={{
-                    textAlign: "right",
+                    textAlign: "start",
                 }}
             >
                 <Typography
                     sx={{
                         fontFamily:
-                            '"IBM Plex Sans Arabic", sans-serif',
+                            "var(--clinova-font-family)",
 
                         fontSize: "0.9rem",
 
@@ -794,7 +800,7 @@ function ServiceTopTab({
                             : "text.secondary",
                     }}
                 >
-                    {service.categoryTitle ?? service.subtitle}
+                    {t(service.categoryTitle ?? service.subtitle)}
                 </Typography>
 
                 <Typography
@@ -802,7 +808,7 @@ function ServiceTopTab({
                         mt: 0.5,
 
                         fontFamily:
-                            '"IBM Plex Sans Arabic", sans-serif',
+                            "var(--clinova-font-family)",
 
                         fontSize: "0.65rem",
 
@@ -810,7 +816,7 @@ function ServiceTopTab({
                             "text.secondary",
                     }}
                 >
-                    {service.subtitle}
+                    {t(service.subtitle)}
                 </Typography>
             </Box>
 
@@ -867,6 +873,8 @@ function AnalyticsPanel({
 }: {
     stats: Service["stats"];
 }) {
+    const { t } = useSiteTranslation();
+
     return (
         <Box
             sx={{
@@ -923,8 +931,8 @@ function AnalyticsPanel({
                             "rgba(245,247,250,0.4)",
                     }}
                 >
-                    CLINOVA / ANALYTICS
-                </Typography>
+                    {t("CLINOVA / ANALYTICS")}
+                        </Typography>
 
                 <Stack
                     sx={{
@@ -949,8 +957,8 @@ function AnalyticsPanel({
                                 "rgba(245,247,250,0.35)",
                         }}
                     >
-                        LIVE
-                    </Typography>
+                        {t("LIVE")}
+                        </Typography>
 
                     <Box
                         sx={{
@@ -1010,7 +1018,7 @@ function AnalyticsPanel({
                                     "rgba(245,247,250,0.55)",
                             }}
                         >
-                            {stat.label}
+                            {t(stat.label)}
                         </Typography>
 
                         {/* Bar */}
@@ -1077,7 +1085,7 @@ function AnalyticsPanel({
                                     "primary.light",
                             }}
                         >
-                            {stat.value}
+                            {t(stat.value)}
                         </Typography>
                     </Box>
                 ))}
@@ -1103,8 +1111,8 @@ function AnalyticsPanel({
                         "rgba(245,247,250,0.28)",
                 }}
             >
-                PERFORMANCE / THIS MONTH
-            </Typography>
+                {t("PERFORMANCE / THIS MONTH")}
+                        </Typography>
 
             <PauseRoundedIcon
                 sx={{

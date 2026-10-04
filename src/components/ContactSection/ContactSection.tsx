@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
@@ -36,6 +37,8 @@ const conversations = [
 ];
 
 function ContactSection() {
+    const { direction, t } = useSiteTranslation();
+
     return (
         <Box
             component="section"
@@ -53,7 +56,7 @@ function ContactSection() {
                 background:
                     "radial-gradient(circle at 80% 60%, rgba(142,168,232,0.08), transparent 35%), #0B111B",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -75,7 +78,7 @@ function ContactSection() {
 
                         textAlign: {
                             xs: "center",
-                            lg: "right",
+                            lg: "start",
                         },
 
                         mb: {
@@ -125,7 +128,7 @@ function ContactSection() {
                         <Typography
                             sx={{
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: "0.72rem",
 
@@ -134,7 +137,7 @@ function ContactSection() {
                                 color: "text.secondary",
                             }}
                         >
-                            التواصل المتكامل
+                            {t("التواصل المتكامل")}
                         </Typography>
                     </Box>
 
@@ -145,7 +148,7 @@ function ContactSection() {
                             m: 0,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "2.5rem",
@@ -166,19 +169,18 @@ function ContactSection() {
                             color: "#F5F7FA",
                         }}
                     >
-                        لا ندير الإعلانات فقط،
-                        <Box
+                        {t("لا ندير الإعلانات فقط،")}<Box
                             component="span"
                             sx={{
                                 display: "block",
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 color: "primary.main",
                             }}
                         >
-                            نبني رحلة المريض
+                            {t("نبني رحلة المريض")}
                         </Box>
                         <Box
                             component="span"
@@ -186,12 +188,12 @@ function ContactSection() {
                                 display: "block",
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 color: "#F5F7FA",
                             }}
                         >
-                            من أول تواصل إلى الحجز.
+                            {t("من أول تواصل إلى الحجز.")}
                         </Box>
                     </Typography>
 
@@ -201,7 +203,7 @@ function ContactSection() {
                             mt: 3,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "0.88rem",
@@ -213,12 +215,8 @@ function ContactSection() {
                             color: "text.secondary",
                         }}
                     >
-                        في Clinova لا نقيس النجاح بعدد الاستفسارات أو
-                        المشاهدات، بل بقدرتنا على تحويل الاهتمام إلى
-                        مرضى فعليين. لذلك نبني نظامًا متكاملًا يشمل
-                        جذب المرضى المحتملين وإدارة التواصل معهم
-                        وتحسين تجربتهم حتى لحظة الحجز.
-                    </Typography>
+                        {t("في Clinova لا نقيس النجاح بعدد الاستفسارات أو المشاهدات، بل بقدرتنا على تحويل الاهتمام إلى مرضى فعليين. لذلك نبني نظامًا متكاملًا يشمل جذب المرضى المحتملين وإدارة التواصل معهم وتحسين تجربتهم حتى لحظة الحجز.")}
+                        </Typography>
                 </Box>
 
                 {/* =====================================
@@ -363,8 +361,8 @@ function ContactSection() {
                                             "rgba(245,247,250,0.4)",
                                     }}
                                 >
-                                    ACTIVE
-                                </Typography>
+                                    {t("ACTIVE")}
+                        </Typography>
 
                                 <Typography
                                     sx={{
@@ -400,8 +398,8 @@ function ContactSection() {
                                             "rgba(245,247,250,0.4)",
                                     }}
                                 >
-                                    LIVE QUEUE
-                                </Typography>
+                                    {t("LIVE QUEUE")}
+                        </Typography>
 
                                 <Box
                                     sx={{
@@ -482,8 +480,8 @@ function ContactSection() {
                                         "rgba(245,247,250,0.3)",
                                 }}
                             >
-                                COVERAGE
-                            </Typography>
+                                {t("COVERAGE")}
+                        </Typography>
 
                             <Typography
                                 sx={{
@@ -511,10 +509,10 @@ function ContactSection() {
 
                             textAlign: {
                                 xs: "center",
-                                lg: "right",
+                                lg: "start",
                             },
 
-                            direction: "rtl",
+                            direction: direction,
                         }}
                     >
                         {/* Small label */}
@@ -546,7 +544,7 @@ function ContactSection() {
                             <Typography
                                 sx={{
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
 
                                     fontSize: "0.7rem",
 
@@ -554,8 +552,8 @@ function ContactSection() {
                                         "text.secondary",
                                 }}
                             >
-                                التواصل مع المرضى
-                            </Typography>
+                                {t("التواصل مع المرضى")}
+                        </Typography>
                         </Box>
 
                         {/* Title */}
@@ -565,7 +563,7 @@ function ContactSection() {
                                 mt: 2.5,
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "2rem",
@@ -582,7 +580,7 @@ function ContactSection() {
                                 color: "#F5F7FA",
                             }}
                         >
-                            مركز اتصال داخلي
+                            {t("مركز اتصال داخلي")}
                         </Typography>
 
                         {/* Description */}
@@ -597,7 +595,7 @@ function ContactSection() {
                                 },
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "0.85rem",
@@ -609,11 +607,7 @@ function ContactSection() {
                                 color: "text.secondary",
                             }}
                         >
-                            موظفونا الناطقون بالعربية والإنجليزية والتركية
-                            يتحدثون مع كل عميل خلال دقائق، بلهجته وبفهم مباشر
-                            لاحتياجه. نتابع الاستفسار ونساعد المريض على الوصول
-                            إلى الخدمة المناسبة حتى إتمام الحجز والمتابعة
-                            بعد الإجراء العلاجي.
+                            {t("موظفونا الناطقون بالعربية والإنجليزية والتركية يتحدثون مع كل عميل خلال دقائق، بلهجته وبفهم مباشر لاحتياجه. نتابع الاستفسار ونساعد المريض على الوصول إلى الخدمة المناسبة حتى إتمام الحجز والمتابعة بعد الإجراء العلاجي.")}
                         </Typography>
 
                         {/* Stats */}
@@ -696,6 +690,8 @@ function Conversation({
     time: string;
     active: boolean;
 }) {
+    const { t } = useSiteTranslation();
+
     return (
         <Box
             sx={{
@@ -766,7 +762,7 @@ function Conversation({
                             "1px solid rgba(142,168,232,0.25)",
                     }}
                 >
-                    {status}
+                    {t(status)}
                 </Typography>
 
                 <Typography
@@ -791,7 +787,7 @@ function Conversation({
                 sx={{
                     minWidth: 0,
 
-                    textAlign: "right",
+                    textAlign: "start",
                 }}
             >
                 <Typography
@@ -813,7 +809,7 @@ function Conversation({
                         textOverflow: "ellipsis",
                     }}
                 >
-                    {name}
+                    {t(name)}
                 </Typography>
 
                 <Typography
@@ -831,7 +827,7 @@ function Conversation({
                         whiteSpace: "nowrap",
                     }}
                 >
-                    {location}
+                    {t(location)}
                 </Typography>
             </Box>
 
@@ -923,6 +919,8 @@ function Stat({
     value: string;
     label: string;
 }) {
+    const { t } = useSiteTranslation();
+
     return (
         <Box>
             <Typography
@@ -948,7 +946,7 @@ function Stat({
                     mt: 0.3,
 
                     fontFamily:
-                        '"IBM Plex Sans Arabic", sans-serif',
+                        "var(--clinova-font-family)",
 
                     fontSize: "0.65rem",
 
@@ -957,7 +955,7 @@ function Stat({
                     whiteSpace: "nowrap",
                 }}
             >
-                {label}
+                {t(label)}
             </Typography>
         </Box>
     );

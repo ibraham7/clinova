@@ -1,5 +1,11 @@
+import { useState } from "react";
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import {
     AppBar,
+    Drawer,
+    List,
+    ListItemButton,
+    ListItemText,
     Box,
     Button,
     Container,
@@ -12,8 +18,8 @@ import {
 } from "@mui/material";
 import clinovaLogo from "../../../public/logo/logo.png";
 
-import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import LanguageSwitcher from "./LanguageSwitcher";
+
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import { bookingLinkProps } from "../../config/contact";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
@@ -33,18 +39,19 @@ const navItems = [
     },
     {
         label: "الأطباء",
-        href: "#doctors",
+        href: "#specialties",
     },
     {
         label: "تواصل معنا",
-        href: "#contact",
+        href: "#contact-cta",
     },
 ];
 
 function Header() {
+    const { isRtl } = useSiteTranslation();
     const theme = useTheme();
 
-    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+    const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
     return (
         <AppBar
@@ -64,6 +71,8 @@ function Header() {
                     disableGutters
                     sx={{
                         minHeight: { xs: 64, md: 76 },
+                        direction: "ltr",
+                        flexDirection: isMobile || isRtl ? "row" : "row-reverse",
                         px: { xs: 1.5, md: 2.5 },
 
                         borderRadius: "999px",
@@ -111,6 +120,8 @@ function Header() {
 }
 
 function DesktopHeader() {
+    const { t, direction } = useSiteTranslation();
+
     return (
         <>
             {/* CTA */}
@@ -147,49 +158,18 @@ function DesktopHeader() {
                         "all 0.3s ease",
                 }}
             >
-                احجز موعد
-            </Button>
+                {t("احجز موعد")}
+                        </Button>
 
-            {/* Language */}
-            <Button
-                variant="outlined"
-                startIcon={<LanguageRoundedIcon />}
-                endIcon={<KeyboardArrowDownRoundedIcon />}
-                sx={{
-                    ml: 2,
-
-                    height: 48,
-                    minWidth: 118,
-
-                    px: 2,
-
-                    borderRadius: "999px",
-
-                    color: "text.secondary",
-
-                    borderColor:
-                        "rgba(142, 168, 232, 0.14)",
-
-                    backgroundColor:
-                        "rgba(255, 255, 255, 0.015)",
-
-                    "&:hover": {
-                        borderColor:
-                            "rgba(142, 168, 232, 0.35)",
-
-                        backgroundColor:
-                            "rgba(142, 168, 232, 0.05)",
-                    },
-                }}
-            >
-                English
-            </Button>
+            <Box sx={{ mx: 2 }}>
+                <LanguageSwitcher />
+            </Box>
 
             {/* Navigation */}
             <Box
                 component="nav"
-                dir="rtl"
-                aria-label="التنقل الرئيسي"
+                dir={direction}
+                aria-label={t("التنقل الرئيسي")}
                 sx={{
                     flex: 1,
 
@@ -204,7 +184,7 @@ function DesktopHeader() {
                     sx={{
                         flexDirection: "row",
                         alignItems: "center",
-                        gap: 4.5,
+                        gap: { md: 2, lg: 4.5 },
                     }}
                 >
                     {navItems.map((item) => (
@@ -263,7 +243,7 @@ function DesktopHeader() {
                                 },
                             }}
                         >
-                            {item.label}
+                            {t(item.label)}
                         </Typography>
                     ))}
                 </Stack>
@@ -306,6 +286,9 @@ function DesktopHeader() {
 }
 
 function MobileHeader() {
+    const { t, direction, isRtl } = useSiteTranslation();
+    const [menuOpen, setMenuOpen] = useState(false);
+
     return (
         <>
             {/* Mobile Logo */}
@@ -371,6 +354,10 @@ function MobileHeader() {
                 </Box>
             </Box>
 
+            <Box sx={{ mx: 0.5 }}>
+                <LanguageSwitcher compact />
+            </Box>
+
             {/* Mobile CTA */}
             <Button
                 endIcon={<PhoneRoundedIcon />}
@@ -387,11 +374,14 @@ function MobileHeader() {
                     fontSize: "0.8rem",
                 }}
             >
-                احجز
-            </Button>
+                {t("احجز")}
+                        </Button>
 
             {/* Menu */}
             <IconButton
+                aria-label={t("فتح قائمة التنقل")}
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen(true)}
                 sx={{
                     ml: 1,
 
@@ -408,6 +398,28 @@ function MobileHeader() {
             >
                 <MenuRoundedIcon />
             </IconButton>
+            <Drawer
+                anchor={isRtl ? "right" : "left"}
+                open={menuOpen}
+                onClose={() => setMenuOpen(false)}
+                slotProps={{ paper: { dir: direction, sx: { width: 280, p: 2 } } }}
+            >
+                <Box component="nav" aria-label={t("التنقل الرئيسي")}>
+                    <List>
+                        {navItems.map((item) => (
+                            <ListItemButton
+                                key={item.href}
+                                component="a"
+                                href={item.href}
+                                onClick={() => setMenuOpen(false)}
+                                sx={{ textAlign: "start", borderRadius: 2 }}
+                            >
+                                <ListItemText primary={t(item.label)} />
+                            </ListItemButton>
+                        ))}
+                    </List>
+                </Box>
+            </Drawer>
         </>
     );
 }

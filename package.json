@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:i18n": "node scripts/verify-i18n.cjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { useLayoutEffect, useRef, useState } from "react";
 import { Box, Typography } from "@mui/material";
 
@@ -12,6 +13,8 @@ const items = [
 ];
 
 function MedicalTicker() {
+    const { direction, t } = useSiteTranslation();
+
     const viewportRef = useRef<HTMLDivElement>(null);
     const unitRef = useRef<HTMLDivElement>(null);
     const [repetitions, setRepetitions] = useState(1);
@@ -79,7 +82,7 @@ function MedicalTicker() {
                                     alignItems: "center",
                                     flexShrink: 0,
                                     gap: 4,
-                                    direction: "rtl",
+                                    direction: direction,
                                     // Same spacing within a unit and across both seams.
                                     paddingInlineEnd: 4,
                                 }}
@@ -96,14 +99,14 @@ function MedicalTicker() {
                                     >
                                         <Typography
                                             sx={{
-                                                fontFamily: '"IBM Plex Sans Arabic", sans-serif',
+                                                fontFamily: "var(--clinova-font-family)",
                                                 fontSize: { xs: "0.85rem", md: "1rem" },
                                                 fontWeight: 500,
                                                 color: "rgba(245, 247, 250, 0.65)",
                                                 whiteSpace: "nowrap",
                                             }}
                                         >
-                                            {item}
+                                            {t(item)}
                                         </Typography>
                                         <Box
                                             aria-hidden="true"

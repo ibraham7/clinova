@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import {
     Box,
     Container,
@@ -9,6 +10,8 @@ import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import { bookingLinkProps } from "../../config/contact";
 
 function CTASection() {
+    const { direction, t } = useSiteTranslation();
+
     return (
         <Box
             component="section"
@@ -25,7 +28,7 @@ function CTASection() {
 
                 backgroundColor: "#0B111B",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -145,7 +148,7 @@ function CTASection() {
                                 m: 0,
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "2.5rem",
@@ -163,7 +166,7 @@ function CTASection() {
                                 color: "#F5F7FA",
                             }}
                         >
-                            لنملأ دفتر مواعيدك.
+                            {t("لنملأ دفتر مواعيدك.")}
                         </Typography>
 
                         {/* Description */}
@@ -173,7 +176,7 @@ function CTASection() {
                                 maxWidth: 580,
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "0.8rem",
@@ -186,9 +189,7 @@ function CTASection() {
                                     "rgba(245,247,250,0.62)",
                             }}
                         >
-                            مكالمة استراتيجية مجانية لمدة 30 دقيقة.
-                            نراجع تسويقك الحالي، نحدد مكامن
-                            النمو، ونترك لك خطة واضحة تبدأ بها.
+                            {t("مكالمة استراتيجية مجانية لمدة 30 دقيقة. نراجع تسويقك الحالي، نحدد مكامن النمو، ونترك لك خطة واضحة تبدأ بها.")}
                         </Typography>
 
                         {/* CTA */}
@@ -224,7 +225,7 @@ function CTASection() {
                                     "#0B111B",
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize:
                                     "0.8rem",
@@ -256,9 +257,7 @@ function CTASection() {
                                 },
                             }}
                         >
-                            احجز مكالمة استراتيجية
-
-                            <PhoneRoundedIcon
+                            {t("احجز مكالمة استراتيجية")}<PhoneRoundedIcon
                                 sx={{
                                     fontSize: 15,
                                 }}

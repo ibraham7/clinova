@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { useId } from "react";
 import { Box } from "@mui/material";
 import { keyframes } from "@emotion/react";
@@ -9,6 +10,8 @@ const pulse = keyframes`
 `;
 
 export default function CoverageMap() {
+    const { t } = useSiteTranslation();
+
     const titleId = useId();
 
     return (
@@ -36,8 +39,8 @@ export default function CoverageMap() {
             }}
         >
             <title id={titleId}>
-                Clinova coverage: Türkiye, Syria, Saudi Arabia, UAE, Qatar and Kuwait
-            </title>
+                {t("Clinova coverage: Türkiye, Syria, Saudi Arabia, UAE, Qatar and Kuwait")}
+                        </title>
             {countryBoundaries.map((country) => {
                 const active = coverageLocations.some((location) => location.code === country.code);
                 return (
@@ -85,7 +88,7 @@ export default function CoverageMap() {
                         strokeLinejoin="round"
                         paintOrder="stroke"
                     >
-                        {location.name}
+                        {t(location.name)}
                     </text>
                 </g>
             ))}

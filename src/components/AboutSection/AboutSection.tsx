@@ -1,6 +1,9 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { Box, Container, Typography } from "@mui/material";
 
 function AboutSection() {
+    const { direction, t } = useSiteTranslation();
+
     return (
         <Box
             component="section"
@@ -65,7 +68,7 @@ function AboutSection() {
 
                         textAlign: "center",
 
-                        direction: "rtl",
+                        direction: direction,
                     }}
                 >
                     {/* Badge */}
@@ -112,7 +115,7 @@ function AboutSection() {
                         <Typography
                             sx={{
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: "0.75rem",
 
@@ -121,7 +124,7 @@ function AboutSection() {
                                 color: "text.secondary",
                             }}
                         >
-                            من نحن
+                            {t("من نحن")}
                         </Typography>
                     </Box>
 
@@ -132,7 +135,7 @@ function AboutSection() {
                             m: 0,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "2.4rem",
@@ -153,19 +156,18 @@ function AboutSection() {
                             color: "#F5F7FA",
                         }}
                     >
-                        نبني أنظمة نمو متكاملة
-                        <Box
+                        {t("نبني أنظمة نمو متكاملة")}<Box
                             component="span"
                             sx={{
                                 display: "block",
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 color: "primary.main",
                             }}
                         >
-                            للعيادات الطبية.
+                            {t("للعيادات الطبية.")}
                         </Box>
                     </Typography>
 
@@ -182,7 +184,7 @@ function AboutSection() {
                             mx: "auto",
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "0.9rem",
@@ -196,12 +198,8 @@ function AboutSection() {
                             color: "text.secondary",
                         }}
                     >
-                        في Clinova، نؤمن أن نجاح العيادة لا يعتمد على
-                        الإعلانات وحدها، بل على بناء نظام متكامل يبدأ من
-                        جذب المريض المناسب، ويتحول إلى تجربة واضحة وموثوقة،
-                        ثم يعمل على تحسين رحلة المريض وبناء نمو قابل للقياس
-                        ومستدام.
-                    </Typography>
+                        {t("في Clinova، نؤمن أن نجاح العيادة لا يعتمد على الإعلانات وحدها، بل على بناء نظام متكامل يبدأ من جذب المريض المناسب، ويتحول إلى تجربة واضحة وموثوقة، ثم يعمل على تحسين رحلة المريض وبناء نمو قابل للقياس ومستدام.")}
+                        </Typography>
                 </Box>
             </Container>
         </Box>

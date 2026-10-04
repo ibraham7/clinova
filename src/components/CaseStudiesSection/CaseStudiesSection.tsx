@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { useState } from "react";
 import {
     Box,
@@ -147,6 +148,8 @@ const caseStudies: CaseStudy[] = [
 ];
 
 function CaseStudiesSection() {
+    const { direction, t } = useSiteTranslation();
+
     const [activeId, setActiveId] = useState("dalya");
 
     const activeCase =
@@ -171,7 +174,7 @@ function CaseStudiesSection() {
                 background:
                     "radial-gradient(circle at 70% 50%, rgba(142,168,232,0.07), transparent 35%), #0B111B",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -193,7 +196,7 @@ function CaseStudiesSection() {
 
                         textAlign: {
                             xs: "center",
-                            lg: "right",
+                            lg: "start",
                         },
 
                         mb: {
@@ -241,14 +244,14 @@ function CaseStudiesSection() {
                         <Typography
                             sx={{
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: "0.72rem",
 
                                 color: "text.secondary",
                             }}
                         >
-                            أعمال مختارة
+                            {t("أعمال مختارة")}
                         </Typography>
                     </Box>
 
@@ -259,7 +262,7 @@ function CaseStudiesSection() {
                             m: 0,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "2.5rem",
@@ -277,19 +280,18 @@ function CaseStudiesSection() {
                             color: "#F5F7FA",
                         }}
                     >
-                        نجاحات حقيقية.
-                        <Box
+                        {t("نجاحات حقيقية.")}<Box
                             component="span"
                             sx={{
                                 display: "block",
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 color: "primary.main",
                             }}
                         >
-                            أرقام حقيقية.
+                            {t("أرقام حقيقية.")}
                         </Box>
                     </Typography>
 
@@ -298,7 +300,7 @@ function CaseStudiesSection() {
                             mt: 3,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "0.88rem",
@@ -310,9 +312,8 @@ function CaseStudiesSection() {
                             color: "text.secondary",
                         }}
                     >
-                        بعض المشاريع الأخيرة. دراسات الحالة الكاملة
-                        متوفرة عند الطلب.
-                    </Typography>
+                        {t("بعض المشاريع الأخيرة. دراسات الحالة الكاملة متوفرة عند الطلب.")}
+                        </Typography>
                 </Box>
 
                 {/* =====================================
@@ -344,7 +345,7 @@ function CaseStudiesSection() {
                         sx={{
                             gap: 1.2,
 
-                            direction: "rtl",
+                            direction: direction,
 
                             order: {
                                 xs: 2,
@@ -397,6 +398,8 @@ function CaseItem({
     active: boolean;
     onClick: () => void;
 }) {
+    const { direction, t } = useSiteTranslation();
+
     return (
         <Box
             component="button"
@@ -431,7 +434,7 @@ function CaseItem({
 
                 cursor: "pointer",
 
-                textAlign: "right",
+                textAlign: "start",
 
                 direction: "ltr",
 
@@ -470,7 +473,7 @@ function CaseItem({
             {/* Content */}
             <Box
                 sx={{
-                    direction: "rtl",
+                    direction: direction,
 
                     minWidth: 0,
                 }}
@@ -478,7 +481,7 @@ function CaseItem({
                 <Typography
                     sx={{
                         fontFamily:
-                            '"IBM Plex Sans Arabic", sans-serif',
+                            "var(--clinova-font-family)",
 
                         fontSize: "0.78rem",
 
@@ -500,7 +503,7 @@ function CaseItem({
                             "ellipsis",
                     }}
                 >
-                    {caseStudy.name}
+                    {t(caseStudy.name)}
                 </Typography>
 
                 <Typography
@@ -508,7 +511,7 @@ function CaseItem({
                         mt: 0.3,
 
                         fontFamily:
-                            '"IBM Plex Sans Arabic", sans-serif',
+                            "var(--clinova-font-family)",
 
                         fontSize: "0.58rem",
 
@@ -525,9 +528,9 @@ function CaseItem({
                             "ellipsis",
                     }}
                 >
-                    {caseStudy.location}
+                    {t(caseStudy.location)}
                     {" · "}
-                    {caseStudy.specialty}
+                    {t(caseStudy.specialty)}
                 </Typography>
             </Box>
 
@@ -552,6 +555,8 @@ function CaseItem({
 ========================================= */
 
 function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
+    const { direction, t } = useSiteTranslation();
+
     const bookedAppointments = caseStudy.stats.find(
         (stat) => stat.label === "موعد محجوز",
     );
@@ -559,7 +564,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
     return (
         <Box
             component="article"
-            aria-label={`تجربة ${caseStudy.name}`}
+            aria-label={t("تجربة {{name}}", { name: t(caseStudy.name) })}
             sx={{
                 order: { xs: 1, lg: 2 },
                 minWidth: 0,
@@ -568,7 +573,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                 border: "1px solid rgba(142,168,232,0.18)",
                 background:
                     "linear-gradient(145deg, rgba(142,168,232,0.08), rgba(21,31,45,0.65))",
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Typography
@@ -578,7 +583,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                     mb: 1.5,
                 }}
             >
-                تجربة العيادة / {caseStudy.number}
+                {t("تجربة العيادة /")}{caseStudy.number}
             </Typography>
             <Typography
                 component="h3"
@@ -589,7 +594,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                     color: "text.primary",
                 }}
             >
-                {caseStudy.name}
+                {t(caseStudy.name)}
             </Typography>
 
             <Box
@@ -614,10 +619,10 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                         }}
                     >
                         <Typography sx={{ color: "text.secondary", fontSize: "0.7rem", mb: 0.7 }}>
-                            {item.label}
+                            {t(item.label)}
                         </Typography>
                         <Typography sx={{ color: "text.primary", fontSize: "0.9rem" }}>
-                            {item.value}
+                            {t(item.value)}
                         </Typography>
                     </Box>
                 ))}
@@ -630,26 +635,21 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                 detail.text ? (
                     <Box key={detail.title} sx={{ mb: 3 }}>
                         <Typography component="h4" sx={{ fontWeight: 600, mb: 1 }}>
-                            {detail.title}
+                            {t(detail.title)}
                         </Typography>
                         <Typography sx={{ color: "text.secondary", lineHeight: 2, fontSize: "0.9rem" }}>
-                            {detail.text}
+                            {t(detail.text)}
                         </Typography>
                     </Box>
                 ) : null,
             )}
 
             <Typography component="h4" sx={{ fontWeight: 600, mb: 1 }}>
-                نتائج التجربة
-            </Typography>
+                {t("نتائج التجربة")}
+                        </Typography>
             {bookedAppointments && (
                 <Typography sx={{ color: "text.secondary", fontSize: "0.9rem", lineHeight: 2 }}>
-                    وصل عدد المواعيد المحجوزة في هذه التجربة إلى{" "}
-                    <Box component="span" sx={{ color: "text.primary", fontWeight: 600 }}>
-                        {bookedAppointments.value}
-                    </Box>
-                    {" "}موعداً. يوضح الملخص التالي الإيرادات ومتوسط إيراد الموعد
-                    والعائد على الاستثمار.
+                    {t("نتائج الحجوزات {{count}}", { count: bookedAppointments.value })}
                 </Typography>
             )}
 
@@ -669,13 +669,13 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                         fontSize: { xs: "2.6rem", md: "3.2rem" },
                         color: "primary.light",
                         lineHeight: 1.2,
-                        textAlign: "right",
+                        textAlign: direction === "rtl" ? "right" : "left",
                     }}
                 >
                     {caseStudy.result}
                 </Typography>
                 <Typography sx={{ mt: 1, color: "text.secondary", fontSize: "0.8rem" }}>
-                    {caseStudy.resultLabel}
+                    {t(caseStudy.resultLabel)}
                 </Typography>
             </Box>
 
@@ -706,10 +706,10 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                                 color: "text.primary",
                             }}
                         >
-                            {stat.value}
+                            {t(stat.value)}
                         </Typography>
                         <Typography sx={{ mt: 0.7, fontSize: "0.7rem", color: "text.secondary" }}>
-                            {stat.label}
+                            {t(stat.label)}
                         </Typography>
                     </Box>
                 ))}

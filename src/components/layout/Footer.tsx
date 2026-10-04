@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import {
     Box,
     Container,
@@ -23,6 +24,8 @@ const company = [
 ];
 
 function Footer() {
+    const { direction, t } = useSiteTranslation();
+
     return (
         <Box
             component="footer"
@@ -45,7 +48,7 @@ function Footer() {
                 borderTop:
                     "1px solid rgba(142,168,232,0.08)",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -90,7 +93,7 @@ function Footer() {
 
                             textAlign: {
                                 xs: "center",
-                                md: "right",
+                                md: "start",
                             },
                         }}
                     >
@@ -141,7 +144,7 @@ function Footer() {
                                 maxWidth: 330,
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize:
                                     "0.82rem",
@@ -153,8 +156,7 @@ function Footer() {
                                     "text.secondary",
                             }}
                         >
-                            شريكك لبناء حضور رقمي ونظام نمو
-                            متكامل للعيادات والمراكز الطبية.
+                            {t("شريكك لبناء حضور رقمي ونظام نمو متكامل للعيادات والمراكز الطبية.")}
                         </Typography>
 
                         {/* Social */}
@@ -220,14 +222,14 @@ function Footer() {
 
                             textAlign: {
                                 xs: "center",
-                                md: "right",
+                                md: "start",
                             },
                         }}
                     >
                         <Typography
                             sx={{
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize:
                                     "0.72rem",
@@ -238,7 +240,7 @@ function Footer() {
                                     "rgba(245,247,250,0.42)",
                             }}
                         >
-                            تواصل
+                            {t("تواصل")}
                         </Typography>
 
                         <Typography
@@ -317,13 +319,13 @@ function Footer() {
                         }}
                     >
                         © {new Date().getFullYear()} Clinova.
-                        All rights reserved.
+                        {t("All rights reserved.")}
                     </Typography>
 
                     <Typography
                         sx={{
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize:
                                 "0.62rem",
@@ -332,8 +334,8 @@ function Footer() {
                                 "rgba(245,247,250,0.3)",
                         }}
                     >
-                        نصنع نموًا حقيقيًا للقطاع الطبي.
-                    </Typography>
+                        {t("نصنع نموًا حقيقيًا للقطاع الطبي.")}
+                        </Typography>
                 </Box>
             </Container>
         </Box>
@@ -351,6 +353,8 @@ function FooterColumn({
     title: string;
     items: string[];
 }) {
+    const { t } = useSiteTranslation();
+
     return (
         <Stack
             sx={{
@@ -363,14 +367,14 @@ function FooterColumn({
 
                 textAlign: {
                     xs: "center",
-                    md: "right",
+                    md: "start",
                 },
             }}
         >
             <Typography
                 sx={{
                     fontFamily:
-                        '"IBM Plex Sans Arabic", sans-serif',
+                        "var(--clinova-font-family)",
 
                     fontSize:
                         "0.72rem",
@@ -381,7 +385,7 @@ function FooterColumn({
                         "rgba(245,247,250,0.42)",
                 }}
             >
-                {title}
+                {t(title)}
             </Typography>
 
             <Stack
@@ -401,7 +405,7 @@ function FooterColumn({
                         href="#"
                         sx={{
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize:
                                 "0.78rem",
@@ -424,7 +428,7 @@ function FooterColumn({
                             },
                         }}
                     >
-                        {item}
+                        {t(item)}
                     </Typography>
                 ))}
             </Stack>

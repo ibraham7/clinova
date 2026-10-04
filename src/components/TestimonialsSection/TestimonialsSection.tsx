@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { useState } from "react";
 import {
     Box,
@@ -56,6 +57,8 @@ const testimonials = [
 ];
 
 function TestimonialsSection() {
+    const { direction, t } = useSiteTranslation();
+
     const [activeIndex, setActiveIndex] = useState(0);
 
     const active = testimonials[activeIndex];
@@ -92,7 +95,7 @@ function TestimonialsSection() {
                 background:
                     "radial-gradient(circle at 50% 40%, rgba(142,168,232,0.07), transparent 38%), #0B111B",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -114,7 +117,7 @@ function TestimonialsSection() {
 
                         textAlign: {
                             xs: "center",
-                            lg: "right",
+                            lg: "start",
                         },
 
                         mb: {
@@ -167,7 +170,7 @@ function TestimonialsSection() {
                         <Typography
                             sx={{
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize:
                                     "0.72rem",
@@ -176,7 +179,7 @@ function TestimonialsSection() {
                                     "text.secondary",
                             }}
                         >
-                            ماذا يقول أصحاب العيادات؟
+                            {t("ماذا يقول أصحاب العيادات؟")}
                         </Typography>
                     </Box>
 
@@ -188,7 +191,7 @@ function TestimonialsSection() {
                             m: 0,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "2.5rem",
@@ -206,8 +209,7 @@ function TestimonialsSection() {
                             color: "#F5F7FA",
                         }}
                     >
-                        تجارب حقيقية.
-                        <Box
+                        {t("تجارب حقيقية.")}<Box
                             component="span"
                             sx={{
                                 display: "block",
@@ -216,10 +218,10 @@ function TestimonialsSection() {
                                     "primary.main",
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
                             }}
                         >
-                            من أصحاب العيادات.
+                            {t("من أصحاب العيادات.")}
                         </Box>
                     </Typography>
 
@@ -230,7 +232,7 @@ function TestimonialsSection() {
                             mt: 3,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "0.88rem",
@@ -243,10 +245,8 @@ function TestimonialsSection() {
                                 "text.secondary",
                         }}
                     >
-                        أصحاب عيادات حقيقية، وتجارب حقيقية،
-                        ونتائج يمكن قياسها. قريبًا سنشارككم
-                        قصصهم بالفيديو.
-                    </Typography>
+                        {t("أصحاب عيادات حقيقية، وتجارب حقيقية، ونتائج يمكن قياسها. قريبًا سنشارككم قصصهم بالفيديو.")}
+                        </Typography>
                 </Box>
 
                 {/* =====================================
@@ -381,8 +381,8 @@ function TestimonialsSection() {
                                         "rgba(245,247,250,0.3)",
                                 }}
                             >
-                                CLINOVA / TESTIMONIAL
-                            </Typography>
+                                {t("CLINOVA / TESTIMONIAL")}
+                        </Typography>
 
                             <Typography
                                 sx={{
@@ -399,8 +399,8 @@ function TestimonialsSection() {
                                         "primary.main",
                                 }}
                             >
-                                COMING SOON
-                            </Typography>
+                                {t("COMING SOON")}
+                        </Typography>
                         </Stack>
 
                         {/* Center Play */}
@@ -497,19 +497,19 @@ function TestimonialsSection() {
                                     "space-between",
 
                                 direction:
-                                    "rtl",
+                                    direction,
                             }}
                         >
                             <Box
                                 sx={{
                                     textAlign:
-                                        "right",
+                                        "start",
                                 }}
                             >
                                 <Typography
                                     sx={{
                                         fontFamily:
-                                            '"IBM Plex Sans Arabic", sans-serif',
+                                            "var(--clinova-font-family)",
 
                                         fontSize: {
                                             xs: "0.85rem",
@@ -523,7 +523,7 @@ function TestimonialsSection() {
                                             "text.primary",
                                     }}
                                 >
-                                    {active.name}
+                                    {t(active.name)}
                                 </Typography>
 
                                 <Typography
@@ -531,7 +531,7 @@ function TestimonialsSection() {
                                         mt: 0.4,
 
                                         fontFamily:
-                                            '"IBM Plex Sans Arabic", sans-serif',
+                                            "var(--clinova-font-family)",
 
                                         fontSize:
                                             "0.62rem",
@@ -540,9 +540,9 @@ function TestimonialsSection() {
                                             "text.secondary",
                                     }}
                                 >
-                                    {active.specialty}
+                                    {t(active.specialty)}
                                     {" · "}
-                                    {active.location}
+                                    {t(active.location)}
                                 </Typography>
                             </Box>
 
@@ -561,8 +561,8 @@ function TestimonialsSection() {
                                         "rgba(245,247,250,0.28)",
                                 }}
                             >
-                                VIDEO 01
-                            </Typography>
+                                {t("VIDEO 01")}
+                        </Typography>
                         </Box>
                     </Box>
 
@@ -604,7 +604,7 @@ function TestimonialsSection() {
                         <Typography
                             sx={{
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "0.95rem",
@@ -616,10 +616,10 @@ function TestimonialsSection() {
                                 color:
                                     "rgba(245,247,250,0.75)",
 
-                                textAlign: "right",
+                                textAlign: "start",
                             }}
                         >
-                            {active.text}
+                            {t(active.text)}
                         </Typography>
                     </Box>
                 </Box>
@@ -745,7 +745,7 @@ function TestimonialsSection() {
                                         p: 1.5,
 
                                         textAlign:
-                                            "right",
+                                            "start",
 
                                         borderRadius:
                                             2.5,
@@ -829,7 +829,7 @@ function TestimonialsSection() {
                                         <Typography
                                             sx={{
                                                 fontFamily:
-                                                    '"IBM Plex Sans Arabic", sans-serif',
+                                                    "var(--clinova-font-family)",
 
                                                 fontSize:
                                                     "0.68rem",
@@ -843,9 +843,7 @@ function TestimonialsSection() {
                                                         : "text.secondary",
                                             }}
                                         >
-                                            {
-                                                testimonial.name
-                                            }
+                                            {t(testimonial.name)}
                                         </Typography>
 
                                         <Typography
@@ -853,7 +851,7 @@ function TestimonialsSection() {
                                                 mt: 0.3,
 
                                                 fontFamily:
-                                                    '"IBM Plex Sans Arabic", sans-serif',
+                                                    "var(--clinova-font-family)",
 
                                                 fontSize:
                                                     "0.52rem",
@@ -862,9 +860,7 @@ function TestimonialsSection() {
                                                     "rgba(245,247,250,0.32)",
                                             }}
                                         >
-                                            {
-                                                testimonial.specialty
-                                            }
+                                            {t(testimonial.specialty)}
                                         </Typography>
                                     </Box>
                                 </Box>

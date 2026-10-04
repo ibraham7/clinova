@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { useState } from "react";
 import {
     Box,
@@ -65,6 +66,8 @@ const faqs = [
 ];
 
 function FAQSection() {
+    const { direction, t } = useSiteTranslation();
+
     const [activeId, setActiveId] = useState("01");
 
     const handleToggle = (id: string) => {
@@ -90,7 +93,7 @@ function FAQSection() {
                 background:
                     "radial-gradient(circle at 75% 25%, rgba(142,168,232,0.06), transparent 35%), #0B111B",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -112,7 +115,7 @@ function FAQSection() {
 
                         textAlign: {
                             xs: "center",
-                            lg: "right",
+                            lg: "start",
                         },
 
                         mb: {
@@ -165,7 +168,7 @@ function FAQSection() {
                         <Typography
                             sx={{
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize:
                                     "0.72rem",
@@ -174,7 +177,7 @@ function FAQSection() {
                                     "text.secondary",
                             }}
                         >
-                            الأسئلة الشائعة
+                            {t("الأسئلة الشائعة")}
                         </Typography>
                     </Box>
 
@@ -186,7 +189,7 @@ function FAQSection() {
                             m: 0,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "2.5rem",
@@ -204,15 +207,15 @@ function FAQSection() {
                             color: "#F5F7FA",
                         }}
                     >
-                        أسئلة تطرحها العيادات.
-                    </Typography>
+                        {t("أسئلة تطرحها العيادات.")}
+                        </Typography>
 
                     <Typography
                         sx={{
                             mt: 3,
 
                             fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
+                                "var(--clinova-font-family)",
 
                             fontSize: {
                                 xs: "0.88rem",
@@ -225,9 +228,8 @@ function FAQSection() {
                                 "text.secondary",
                         }}
                     >
-                        إجابات مباشرة عن طريقة عملنا، وأين نعمل،
-                        وما الذي يمكن أن نقدمه لعيادتك.
-                    </Typography>
+                        {t("إجابات مباشرة عن طريقة عملنا، وأين نعمل، وما الذي يمكن أن نقدمه لعيادتك.")}
+                        </Typography>
                 </Box>
 
                 {/* =====================================
@@ -285,6 +287,8 @@ function FAQItem({
     active: boolean;
     onClick: () => void;
 }) {
+    const { direction, t } = useSiteTranslation();
+
     return (
         <Box
             sx={{
@@ -373,7 +377,7 @@ function FAQItem({
 
                     cursor: "pointer",
 
-                    textAlign: "right",
+                    textAlign: "start",
 
                     direction: "ltr",
                 }}
@@ -419,7 +423,7 @@ function FAQItem({
                         gridColumn: 1,
 
                         fontFamily:
-                            '"IBM Plex Sans Arabic", sans-serif',
+                            "var(--clinova-font-family)",
 
                         fontSize: {
                             xs: "0.82rem",
@@ -434,13 +438,13 @@ function FAQItem({
                             ? "text.primary"
                             : "text.secondary",
 
-                        direction: "rtl",
+                        direction: direction,
 
                         transition:
                             "color 0.25s ease",
                     }}
                 >
-                    {question}
+                    {t(question)}
                 </Typography>
 
                 {/* Toggle */}
@@ -547,7 +551,7 @@ function FAQItem({
                         <Typography
                             sx={{
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "0.78rem",
@@ -560,10 +564,10 @@ function FAQItem({
                                     "text.secondary",
 
                                 textAlign:
-                                    "right",
+                                    "start",
                             }}
                         >
-                            {answer}
+                            {t(answer)}
                         </Typography>
                     </Box>
                 </Box>

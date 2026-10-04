@@ -1,9 +1,12 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { Box, Container, Stack, Typography } from "@mui/material";
 
 import CoverageMap from "./CoverageMap";
 import { coverageLocations } from "./coverageData";
 
 function ReachSection() {
+    const { direction, t } = useSiteTranslation();
+
     return (
         <Box
             component="section"
@@ -21,7 +24,7 @@ function ReachSection() {
                 background:
                     "radial-gradient(circle at 15% 50%, rgba(142,168,232,0.07), transparent 35%), #0B111B",
 
-                direction: "rtl",
+                direction: direction,
             }}
         >
             <Container>
@@ -118,8 +121,8 @@ function ReachSection() {
                                             "rgba(245,247,250,0.45)",
                                     }}
                                 >
-                                    CLINOVA / COVERAGE
-                                </Typography>
+                                    {t("CLINOVA / COVERAGE")}
+                        </Typography>
 
                                 <Stack
                                     sx={{
@@ -156,8 +159,8 @@ function ReachSection() {
                                                 "primary.light",
                                         }}
                                     >
-                                        LIVE
-                                    </Typography>
+                                        {t("LIVE")}
+                        </Typography>
                                 </Stack>
                             </Box>
 
@@ -266,8 +269,8 @@ function ReachSection() {
                                             "rgba(245,247,250,0.35)",
                                     }}
                                 >
-                                    CLINOVA NETWORK
-                                </Typography>
+                                    {t("CLINOVA NETWORK")}
+                        </Typography>
                             </Box>
 
                             {/* =================================
@@ -363,7 +366,7 @@ function ReachSection() {
                                                     "rgba(245,247,250,0.75)",
                                             }}
                                         >
-                                            {location.name}
+                                            {t(location.name)}
                                         </Typography>
                                     </Box>
                                 ))}
@@ -384,10 +387,10 @@ function ReachSection() {
 
                             textAlign: {
                                 xs: "center",
-                                lg: "right",
+                                lg: "start",
                             },
 
-                            direction: "rtl",
+                            direction: direction,
                         }}
                     >
                         {/* Badge */}
@@ -434,7 +437,7 @@ function ReachSection() {
                             <Typography
                                 sx={{
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
 
                                     fontSize: "0.75rem",
 
@@ -443,8 +446,8 @@ function ReachSection() {
                                     color: "text.secondary",
                                 }}
                             >
-                                لماذا نحن مختلفون؟
-                            </Typography>
+                                {t("لماذا نحن مختلفون؟")}
+                        </Typography>
                         </Box>
 
                         {/* Heading */}
@@ -454,7 +457,7 @@ function ReachSection() {
                                 m: 0,
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "2.5rem",
@@ -475,20 +478,19 @@ function ReachSection() {
                                 color: "#F5F7FA",
                             }}
                         >
-                            نعرف كيف نصل إلى
-                            <Box
+                            {t("نعرف كيف نصل إلى")}<Box
                                 component="span"
                                 sx={{
                                     display: "block",
 
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
 
                                     color: "primary.main",
                                 }}
                             >
-                                المريض المناسب لعيادتك
-                            </Box>
+                                {t("المريض المناسب لعيادتك")}
+                        </Box>
                         </Typography>
 
                         {/* Description */}
@@ -503,7 +505,7 @@ function ReachSection() {
                                 },
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "0.9rem",
@@ -515,11 +517,7 @@ function ReachSection() {
                                 color: "text.secondary",
                             }}
                         >
-                            من أول إعلان أو استفسار، وحتى حجز الموعد والمتابعة بعده،
-                            نبني تجربة متكاملة حول المريض.
-                            نستخدم التسويق والتقنية والذكاء الاصطناعي، إلى جانب فريقنا
-                            البشري، لضمان وصول الاستفسارات إلى الطريق الصحيح وتحويل
-                            الفرص إلى مرضى فعليين.
+                            {t("من أول إعلان أو استفسار، وحتى حجز الموعد والمتابعة بعده، نبني تجربة متكاملة حول المريض. نستخدم التسويق والتقنية والذكاء الاصطناعي، إلى جانب فريقنا البشري، لضمان وصول الاستفسارات إلى الطريق الصحيح وتحويل الفرص إلى مرضى فعليين.")}
                         </Typography>
 
                         {/* Small stats */}
@@ -620,6 +618,8 @@ function ReachStat({
     value: string;
     label: string;
 }) {
+    const { t } = useSiteTranslation();
+
     return (
         <Box>
             <Typography
@@ -646,14 +646,14 @@ function ReachStat({
                     mt: 0.3,
 
                     fontFamily:
-                        '"IBM Plex Sans Arabic", sans-serif',
+                        "var(--clinova-font-family)",
 
                     fontSize: "0.72rem",
 
                     color: "text.secondary",
                 }}
             >
-                {label}
+                {t(label)}
             </Typography>
         </Box>
     );

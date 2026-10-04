@@ -1,3 +1,4 @@
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import { bookingLinkProps } from "../../config/contact";
@@ -5,9 +6,13 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import HeroVisual from "./HeroVisual";
 
 function Hero() {
+    const { direction, t, isRtl } = useSiteTranslation();
+
     return (
         <Box
             component="section"
+            id="home"
+            dir={isRtl ? "ltr" : "rtl"}
             sx={{
                 position: "relative",
                 minHeight: "100vh",
@@ -106,7 +111,7 @@ function Hero() {
 
                             textAlign: {
                                 xs: "center",
-                                lg: "right",
+                                lg: "start",
                             },
 
                             order: {
@@ -114,7 +119,7 @@ function Hero() {
                                 lg: 2,
                             },
 
-                            direction: "rtl",
+                            direction: direction,
                         }}
                     >
                         {/* Eyebrow */}
@@ -163,14 +168,14 @@ function Hero() {
                                 variant="caption"
                                 sx={{
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
 
                                     color: "text.secondary",
                                     fontWeight: 500,
                                 }}
                             >
-                                رعاية طبية أكثر وضوحًا وثقة
-                            </Typography>
+                                {t("رعاية طبية أكثر وضوحًا وثقة")}
+                        </Typography>
                         </Box>
 
                         {/* =========================
@@ -182,10 +187,10 @@ function Hero() {
                             sx={{
                                 m: 0,
 
-                                direction: "rtl",
+                                direction: direction,
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 fontSize: {
                                     xs: "3rem",
@@ -208,7 +213,7 @@ function Hero() {
 
                                 textAlign: {
                                     xs: "center",
-                                    lg: "right",
+                                    lg: "start",
                                 },
                             }}
                         >
@@ -219,7 +224,7 @@ function Hero() {
                                     display: "block",
 
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
 
                                     fontSize: "inherit",
                                     fontWeight: "inherit",
@@ -229,8 +234,8 @@ function Hero() {
                                     color: "#F5F7FA",
                                 }}
                             >
-                                نرتقي
-                            </Typography>
+                                {t("نرتقي")}
+                        </Typography>
 
                             {/* السطر الثاني */}
                             <Typography
@@ -239,7 +244,7 @@ function Hero() {
                                     display: "block",
 
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
 
                                     fontSize: "inherit",
                                     fontWeight: "inherit",
@@ -258,8 +263,8 @@ function Hero() {
                                     backgroundClip: "text",
                                 }}
                             >
-                                بتجربة
-                            </Typography>
+                                {t("بتجربة")}
+                        </Typography>
 
                             {/* السطر الثالث */}
                             <Typography
@@ -268,7 +273,7 @@ function Hero() {
                                     display: "block",
 
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
 
                                     fontSize: "inherit",
                                     fontWeight: "inherit",
@@ -278,8 +283,8 @@ function Hero() {
                                     color: "primary.main",
                                 }}
                             >
-                                الرعاية الطبية
-                            </Typography>
+                                {t("الرعاية الطبية")}
+                        </Typography>
                         </Box>
 
                         {/* =========================
@@ -298,7 +303,7 @@ function Hero() {
                                 },
 
                                 fontFamily:
-                                    '"IBM Plex Sans Arabic", sans-serif',
+                                    "var(--clinova-font-family)",
 
                                 color: "text.secondary",
 
@@ -309,13 +314,10 @@ function Hero() {
 
                                 lineHeight: 1.9,
 
-                                direction: "rtl",
+                                direction: direction,
                             }}
                         >
-                            في Clinova نساعد العيادات والأطباء على بناء
-                            حضور رقمي احترافي، وتجربة طبية أكثر سهولة
-                            ووضوحًا للمرضى، من خلال حلول رقمية مصممة
-                            بعناية.
+                            {t("في Clinova نساعد العيادات والأطباء على بناء حضور رقمي احترافي، وتجربة طبية أكثر سهولة ووضوحًا للمرضى، من خلال حلول رقمية مصممة بعناية.")}
                         </Typography>
 
                         {/* =========================
@@ -357,11 +359,11 @@ function Hero() {
                                     py: 1.5,
 
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
                                 }}
                             >
-                                احجز موعدًا
-                            </Button>
+                                {t("احجز موعدًا")}
+                        </Button>
 
                             <Button
                                 href="https://clisis.novanoai.online/"
@@ -369,7 +371,7 @@ function Hero() {
                                 rel="noopener noreferrer"
                                 variant="outlined"
                                 endIcon={
-                                    <ArrowBackRoundedIcon />
+                                    <ArrowBackRoundedIcon sx={{ transform: isRtl ? "none" : "rotate(180deg)" }} />
                                 }
                                 sx={{
                                     minWidth: 145,
@@ -380,10 +382,10 @@ function Hero() {
                                     py: 1.5,
 
                                     fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
+                                        "var(--clinova-font-family)",
                                 }}
                             >
-                                جرّب نظام الـ <Box component="span" dir="ltr">CRM</Box>
+                                {t("جرّب نظام الـ CRM")}
                             </Button>
                         </Stack>
                     </Box>
