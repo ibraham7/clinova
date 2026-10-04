@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
 
 type CaseStudy = {
     id: string;
@@ -17,6 +16,8 @@ type CaseStudy = {
     specialty: string;
     result: string;
     resultLabel: string;
+    challenge?: string;
+    solution?: string;
     stats: {
         value: string;
         label: string;
@@ -550,359 +551,169 @@ function CaseItem({
    RESULT CARD
 ========================================= */
 
-function ResultCard({
-    caseStudy,
-}: {
-    caseStudy: CaseStudy;
-}) {
+function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
+    const bookedAppointments = caseStudy.stats.find(
+        (stat) => stat.label === "موعد محجوز",
+    );
+
     return (
         <Box
+            component="article"
+            aria-label={`تجربة ${caseStudy.name}`}
             sx={{
-                position: "relative",
-
-                minHeight: {
-                    xs: 420,
-                    md: 450,
-                },
-
-                p: {
-                    xs: 3,
-                    sm: 4,
-                    md: 5,
-                },
-
+                order: { xs: 1, lg: 2 },
+                minWidth: 0,
+                p: { xs: 3, sm: 4, md: 5 },
                 borderRadius: 4,
-
-                border:
-                    "1px solid rgba(142,168,232,0.18)",
-
+                border: "1px solid rgba(142,168,232,0.18)",
                 background:
                     "linear-gradient(145deg, rgba(142,168,232,0.08), rgba(21,31,45,0.65))",
-
-                overflow: "hidden",
-
                 direction: "rtl",
-
-                transition:
-                    "border-color 0.3s ease",
-
-                "&::before": {
-                    content: '""',
-
-                    position: "absolute",
-
-                    width: 420,
-                    height: 420,
-
-                    right: -150,
-                    top: -230,
-
-                    borderRadius: "50%",
-
-                    background:
-                        "radial-gradient(circle, rgba(142,168,232,0.12), transparent 68%)",
-
-                    pointerEvents: "none",
-                },
             }}
         >
-            {/* =================================
-                HEADER
-            ================================== */}
-
-            <Stack
+            <Typography
                 sx={{
-                    flexDirection: "row",
-
-                    alignItems: "center",
-
-                    justifyContent:
-                        "space-between",
-
-                    direction: "rtl",
+                    color: "primary.main",
+                    fontSize: "0.7rem",
+                    mb: 1.5,
                 }}
             >
-                <Box>
-                    <Typography
-                        sx={{
-                            fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
-
-                            fontSize: "1rem",
-
-                            fontWeight: 600,
-
-                            color: "text.primary",
-                        }}
-                    >
-                        {caseStudy.name}
-                    </Typography>
-
-                    <Typography
-                        sx={{
-                            mt: 0.4,
-
-                            fontFamily:
-                                '"IBM Plex Sans Arabic", sans-serif',
-
-                            fontSize: "0.65rem",
-
-                            color: "text.secondary",
-                        }}
-                    >
-                        {caseStudy.location} ·{" "}
-                        {caseStudy.specialty}
-                    </Typography>
-                </Box>
-
-                {/* Mini logo */}
-                <Box
-                    sx={{
-                        width: 76,
-                        height: 48,
-
-                        display: "flex",
-
-                        alignItems: "center",
-                        justifyContent: "center",
-
-                        borderRadius: 2,
-
-                        border:
-                            "1px solid rgba(142,168,232,0.12)",
-
-                        backgroundColor:
-                            "rgba(11,17,27,0.4)",
-                    }}
-                >
-                    <Typography
-                        sx={{
-                            fontFamily:
-                                '"Plus Jakarta Sans", sans-serif',
-
-                            fontSize: "0.5rem",
-
-                            fontWeight: 600,
-
-                            color:
-                                "rgba(142,168,232,0.65)",
-
-                            letterSpacing:
-                                "0.06em",
-                        }}
-                    >
-                        CLINOVA
-                    </Typography>
-                </Box>
-            </Stack>
-
-            {/* =================================
-                SPECIALTY BADGE
-            ================================== */}
+                تجربة العيادة / {caseStudy.number}
+            </Typography>
+            <Typography
+                component="h3"
+                sx={{
+                    fontSize: { xs: "1.5rem", md: "1.9rem" },
+                    fontWeight: 600,
+                    lineHeight: 1.5,
+                    color: "text.primary",
+                }}
+            >
+                {caseStudy.name}
+            </Typography>
 
             <Box
                 sx={{
-                    display: "inline-flex",
-
-                    alignItems: "center",
-
-                    mt: 3,
-
-                    px: 1.8,
-                    py: 0.7,
-
-                    borderRadius: "999px",
-
-                    border:
-                        "1px solid rgba(142,168,232,0.18)",
-
-                    backgroundColor:
-                        "rgba(142,168,232,0.04)",
+                    display: "grid",
+                    gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                    gap: 2,
+                    my: 3,
                 }}
             >
-                <Typography
-                    sx={{
-                        fontFamily:
-                            '"IBM Plex Sans Arabic", sans-serif',
-
-                        fontSize: "0.65rem",
-
-                        color: "primary.light",
-                    }}
-                >
-                    {caseStudy.specialty}
-                </Typography>
+                {[
+                    { label: "الموقع", value: caseStudy.location },
+                    { label: "التخصص", value: caseStudy.specialty },
+                ].map((item) => (
+                    <Box
+                        key={item.label}
+                        sx={{
+                            p: 2,
+                            borderRadius: 2,
+                            backgroundColor: "rgba(11,17,27,0.35)",
+                            border: "1px solid rgba(142,168,232,0.10)",
+                        }}
+                    >
+                        <Typography sx={{ color: "text.secondary", fontSize: "0.7rem", mb: 0.7 }}>
+                            {item.label}
+                        </Typography>
+                        <Typography sx={{ color: "text.primary", fontSize: "0.9rem" }}>
+                            {item.value}
+                        </Typography>
+                    </Box>
+                ))}
             </Box>
 
-            {/* =================================
-                MAIN RESULT
-            ================================== */}
+            {[
+                { title: "التحدّي", text: caseStudy.challenge },
+                { title: "كيف ساعدنا العيادة", text: caseStudy.solution },
+            ].map((detail) =>
+                detail.text ? (
+                    <Box key={detail.title} sx={{ mb: 3 }}>
+                        <Typography component="h4" sx={{ fontWeight: 600, mb: 1 }}>
+                            {detail.title}
+                        </Typography>
+                        <Typography sx={{ color: "text.secondary", lineHeight: 2, fontSize: "0.9rem" }}>
+                            {detail.text}
+                        </Typography>
+                    </Box>
+                ) : null,
+            )}
+
+            <Typography component="h4" sx={{ fontWeight: 600, mb: 1 }}>
+                نتائج التجربة
+            </Typography>
+            {bookedAppointments && (
+                <Typography sx={{ color: "text.secondary", fontSize: "0.9rem", lineHeight: 2 }}>
+                    وصل عدد المواعيد المحجوزة في هذه التجربة إلى{" "}
+                    <Box component="span" sx={{ color: "text.primary", fontWeight: 600 }}>
+                        {bookedAppointments.value}
+                    </Box>
+                    {" "}موعداً. يوضح الملخص التالي الإيرادات ومتوسط إيراد الموعد
+                    والعائد على الاستثمار.
+                </Typography>
+            )}
 
             <Box
                 sx={{
                     mt: 3,
-
-                    textAlign: "right",
+                    p: { xs: 2, sm: 3 },
+                    borderRadius: 3,
+                    border: "1px solid rgba(142,168,232,0.14)",
+                    backgroundColor: "rgba(142,168,232,0.04)",
                 }}
             >
                 <Typography
+                    dir="ltr"
                     sx={{
-                        fontFamily:
-                            '"Plus Jakarta Sans", sans-serif',
-
-                        fontSize: {
-                            xs: "4rem",
-                            sm: "5rem",
-                            md: "5.5rem",
-                        },
-
-                        fontWeight: 400,
-
-                        lineHeight: 1,
-
-                        letterSpacing:
-                            "-0.045em",
-
-                        background:
-                            "linear-gradient(110deg, #5F78B5, #8EA8E8, #B8C8EF)",
-
-                        WebkitBackgroundClip:
-                            "text",
-
-                        WebkitTextFillColor:
-                            "transparent",
-
-                        backgroundClip:
-                            "text",
+                        fontFamily: '"Plus Jakarta Sans", sans-serif',
+                        fontSize: { xs: "2.6rem", md: "3.2rem" },
+                        color: "primary.light",
+                        lineHeight: 1.2,
+                        textAlign: "right",
                     }}
                 >
                     {caseStudy.result}
                 </Typography>
-
-                <Typography
-                    sx={{
-                        mt: 1,
-
-                        fontFamily:
-                            '"IBM Plex Sans Arabic", sans-serif',
-
-                        fontSize: "0.75rem",
-
-                        color: "text.secondary",
-                    }}
-                >
+                <Typography sx={{ mt: 1, color: "text.secondary", fontSize: "0.8rem" }}>
                     {caseStudy.resultLabel}
                 </Typography>
             </Box>
 
-            {/* =================================
-                STATS
-            ================================== */}
-
             <Box
                 sx={{
-                    position: "absolute",
-
-                    left: {
-                        xs: 20,
-                        md: 32,
-                    },
-
-                    right: {
-                        xs: 20,
-                        md: 32,
-                    },
-
-                    bottom: {
-                        xs: 20,
-                        md: 32,
-                    },
-
+                    mt: 2,
                     display: "grid",
-
-                    gridTemplateColumns:
-                        "repeat(3, 1fr)",
-
-                    border:
-                        "1px solid rgba(142,168,232,0.12)",
-
-                    borderRadius: 2.5,
-
-                    overflow: "hidden",
+                    gridTemplateColumns: { xs: "1fr", sm: "repeat(3, minmax(0, 1fr))" },
+                    gap: 1.5,
                 }}
             >
-                {caseStudy.stats.map(
-                    (stat, index) => (
-                        <Box
-                            key={stat.label}
+                {caseStudy.stats.map((stat) => (
+                    <Box
+                        key={stat.label}
+                        sx={{
+                            p: 2,
+                            textAlign: "center",
+                            borderRadius: 2,
+                            border: "1px solid rgba(142,168,232,0.10)",
+                        }}
+                    >
+                        <Typography
+                            dir="ltr"
                             sx={{
-                                py: 2,
-
-                                px: 1.5,
-
-                                textAlign:
-                                    "center",
-
-                                borderLeft:
-                                    index !== 2
-                                        ? "1px solid rgba(142,168,232,0.10)"
-                                        : "none",
+                                fontFamily: '"Plus Jakarta Sans", sans-serif',
+                                fontSize: "1.2rem",
+                                fontWeight: 600,
+                                color: "text.primary",
                             }}
                         >
-                            <Typography
-                                sx={{
-                                    fontFamily:
-                                        '"Plus Jakarta Sans", sans-serif',
-
-                                    fontSize: {
-                                        xs: "1.1rem",
-                                        md: "1.35rem",
-                                    },
-
-                                    fontWeight: 600,
-
-                                    color:
-                                        "text.primary",
-                                }}
-                            >
-                                {stat.value}
-                            </Typography>
-
-                            <Typography
-                                sx={{
-                                    mt: 0.5,
-
-                                    fontFamily:
-                                        '"IBM Plex Sans Arabic", sans-serif',
-
-                                    fontSize:
-                                        "0.6rem",
-
-                                    color:
-                                        "text.secondary",
-                                }}
-                            >
-                                {stat.label}
-                            </Typography>
-                        </Box>
-                    ),
-                )}
+                            {stat.value}
+                        </Typography>
+                        <Typography sx={{ mt: 0.7, fontSize: "0.7rem", color: "text.secondary" }}>
+                            {stat.label}
+                        </Typography>
+                    </Box>
+                ))}
             </Box>
-
-            {/* Decorative icon */}
-            <TrendingUpRoundedIcon
-                sx={{
-                    position: "absolute",
-
-                    right: 32,
-                    bottom: 115,
-
-                    fontSize: 24,
-
-                    color:
-                        "rgba(142,168,232,0.18)",
-                }}
-            />
         </Box>
     );
 }
