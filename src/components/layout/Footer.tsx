@@ -10,16 +10,16 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 const services = [
-    "نظامنا",
-    "أعمالنا",
-    "آراء العملاء",
+    { label: "نظامنا", href: "#contact-system" },
+    { label: "أعمالنا", href: "#case-studies" },
+    { label: "آراء العملاء", href: "#testimonials" },
 ];
 
 const company = [
-    "من نحن",
-    "دليل الأطباء",
-    "لماذا نحن مميزون",
-    "احجز مكالمة",
+    { label: "من نحن", href: "#about" },
+    { label: "تخصصاتنا", href: "#specialties" },
+    { label: "لماذا نحن مميزون", href: "#reach" },
+    { label: "احجز مكالمة", href: "#contact-cta" },
 ];
 
 function Footer() {
@@ -350,7 +350,7 @@ function FooterColumn({
     items,
 }: {
     title: string;
-    items: string[];
+    items: { label: string; href: string }[];
 }) {
     const { t } = useSiteTranslation();
 
@@ -399,9 +399,9 @@ function FooterColumn({
             >
                 {items.map((item) => (
                     <Typography
-                        key={item}
+                        key={item.href}
                         component="a"
-                        href="#"
+                        href={item.href}
                         sx={{
                             fontFamily:
                                 "var(--clinova-font-family)",
@@ -427,7 +427,7 @@ function FooterColumn({
                             },
                         }}
                     >
-                        {t(item)}
+                        {t(item.label)}
                     </Typography>
                 ))}
             </Stack>
