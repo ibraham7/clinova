@@ -2,6 +2,7 @@ import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
+import PatientJourneyVisual from "./PatientJourneyVisual";
 
 const conversations = [
     {
@@ -66,157 +67,160 @@ function ContactSection() {
 
                 <Box
                     sx={{
-                        maxWidth: 620,
-
-                        mr: {
-                            lg: 0,
-                        },
-
-                        ml: {
-                            lg: "auto",
-                        },
-
-                        textAlign: {
-                            xs: "center",
-                            lg: "start",
-                        },
-
-                        mb: {
-                            xs: 7,
-                            md: 9,
-                        },
+                        display: "grid",
+                        gridTemplateColumns: { xs: "1fr", lg: "1.15fr 1fr" },
+                        alignItems: "center",
+                        gap: { xs: 3, lg: 8 },
+                        mb: { xs: 7, md: 9 },
                     }}
                 >
-                    {/* Badge */}
                     <Box
                         sx={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: 1,
+                            maxWidth: 620,
 
-                            px: 2,
-                            py: 0.8,
+                            mx: "auto",
+                            width: "100%",
 
-                            mb: 3,
+                            textAlign: {
+                                xs: "center",
+                                lg: "start",
+                            },
 
-                            borderRadius: "999px",
-
-                            border:
-                                "1px solid rgba(142,168,232,0.18)",
-
-                            backgroundColor:
-                                "rgba(142,168,232,0.04)",
-
-                            backdropFilter: "blur(10px)",
                         }}
                     >
+                        {/* Badge */}
                         <Box
                             sx={{
-                                width: 6,
-                                height: 6,
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 1,
 
-                                borderRadius: "50%",
+                                px: 2,
+                                py: 0.8,
+
+                                mb: 3,
+
+                                borderRadius: "999px",
+
+                                border:
+                                    "1px solid rgba(142,168,232,0.18)",
 
                                 backgroundColor:
-                                    "primary.main",
+                                    "rgba(142,168,232,0.04)",
 
-                                boxShadow:
-                                    "0 0 12px rgba(142,168,232,0.7)",
-                            }}
-                        />
-
-                        <Typography
-                            sx={{
-                                fontFamily:
-                                    "var(--clinova-font-family)",
-
-                                fontSize: "0.72rem",
-
-                                fontWeight: 500,
-
-                                color: "text.secondary",
+                                backdropFilter: "blur(10px)",
                             }}
                         >
-                            {t("التواصل المتكامل")}
-                        </Typography>
-                    </Box>
+                            <Box
+                                sx={{
+                                    width: 6,
+                                    height: 6,
 
-                    {/* Heading */}
-                    <Typography
-                        component="h2"
-                        sx={{
-                            m: 0,
+                                    borderRadius: "50%",
 
-                            fontFamily:
-                                "var(--clinova-font-family)",
+                                    backgroundColor:
+                                        "primary.main",
 
-                            fontSize: {
-                                xs: "2.5rem",
-                                sm: "3.2rem",
-                                md: "4.1rem",
-                                lg: "4.7rem",
-                            },
+                                    boxShadow:
+                                        "0 0 12px rgba(142,168,232,0.7)",
+                                }}
+                            />
 
-                            fontWeight: 600,
+                            <Typography
+                                sx={{
+                                    fontFamily:
+                                        "var(--clinova-font-family)",
 
-                            lineHeight: {
-                                xs: 1.35,
-                                md: 1.25,
-                            },
+                                    fontSize: "0.72rem",
 
-                            letterSpacing: 0,
+                                    fontWeight: 500,
 
-                            color: "#F5F7FA",
-                        }}
-                    >
-                        {t("لا ندير الإعلانات فقط،")}<Box
-                            component="span"
-                            sx={{
-                                display: "block",
-
-                                fontFamily:
-                                    "var(--clinova-font-family)",
-
-                                color: "primary.main",
-                            }}
-                        >
-                            {t("نبني رحلة المريض")}
+                                    color: "text.secondary",
+                                }}
+                            >
+                                {t("التواصل المتكامل")}
+                            </Typography>
                         </Box>
-                        <Box
-                            component="span"
+
+                        {/* Heading */}
+                        <Typography
+                            component="h2"
                             sx={{
-                                display: "block",
+                                m: 0,
 
                                 fontFamily:
                                     "var(--clinova-font-family)",
+
+                                fontSize: {
+                                    xs: "2.5rem",
+                                    sm: "3.2rem",
+                                    md: "4.1rem",
+                                    lg: "4.7rem",
+                                },
+
+                                fontWeight: 600,
+
+                                lineHeight: {
+                                    xs: 1.35,
+                                    md: 1.25,
+                                },
+
+                                letterSpacing: 0,
 
                                 color: "#F5F7FA",
                             }}
                         >
-                            {t("من أول تواصل إلى الحجز.")}
-                        </Box>
-                    </Typography>
+                            {t("لا ندير الإعلانات فقط،")}<Box
+                                component="span"
+                                sx={{
+                                    display: "block",
 
-                    {/* Description */}
-                    <Typography
-                        sx={{
-                            mt: 3,
+                                    fontFamily:
+                                        "var(--clinova-font-family)",
 
-                            fontFamily:
-                                "var(--clinova-font-family)",
+                                    color: "primary.main",
+                                }}
+                            >
+                                {t("نبني رحلة المريض")}
+                            </Box>
+                            <Box
+                                component="span"
+                                sx={{
+                                    display: "block",
 
-                            fontSize: {
-                                xs: "0.88rem",
-                                md: "0.95rem",
-                            },
+                                    fontFamily:
+                                        "var(--clinova-font-family)",
 
-                            lineHeight: 2,
-
-                            color: "text.secondary",
-                        }}
-                    >
-                        {t("في Clinova لا نقيس النجاح بعدد الاستفسارات أو المشاهدات، بل بقدرتنا على تحويل الاهتمام إلى مرضى فعليين. لذلك نبني نظامًا متكاملًا يشمل جذب المرضى المحتملين وإدارة التواصل معهم وتحسين تجربتهم حتى لحظة الحجز.")}
+                                    color: "#F5F7FA",
+                                }}
+                            >
+                                {t("من أول تواصل إلى الحجز.")}
+                            </Box>
                         </Typography>
+
+                        {/* Description */}
+                        <Typography
+                            sx={{
+                                mt: 3,
+
+                                fontFamily:
+                                    "var(--clinova-font-family)",
+
+                                fontSize: {
+                                    xs: "0.88rem",
+                                    md: "0.95rem",
+                                },
+
+                                lineHeight: 2,
+
+                                color: "text.secondary",
+                            }}
+                        >
+                            {t("في Clinova لا نقيس النجاح بعدد الاستفسارات أو المشاهدات، بل بقدرتنا على تحويل الاهتمام إلى مرضى فعليين. لذلك نبني نظامًا متكاملًا يشمل جذب المرضى المحتملين وإدارة التواصل معهم وتحسين تجربتهم حتى لحظة الحجز.")}
+                            </Typography>
+                    </Box>
+
+                    <PatientJourneyVisual />
                 </Box>
 
                 {/* =====================================
