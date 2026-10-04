@@ -542,14 +542,15 @@ function ReachSection() {
                             }}
                         >
                             <ReachStat
-                                value="+24"
-                                label="نقطة تواصل"
+                                value="24/7"
+                                label="استجابة ومتابعة رقمية"
                             />
 
                             <Box
                                 sx={{
-                                    width: 1,
+                                    width: "1px",
                                     height: 38,
+                                    flexShrink: 0,
 
                                     backgroundColor:
                                         "rgba(142,168,232,0.15)",
@@ -557,8 +558,8 @@ function ReachSection() {
                             />
 
                             <ReachStat
-                                value="24/7"
-                                label="متابعة رقمية"
+                                value="AI + Human"
+                                label="ذكاء اصطناعي وفريق بشري"
                             />
                         </Stack>
                     </Box>
@@ -622,6 +623,7 @@ function ReachStat({
     return (
         <Box>
             <Typography
+                dir="ltr"
                 sx={{
                     fontFamily:
                         '"Plus Jakarta Sans", sans-serif',
