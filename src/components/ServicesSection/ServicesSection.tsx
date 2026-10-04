@@ -8,6 +8,7 @@ import {
 
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
 type Service = {
     id: string;
@@ -573,13 +574,14 @@ function ServicesSection() {
                             md: "repeat(6, 1fr)",
                         },
 
+                        columnGap: 3,
                         mt: 3,
 
                         borderTop:
                             "1px solid rgba(142,168,232,0.10)",
                     }}
                 >
-                    {services.map((service) => {
+                    {services.map((service, index) => {
                         const isActive =
                             activeService === service.id;
 
@@ -683,6 +685,27 @@ function ServicesSection() {
                                 >
                                     {service.navLabel}
                                 </Typography>
+                                {index < services.length - 1 && (
+                                    <ArrowBackRoundedIcon
+                                        aria-hidden="true"
+                                        sx={{
+                                            position: "absolute",
+                                            left: -12,
+                                            top: "50%",
+                                            transform: "translate(-50%, -50%)",
+                                            fontSize: 18,
+                                            color: isActive
+                                                ? "primary.main"
+                                                : "rgba(142,168,232,0.45)",
+                                            pointerEvents: "none",
+                                            display: {
+                                                xs: (index + 1) % 2 === 0 ? "none" : "block",
+                                                sm: (index + 1) % 3 === 0 ? "none" : "block",
+                                                md: "block",
+                                            },
+                                        }}
+                                    />
+                                )}
                             </Box>
                         );
                     })}
