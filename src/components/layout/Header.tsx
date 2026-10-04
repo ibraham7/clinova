@@ -186,6 +186,8 @@ function DesktopHeader() {
             {/* Navigation */}
             <Box
                 component="nav"
+                dir="rtl"
+                aria-label="التنقل الرئيسي"
                 sx={{
                     flex: 1,
 
