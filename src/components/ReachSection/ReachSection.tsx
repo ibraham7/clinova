@@ -1,37 +1,7 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
 
-const locations = [
-    {
-        code: "TUR",
-        name: "Türkiye",
-        status: "ACTIVE",
-    },
-    {
-        code: "UAE",
-        name: "U.A.E",
-        status: "ACTIVE",
-    },
-    {
-        code: "SAU",
-        name: "Saudi Arabia",
-        status: "ACTIVE",
-    },
-    {
-        code: "QAT",
-        name: "Qatar",
-        status: "ACTIVE",
-    },
-    {
-        code: "KWT",
-        name: "Kuwait",
-        status: "ACTIVE",
-    },
-    {
-        code: "BHR",
-        name: "Bahrain",
-        status: "ACTIVE",
-    },
-];
+import CoverageMap from "./CoverageMap";
+import { coverageLocations } from "./coverageData";
 
 function ReachSection() {
     return (
@@ -200,9 +170,9 @@ function ReachSection() {
                                     position: "relative",
 
                                     height: {
-                                        xs: 280,
-                                        sm: 340,
-                                        md: 390,
+                                        xs: 320,
+                                        sm: 400,
+                                        md: 440,
                                     },
 
                                     overflow: "hidden",
@@ -272,134 +242,10 @@ function ReachSection() {
                                 />
 
                                 {/* =================================
-                                    SCHEMATIC MAP
+                                    GEOGRAPHIC COVERAGE MAP
                                 ================================== */}
 
-                                <Box
-                                    component="svg"
-                                    viewBox="0 0 600 390"
-                                    sx={{
-                                        position: "absolute",
-
-                                        width: "90%",
-                                        height: "90%",
-
-                                        left: "5%",
-                                        top: "5%",
-
-                                        overflow: "visible",
-                                    }}
-                                >
-                                    {/* Outer glow */}
-                                    <path
-                                        d="M150 45
-                                           L225 55
-                                           L285 95
-                                           L350 105
-                                           L390 145
-                                           L430 165
-                                           L465 220
-                                           L450 275
-                                           L390 305
-                                           L310 320
-                                           L245 300
-                                           L205 265
-                                           L180 210
-                                           L140 175
-                                           L115 115
-                                           Z"
-                                        fill="rgba(142,168,232,0.04)"
-                                        stroke="rgba(142,168,232,0.18)"
-                                        strokeWidth="2"
-                                    />
-
-                                    {/* Main area */}
-                                    <path
-                                        d="M150 45
-                                           L225 55
-                                           L285 95
-                                           L350 105
-                                           L390 145
-                                           L430 165
-                                           L465 220
-                                           L450 275
-                                           L390 305
-                                           L310 320
-                                           L245 300
-                                           L205 265
-                                           L180 210
-                                           L140 175
-                                           L115 115
-                                           Z"
-                                        fill="rgba(142,168,232,0.10)"
-                                        stroke="#8EA8E8"
-                                        strokeOpacity="0.5"
-                                        strokeWidth="1.5"
-                                    />
-
-                                    {/* Inner lines */}
-                                    <path
-                                        d="M225 55 L205 265"
-                                        stroke="rgba(142,168,232,0.13)"
-                                        strokeWidth="1"
-                                    />
-
-                                    <path
-                                        d="M285 95 L245 300"
-                                        stroke="rgba(142,168,232,0.13)"
-                                        strokeWidth="1"
-                                    />
-
-                                    <path
-                                        d="M350 105 L310 320"
-                                        stroke="rgba(142,168,232,0.13)"
-                                        strokeWidth="1"
-                                    />
-
-                                    <path
-                                        d="M140 175 L450 275"
-                                        stroke="rgba(142,168,232,0.10)"
-                                        strokeWidth="1"
-                                    />
-
-                                    {/* Connection line */}
-                                    <path
-                                        d="M170 150
-                                           C240 105 325 135 390 190
-                                           C425 220 430 245 410 260"
-                                        fill="none"
-                                        stroke="#8EA8E8"
-                                        strokeOpacity="0.35"
-                                        strokeWidth="1"
-                                        strokeDasharray="4 6"
-                                    />
-
-                                    {/* Location points */}
-
-                                    <MapPoint
-                                        x="175"
-                                        y="145"
-                                        label="IST"
-                                    />
-
-                                    <MapPoint
-                                        x="320"
-                                        y="185"
-                                        label="Riyadh"
-                                    />
-
-                                    <MapPoint
-                                        x="385"
-                                        y="210"
-                                        label="DXB"
-                                    />
-
-                                    <MapPoint
-                                        x="405"
-                                        y="235"
-                                        label="DOH"
-                                    />
-                                </Box>
+                                <CoverageMap />
 
                                 {/* Map label */}
                                 <Typography
@@ -441,7 +287,7 @@ function ReachSection() {
                                         "1px solid rgba(142,168,232,0.10)",
                                 }}
                             >
-                                {locations.map((location) => (
+                                {coverageLocations.map((location) => (
                                     <Box
                                         key={location.code}
                                         sx={{
@@ -721,49 +567,6 @@ function ReachSection() {
                 </Box>
             </Container>
         </Box>
-    );
-}
-
-/* =========================================
-   MAP POINT
-========================================= */
-
-function MapPoint({
-    x,
-    y,
-    label,
-}: {
-    x: string;
-    y: string;
-    label: string;
-}) {
-    return (
-        <g>
-            <circle
-                cx={x}
-                cy={y}
-                r="14"
-                fill="rgba(142,168,232,0.08)"
-                stroke="rgba(142,168,232,0.25)"
-            />
-
-            <circle
-                cx={x}
-                cy={y}
-                r="4"
-                fill="#8EA8E8"
-            />
-
-            <text
-                x={Number(x) + 10}
-                y={Number(y) - 10}
-                fill="rgba(245,247,250,0.55)"
-                fontSize="8"
-                fontFamily="Plus Jakarta Sans"
-            >
-                {label}
-            </text>
-        </g>
     );
 }
 
