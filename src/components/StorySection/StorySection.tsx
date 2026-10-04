@@ -13,11 +13,13 @@ function StorySection() {
                 position: "relative",
                 overflow: "hidden",
 
-                py: {
+                pb: {
                     xs: 10,
                     md: 14,
                     lg: 18,
                 },
+
+                pt: { xs: 4, md: 6 },
 
                 background:
                     "radial-gradient(circle at 50% 45%, rgba(95,120,181,0.08), transparent 38%), #0B111B",
