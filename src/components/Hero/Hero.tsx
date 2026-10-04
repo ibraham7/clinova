@@ -351,6 +351,11 @@ function Hero() {
                                     <PhoneRoundedIcon />
                                 }
                                 sx={{
+                                    "& .MuiButton-endIcon": {
+                                        margin: 0,
+                                        marginInlineStart: "14px",
+                                    },
+
                                     minWidth: 170,
 
                                     borderRadius: "999px",
@@ -374,6 +379,11 @@ function Hero() {
                                     <ArrowBackRoundedIcon sx={{ transform: isRtl ? "none" : "rotate(180deg)" }} />
                                 }
                                 sx={{
+                                    "& .MuiButton-endIcon": {
+                                        margin: 0,
+                                        marginInlineStart: "14px",
+                                    },
+
                                     minWidth: 145,
 
                                     borderRadius: "999px",
