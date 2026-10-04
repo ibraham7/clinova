@@ -1,5 +1,6 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
-import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
+import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
+import { bookingLinkProps } from "../../config/contact";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import HeroVisual from "./HeroVisual";
 
@@ -341,10 +342,11 @@ function Hero() {
                             }}
                         >
                             <Button
+                                {...bookingLinkProps}
                                 variant="contained"
                                 color="primary"
                                 endIcon={
-                                    <ArrowOutwardRoundedIcon />
+                                    <PhoneRoundedIcon />
                                 }
                                 sx={{
                                     minWidth: 170,

@@ -5,7 +5,8 @@ import {
     Typography,
 } from "@mui/material";
 
-import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
+import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
+import { bookingLinkProps } from "../../config/contact";
 
 function CTASection() {
     return (
@@ -193,7 +194,8 @@ function CTASection() {
                         {/* CTA */}
 
                         <Box
-                            component="button"
+                            component="a"
+                            {...bookingLinkProps}
                             sx={{
                                 mt: 1,
 
@@ -210,6 +212,7 @@ function CTASection() {
                                 px: 3,
 
                                 border: 0,
+                                textDecoration: "none",
 
                                 borderRadius:
                                     "999px",
@@ -255,7 +258,7 @@ function CTASection() {
                         >
                             احجز مكالمة استراتيجية
 
-                            <ArrowOutwardRoundedIcon
+                            <PhoneRoundedIcon
                                 sx={{
                                     fontSize: 15,
                                 }}

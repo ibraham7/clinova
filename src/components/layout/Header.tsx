@@ -14,7 +14,8 @@ import clinovaLogo from "../../../public/logo/logo.png";
 
 import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
+import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
+import { bookingLinkProps } from "../../config/contact";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
 const navItems = [
@@ -114,9 +115,10 @@ function DesktopHeader() {
         <>
             {/* CTA */}
             <Button
+                {...bookingLinkProps}
                 variant="contained"
                 color="primary"
-                endIcon={<ArrowOutwardRoundedIcon />}
+                endIcon={<PhoneRoundedIcon />}
                 sx={{
                     flexShrink: 0,
 
@@ -371,6 +373,8 @@ function MobileHeader() {
 
             {/* Mobile CTA */}
             <Button
+                endIcon={<PhoneRoundedIcon />}
+                {...bookingLinkProps}
                 variant="contained"
                 color="primary"
                 sx={{
