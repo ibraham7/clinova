@@ -72,8 +72,10 @@ function MedicalTicker() {
                     width: "max-content",
                     willChange: "transform",
                     animation: `${tickerScroll} ${duration}s linear infinite`,
+                    // Keep the requested ticker moving, gently, when the device
+                    // prefers reduced motion instead of freezing it completely.
                     "@media (prefers-reduced-motion: reduce)": {
-                        animation: "none",
+                        animationDuration: `${duration * 2}s`,
                     },
                 }}
             >
