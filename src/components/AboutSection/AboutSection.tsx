@@ -12,12 +12,14 @@ function AboutSection() {
                 position: "relative",
                 overflow: "hidden",
 
-                py: {
+                pt: {
                     xs: 10,
                     sm: 12,
                     md: 16,
                     lg: 20,
                 },
+
+                pb: { xs: 4, md: 6 },
 
                 background:
                     "radial-gradient(circle at 50% 0%, rgba(95,120,181,0.10), transparent 38%), #0B111B",
