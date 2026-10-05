@@ -16,7 +16,7 @@ export default function ProfileDownloadDialog({ outlined, onClose }: { outlined:
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<"invalid" | "save" | null>(null);
     const titleId = useId();
-    const [requestId] = useState(() => crypto.randomUUID());
+    const submissionRef = useRef<{ payload: string; requestId: string } | null>(null);
     const downloadRef = useRef<HTMLAnchorElement>(null);
     const language = i18n.resolvedLanguage ?? "ar";
     const type = detectContactType(value);
@@ -42,7 +42,10 @@ export default function ProfileDownloadDialog({ outlined, onClose }: { outlined:
         if (!contact) { setError("invalid"); return; }
         setError(null); setBusy(true);
         try {
-            await submitProfileLead({ contact, language, source: outlined ? "contact_cta" : "hero", marketingConsent: consent, requestId });
+            const lead = { contact, language, source: outlined ? "contact_cta" as const : "hero" as const, marketingConsent: consent };
+            const payload = JSON.stringify(lead);
+            if (submissionRef.current?.payload !== payload) submissionRef.current = { payload, requestId: crypto.randomUUID() };
+            await submitProfileLead({ ...lead, requestId: submissionRef.current.requestId });
             downloadRef.current?.click();
             onClose(); setValue(""); setConsent(false);
         } catch { setError("save"); }

@@ -38,7 +38,7 @@ const tmp = fs.mkdtempSync(path.join(root, 'node_modules/.profile-check-'));
         try {
             AbortSignal.timeout=undefined; // Older mobile browsers lack this API.
             global.setTimeout=(callback,delay)=>{
-                assert.equal(delay,45000,'Allow slow Sheets writes beyond the old 15-second cutoff');
+                assert.equal(delay,55000,'Allow slow Sheets writes beyond the old 15-second cutoff');
                 const timer=originalSetTimeout(callback,delay);pendingTimers.add(timer);
                 if(expireNextRequest)queueMicrotask(callback);
                 return timer;

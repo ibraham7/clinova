@@ -4,6 +4,7 @@ import settings from "./profile-leads.json";
 
 export const profileDocument = "/documents/clinova-profile.pdf";
 export const profileFilename = "Clinova-Company-Profile.pdf";
+const profileLeadEndpoint = "/.netlify/functions/profile-lead";
 export const profileLeadsEnabled = settings.endpoint.startsWith("https://");
 export function normalizeDigits(value: string) {
     return value.replace(/[٠-٩۰-۹]/g, digit => String(digit.charCodeAt(0) - (digit <= "٩" ? 0x660 : 0x6f0)));
@@ -34,14 +35,14 @@ export type ProfileLead = {
     marketingConsent: boolean;
     requestId: string;
 };
-export async function submitProfileLead(lead: ProfileLead, endpoint = settings.endpoint) {
-    if (!endpoint.startsWith("https://")) throw new Error("Profile lead endpoint is not configured");
-    const url = new URL(endpoint);
+export async function submitProfileLead(lead: ProfileLead, endpoint = profileLeadEndpoint) {
+    if (!endpoint.startsWith("https://") && endpoint !== profileLeadEndpoint) throw new Error("Profile lead endpoint is not configured");
+    const url = new URL(endpoint, "https://clinova.novanoai.online");
     const googleAppsScript = url.hostname === "script.google.com" && /^\/macros\/s\/[^/]+\/exec$/.test(url.pathname);
-    // Apps Script may need over 15 seconds to start and write to Sheets.
+    // Allow the server to confirm a Sheets write and one deduplicated retry.
     // AbortController also supports browsers without AbortSignal.timeout.
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 45000);
+    const timeout = setTimeout(() => controller.abort(), 55000);
     try {
         const response = await fetch(endpoint, {
             method: "POST", credentials: "omit", signal: controller.signal,
