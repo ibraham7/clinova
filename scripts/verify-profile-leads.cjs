@@ -30,7 +30,20 @@ const tmp = fs.mkdtempSync(path.join(root, 'node_modules/.profile-check-'));
         assert.equal(parseContact('+12025550123','TR').value,'+12025550123');
         const lead={ contact:parseContact('test@example.com','TR'), language:'ar', source:'hero', marketingConsent:false, requestId:'fixed-test-id' };
         const originalFetch=global.fetch;
+        const originalSignalTimeout=AbortSignal.timeout;
+        const originalSetTimeout=global.setTimeout;
+        const originalClearTimeout=global.clearTimeout;
+        const pendingTimers=new Set();
+        let expireNextRequest=false;
         try {
+            AbortSignal.timeout=undefined; // Older mobile browsers lack this API.
+            global.setTimeout=(callback,delay)=>{
+                assert.equal(delay,45000,'Allow slow Sheets writes beyond the old 15-second cutoff');
+                const timer=originalSetTimeout(callback,delay);pendingTimers.add(timer);
+                if(expireNextRequest)queueMicrotask(callback);
+                return timer;
+            };
+            global.clearTimeout=(timer)=>{pendingTimers.delete(timer);originalClearTimeout(timer)};
             global.fetch=async (url,options) => {
                 assert.equal(url,'https://receiver.example/profile');
                 assert.equal(options.method,'POST');assert.equal(options.credentials,'omit');
@@ -48,7 +61,15 @@ const tmp = fs.mkdtempSync(path.join(root, 'node_modules/.profile-check-'));
             }
             global.fetch=async()=>{throw Error('offline')};
             await assert.rejects(submitProfileLead(lead,'https://receiver.example/profile'));
-        } finally { global.fetch=originalFetch; }
+            expireNextRequest=true;
+            global.fetch=async(url,options)=>new Promise((resolve,reject)=>options.signal.addEventListener('abort',()=>reject(new DOMException('Timed out','AbortError')),{once:true}));
+            await assert.rejects(submitProfileLead(lead,'https://receiver.example/profile'),{name:'AbortError'});
+            assert.equal(pendingTimers.size,0,'Clean up timers after successful, failed and aborted requests');
+        } finally {
+            global.fetch=originalFetch;AbortSignal.timeout=originalSignalTimeout;
+            global.setTimeout=originalSetTimeout;global.clearTimeout=originalClearTimeout;
+            for(const timer of pendingTimers)originalClearTimeout(timer);
+        }
         assert.equal(new URL(bookingLinkProps.href).searchParams.has('text'),false,'Top CTA stays direct');
         const message='مرحباً، أود الحصول على معلومات حول خدمات Clinova. هل يمكنكم مساعدتي؟';
         const bottom=new URL(bottomBookingLinkProps(message).href);

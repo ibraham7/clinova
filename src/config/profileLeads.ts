@@ -38,13 +38,21 @@ export async function submitProfileLead(lead: ProfileLead, endpoint = settings.e
     if (!endpoint.startsWith("https://")) throw new Error("Profile lead endpoint is not configured");
     const url = new URL(endpoint);
     const googleAppsScript = url.hostname === "script.google.com" && /^\/macros\/s\/[^/]+\/exec$/.test(url.pathname);
-    const response = await fetch(endpoint, {
-        method: "POST", credentials: "omit", signal: AbortSignal.timeout(15000),
-        // text/plain allows a simple POST to Apps Script without an unsupported preflight.
-        headers: { "Content-Type": googleAppsScript ? "text/plain;charset=UTF-8" : "application/json" },
-        body: JSON.stringify({ ...lead, purpose: "company_profile_download" }),
-    });
-    if (!response.ok) throw new Error("Profile lead could not be saved");
-    const result: unknown = await response.json();
-    if (!result || typeof result !== "object" || !("ok" in result) || result.ok !== true) throw new Error("CRM did not confirm saving the lead");
+    // Apps Script may need over 15 seconds to start and write to Sheets.
+    // AbortController also supports browsers without AbortSignal.timeout.
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 45000);
+    try {
+        const response = await fetch(endpoint, {
+            method: "POST", credentials: "omit", signal: controller.signal,
+            // text/plain allows a simple POST to Apps Script without an unsupported preflight.
+            headers: { "Content-Type": googleAppsScript ? "text/plain;charset=UTF-8" : "application/json" },
+            body: JSON.stringify({ ...lead, purpose: "company_profile_download" }),
+        });
+        if (!response.ok) throw new Error("Profile lead could not be saved");
+        const result: unknown = await response.json();
+        if (!result || typeof result !== "object" || !("ok" in result) || result.ok !== true) throw new Error("CRM did not confirm saving the lead");
+    } finally {
+        clearTimeout(timeout);
+    }
 }
