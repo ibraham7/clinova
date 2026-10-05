@@ -18,7 +18,14 @@ export function isSiteLanguage(value: unknown): value is SiteLanguage {
     return languages.some((language) => language.code === value);
 }
 
-function initialLanguage(): SiteLanguage {
+export function languageFromPath(pathname: string): SiteLanguage | undefined {
+    const code = /^\/([^/]+)\/?$/.exec(pathname)?.[1];
+    return isSiteLanguage(code) ? code : undefined;
+}
+
+export function initialLanguage(pathname = typeof window !== "undefined" ? window.location.pathname : "/"): SiteLanguage {
+    const linkedLanguage = languageFromPath(pathname);
+    if (linkedLanguage) return linkedLanguage;
     try {
         const saved = localStorage.getItem(storageKey);
         if (isSiteLanguage(saved)) return saved;
@@ -26,6 +33,14 @@ function initialLanguage(): SiteLanguage {
         // Language switching remains available when browser storage is blocked.
     }
     return "ar";
+}
+
+export function changeSiteLanguage(language: SiteLanguage) {
+    if (typeof window !== "undefined") {
+        const href = `/${language}${window.location.search}${window.location.hash}`;
+        if (window.location.pathname !== `/${language}`) window.history.pushState(null, "", href);
+    }
+    return i18n.changeLanguage(language);
 }
 
 export function syncDocumentLanguage(language: string) {
@@ -59,5 +74,11 @@ void i18n.use(initReactI18next).init({
     initAsync: false,
 });
 syncDocumentLanguage(i18n.language);
+
+if (typeof window !== "undefined") {
+    window.addEventListener("popstate", () => {
+        void i18n.changeLanguage(initialLanguage());
+    });
+}
 
 export default i18n;

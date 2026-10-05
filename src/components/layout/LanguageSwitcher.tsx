@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import TranslateRoundedIcon from "@mui/icons-material/TranslateRounded";
-import { languages } from "../../i18n";
+import { changeSiteLanguage, languages } from "../../i18n";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 
 export default function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
@@ -48,7 +48,7 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
                         dir={language.code === "ar" ? "rtl" : "ltr"}
                         selected={selected.code === language.code}
                         onClick={() => {
-                            void i18n.changeLanguage(language.code);
+                            void changeSiteLanguage(language.code);
                             setAnchor(null);
                         }}
                         sx={{ minWidth: 150 }}

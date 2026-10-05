@@ -51,8 +51,19 @@ function compile(directory) {
         require.extensions['.png'] = (module) => { module.exports = '/logo/logo.png'; };
         const saved = new Map([['clinova.language', 'tr']]);
         global.localStorage = { getItem: (key) => saved.get(key), setItem: (key, value) => saved.set(key, value) };
-        const { default: i18n, syncDocumentLanguage } = require(path.join(workspace, 'src/i18n/index.js'));
+        const { default: i18n, syncDocumentLanguage, initialLanguage, languageFromPath, changeSiteLanguage } = require(path.join(workspace, 'src/i18n/index.js'));
         assert.equal(i18n.language, 'tr', 'Restore saved language');
+        for (const locale of locales) {
+            assert.equal(initialLanguage('/'+locale),locale,'Language URL takes priority over saved preference');
+            assert.equal(languageFromPath('/'+locale+'/'),locale,'Trailing slash language URL');
+        }
+        assert.equal(languageFromPath('/documents/clinova-profile.pdf'),undefined);
+        assert.equal(initialLanguage('/'), 'tr','Root retains saved preference');
+        global.window={location:{pathname:'/ar',search:'?campaign=test',hash:'#about'},history:{pushState(state,title,href){this.href=href}}};
+        await changeSiteLanguage('en');
+        assert.equal(window.history.href,'/en?campaign=test#about','Switch preserves campaign and section');
+        assert.equal(i18n.language,'en');
+        delete global.window;
         const React = require('react');
         const { renderToStaticMarkup } = require('react-dom/server');
         const { ThemeProvider, createTheme } = require('@mui/material/styles');
