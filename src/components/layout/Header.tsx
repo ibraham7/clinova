@@ -99,11 +99,16 @@ export default function Header() {
                                     const current = active === item.href;
                                     return <Button
                                         component="a" href={item.href} key={item.href} onClick={() => select(item.href)} aria-current={current ? "location" : undefined}
-                                        className="clinova-nav-item" style={{ animationDelay: `${120 + index * 45}ms` }}
+                                        className="clinova-nav-item" disableRipple style={{ animationDelay: `${120 + index * 45}ms` }}
                                         sx={{ minWidth: 0, maxWidth: { lg: 84, xl: 104 }, px: { lg: 0.6, xl: 1 }, py: 0.75, gap: 0.4, flexDirection: "column", justifyContent: "flex-start", borderRadius: "18px", fontSize: { lg: "0.7rem", xl: "0.76rem" }, lineHeight: 1.2, textAlign: "center", fontWeight: current ? 600 : 500,
-                                            color: current ? "primary.light" : "var(--clinova-rgba-245-247-250-0_72)", backgroundColor: current ? "var(--clinova-rgba-142-168-232-0_12)" : "transparent",
+                                            position: "relative", isolation: "isolate", backgroundColor: "transparent",
+                                            color: current ? "primary.light" : "var(--clinova-rgba-245-247-250-0_72)",
+                                            "&::before": { content: '""', position: "absolute", inset: 0, zIndex: -1, borderRadius: "inherit",
+                                                backgroundColor: current ? "var(--clinova-rgba-142-168-232-0_12)" : "var(--clinova-rgba-142-168-232-0_08)",
+                                                opacity: current ? 1 : 0, transform: current ? "scale(1)" : "scale(0.72)" },
+                                            "&:hover, &.Mui-focusVisible": { color: current ? "primary.light" : "var(--clinova-color-f5f7fa)", backgroundColor: "transparent" },
+                                            "&:hover::before, &.Mui-focusVisible::before": { opacity: 1, transform: "scale(1)" },
                                             "& .clinova-nav-icon": { fontSize: 20, color: current ? "primary.light" : "var(--clinova-rgba-142-168-232-0_6)" },
-                                            "&:hover": { color: "var(--clinova-color-f5f7fa)", backgroundColor: "var(--clinova-rgba-142-168-232-0_08)" },
                                             "&:hover .clinova-nav-icon": { color: "primary.light" } }}
                                     ><item.icon className="clinova-nav-icon" />{t(item.short ?? item.label)}</Button>;
                                 })}
