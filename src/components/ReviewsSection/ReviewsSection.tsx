@@ -73,9 +73,9 @@ function useGlideSlider(startAtEnd: boolean) {
                 const box = element.getBoundingClientRect();
                 const ratio = (pointerX - box.left) / box.width;
                 const edge = 0.3;
-                // Pointer near the right edge: reviews travel right (scroll back); near the left: they travel left.
-                if (ratio > 1 - edge) target = -Math.pow((ratio - (1 - edge)) / edge, 2) * 13;
-                else if (ratio < edge) target = Math.pow((edge - ratio) / edge, 2) * 13;
+                // Pointer near the right edge: reviews travel left (scroll forward); near the left: they travel right.
+                if (ratio > 1 - edge) target = Math.pow((ratio - (1 - edge)) / edge, 2) * 13;
+                else if (ratio < edge) target = -Math.pow((edge - ratio) / edge, 2) * 13;
             } else if (!drag && !reduced) {
                 if (position >= max - 1) drift = -1;
                 else if (position <= 1) drift = 1;
