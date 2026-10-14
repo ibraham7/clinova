@@ -303,5 +303,10 @@
   "متابعة المرضى وإعادتهم": "Following up and bringing patients back",
   "معرفة نتائج التسويق بالأرقام": "Seeing marketing results in numbers",
   "تنظيم الفريق والمواعيد": "Organizing the team and appointments",
-  "لو حللنا مشكلة واحدة في عيادتك، ماذا ستكون؟": "If we could solve one problem at your clinic, what would it be?"
+  "لو حللنا مشكلة واحدة في عيادتك، ماذا ستكون؟": "If we could solve one problem at your clinic, what would it be?",
+  "تقييمات وآراء": "Reviews and feedback",
+  "عملائنا.": "from our clients.",
+  "تقييمات وآراء عملائنا": "Our clients' reviews and feedback",
+  "التقييم العام من {{count}} تقييم": "Overall rating from {{count}} reviews",
+  "معاينة فقط: هذه نماذج توضيحية وتظهر هنا حتى تُضاف تقييمات العملاء الحقيقية.": "Preview only: these are placeholder samples, shown until real client reviews are added."
 }

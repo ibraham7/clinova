@@ -16,6 +16,8 @@ import SpecialtiesSection from "./components/SpecialtiesSection/SpecialtiesSecti
 import CaseStudiesSection from "./components/CaseStudiesSection/CaseStudiesSection";
 import PartnersSection from "./components/PartnersSection/PartnersSection";
 import TestimonialsSection from "./components/TestimonialsSection/TestimonialsSection";
+import ReviewsSection from "./components/ReviewsSection/ReviewsSection";
+import { displayedReviews } from "./config/clientReviews";
 import FAQSection from "./components/FAQSection/FAQSection";
 import CTASection from "./components/CTASection/CTASection";
 import Footer from "./components/layout/Footer";
@@ -49,6 +51,7 @@ function App() {
       <CaseStudiesSection />
       <PartnersSection />
       {showClinicVideos && <TestimonialsSection />}
+      {displayedReviews.length > 0 && <ReviewsSection />}
       <FAQSection />
       <CTASection />
       <Footer />

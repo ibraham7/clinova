@@ -303,5 +303,10 @@
   "متابعة المرضى وإعادتهم": "Suivre les patients et les faire revenir",
   "معرفة نتائج التسويق بالأرقام": "Mesurer les résultats marketing en chiffres",
   "تنظيم الفريق والمواعيد": "Organiser l'équipe et les rendez-vous",
-  "لو حللنا مشكلة واحدة في عيادتك، ماذا ستكون؟": "Si nous pouvions résoudre un seul problème dans votre clinique, lequel serait-ce ?"
+  "لو حللنا مشكلة واحدة في عيادتك، ماذا ستكون؟": "Si nous pouvions résoudre un seul problème dans votre clinique, lequel serait-ce ?",
+  "تقييمات وآراء": "Avis et retours",
+  "عملائنا.": "de nos clients.",
+  "تقييمات وآراء عملائنا": "Avis et retours de nos clients",
+  "التقييم العام من {{count}} تقييم": "Note globale sur {{count}} avis",
+  "معاينة فقط: هذه نماذج توضيحية وتظهر هنا حتى تُضاف تقييمات العملاء الحقيقية.": "Aperçu uniquement : ce sont des exemples, affichés jusqu'à l'ajout des vrais avis clients."
 }

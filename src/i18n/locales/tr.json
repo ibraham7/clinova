@@ -303,5 +303,10 @@
   "متابعة المرضى وإعادتهم": "Hastaları takip edip geri kazanmak",
   "معرفة نتائج التسويق بالأرقام": "Pazarlama sonuçlarını rakamlarla görmek",
   "تنظيم الفريق والمواعيد": "Ekibi ve randevuları düzenlemek",
-  "لو حللنا مشكلة واحدة في عيادتك، ماذا ستكون؟": "Kliniğinizde tek bir sorunu çözebilseydik, bu ne olurdu?"
+  "لو حللنا مشكلة واحدة في عيادتك، ماذا ستكون؟": "Kliniğinizde tek bir sorunu çözebilseydik, bu ne olurdu?",
+  "تقييمات وآراء": "Değerlendirmeler ve görüşler",
+  "عملائنا.": "müşterilerimizden.",
+  "تقييمات وآراء عملائنا": "Müşterilerimizin değerlendirmeleri ve görüşleri",
+  "التقييم العام من {{count}} تقييم": "{{count}} değerlendirmeden genel puan",
+  "معاينة فقط: هذه نماذج توضيحية وتظهر هنا حتى تُضاف تقييمات العملاء الحقيقية.": "Yalnızca önizleme: bunlar örnek kartlardır ve gerçek müşteri yorumları eklenene kadar görünür."
 }
