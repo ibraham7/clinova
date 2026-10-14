@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from "react";
-import { AppBar, Box, Button, Container, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Toolbar, Typography, useMediaQuery } from "@mui/material";
+import { AppBar, Box, Button, Container, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography, useMediaQuery } from "@mui/material";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
@@ -12,24 +12,23 @@ import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import clinovaLogo from "../../../public/logo/logo.png";
 import { bookingLinkProps } from "../../config/contact";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-const navItems = [
-    { label: "الرئيسية", href: "#home", icon: HomeRoundedIcon, primary: true },
-    { label: "من نحن", href: "#about", icon: InfoRoundedIcon, primary: true },
-    { label: "لماذا Clinova؟", href: "#reach", icon: AutoAwesomeRoundedIcon, primary: false },
-    { label: "خدماتنا", href: "#services", icon: WidgetsRoundedIcon, primary: true },
-    { label: "رحلة المريض", href: "#contact-system", icon: RouteRoundedIcon, primary: true },
-    { label: "تخصصاتنا", href: "#specialties", icon: MedicalServicesRoundedIcon, primary: true },
-    { label: "قصص النجاح", href: "#case-studies", icon: TrendingUpRoundedIcon, primary: true },
-    { label: "شركاؤنا", href: "#partners", icon: HandshakeRoundedIcon, primary: false },
-    { label: "الأسئلة الشائعة", href: "#faq", icon: HelpOutlineRoundedIcon, primary: false },
-    { label: "تواصل معنا", href: "#contact-cta", icon: PhoneRoundedIcon, primary: false },
+const navItems: { label: string; short?: string; href: string; icon: typeof HomeRoundedIcon }[] = [
+    { label: "الرئيسية", href: "#home", icon: HomeRoundedIcon },
+    { label: "من نحن", href: "#about", icon: InfoRoundedIcon },
+    { label: "لماذا Clinova؟", href: "#reach", icon: AutoAwesomeRoundedIcon },
+    { label: "خدماتنا", href: "#services", icon: WidgetsRoundedIcon },
+    { label: "رحلة المريض", href: "#contact-system", icon: RouteRoundedIcon },
+    { label: "تخصصاتنا", href: "#specialties", icon: MedicalServicesRoundedIcon },
+    { label: "قصص النجاح", href: "#case-studies", icon: TrendingUpRoundedIcon },
+    { label: "شركاؤنا", href: "#partners", icon: HandshakeRoundedIcon },
+    { label: "الأسئلة الشائعة", short: "أسئلة شائعة", href: "#faq", icon: HelpOutlineRoundedIcon },
+    { label: "تواصل معنا", href: "#contact-cta", icon: PhoneRoundedIcon },
 ];
 
 const bookingStyle = {
@@ -51,10 +50,7 @@ export default function Header() {
     const compact = useMediaQuery("(max-width:1399px)");
     const [active, setActive] = useState("#home");
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [moreAnchor, setMoreAnchor] = useState<HTMLElement | null>(null);
-    const moreId = useId();
     const drawerId = useId();
-    const moreActive = navItems.some((item) => !item.primary && item.href === active);
 
     useEffect(() => {
         // A narrow viewport band tracks the section the visitor is reading.
@@ -73,13 +69,12 @@ export default function Header() {
     const select = (href: string) => {
         setActive(href);
         setDrawerOpen(false);
-        setMoreAnchor(null);
     };
 
     return <>
         <AppBar position="fixed" elevation={0} sx={{ background: "transparent", py: { xs: 1.25, md: 2 }, pointerEvents: "none" }}>
             <Container maxWidth="xl" sx={{ px: { xs: 1.5, sm: 3 } }}>
-                <Toolbar disableGutters sx={{
+                <Toolbar disableGutters className="clinova-header-bar" sx={{
                     minHeight: { xs: 64, md: 76 }, px: { xs: 1.25, md: 2.5 }, gap: { xs: 0.75, sm: 1.5 },
                     direction: "ltr", flexDirection: compact || isRtl ? "row" : "row-reverse",
                     borderRadius: "999px", border: "1px solid var(--clinova-rgba-142-168-232-0_22)",
@@ -92,21 +87,26 @@ export default function Header() {
                         <Box sx={{ flex: 1, minWidth: 0 }}><Logo compact /></Box>
                         <ThemeToggle compact />
                         <LanguageSwitcher compact />
-                        <Button {...bookingLinkProps} endIcon={<PhoneRoundedIcon />} sx={{ ...bookingStyle, "@media (max-width:399px)": { display: "none" }, px: { xs: 1.4, sm: 2 }, fontSize: "0.8rem" }}>{t("احجز")}</Button>
+                        <Button {...bookingLinkProps} className="clinova-shine" endIcon={<PhoneRoundedIcon />} sx={{ ...bookingStyle, "@media (max-width:399px)": { display: "none" }, px: { xs: 1.4, sm: 2 }, fontSize: "0.8rem" }}>{t("احجز")}</Button>
                         <IconButton aria-label={t("فتح قائمة التنقل")} aria-expanded={drawerOpen} aria-controls={drawerOpen ? drawerId : undefined} onClick={() => setDrawerOpen(true)} sx={{ width: 42, height: 42, color: "primary.light", backgroundColor: "var(--clinova-rgba-142-168-232-0_08)", border: "1px solid var(--clinova-rgba-142-168-232-0_16)" }}><MenuRoundedIcon /></IconButton>
                     </> : <>
-                        <Button {...bookingLinkProps} endIcon={<PhoneRoundedIcon />} sx={{ ...bookingStyle, px: 2.5 }}>{t("احجز موعد")}</Button>
+                        <Button {...bookingLinkProps} className="clinova-shine" endIcon={<PhoneRoundedIcon />} sx={{ ...bookingStyle, px: 2.5 }}>{t("احجز موعد")}</Button>
                         <ThemeToggle />
                         <LanguageSwitcher />
                         <Box component="nav" dir={direction} aria-label={t("التنقل الرئيسي")} sx={{ flex: 1, minWidth: 0, display: "flex", justifyContent: "center" }}>
-                            <Stack direction="row" sx={{ alignItems: "center", gap: 0.25 }}>
-                                {navItems.filter((item) => item.primary).map((item) => <Button
-                                    component="a" href={item.href} key={item.href} onClick={() => select(item.href)} aria-current={active === item.href ? "location" : undefined}
-                                    sx={{ minWidth: 0, px: { lg: 1.2, xl: 1.7 }, py: 1.2, whiteSpace: "nowrap", borderRadius: "999px", fontSize: "0.85rem", fontWeight: active === item.href ? 600 : 500,
-                                        color: active === item.href ? "primary.light" : "var(--clinova-rgba-245-247-250-0_72)", backgroundColor: active === item.href ? "var(--clinova-rgba-142-168-232-0_12)" : "transparent",
-                                        "&:hover": { color: "var(--clinova-color-f5f7fa)", backgroundColor: "var(--clinova-rgba-142-168-232-0_08)" } }}
-                                >{t(item.label)}</Button>)}
-                                <Button id={`${moreId}-button`} aria-haspopup="menu" aria-expanded={Boolean(moreAnchor)} aria-controls={moreAnchor ? moreId : undefined} onClick={(event) => setMoreAnchor(event.currentTarget)} endIcon={<KeyboardArrowDownRoundedIcon />} sx={{ minWidth: 0, px: 1.5, borderRadius: "999px", color: moreActive ? "primary.light" : "text.secondary", backgroundColor: moreActive ? "var(--clinova-rgba-142-168-232-0_12)" : "transparent", "& .MuiButton-endIcon": { margin: 0, marginInlineStart: "4px" } }}>{t("المزيد")}</Button>
+                            <Stack direction="row" sx={{ width: "100%", maxWidth: 1040, alignItems: "stretch", justifyContent: "space-between", px: { lg: 1, xl: 2 } }}>
+                                {navItems.map((item, index) => {
+                                    const current = active === item.href;
+                                    return <Button
+                                        component="a" href={item.href} key={item.href} onClick={() => select(item.href)} aria-current={current ? "location" : undefined}
+                                        className="clinova-nav-item" style={{ animationDelay: `${120 + index * 45}ms` }}
+                                        sx={{ minWidth: 0, maxWidth: { lg: 84, xl: 104 }, px: { lg: 0.6, xl: 1 }, py: 0.75, gap: 0.4, flexDirection: "column", justifyContent: "flex-start", borderRadius: "18px", fontSize: { lg: "0.7rem", xl: "0.76rem" }, lineHeight: 1.2, textAlign: "center", fontWeight: current ? 600 : 500,
+                                            color: current ? "primary.light" : "var(--clinova-rgba-245-247-250-0_72)", backgroundColor: current ? "var(--clinova-rgba-142-168-232-0_12)" : "transparent",
+                                            "& .clinova-nav-icon": { fontSize: 20, color: current ? "primary.light" : "var(--clinova-rgba-142-168-232-0_6)" },
+                                            "&:hover": { color: "var(--clinova-color-f5f7fa)", backgroundColor: "var(--clinova-rgba-142-168-232-0_08)" },
+                                            "&:hover .clinova-nav-icon": { color: "primary.light" } }}
+                                    ><item.icon className="clinova-nav-icon" />{t(item.short ?? item.label)}</Button>;
+                                })}
                             </Stack>
                         </Box>
                         <Box sx={{ borderLeft: "1px solid var(--clinova-rgba-142-168-232-0_16)", pl: 2.5 }}><Logo /></Box>
@@ -114,14 +114,6 @@ export default function Header() {
                 </Toolbar>
             </Container>
         </AppBar>
-        <Menu id={moreId} anchorEl={moreAnchor} open={Boolean(moreAnchor)} onClose={() => setMoreAnchor(null)} slotProps={{
-            list: { "aria-labelledby": `${moreId}-button` },
-            paper: { dir: direction, sx: { mt: 1.5, p: 0.75, minWidth: 240, borderRadius: 3, border: "1px solid var(--clinova-rgba-142-168-232-0_2)", background: "var(--clinova-color-111b2a)", boxShadow: "0 18px 50px var(--clinova-rgba-0-0-0-0_4)" } },
-        }}>
-            {navItems.filter((item) => !item.primary).map((item) => <MenuItem component="a" href={item.href} key={item.href} selected={active === item.href} aria-current={active === item.href ? "location" : undefined} onClick={() => select(item.href)} sx={{ borderRadius: 2, py: 1.5, gap: 1.5 }}>
-                <item.icon sx={{ fontSize: 20, color: "primary.main" }} /><Typography variant="body2">{t(item.label)}</Typography>
-            </MenuItem>)}
-        </Menu>
         <Drawer anchor={isRtl ? "right" : "left"} open={drawerOpen} onClose={() => setDrawerOpen(false)} slotProps={{ paper: { dir: direction, sx: { width: { xs: "min(350px, 92vw)", sm: 380 }, p: 2.5, background: "linear-gradient(160deg, var(--clinova-color-18243a), var(--clinova-color-0b111b) 65%)", borderInlineStart: "1px solid var(--clinova-rgba-142-168-232-0_18)" } } }}>
             <Stack direction="row" sx={{ alignItems: "center", justifyContent: "space-between", mb: 3 }}>
                 <Logo compact /><IconButton aria-label={t("إغلاق القائمة")} onClick={() => setDrawerOpen(false)} sx={{ color: "text.secondary", backgroundColor: "var(--clinova-rgba-142-168-232-0_08)" }}><CloseRoundedIcon /></IconButton>
@@ -136,7 +128,7 @@ export default function Header() {
                     </ListItemButton>)}
                 </List>
             </Box>
-            <Box sx={{ mt: "auto", pt: 3 }}><Button fullWidth {...bookingLinkProps} endIcon={<PhoneRoundedIcon />} sx={bookingStyle}>{t("احجز موعد")}</Button></Box>
+            <Box sx={{ mt: "auto", pt: 3 }}><Button fullWidth {...bookingLinkProps} className="clinova-shine" endIcon={<PhoneRoundedIcon />} sx={bookingStyle}>{t("احجز موعد")}</Button></Box>
         </Drawer>
     </>;
 }
