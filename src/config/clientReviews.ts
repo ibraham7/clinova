@@ -14,11 +14,11 @@ export type ClientReview = {
 };
 
 // Real client reviews only, with each client's permission. The average rating and count
-// are calculated from this list. While it is empty the live site hides the section.
+// are calculated from this list. Labelled samples keep the section visible while it is empty.
 export const clientReviews: ClientReview[] = [];
 
 const samplesAllowed = typeof __CLINOVA_REVIEW_SAMPLES__ !== "undefined" && __CLINOVA_REVIEW_SAMPLES__;
 
-/** Clearly marked placeholder cards appear only on previews, until real reviews are added. */
+/** Clearly marked placeholder cards appear until real reviews are added. */
 export const usingSampleReviews = clientReviews.length === 0 && samplesAllowed;
 export const displayedReviews: ClientReview[] = clientReviews.length ? clientReviews : usingSampleReviews ? sampleReviews : [];

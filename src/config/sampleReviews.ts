@@ -1,6 +1,6 @@
 import type { ClientReview } from "./clientReviews";
 
-// Preview-only placeholders that show the layout; never shown on the production site.
+// Illustrative placeholders, explicitly labelled in the section until real reviews are added.
 export const sampleReviews: ClientReview[] = [
   // Arabic
   { language: "ar", name: "د. أحمد الخطيب", detail: "طب الأسنان · إسطنبول", rating: 5, text: "نص توضيحي قصير لتقييم عميل." },
