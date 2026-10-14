@@ -3,7 +3,7 @@ import { Box, Container, Stack, Typography } from "@mui/material";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import FormatQuoteRoundedIcon from "@mui/icons-material/FormatQuoteRounded";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
-import { displayedReviews, usingSampleReviews } from "../../config/clientReviews";
+import { displayedReviews } from "../../config/clientReviews";
 import type { ClientReview } from "../../config/clientReviews";
 import CountUp from "../motion/CountUp";
 
