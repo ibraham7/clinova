@@ -1,4 +1,5 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
+import CountUp from "../motion/CountUp";
 import { useState } from "react";
 import {
     Box,
@@ -672,7 +673,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                         textAlign: direction === "rtl" ? "right" : "left",
                     }}
                 >
-                    {caseStudy.result}
+                    <CountUp value={caseStudy.result} />
                 </Typography>
                 <Typography sx={{ mt: 1, color: "text.secondary", fontSize: "0.8rem" }}>
                     {t(caseStudy.resultLabel)}
@@ -706,7 +707,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                                 color: "text.primary",
                             }}
                         >
-                            {t(stat.value)}
+                            <CountUp value={t(stat.value)} />
                         </Typography>
                         <Typography sx={{ mt: 0.7, fontSize: "0.7rem", color: "text.secondary" }}>
                             {t(stat.label)}

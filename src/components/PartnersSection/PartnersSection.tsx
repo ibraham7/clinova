@@ -1,4 +1,5 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
+import CountUp from "../motion/CountUp";
 import { Box, Container, Stack, Typography } from "@mui/material";
 
 const partnersTop = [
@@ -504,7 +505,7 @@ function PartnerStat({
                     color: "primary.main",
                 }}
             >
-                {value}
+                <CountUp value={value} />
             </Typography>
 
             <Typography
