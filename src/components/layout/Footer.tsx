@@ -6,6 +6,7 @@ import {
     Typography,
 } from "@mui/material";
 import clinovaLogo from "../../../public/logo/logo.png";
+import { showClinicVideos } from "../../config/sections";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
@@ -13,7 +14,7 @@ const services = [
     { label: "نظامنا", href: "#contact-system" },
     { label: "أعمالنا", href: "#case-studies" },
     { label: "آراء العملاء", href: "#testimonials" },
-];
+].filter((link) => showClinicVideos || link.href !== "#testimonials");
 
 const company = [
     { label: "من نحن", href: "#about" },
