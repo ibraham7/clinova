@@ -35,7 +35,20 @@ export type ProfileLead = {
     marketingConsent: boolean;
     requestId: string;
 };
-export async function submitProfileLead(lead: ProfileLead, endpoint = profileLeadEndpoint) {
+export type SurveyLead = {
+    contact: NonNullable<ReturnType<typeof parseContact>>;
+    language: string;
+    answers: Record<string, string>;
+    marketingConsent: boolean;
+    requestId: string;
+};
+export function submitSurveyLead(lead: SurveyLead) {
+    return postLead({ ...lead, purpose: "trial_survey" });
+}
+export function submitProfileLead(lead: ProfileLead, endpoint = profileLeadEndpoint) {
+    return postLead({ ...lead, purpose: "company_profile_download" }, endpoint);
+}
+async function postLead(lead: (ProfileLead | SurveyLead) & { purpose: string }, endpoint = profileLeadEndpoint) {
     if (!endpoint.startsWith("https://") && endpoint !== profileLeadEndpoint) throw new Error("Profile lead endpoint is not configured");
     const url = new URL(endpoint, "https://clinova.novanoai.online");
     const googleAppsScript = url.hostname === "script.google.com" && /^\/macros\/s\/[^/]+\/exec$/.test(url.pathname);
@@ -48,7 +61,7 @@ export async function submitProfileLead(lead: ProfileLead, endpoint = profileLea
             method: "POST", credentials: "omit", signal: controller.signal,
             // text/plain allows a simple POST to Apps Script without an unsupported preflight.
             headers: { "Content-Type": googleAppsScript ? "text/plain;charset=UTF-8" : "application/json" },
-            body: JSON.stringify({ ...lead, purpose: "company_profile_download" }),
+            body: JSON.stringify(lead),
         });
         if (!response.ok) throw new Error("Profile lead could not be saved");
         const result: unknown = await response.json();

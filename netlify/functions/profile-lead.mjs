@@ -1,10 +1,22 @@
 import settings from '../../src/config/profile-leads.json' with { type: 'json' };
+import survey from '../../src/config/survey.json' with { type: 'json' };
 
 const reply = (status, data) => Response.json(data, { status, headers: { 'Cache-Control': 'no-store' } });
+// Trial survey answers must be one of the listed options; the open answer is optional free text.
+function validSurvey(answers) {
+    if (!answers || typeof answers !== 'object') return false;
+    return survey.questions.every((question) => {
+        const answer = answers[question.id];
+        return question.type === 'choice'
+            ? question.options.includes(answer)
+            : answer === undefined || (typeof answer === 'string' && answer.length <= question.maxLength);
+    });
+}
 function validLead(p) {
-    if (!p || p.purpose !== 'company_profile_download' || !p.contact || typeof p.contact.value !== 'string') return false;
+    if (!p || !['company_profile_download','trial_survey'].includes(p.purpose) || !p.contact || typeof p.contact.value !== 'string') return false;
     if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(p.requestId ?? '')) return false;
-    if (typeof p.marketingConsent !== 'boolean' || !['ar','en','tr','fr'].includes(p.language) || !['hero','contact_cta'].includes(p.source)) return false;
+    if (typeof p.marketingConsent !== 'boolean' || !['ar','en','tr','fr'].includes(p.language)) return false;
+    if (p.purpose === 'trial_survey' ? !validSurvey(p.answers) : !['hero','contact_cta'].includes(p.source)) return false;
     if (p.contact.country && !/^[A-Z]{2}$/.test(p.contact.country)) return false;
     return p.contact.type === 'email'
         ? p.contact.value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.contact.value)

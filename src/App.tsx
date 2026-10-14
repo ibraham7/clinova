@@ -19,6 +19,7 @@ import TestimonialsSection from "./components/TestimonialsSection/TestimonialsSe
 import FAQSection from "./components/FAQSection/FAQSection";
 import CTASection from "./components/CTASection/CTASection";
 import Footer from "./components/layout/Footer";
+import SurveyPopup from "./components/layout/SurveyPopup";
 import { showClinicVideos } from "./config/sections";
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
       <FAQSection />
       <CTASection />
       <Footer />
+      <SurveyPopup />
     </Box>
   );
 }
