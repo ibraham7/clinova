@@ -172,13 +172,13 @@ section[data-section="shown"] {
   transition: opacity 450ms ease, transform 550ms var(--clinova-ease-out);
 }
 
+/* Icons only change colour and glow on hover; no movement, so nothing snaps. */
 .clinova-nav-item .clinova-nav-icon {
-  transition: color 450ms ease, translate 550ms var(--clinova-ease-out), scale 550ms var(--clinova-ease-out);
+  transition: color 500ms ease, filter 600ms ease;
 }
 
 .clinova-nav-item:hover .clinova-nav-icon {
-  translate: 0 -2px;
-  scale: 1.08;
+  filter: drop-shadow(0 0 5px var(--clinova-rgba-142-168-232-0_45));
 }
 
 .clinova-nav-item[aria-current="location"] .clinova-nav-icon {
@@ -299,8 +299,11 @@ section[data-section="shown"] {
     animation: none;
   }
 
-  .clinova-nav-item .clinova-nav-icon,
   .clinova-parallax {
     transition: none;
+  }
+
+  .clinova-nav-item::before {
+    transition: opacity 450ms ease;
   }
 }
