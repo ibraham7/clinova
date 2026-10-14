@@ -22,10 +22,10 @@ function Stars({ rating, size = 18 }: { rating: number; size?: number }) {
     </Stack>;
 }
 
-function ReviewCard({ review }: { review: ClientReview }) {
+function ReviewCard({ review, copy = false }: { review: ClientReview; copy?: boolean }) {
     const { direction } = useSiteTranslation();
     const initials = review.name.split(/\s+/).filter((part) => !/^(د\.|dr\.?)$/i.test(part)).slice(0, 2).map((part) => part[0]).join("");
-    return <Box component="article" dir={direction} sx={{
+    return <Box component="article" dir={direction} aria-hidden={copy || undefined} inert={copy || undefined} sx={{
         flex: "0 0 auto", width: { xs: 280, sm: 330 }, minHeight: 230, p: 3, display: "flex", flexDirection: "column", gap: 2,
         borderRadius: "24px", border: "1px solid var(--clinova-rgba-142-168-232-0_14)",
         background: "linear-gradient(160deg, var(--clinova-rgba-142-168-232-0_08), var(--clinova-rgba-142-168-232-0_025) 60%)",
@@ -47,9 +47,10 @@ function ReviewCard({ review }: { review: ClientReview }) {
     </Box>;
 }
 
-// Moving the mouse towards an edge glides the reviews that way without clicking; the middle
-// of the strip is a calm reading zone. Dragging and touch swiping also work.
-function useGlideSlider(startAtEnd: boolean) {
+// Moving the mouse towards an edge brings in the reviews on that side without clicking; the middle
+// of the strip is a calm reading zone. Dragging and touch swiping also work. The list is rendered
+// three times and the strip wraps between copies, so there are always reviews on both sides.
+function useGlideSlider(startAtEnd: boolean, count: number) {
     const track = useRef<HTMLDivElement>(null);
     useEffect(() => {
         const element = track.current;
@@ -58,9 +59,21 @@ function useGlideSlider(startAtEnd: boolean) {
         let frame = 0;
         let pointerX: number | null = null;
         let velocity = 0;
-        let drift = startAtEnd ? -1 : 1;
+        const drift = startAtEnd ? -1 : 1;
         let drag: { x: number; start: number } | null = null;
-        let position = startAtEnd ? element.scrollWidth : 0;
+        const cards = element.children as HTMLCollectionOf<HTMLElement>;
+        // Width of one full copy of the list, gaps included.
+        const loop = () => (cards.length >= count * 2 ? cards[count].offsetLeft - cards[0].offsetLeft : 0);
+        const wrap = (value: number) => {
+            const width = loop();
+            if (!width) return value;
+            if (value < width * 0.5) return value + width;
+            if (value > width * 1.5) return value - width;
+            return value;
+        };
+        // Start on the middle copy: Arabic with its first review at the right edge, other languages at the left.
+        const first = cards[startAtEnd ? count * 2 - 1 : count];
+        let position = first ? (startAtEnd ? first.offsetLeft + first.offsetWidth - element.clientWidth + 48 : first.offsetLeft - 48) : 0;
         element.scrollLeft = position;
         position = element.scrollLeft;
 
@@ -73,17 +86,15 @@ function useGlideSlider(startAtEnd: boolean) {
                 const box = element.getBoundingClientRect();
                 const ratio = (pointerX - box.left) / box.width;
                 const edge = 0.3;
-                // Pointer near the right edge: reviews travel left (scroll forward); near the left: they travel right.
+                // Pointer near the right edge brings in the reviews on the right; near the left edge, those on the left.
                 if (ratio > 1 - edge) target = Math.pow((ratio - (1 - edge)) / edge, 2) * 13;
                 else if (ratio < edge) target = -Math.pow((edge - ratio) / edge, 2) * 13;
             } else if (!drag && !reduced) {
-                if (position >= max - 1) drift = -1;
-                else if (position <= 1) drift = 1;
                 target = drift * 0.35;
             }
             velocity += (target - velocity) * 0.08;
             if (!drag && Math.abs(velocity) > 0.01) {
-                position = Math.max(0, Math.min(max, position + velocity));
+                position = Math.max(0, Math.min(max, wrap(position + velocity)));
                 element.scrollLeft = position;
             }
             frame = requestAnimationFrame(tick);
@@ -93,7 +104,9 @@ function useGlideSlider(startAtEnd: boolean) {
             if (event.pointerType !== "mouse") return;
             pointerX = event.clientX;
             if (drag) {
-                position = Math.max(0, Math.min(element.scrollWidth - element.clientWidth, drag.start - (event.clientX - drag.x)));
+                const next = drag.start - (event.clientX - drag.x);
+                position = Math.max(0, Math.min(element.scrollWidth - element.clientWidth, wrap(next)));
+                drag.start += position - next;
                 element.scrollLeft = position;
             }
         };
@@ -124,7 +137,7 @@ function useGlideSlider(startAtEnd: boolean) {
             element.removeEventListener("pointerup", up);
             element.removeEventListener("pointercancel", up);
         };
-    }, [startAtEnd]);
+    }, [startAtEnd, count]);
     return track;
 }
 
@@ -136,7 +149,7 @@ export default function ReviewsSection() {
     // The strip runs left-to-right; Arabic starts from the right so the first review sits where reading starts.
     const ordered = isRtl ? [...shown].reverse() : shown;
     const average = displayedReviews.reduce((sum, review) => sum + review.rating, 0) / displayedReviews.length;
-    const track = useGlideSlider(isRtl);
+    const track = useGlideSlider(isRtl, ordered.length);
 
     return <Box component="section" id="reviews" sx={{ position: "relative", overflow: "hidden", py: { xs: 10, md: 14 }, direction }}>
         <Container>
@@ -172,7 +185,7 @@ export default function ReviewsSection() {
             maskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
             WebkitMaskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
         }}>
-            {ordered.map((review, index) => <ReviewCard key={`${review.language}-${review.name}-${index}`} review={review} />)}
+            {[0, 1, 2].flatMap((copy) => ordered.map((review, index) => <ReviewCard key={`${copy}-${review.language}-${review.name}-${index}`} review={review} copy={copy !== 1} />))}
         </Box>
     </Box>;
 }
