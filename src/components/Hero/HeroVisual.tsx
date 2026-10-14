@@ -27,6 +27,7 @@ export default function HeroVisual() {
     return (
         <Box
             aria-hidden="true"
+            className="clinova-parallax"
             sx={{
                 width: "100%",
                 maxWidth: { xs: 350, md: 440, lg: 520 },

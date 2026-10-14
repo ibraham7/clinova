@@ -346,6 +346,7 @@ function Hero() {
                         >
                             <Button
                                 {...bookingLinkProps}
+                                className="clinova-shine"
                                 variant="contained"
                                 color="primary"
                                 endIcon={

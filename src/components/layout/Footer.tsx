@@ -6,14 +6,15 @@ import {
     Typography,
 } from "@mui/material";
 import clinovaLogo from "../../../public/logo/logo.png";
+import { displayedReviews } from "../../config/clientReviews";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 const services = [
     { label: "نظامنا", href: "#contact-system" },
     { label: "أعمالنا", href: "#case-studies" },
-    { label: "آراء العملاء", href: "#testimonials" },
-];
+    { label: "آراء العملاء", href: "#reviews" },
+].filter((link) => displayedReviews.length > 0 || link.href !== "#reviews");
 
 const company = [
     { label: "من نحن", href: "#about" },
@@ -262,7 +263,7 @@ function Footer() {
                                     "ltr",
 
                                 transition:
-                                    "color 0.25s ease",
+                                    "color 0.45s ease",
 
                                 "&:hover": {
                                     color:
@@ -416,7 +417,7 @@ function FooterColumn({
                                 "none",
 
                             transition:
-                                "color 0.25s ease, transform 0.25s ease",
+                                "color 0.45s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
 
                             "&:hover": {
                                 color:
@@ -475,7 +476,7 @@ function SocialButton({
                     "var(--clinova-rgba-245-247-250-0_5)",
 
                 transition:
-                    "all 0.25s ease",
+                    "color 0.45s ease, border-color 0.45s ease, background-color 0.45s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
 
                 "& svg": {
                     fontSize: 17,

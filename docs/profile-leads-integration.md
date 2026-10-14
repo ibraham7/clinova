@@ -26,3 +26,13 @@ Email contacts instead contain `type: "email"` and `value`. Source is `hero` or 
 For cross-origin receivers, allow only the actual site origins and POST/Content-Type in CORS. Keep CRM credentials on the receiver server. No email is sent or verified by the current flow, and the PDF is not personalized. Sending email and personalizing it are future work.
 
 The bottom WhatsApp CTA contains a translated prefilled message. It identifies the clicked CTA, not proof that the visitor read all sections. WhatsApp requires the visitor to send the message themselves.
+
+## Trial survey popup
+
+After one minute of visible browsing, a small popup offers a 7-day free trial in exchange for 5 short answers (`src/config/survey.json`) and an email or phone. Dismissing it hides it for 3 days; submitting it hides it for good. Add `?survey` to any page URL to open it after 1.5 seconds for review.
+
+It posts to the same `/.netlify/functions/profile-lead` function with `purpose: "trial_survey"` and an `answers` object. The function only accepts listed options, plus optional free text up to 500 characters. `Code.gs` writes these rows to a separate **Clinova Survey** sheet, created on the first submission. After updating `Code.gs` in Apps Script, deploy a new version of the existing Web App deployment (Deploy → Manage deployments → Edit → New version) so the URL stays the same. Until then, survey submissions show the save error.
+
+## Client reviews
+
+`src/config/clientReviews.ts` holds real client reviews, published with each client's permission. The section's average rating and review count are calculated from this list. While it is empty, the production site hides the section and its footer link. Netlify deploy previews and local builds show clearly marked placeholder cards instead, so the layout can be reviewed.

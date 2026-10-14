@@ -1,0 +1,373 @@
+/* Shared motion layer: reveals, header entrance, shine, ambient light and scroll progress. */
+
+:root {
+  --clinova-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --clinova-slide: -70px;
+}
+
+[dir="rtl"] {
+  --clinova-slide: 70px;
+}
+
+/* Side-sliding reveals must never widen the page. */
+body {
+  overflow-x: clip;
+}
+
+/* Softer hover and press feedback on every button and link button. */
+html .MuiButtonBase-root {
+  transition-duration: 450ms;
+  transition-timing-function: var(--clinova-ease-out);
+}
+
+section[data-section="hidden"] {
+  opacity: 0;
+}
+
+section[data-section="shown"] {
+  animation: clinova-section-in 1100ms var(--clinova-ease-out) backwards;
+}
+
+@keyframes clinova-section-in {
+  from {
+    opacity: 0;
+    translate: 0 80px;
+    clip-path: inset(4% 4% 0 4% round 56px);
+  }
+}
+
+[data-reveal="hidden"] {
+  opacity: 0;
+}
+
+[data-reveal="shown"] {
+  animation: clinova-reveal 900ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--clinova-reveal-delay, 0ms) backwards;
+}
+
+[data-reveal="shown"][data-reveal-variant="start"] {
+  animation-name: clinova-reveal-start;
+  animation-duration: 1000ms;
+}
+
+[data-reveal="shown"][data-reveal-variant="end"] {
+  animation-name: clinova-reveal-end;
+  animation-duration: 1000ms;
+}
+
+[data-reveal="shown"][data-reveal-variant="card"] {
+  animation-name: clinova-reveal-card;
+}
+
+[data-reveal="shown"][data-reveal-variant="heading"] {
+  animation-name: clinova-reveal-heading;
+  animation-duration: 1200ms;
+}
+
+@keyframes clinova-reveal-start {
+  from {
+    opacity: 0;
+    translate: var(--clinova-slide) 0;
+    filter: blur(8px);
+  }
+}
+
+@keyframes clinova-reveal-end {
+  from {
+    opacity: 0;
+    translate: calc(var(--clinova-slide) * -1) 0;
+    filter: blur(8px);
+  }
+}
+
+@keyframes clinova-reveal-card {
+  from {
+    opacity: 0;
+    translate: 0 48px;
+    scale: 0.92;
+    filter: blur(6px);
+  }
+}
+
+@keyframes clinova-reveal-heading {
+  from {
+    opacity: 0;
+    translate: 0 18px;
+    clip-path: inset(-20% 100% -40% -10%);
+  }
+}
+
+[dir="rtl"] [data-reveal="shown"][data-reveal-variant="heading"] {
+  animation-name: clinova-reveal-heading-rtl;
+}
+
+@keyframes clinova-reveal-heading-rtl {
+  from {
+    opacity: 0;
+    translate: 0 18px;
+    clip-path: inset(-20% -10% -40% 100%);
+  }
+}
+
+[data-accent] {
+  background: linear-gradient(100deg, var(--clinova-color-7894d2) 20%, var(--clinova-color-b8c8ef) 40%, var(--clinova-color-8ea8e8) 50%, var(--clinova-color-7894d2) 80%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: clinova-accent-sweep 7s ease-in-out infinite;
+}
+
+@keyframes clinova-accent-sweep {
+  0%, 100% { background-position: 100% 0; }
+  50% { background-position: 0% 0; }
+}
+
+.clinova-parallax {
+  translate: calc(var(--clinova-px, 0) * -18px) calc(var(--clinova-py, 0) * -14px);
+  transition: translate 900ms var(--clinova-ease-out);
+}
+
+@keyframes clinova-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes clinova-reveal {
+  from {
+    opacity: 0;
+    translate: 0 36px;
+    scale: 0.98;
+    filter: blur(8px);
+  }
+}
+
+.clinova-header-bar {
+  animation: clinova-drop-in 800ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+@keyframes clinova-drop-in {
+  from {
+    opacity: 0;
+    translate: 0 -28px;
+  }
+}
+
+.clinova-nav-item {
+  animation: clinova-nav-in 600ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+@keyframes clinova-nav-in {
+  from {
+    opacity: 0;
+    translate: 0 -10px;
+  }
+}
+
+.clinova-nav-item {
+  transition: color 450ms ease !important;
+}
+
+.clinova-nav-item::before {
+  transition: opacity 450ms ease, transform 550ms var(--clinova-ease-out);
+}
+
+/* Icons only change colour and glow on hover; no movement, so nothing snaps. */
+.clinova-nav-item .clinova-nav-icon {
+  transition: color 500ms ease, filter 600ms ease;
+}
+
+.clinova-nav-item:hover .clinova-nav-icon {
+  filter: drop-shadow(0 0 5px var(--clinova-rgba-142-168-232-0_45));
+}
+
+.clinova-nav-item[aria-current="location"] .clinova-nav-icon {
+  animation: clinova-icon-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes clinova-icon-glow {
+  50% {
+    filter: drop-shadow(0 0 6px var(--clinova-rgba-142-168-232-0_6));
+  }
+}
+
+.clinova-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.clinova-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  translate: -130% 0;
+  animation: clinova-shine 4.8s ease-in-out 1.5s infinite;
+}
+
+@keyframes clinova-shine {
+  0%, 60% { translate: -130% 0; }
+  85%, 100% { translate: 130% 0; }
+}
+
+.clinova-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 1301;
+  pointer-events: none;
+}
+
+.clinova-scroll-progress > div {
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--clinova-color-7894d2), var(--clinova-color-b8c8ef), var(--clinova-color-8ea8e8));
+  box-shadow: 0 0 12px var(--clinova-rgba-142-168-232-0_6);
+}
+
+[dir="rtl"] .clinova-scroll-progress > div {
+  transform-origin: right;
+}
+
+.clinova-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.clinova-ambient span {
+  position: absolute;
+  width: 42vmax;
+  height: 42vmax;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--clinova-rgba-142-168-232-0_08) 0%, transparent 65%);
+  will-change: transform;
+}
+
+.clinova-ambient span:nth-child(1) {
+  top: -12vmax;
+  left: -10vmax;
+  animation: clinova-drift-a 26s ease-in-out infinite alternate;
+}
+
+.clinova-ambient span:nth-child(2) {
+  bottom: -16vmax;
+  right: -12vmax;
+  animation: clinova-drift-b 32s ease-in-out infinite alternate;
+}
+
+.clinova-ambient span:nth-child(3) {
+  top: 35%;
+  left: 40%;
+  width: 28vmax;
+  height: 28vmax;
+  animation: clinova-drift-c 22s ease-in-out infinite alternate;
+}
+
+@keyframes clinova-drift-a {
+  to { transform: translate3d(30vw, 25vh, 0) scale(1.2); }
+}
+
+@keyframes clinova-drift-b {
+  to { transform: translate3d(-35vw, -30vh, 0) scale(0.85); }
+}
+
+@keyframes clinova-drift-c {
+  to { transform: translate3d(-25vw, 20vh, 0) scale(1.3); }
+}
+
+/* Trial survey popup */
+.clinova-survey .MuiDialog-paper {
+  animation: clinova-survey-in 700ms var(--clinova-ease-out) backwards;
+}
+
+@keyframes clinova-survey-in {
+  from {
+    opacity: 0;
+    translate: 0 40px;
+    scale: 0.9;
+    filter: blur(6px);
+  }
+}
+
+.clinova-survey-step {
+  animation: clinova-survey-step 550ms var(--clinova-ease-out) backwards;
+}
+
+@keyframes clinova-survey-step {
+  from {
+    opacity: 0;
+    translate: calc(var(--clinova-slide) * -0.5) 0;
+  }
+}
+
+.clinova-survey-option {
+  animation: clinova-survey-option 500ms var(--clinova-ease-out) backwards;
+}
+
+@keyframes clinova-survey-option {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+}
+
+.clinova-survey-check {
+  animation: clinova-pop 400ms var(--clinova-ease-out) backwards;
+}
+
+.clinova-survey-done {
+  animation: clinova-pop 700ms cubic-bezier(0.3, 1.5, 0.5, 1) backwards;
+}
+
+@keyframes clinova-pop {
+  from {
+    scale: 0;
+    opacity: 0;
+  }
+}
+
+.clinova-survey-gift {
+  animation: clinova-gift 3s ease-in-out 1s infinite;
+}
+
+@keyframes clinova-gift {
+  0%, 80%, 100% { rotate: 0deg; }
+  84% { rotate: -14deg; }
+  88% { rotate: 12deg; }
+  92% { rotate: -8deg; }
+  96% { rotate: 4deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  section[data-section="shown"],
+  :root [data-reveal="shown"][data-reveal] {
+    animation: clinova-fade 700ms ease var(--clinova-reveal-delay, 0ms) backwards;
+  }
+
+  [data-accent],
+  .clinova-survey-gift,
+  .clinova-header-bar,
+  .clinova-nav-item,
+  .clinova-nav-item[aria-current="location"] .clinova-nav-icon,
+  .clinova-shine::after,
+  .clinova-ambient span {
+    animation: none;
+  }
+
+  .clinova-parallax {
+    transition: none;
+  }
+
+  .clinova-nav-item::before {
+    transition: opacity 450ms ease;
+  }
+}

@@ -197,6 +197,7 @@ function CTASection() {
                         <Stack direction={{ xs: "column", sm: "row" }} sx={{ gap: 1.5, alignItems: "center", justifyContent: "center", mt: 1 }}>
                         <Box
                             component="a"
+                            className="clinova-shine"
                             {...bottomBookingLinkProps(t("مرحباً، أود الحصول على معلومات حول خدمات Clinova. هل يمكنكم مساعدتي؟"))}
                             sx={{
                                 minHeight: 50,

@@ -6,6 +6,7 @@ import { useSiteTranslation } from "./i18n/useSiteTranslation";
 import CssBaseline from "@mui/material/CssBaseline";
 import "./index.css";
 import "./theme/tokens.css";
+import "./motion.css";
 import { ColorModeProvider, useColorMode } from "./theme/ColorMode";
 import "./i18n";
 

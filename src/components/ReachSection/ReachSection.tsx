@@ -1,4 +1,5 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
+import { useRef, useState, type PointerEvent } from "react";
 import { Box, Container, Stack, Typography } from "@mui/material";
 
 import CoverageMap, { coverageLight } from "./CoverageMap";
@@ -6,6 +7,22 @@ import { coverageLocations } from "./coverageData";
 
 function ReachSection() {
     const { direction, t } = useSiteTranslation();
+    const [focus, setFocus] = useState<string | null>(null);
+    const mapArea = useRef<HTMLDivElement>(null);
+
+    // The map tilts a little towards the pointer, like a screen being looked at.
+    const tilt = (event: PointerEvent<HTMLDivElement>) => {
+        const area = mapArea.current;
+        if (!area || event.pointerType !== "mouse") return;
+        const box = area.getBoundingClientRect();
+        area.style.setProperty("--map-tilt-x", (((event.clientX - box.left) / box.width) * 2 - 1).toFixed(3));
+        area.style.setProperty("--map-tilt-y", (((event.clientY - box.top) / box.height) * 2 - 1).toFixed(3));
+    };
+    const resetTilt = () => {
+        mapArea.current?.style.setProperty("--map-tilt-x", "0");
+        mapArea.current?.style.setProperty("--map-tilt-y", "0");
+        setFocus(null);
+    };
 
     return (
         <Box
@@ -169,8 +186,19 @@ function ReachSection() {
                             ================================== */}
 
                             <Box
+                                ref={mapArea}
+                                onPointerMove={tilt}
+                                onPointerLeave={resetTilt}
                                 sx={{
                                     position: "relative",
+                                    perspective: "900px",
+                                    "& > svg": {
+                                        transform: "rotateX(calc(var(--map-tilt-y, 0) * -5deg)) rotateY(calc(var(--map-tilt-x, 0) * 6deg)) scale(1.01)",
+                                        transition: "transform 700ms cubic-bezier(0.22, 1, 0.36, 1)",
+                                    },
+                                    backgroundPosition: "calc(var(--map-tilt-x, 0) * -8px) calc(var(--map-tilt-y, 0) * -8px)",
+                                    transition: "background-position 700ms cubic-bezier(0.22, 1, 0.36, 1)",
+                                    "@media (prefers-reduced-motion: reduce)": { "& > svg": { transform: "none" } },
 
                                     height: {
                                         xs: 320,
@@ -248,7 +276,7 @@ function ReachSection() {
                                     GEOGRAPHIC COVERAGE MAP
                                 ================================== */}
 
-                                <CoverageMap />
+                                <CoverageMap focus={focus} onFocus={setFocus} />
 
                                 {/* Map label */}
                                 <Typography
@@ -293,8 +321,29 @@ function ReachSection() {
                                 {coverageLocations.map((location, index) => (
                                     <Box
                                         key={location.code}
+                                        tabIndex={0}
+                                        className={focus === location.code ? "is-focus" : undefined}
+                                        onPointerEnter={() => setFocus(location.code)}
+                                        onPointerLeave={() => setFocus(null)}
+                                        onFocus={() => setFocus(location.code)}
+                                        onBlur={() => setFocus(null)}
                                         sx={{
                                             position: "relative",
+                                            cursor: "pointer",
+                                            outline: "none",
+                                            transition: "background-color 500ms ease",
+                                            "&::before": {
+                                                content: '""', position: "absolute", insetInline: 0, top: 0, height: 2,
+                                                background: "linear-gradient(90deg, transparent, var(--clinova-color-8ea8e8), transparent)",
+                                                transform: "scaleX(0)", opacity: 0,
+                                                transition: "transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 500ms ease",
+                                            },
+                                            "& .coverage-cell-flag": { transition: "transform 600ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms ease" },
+                                            "& .coverage-cell-name": { transition: "color 500ms ease" },
+                                            "&.is-focus, &:focus-visible": { backgroundColor: "var(--clinova-rgba-142-168-232-0_07)" },
+                                            "&.is-focus::before, &:focus-visible::before": { transform: "scaleX(1)", opacity: 1 },
+                                            "&.is-focus .coverage-cell-flag": { transform: "scale(1.15)", boxShadow: "0 0 12px var(--clinova-rgba-142-168-232-0_45)" },
+                                            "&.is-focus .coverage-cell-name": { color: "var(--clinova-color-f5f7fa)" },
 
                                             px: 2,
                                             py: 1.5,
@@ -362,6 +411,7 @@ function ReachSection() {
                                         </Stack>
 
                                         <Typography
+                                            className="coverage-cell-name"
                                             sx={{
                                                 mt: 0.5,
                                                 display: "flex",
@@ -377,7 +427,7 @@ function ReachSection() {
                                                     "var(--clinova-rgba-245-247-250-0_75)",
                                             }}
                                         >
-                                            <Box component="img" src={location.flag} alt="" aria-hidden="true" width={20} height={15} sx={{ flexShrink: 0, borderRadius: "2px", objectFit: "cover" }} />
+                                            <Box component="img" className="coverage-cell-flag" src={location.flag} alt="" aria-hidden="true" width={20} height={15} sx={{ flexShrink: 0, borderRadius: "2px", objectFit: "cover" }} />
                                             {t(location.name)}
                                         </Typography>
                                     </Box>

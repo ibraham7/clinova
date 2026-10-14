@@ -1,5 +1,9 @@
 import { Box } from "@mui/material";
 import MouseGlow from "./components/layout/MouseGlow";
+import AmbientOrbs from "./components/motion/AmbientOrbs";
+import PointerParallax from "./components/motion/PointerParallax";
+import ScrollProgress from "./components/motion/ScrollProgress";
+import ScrollReveal from "./components/motion/ScrollReveal";
 import Header from "./components/layout/Header";
 import Hero from "./components/Hero/Hero";
 import MedicalTicker from "./components/MedicalTicker/MedicalTicker";
@@ -12,9 +16,13 @@ import SpecialtiesSection from "./components/SpecialtiesSection/SpecialtiesSecti
 import CaseStudiesSection from "./components/CaseStudiesSection/CaseStudiesSection";
 import PartnersSection from "./components/PartnersSection/PartnersSection";
 import TestimonialsSection from "./components/TestimonialsSection/TestimonialsSection";
+import ReviewsSection from "./components/ReviewsSection/ReviewsSection";
+import { displayedReviews } from "./config/clientReviews";
 import FAQSection from "./components/FAQSection/FAQSection";
 import CTASection from "./components/CTASection/CTASection";
 import Footer from "./components/layout/Footer";
+import SurveyPopup from "./components/layout/SurveyPopup";
+import { showClinicVideos } from "./config/sections";
 
 function App() {
   return (
@@ -26,6 +34,10 @@ function App() {
           "radial-gradient(circle at 15% 0%, var(--clinova-rgba-142-168-232-0_1), transparent 30%), var(--clinova-color-0b111b)",
       }}
     >
+      <AmbientOrbs />
+      <ScrollProgress />
+      <ScrollReveal />
+      <PointerParallax />
       <MouseGlow />
       <Header />
       <Hero />
@@ -38,10 +50,12 @@ function App() {
       <SpecialtiesSection />
       <CaseStudiesSection />
       <PartnersSection />
-      <TestimonialsSection />
+      {showClinicVideos && <TestimonialsSection />}
+      {displayedReviews.length > 0 && <ReviewsSection />}
       <FAQSection />
       <CTASection />
       <Footer />
+      <SurveyPopup />
     </Box>
   );
 }

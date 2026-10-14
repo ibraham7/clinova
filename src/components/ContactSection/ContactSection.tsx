@@ -1,4 +1,5 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
+import CountUp from "../motion/CountUp";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import ArrowOutwardRoundedIcon from "@mui/icons-material/ArrowOutwardRounded";
@@ -942,7 +943,7 @@ function Stat({
                     color: "primary.main",
                 }}
             >
-                {value}
+                <CountUp value={value} />
             </Typography>
 
             <Typography
