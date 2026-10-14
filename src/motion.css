@@ -1,11 +1,130 @@
 /* Shared motion layer: reveals, header entrance, shine, ambient light and scroll progress. */
 
+:root {
+  --clinova-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --clinova-slide: -70px;
+}
+
+[dir="rtl"] {
+  --clinova-slide: 70px;
+}
+
+/* Side-sliding reveals must never widen the page. */
+body {
+  overflow-x: clip;
+}
+
+/* Softer hover and press feedback on every button and link button. */
+html .MuiButtonBase-root {
+  transition-duration: 450ms;
+  transition-timing-function: var(--clinova-ease-out);
+}
+
+section[data-section="hidden"] {
+  opacity: 0;
+}
+
+section[data-section="shown"] {
+  animation: clinova-section-in 1100ms var(--clinova-ease-out) backwards;
+}
+
+@keyframes clinova-section-in {
+  from {
+    opacity: 0;
+    translate: 0 80px;
+    clip-path: inset(4% 4% 0 4% round 56px);
+  }
+}
+
 [data-reveal="hidden"] {
   opacity: 0;
 }
 
 [data-reveal="shown"] {
   animation: clinova-reveal 900ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--clinova-reveal-delay, 0ms) backwards;
+}
+
+[data-reveal="shown"][data-reveal-variant="start"] {
+  animation-name: clinova-reveal-start;
+  animation-duration: 1000ms;
+}
+
+[data-reveal="shown"][data-reveal-variant="end"] {
+  animation-name: clinova-reveal-end;
+  animation-duration: 1000ms;
+}
+
+[data-reveal="shown"][data-reveal-variant="card"] {
+  animation-name: clinova-reveal-card;
+}
+
+[data-reveal="shown"][data-reveal-variant="heading"] {
+  animation-name: clinova-reveal-heading;
+  animation-duration: 1200ms;
+}
+
+@keyframes clinova-reveal-start {
+  from {
+    opacity: 0;
+    translate: var(--clinova-slide) 0;
+    filter: blur(8px);
+  }
+}
+
+@keyframes clinova-reveal-end {
+  from {
+    opacity: 0;
+    translate: calc(var(--clinova-slide) * -1) 0;
+    filter: blur(8px);
+  }
+}
+
+@keyframes clinova-reveal-card {
+  from {
+    opacity: 0;
+    translate: 0 48px;
+    scale: 0.92;
+    filter: blur(6px);
+  }
+}
+
+@keyframes clinova-reveal-heading {
+  from {
+    opacity: 0;
+    translate: 0 18px;
+    clip-path: inset(-20% 100% -40% -10%);
+  }
+}
+
+[dir="rtl"] [data-reveal="shown"][data-reveal-variant="heading"] {
+  animation-name: clinova-reveal-heading-rtl;
+}
+
+@keyframes clinova-reveal-heading-rtl {
+  from {
+    opacity: 0;
+    translate: 0 18px;
+    clip-path: inset(-20% -10% -40% 100%);
+  }
+}
+
+[data-accent] {
+  background: linear-gradient(100deg, var(--clinova-color-7894d2) 20%, var(--clinova-color-b8c8ef) 40%, var(--clinova-color-8ea8e8) 50%, var(--clinova-color-7894d2) 80%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: clinova-accent-sweep 7s ease-in-out infinite;
+}
+
+@keyframes clinova-accent-sweep {
+  0%, 100% { background-position: 100% 0; }
+  50% { background-position: 0% 0; }
+}
+
+.clinova-parallax {
+  translate: calc(var(--clinova-px, 0) * -18px) calc(var(--clinova-py, 0) * -14px);
+  transition: translate 900ms var(--clinova-ease-out);
 }
 
 @keyframes clinova-reveal {
@@ -39,13 +158,21 @@
   }
 }
 
+.clinova-nav-item {
+  transition: color 450ms ease !important;
+}
+
+.clinova-nav-item::before {
+  transition: opacity 450ms ease, transform 550ms var(--clinova-ease-out);
+}
+
 .clinova-nav-item .clinova-nav-icon {
-  transition: color 200ms ease, translate 300ms cubic-bezier(0.3, 1.6, 0.5, 1), scale 300ms cubic-bezier(0.3, 1.6, 0.5, 1);
+  transition: color 450ms ease, translate 550ms var(--clinova-ease-out), scale 550ms var(--clinova-ease-out);
 }
 
 .clinova-nav-item:hover .clinova-nav-icon {
-  translate: 0 -3px;
-  scale: 1.15;
+  translate: 0 -2px;
+  scale: 1.08;
 }
 
 .clinova-nav-item[aria-current="location"] .clinova-nav-icon {
@@ -152,6 +279,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  section[data-section="shown"],
+  [data-accent],
   [data-reveal="shown"],
   .clinova-header-bar,
   .clinova-nav-item,
@@ -161,7 +290,8 @@
     animation: none;
   }
 
-  .clinova-nav-item .clinova-nav-icon {
+  .clinova-nav-item .clinova-nav-icon,
+  .clinova-parallax {
     transition: none;
   }
 }

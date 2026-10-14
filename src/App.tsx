@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import MouseGlow from "./components/layout/MouseGlow";
 import AmbientOrbs from "./components/motion/AmbientOrbs";
+import PointerParallax from "./components/motion/PointerParallax";
 import ScrollProgress from "./components/motion/ScrollProgress";
 import ScrollReveal from "./components/motion/ScrollReveal";
 import Header from "./components/layout/Header";
@@ -33,6 +34,7 @@ function App() {
       <AmbientOrbs />
       <ScrollProgress />
       <ScrollReveal />
+      <PointerParallax />
       <MouseGlow />
       <Header />
       <Hero />
