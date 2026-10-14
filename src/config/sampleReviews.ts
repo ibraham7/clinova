@@ -1,6 +1,7 @@
+
 import type { ClientReview } from "./clientReviews";
 
-// Illustrative placeholders, explicitly labelled in the section until real reviews are added.
+// Preview-only placeholders that show the layout; never shown on the production site.
 export const sampleReviews: ClientReview[] = [
   // Arabic
   { language: "ar", name: "د. أحمد الخطيب", detail: "طب الأسنان · إسطنبول", rating: 5, text: "نص توضيحي قصير لتقييم عميل." },
@@ -12,9 +13,6 @@ export const sampleReviews: ClientReview[] = [
   { language: "ar", name: "د. يوسف النجار", detail: "تقويم الأسنان · عمّان", rating: 3, text: "نص توضيحي قصير لتقييم عميل." },
   { language: "ar", name: "د. نور الهاشمي", detail: "طب الأسنان · الكويت", rating: 5, text: "هنا يظهر رأي العميل الحقيقي بكلماته كما أرسله لكم، بعد موافقته على النشر." },
 
-  { language: "ar", name: "د. مازن الشامي", detail: "طب الأسنان · إسطنبول", rating: 4.5, text: "نموذج توضيحي لتجربة عميل في متابعة المرضى وتحسين الحجز." },
-  { language: "ar", name: "د. هبة النعيمي", detail: "الجلدية والتجميل · الدوحة", rating: 5, text: "تقييم تجريبي يوضح شكل تعليق العميل بعد الحصول على موافقته للنشر." },
-
   // English
   { language: "en", name: "Dr. James Wilson", detail: "Dentistry · London", rating: 5, text: "A short placeholder review." },
   { language: "en", name: "Dr. Emily Carter", detail: "Dermatology · Manchester", rating: 4.5, text: "The client's real review appears here, in their own words, once they agree to publish it." },
@@ -24,9 +22,6 @@ export const sampleReviews: ClientReview[] = [
   { language: "en", name: "Dr. Sophia Mitchell", detail: "Dermatology · Sydney", rating: 4.5, text: "A longer placeholder: a client might describe what changed at their clinic, what they liked about the service and what they'd like improved next." },
   { language: "en", name: "Dr. Alexander Reed", detail: "Orthodontics · Birmingham", rating: 3, text: "A short placeholder review." },
   { language: "en", name: "Dr. Charlotte Evans", detail: "Cosmetic Dentistry · Dublin", rating: 5, text: "The client's real review appears here, in their own words, once they agree to publish it." },
-
-  { language: "en", name: "Dr. Liam Thompson", detail: "Dental Care · Dubai", rating: 4.5, text: "An illustrative review about improving patient follow-up and appointment booking." },
-  { language: "en", name: "Dr. Maya Patel", detail: "Aesthetic Medicine · Doha", rating: 5, text: "A sample comment showing how a client testimonial may appear after approval." },
 
   // French
   { language: "fr", name: "Dr. Thomas Dubois", detail: "Dentisterie · Paris", rating: 5, text: "Un court avis d'exemple." },
@@ -38,9 +33,6 @@ export const sampleReviews: ClientReview[] = [
   { language: "fr", name: "Dr. Antoine Girard", detail: "Orthodontie · Toulouse", rating: 3, text: "Un court avis d'exemple." },
   { language: "fr", name: "Dr. Claire Rousseau", detail: "Dentisterie esthétique · Nantes", rating: 5, text: "L'avis réel du client s'affichera ici, avec ses propres mots, une fois sa publication acceptée." },
 
-  { language: "fr", name: "Dr. Élodie Morel", detail: "Soins dentaires · Genève", rating: 4.5, text: "Un avis illustratif sur l’amélioration du suivi des patients et des rendez-vous." },
-  { language: "fr", name: "Dr. Marc Fontaine", detail: "Dermatologie · Bruxelles", rating: 5, text: "Un commentaire d’exemple montrant la forme d’un témoignage après validation." },
-
   // Turkish
   { language: "tr", name: "Dr. Ahmet Yılmaz", detail: "Diş Hekimliği · İstanbul", rating: 5, text: "Kısa bir örnek yorum." },
   { language: "tr", name: "Dr. Elif Demir", detail: "Dermatoloji · Ankara", rating: 4.5, text: "Müşterinin gerçek yorumu, yayın izni verdikten sonra kendi sözleriyle burada görünecek." },
@@ -50,7 +42,5 @@ export const sampleReviews: ClientReview[] = [
   { language: "tr", name: "Dr. Ayşe Arslan", detail: "Dermatoloji · Gaziantep", rating: 4.5, text: "Daha uzun bir örnek: müşteri kliniğinde neyin değiştiğini, hizmette neyi beğendiğini ve neyin geliştirilmesini istediğini anlatabilir." },
   { language: "tr", name: "Dr. Burak Özdemir", detail: "Ortodonti · Konya", rating: 3, text: "Kısa bir örnek yorum." },
   { language: "tr", name: "Dr. Selin Aydın", detail: "Estetik Diş Hekimliği · İstanbul", rating: 5, text: "Müşterinin gerçek yorumu, yayın izni verdikten sonra kendi sözleriyle burada görünecek." },
-  { language: "tr", name: "Dr. Can Yıldırım", detail: "Diş Kliniği · Gaziantep", rating: 4.5, text: "Hasta takibini ve randevu sürecini anlatan açıklayıcı bir örnek yorum." },
-  { language: "tr", name: "Dr. Derya Koç", detail: "Dermatoloji · Ankara", rating: 5, text: "Onay alındıktan sonra müşteri görüşünün nasıl görüneceğini gösteren örnek yorum." },
 ];
 
