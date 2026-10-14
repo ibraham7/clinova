@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import FormatQuoteRoundedIcon from "@mui/icons-material/FormatQuoteRounded";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { displayedReviews, usingSampleReviews } from "../../config/clientReviews";
 import type { ClientReview } from "../../config/clientReviews";
@@ -174,8 +173,7 @@ export default function ReviewsSection() {
                 </Stack>
             </Stack>
             {usingSampleReviews && <Stack direction="row" sx={{ alignItems: "center", justifyContent: "center", gap: 1, mb: 3, px: 2, py: 1, borderRadius: 2, color: "warning.light", border: "1px dashed var(--clinova-rgba-142-168-232-0_35)" }}>
-                <InfoOutlinedIcon sx={{ fontSize: 18 }} />
-                <Typography sx={{ fontSize: "0.78rem" }}>{t("معاينة فقط: هذه نماذج توضيحية وتظهر هنا حتى تُضاف تقييمات العملاء الحقيقية.")}</Typography>
+             
             </Stack>}
         </Container>
         <Box ref={track} dir="ltr" tabIndex={0} data-reveal-group="" role="region" aria-label={t("تقييمات وآراء عملائنا")} sx={{
