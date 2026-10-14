@@ -172,9 +172,7 @@ export default function ReviewsSection() {
                     </Box>
                 </Stack>
             </Stack>
-            {usingSampleReviews && <Stack direction="row" sx={{ alignItems: "center", justifyContent: "center", gap: 1, mb: 3, px: 2, py: 1, borderRadius: 2, color: "warning.light", border: "1px dashed var(--clinova-rgba-142-168-232-0_35)" }}>
-             
-            </Stack>}
+
         </Container>
         <Box ref={track} dir="ltr" tabIndex={0} data-reveal-group="" role="region" aria-label={t("تقييمات وآراء عملائنا")} sx={{
             display: "flex", gap: 2.5, overflowX: "auto", py: 2, px: { xs: 2, md: 6 }, cursor: "grab", userSelect: "none", outline: "none",
