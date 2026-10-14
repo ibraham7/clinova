@@ -127,6 +127,12 @@ section[data-section="shown"] {
   transition: translate 900ms var(--clinova-ease-out);
 }
 
+@keyframes clinova-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 @keyframes clinova-reveal {
   from {
     opacity: 0;
@@ -280,8 +286,11 @@ section[data-section="shown"] {
 
 @media (prefers-reduced-motion: reduce) {
   section[data-section="shown"],
+  :root [data-reveal="shown"][data-reveal] {
+    animation: clinova-fade 700ms ease var(--clinova-reveal-delay, 0ms) backwards;
+  }
+
   [data-accent],
-  [data-reveal="shown"],
   .clinova-header-bar,
   .clinova-nav-item,
   .clinova-nav-item[aria-current="location"] .clinova-nav-icon,

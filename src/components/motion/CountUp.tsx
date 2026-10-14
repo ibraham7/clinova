@@ -11,8 +11,7 @@ function format(value: number, template: string) {
 }
 
 function canAnimate() {
-    return typeof window !== "undefined" && typeof IntersectionObserver !== "undefined"
-        && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    return typeof window !== "undefined" && typeof IntersectionObserver !== "undefined";
 }
 
 function Counter({ value, duration }: { value: string; duration: number }) {

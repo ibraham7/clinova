@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 
-// Sections and their content animate into view as the visitor scrolls. Content stays
-// visible when motion is reduced or IntersectionObserver is missing.
+// Sections and their content animate into view as the visitor scrolls. With reduced
+// motion the CSS turns every reveal into a plain fade; without IntersectionObserver
+// content simply stays visible.
 const contentTargets = [
     "#home .MuiContainer-root > * > *",
     "section[id]:not(#home) .MuiContainer-root > *",
@@ -32,11 +33,11 @@ function markAccents() {
 export default function ScrollReveal() {
     useEffect(() => {
         if (typeof IntersectionObserver === "undefined") return;
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         markAccents();
 
         const show = (entries: IntersectionObserverEntry[], observer: IntersectionObserver, key: "reveal" | "section") => {
-            entries.filter((entry) => entry.isIntersecting).forEach((entry, index) => {
+            // Anything already scrolled past (a jump link, a restored scroll position) is shown too.
+            entries.filter((entry) => entry.isIntersecting || entry.boundingClientRect.bottom < 0).forEach((entry, index) => {
                 const element = entry.target as HTMLElement;
                 element.style.setProperty("--clinova-reveal-delay", `${Math.min(index, 6) * 90}ms`);
                 element.dataset[key] = "shown";
