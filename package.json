@@ -15,7 +15,6 @@
     "check:serena": "node scripts/verify-serena.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.135.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.4.0",

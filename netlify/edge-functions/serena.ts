@@ -1,13 +1,13 @@
 // Serena, the Clinova assistant in the admin reports page. She reads the site's visitor analytics
 // (through the admin-reports function, as the signed-in admin) and answers in a stream.
 // An edge function because answers can take longer than a regular function is allowed to run.
-import Anthropic from "@anthropic-ai/sdk";
-
+// The model is Google Gemini (free tier available), called over its REST API with fetch:
+// https://ai.google.dev/api/generate-content
 declare const Netlify: { env: { get(name: string): string | undefined } };
 
 export const config = { path: "/api/serena" };
 
-const model = "claude-opus-5-5";
+const gemini = "https://generativelanguage.googleapis.com/v1beta";
 const maxTurns = 6;
 const filterKeys = ["country", "device", "lang", "source", "channel", "path"] as const;
 
@@ -34,11 +34,10 @@ Rules:
 - Answer in the language of the user's message (usually Arabic). Be concise: short headings, bullets and the key numbers. No tables wider than 4 columns.
 - Today is ${today}. Dates are YYYY-MM-DD in Istanbul time; a single report covers at most 400 days.`;
 
-const tools: Anthropic.Beta.BetaTool[] = [{
+const tools = [{
     name: "get_report",
     description: "Returns the Clinova site analytics for a date range (inclusive days, Istanbul time) with optional filters, plus the previous period of the same length for comparison. Call it several times to compare periods (for example before and after an article was published) or segments (for example one country or one traffic source).",
-    eager_input_streaming: true,
-    input_schema: {
+    parameters: {
         type: "object",
         properties: {
             from: { type: "string", description: "First day, YYYY-MM-DD" },
@@ -53,6 +52,78 @@ const tools: Anthropic.Beta.BetaTool[] = [{
         required: ["from", "to"],
     },
 }];
+
+class GeminiError extends Error {
+    status: number;
+    constructor(message: string, status: number) { super(message); this.status = status; }
+}
+
+// GEMINI_MODEL picks a model; otherwise the newest stable "flash" model the key can use (fast and cheap).
+let cachedModel: string | null = null;
+async function chooseModel(apiKey: string) {
+    const configured = Netlify.env.get("GEMINI_MODEL");
+    if (configured) return configured;
+    if (cachedModel) return cachedModel;
+    const response = await fetch(`${gemini}/models?pageSize=200`, { headers: { "x-goog-api-key": apiKey } });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new GeminiError(data?.error?.message ?? "models", response.status);
+    const names: string[] = (data.models ?? [])
+        .filter((model: { supportedGenerationMethods?: string[] }) => model.supportedGenerationMethods?.includes("generateContent"))
+        .map((model: { name: string }) => model.name.replace(/^models\//, ""))
+        .filter((name: string) => /^gemini-[\d.]+-flash/.test(name) && !/lite|image|tts|audio|live|exp|preview|thinking/.test(name));
+    const version = (name: string) => Number(name.match(/^gemini-([\d.]+)/)?.[1] ?? 0);
+    names.sort((a, b) => version(b) - version(a) || a.length - b.length);
+    if (!names.length) throw new GeminiError("no flash model", 404);
+    cachedModel = names[0];
+    return cachedModel;
+}
+
+type Part = { text?: string; thought?: boolean; thoughtSignature?: string; functionCall?: { name: string; args?: Record<string, unknown> }; functionResponse?: unknown };
+type Content = { role: "user" | "model"; parts: Part[] };
+
+/** One streamed model turn: text goes to the browser as it arrives; the full turn comes back for the tool loop. */
+async function streamTurn(apiKey: string, model: string, system: string, contents: Content[], onText: (text: string) => void) {
+    const response = await fetch(`${gemini}/models/${encodeURIComponent(model)}:streamGenerateContent?alt=sse`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+        body: JSON.stringify({
+            systemInstruction: { parts: [{ text: system }] },
+            contents,
+            tools: [{ functionDeclarations: tools }],
+            generationConfig: { maxOutputTokens: 8192 },
+        }),
+    });
+    if (!response.ok || !response.body) {
+        const data = await response.json().catch(() => ({}));
+        throw new GeminiError(data?.error?.message ?? `gemini_${response.status}`, response.status);
+    }
+    const parts: Part[] = [];
+    let finishReason = "";
+    let blocked = false;
+    const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+    let buffer = "";
+    for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += value;
+        const events = buffer.split(/\r?\n\r?\n/);
+        buffer = events.pop() ?? "";
+        for (const event of events) {
+            const data = event.split(/\r?\n/).filter((line) => line.startsWith("data:")).map((line) => line.slice(5).trim()).join("");
+            if (!data) continue;
+            const chunk = JSON.parse(data);
+            if (chunk.promptFeedback?.blockReason) blocked = true;
+            const candidate = chunk.candidates?.[0];
+            if (!candidate) continue;
+            if (candidate.finishReason) finishReason = candidate.finishReason;
+            for (const part of (candidate.content?.parts ?? []) as Part[]) {
+                parts.push(part);
+                if (part.text && !part.thought) onText(part.text);
+            }
+        }
+    }
+    return { parts, finishReason, blocked: blocked || finishReason === "SAFETY" || finishReason === "PROHIBITED_CONTENT" };
+}
 
 // ---- Session check (same signed cookie as netlify/lib/admin.mjs) -----------------------------
 
@@ -102,68 +173,56 @@ export default async function handler(request: Request) {
     const origin = request.headers.get("origin");
     if (origin && origin !== new URL(request.url).origin) return json(403, "invalid_origin");
     if (!(await isAdmin(request))) return json(401, "signed_out");
-    const apiKey = Netlify.env.get("ANTHROPIC_API_KEY");
+    const apiKey = Netlify.env.get("GEMINI_API_KEY");
     if (!apiKey) return json(503, "serena_not_configured");
     let body: { messages?: unknown; view?: unknown };
     try { body = await request.json(); } catch { return json(400, "invalid_request"); }
     if (!validMessages(body.messages)) return json(400, "invalid_request");
 
-    // The report the admin is looking at goes first, so most questions need no extra call.
-    const view = validInput(body.view) ? body.view : null;
-    const messages: Anthropic.Beta.BetaMessageParam[] = body.messages.map((message) => ({ role: message.role, content: message.content }));
-    if (view) {
-        const report = await getReport(request, view);
-        messages[0] = { role: "user", content: [
-            { type: "text", text: `<current_view filters='${JSON.stringify(view)}'>\n${JSON.stringify(report)}\n</current_view>\nThis is the report on the admin's screen right now.` },
-            { type: "text", text: body.messages[0].content },
-        ] };
-    }
-
-    const client = new Anthropic({ apiKey });
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
         async start(controller) {
             const send = (data: object) => controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`));
             try {
+                const model = await chooseModel(apiKey);
+                const contents: Content[] = (body.messages as ChatMessage[]).map((message) => ({ role: message.role === "user" ? "user" : "model", parts: [{ text: message.content }] }));
+                // The report the admin is looking at goes first, so most questions need no extra call.
+                const view = validInput(body.view) ? body.view : null;
+                if (view) {
+                    const report = await getReport(request, view);
+                    contents[0] = { role: "user", parts: [
+                        { text: `<current_view filters='${JSON.stringify(view)}'>\n${JSON.stringify(report)}\n</current_view>\nThis is the report on the admin's screen right now.` },
+                        { text: (body.messages as ChatMessage[])[0].content },
+                    ] };
+                }
+                const system = systemPrompt(new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10));
                 for (let turn = 0; turn < maxTurns; turn++) {
-                    const response = client.beta.messages.stream({
-                        model,
-                        max_tokens: 16000,
-                        thinking: { type: "adaptive" },
-                        output_config: { effort: "medium" },
-                        // If a safety classifier declines, the API retries on the recommended fallback model.
-                        betas: ["server-side-fallback-2026-07-01"],
-                        fallbacks: "default",
-                        cache_control: { type: "ephemeral" },
-                        system: systemPrompt(new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10)),
-                        tools,
-                        messages,
-                    });
-                    response.on("text", (text) => send({ type: "text", text }));
-                    const message = await response.finalMessage();
-                    if (message.stop_reason === "refusal") { send({ type: "error", error: "refusal" }); break; }
-                    const calls = message.content.filter((block): block is Anthropic.Beta.BetaToolUseBlock => block.type === "tool_use");
-                    if (message.stop_reason !== "tool_use" || !calls.length) {
-                        if (message.stop_reason === "max_tokens") send({ type: "error", error: "too_long" });
+                    const result = await streamTurn(apiKey, model, system, contents, (text) => send({ type: "text", text }));
+                    if (result.blocked) { send({ type: "error", error: "refusal" }); break; }
+                    const calls = result.parts.filter((part) => part.functionCall);
+                    if (!calls.length) {
+                        if (result.finishReason === "MAX_TOKENS") send({ type: "error", error: "too_long" });
                         break;
                     }
-                    messages.push({ role: "assistant", content: message.content });
-                    const results: Anthropic.Beta.BetaToolResultBlockParam[] = [];
-                    for (const call of calls) {
-                        if (!validInput(call.input)) {
-                            results.push({ type: "tool_result", tool_use_id: call.id, is_error: true, content: "Invalid input: from and to must be YYYY-MM-DD; filters are short strings." });
+                    // The model's turn goes back unchanged: its parts carry thought signatures.
+                    contents.push({ role: "model", parts: result.parts });
+                    const responses: Part[] = [];
+                    for (const part of calls) {
+                        const { name, args = {} } = part.functionCall!;
+                        if (name !== "get_report" || !validInput(args)) {
+                            responses.push({ functionResponse: { name, response: { error: "Invalid input: from and to must be YYYY-MM-DD; filters are short strings." } } });
                             continue;
                         }
-                        send({ type: "status", input: call.input });
-                        const report = await getReport(request, call.input);
-                        results.push({ type: "tool_result", tool_use_id: call.id, is_error: "error" in report, content: JSON.stringify(report) });
+                        send({ type: "status", input: args });
+                        responses.push({ functionResponse: { name, response: { result: await getReport(request, args) } } });
                     }
-                    messages.push({ role: "user", content: results });
+                    contents.push({ role: "user", parts: responses });
                     if (turn === maxTurns - 1) send({ type: "error", error: "too_many_steps" });
                 }
                 send({ type: "done" });
             } catch (error) {
-                send({ type: "error", error: error instanceof Anthropic.RateLimitError ? "rate_limited" : error instanceof Anthropic.AuthenticationError ? "bad_key" : "failed" });
+                const status = error instanceof GeminiError ? error.status : 0;
+                send({ type: "error", error: status === 429 ? "rate_limited" : status === 400 || status === 401 || status === 403 ? "bad_key" : "failed" });
             } finally {
                 controller.close();
             }
