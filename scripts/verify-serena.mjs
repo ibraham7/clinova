@@ -82,6 +82,24 @@ assert.equal(second.body.contents[2].parts[0].functionResponse.name, "get_report
 assert.equal(second.body.contents[2].parts[0].functionResponse.response.result.filters.country, "TR");
 assert.equal(modelLists, 1, "the model list is fetched once and cached");
 
+// A busy model ("high demand", HTTP 503) hands over to the next model in the chain.
+const before = globalThis.fetch;
+const tried = [];
+globalThis.fetch = async (input, init) => {
+    const url = new URL(String(input));
+    if (url.hostname !== "generativelanguage.googleapis.com" || url.pathname.endsWith("/models")) return before(input, init);
+    tried.push(url.pathname.split("/").pop());
+    if (url.pathname.includes("gemini-9.5-flash:")) return Response.json({ error: { code: 503, message: "This model is currently experiencing high demand." } }, { status: 503 });
+    return Response.json({ candidates: [{ content: { role: "model", parts: [{ text: "جواب من موديل بديل" }] }, finishReason: "STOP" }] });
+};
+const busy = (await (await ask({ messages: [{ role: "user", content: "مرحبا" }] })).text()).trim().split("\n").map((line) => JSON.parse(line));
+assert.equal(busy[0].text, "جواب من موديل بديل");
+assert.deepEqual(tried, ["gemini-9.5-flash:generateContent", "gemini-9.5-flash-lite:generateContent"]);
+tried.length = 0;
+await ask({ messages: [{ role: "user", content: "مرحبا" }] });
+assert.deepEqual(tried, ["gemini-9.5-flash-lite:generateContent"], "the busy model is skipped for a while");
+globalThis.fetch = before;
+
 // Google errors reach the admin with Google's own message.
 const working = globalThis.fetch;
 globalThis.fetch = async (input, init) => new URL(String(input)).hostname === "generativelanguage.googleapis.com"

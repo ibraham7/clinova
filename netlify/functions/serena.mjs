@@ -70,11 +70,11 @@ async function call(path, apiKey, init = {}, timeout = 20_000) {
     return data;
 }
 
-// GEMINI_MODEL picks a model; otherwise the newest stable "flash" model the key can use (fast and cheap),
-// with the newest "flash-lite" model as a faster fallback when the main one is slow.
+// The models to try, in order: GEMINI_MODEL if set, then the newest stable Flash, the newest Flash-Lite and
+// the previous generation of each. When one is busy (Google answers "high demand") or slow, the next one answers.
 let cachedModels = null;
-// After the main model times out, the lite model answers directly for a while instead of waiting again.
-let liteUntil = 0;
+// A model that was busy or slow is skipped for 10 minutes.
+const skipUntil = new Map();
 async function chooseModels(apiKey) {
     if (cachedModels) return cachedModels;
     const data = await call("models?pageSize=200", apiKey, {}, 8_000);
@@ -83,13 +83,15 @@ async function chooseModels(apiKey) {
         .map((model) => model.name.replace(/^models\//, ""))
         .filter((name) => /^gemini-[\d.]+-flash/.test(name) && !/image|tts|audio|live|exp|preview|thinking/.test(name));
     const version = (name) => Number(name.match(/^gemini-([\d.]+)/)?.[1] ?? 0);
-    const newest = (list) => list.sort((a, b) => version(b) - version(a) || a.length - b.length)[0] ?? null;
-    const main = process.env.GEMINI_MODEL || newest(names.filter((name) => !name.includes("lite")));
-    const lite = newest(names.filter((name) => name.includes("lite")));
-    if (!main && !lite) throw new GeminiError("No Gemini Flash model is available for this key.", 404);
-    cachedModels = { main: main ?? lite, lite: lite && lite !== main ? lite : null };
+    const byVersion = (list) => [...list].sort((a, b) => version(b) - version(a) || a.length - b.length);
+    const full = byVersion(names.filter((name) => !name.includes("lite")));
+    const lite = byVersion(names.filter((name) => name.includes("lite")));
+    const chain = [process.env.GEMINI_MODEL, full[0], lite[0], full.find((name) => version(name) < version(full[0] ?? "")), lite.find((name) => version(name) < version(lite[0] ?? ""))];
+    cachedModels = [...new Set(chain.filter(Boolean))].slice(0, 4);
+    if (!cachedModels.length) throw new GeminiError("No Gemini Flash model is available for this key.", 404);
     return cachedModels;
 }
+const transient = (error) => error?.name === "TimeoutError" || error?.name === "AbortError" || (error instanceof GeminiError && [429, 500, 502, 503, 504].includes(error.status));
 
 // Short, fast answers: the lowest thinking level each model accepts. Models differ ("minimal" is not
 // accepted everywhere), so a level a model rejects is remembered and the next one is tried.
@@ -159,8 +161,7 @@ export default async function handler(request) {
         const view = validInput(body.view) ? body.view : null;
         step = "model list + report";
         const [models, viewReport] = await Promise.all([chooseModels(apiKey), view ? report(view, origin) : null]);
-        let model = models.lite && Date.now() < liteUntil ? models.lite : models.main;
-        modelName = model;
+        let model = null;
         const contents = body.messages.map((message) => ({ role: message.role === "user" ? "user" : "model", parts: [{ text: message.content }] }));
         // The report the admin is looking at goes first, so most questions need no extra call.
         if (view) contents[0] = { role: "user", parts: [
@@ -192,19 +193,25 @@ export default async function handler(request) {
                 }
             };
             let data;
-            // A slow main model gets about half the remaining time; then the faster lite model answers instead.
-            if (models.lite && model !== models.lite && remaining > 12_000) {
+            // The model that answered before goes first (its thought signatures are in the conversation).
+            const available = models.filter((name) => (skipUntil.get(name) ?? 0) < Date.now());
+            const order = [...new Set([model, ...(available.length ? available : models)].filter(Boolean))];
+            for (let index = 0; index < order.length; index++) {
+                const name = order[index];
+                const left = budgetMs - (Date.now() - started) - 300;
+                const last = index === order.length - 1;
+                if (left < 2_000) throw Object.assign(new Error("No time left for another model."), { name: "TimeoutError" });
+                modelName = name;
                 try {
-                    data = await request(model, Math.round(Math.min(remaining / 2, 14_000)));
+                    // Every model but the last gets about half the remaining time, so another one can still answer.
+                    data = await request(name, last ? left : Math.min(left / 2, 14_000));
+                    model = name;
+                    break;
                 } catch (error) {
-                    if (error?.name !== "TimeoutError" && error?.name !== "AbortError") throw error;
-                    model = modelName = models.lite;
-                    liteUntil = Date.now() + 10 * 60_000;
-                    step = `answer ${turn + 1} (lite)`;
-                    data = await request(model, Math.max(1_000, budgetMs - (Date.now() - started) - 500));
+                    if (last || !transient(error)) throw error;
+                    skipUntil.set(name, Date.now() + 10 * 60_000);
+                    step = `answer ${turn + 1} after ${name}: ${String(error?.message ?? "").slice(0, 60)}`;
                 }
-            } else {
-                data = await request(model, remaining);
             }
             const candidate = data.candidates?.[0];
             const parts = candidate?.content?.parts ?? [];
