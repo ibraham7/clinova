@@ -1,8 +1,8 @@
--- Clinova visitor analytics and leads. Run once in Supabase: SQL Editor -> New query -> paste -> Run.
+-- Clinova visitor analytics and leads. Table names start with clinova_ so they can live in a shared project. Run once in Supabase: SQL Editor -> New query -> paste -> Run.
 -- Only the site's Netlify functions write and read these tables, with the service role key.
 -- Row level security is on with no policies, so the public (anon) key can read nothing.
 
-create table if not exists public.events (
+create table if not exists public.clinova_events (
     id bigint generated always as identity primary key,
     ts timestamptz not null default now(),
     visitor text not null,          -- anonymous daily id: a keyed hash of IP + browser, changes every day, the IP is never stored
@@ -29,10 +29,10 @@ create table if not exists public.events (
     city text,
     timezone text
 );
-create index if not exists events_ts_idx on public.events (ts);
-create index if not exists events_type_ts_idx on public.events (type, ts);
+create index if not exists clinova_events_ts_idx on public.clinova_events (ts);
+create index if not exists clinova_events_type_ts_idx on public.clinova_events (type, ts);
 
-create table if not exists public.leads (
+create table if not exists public.clinova_leads (
     id bigint generated always as identity primary key,
     ts timestamptz not null default now(),
     request_id uuid not null unique,
@@ -48,17 +48,17 @@ create table if not exists public.leads (
     country text,
     city text
 );
-create index if not exists leads_ts_idx on public.leads (ts);
+create index if not exists clinova_leads_ts_idx on public.clinova_leads (ts);
 
-create table if not exists public.admin_log (
+create table if not exists public.clinova_admin_log (
     id bigint generated always as identity primary key,
     ts timestamptz not null default now(),
     action text not null,           -- texts | videos | logos | logo_upload
     summary text not null,
     details jsonb
 );
-create index if not exists admin_log_ts_idx on public.admin_log (ts);
+create index if not exists clinova_admin_log_ts_idx on public.clinova_admin_log (ts);
 
-alter table public.events enable row level security;
-alter table public.leads enable row level security;
-alter table public.admin_log enable row level security;
+alter table public.clinova_events enable row level security;
+alter table public.clinova_leads enable row level security;
+alter table public.clinova_admin_log enable row level security;
