@@ -28,7 +28,12 @@ globalThis.fetch = async (input, init = {}) => {
                 { name: "models/text-embedding-4", supportedGenerationMethods: ["embedContent"] },
             ] });
         }
-        geminiRequests.push({ url, body: JSON.parse(init.body) });
+        const body = JSON.parse(init.body);
+        // Like gemini-3.8-flash in production: the "minimal" thinking level is refused.
+        if (body.generationConfig.thinkingConfig?.thinkingLevel === "minimal") {
+            return Response.json({ error: { code: 400, message: "Thinking level MINIMAL is not supported for this model. Please retry with other thinking level." } }, { status: 400 });
+        }
+        geminiRequests.push({ url, body });
         if (geminiRequests.length === 1) return reply([{ text: "سأقارن الفترتين. " }, { functionCall: { name: "get_report", args: { from: "2026-10-01", to: "2026-10-15", country: "TR" } }, thoughtSignature: "sig-1" }]);
         return reply([{ text: "الزوار من تركيا زادوا." }]);
     }
@@ -65,7 +70,8 @@ assert.ok(supabaseReads >= 10, "the on-screen report and the tool report are bot
 
 const [first, second] = geminiRequests;
 assert.match(first.url.pathname, /\/models\/gemini-9\.5-flash:generateContent$/, "newest stable flash model");
-assert.deepEqual(first.body.generationConfig.thinkingConfig, { thinkingLevel: "minimal" }, "fast answers: minimal thinking");
+assert.deepEqual(first.body.generationConfig.thinkingConfig, { thinkingLevel: "low" }, "a refused thinking level falls back to the next one");
+assert.deepEqual(second.body.generationConfig.thinkingConfig, { thinkingLevel: "low" }, "the refusal is remembered");
 assert.equal(first.body.tools[0].functionDeclarations[0].name, "get_report");
 assert.match(first.body.systemInstruction.parts[0].text, /Serena/);
 assert.match(first.body.contents[0].parts[0].text, /<current_view[\s\S]*"visitors":0/);

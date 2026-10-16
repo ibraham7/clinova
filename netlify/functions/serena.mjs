@@ -91,12 +91,26 @@ async function chooseModels(apiKey) {
     return cachedModels;
 }
 
-// Short, fast answers: thinking off on 2.x Flash, low on newer models (they cannot turn it off).
+// Short, fast answers: the lowest thinking level each model accepts. Models differ ("minimal" is not
+// accepted everywhere), so a level a model rejects is remembered and the next one is tried.
+const thinkingLevels = ["minimal", "low", null];
+const rejectedLevels = new Map();
 function thinkingFor(model) {
     const version = Number(model.match(/^gemini-([\d.]+)/)?.[1] ?? 0);
-    if (version >= 3) return { thinkingConfig: { thinkingLevel: "minimal" } };
-    if (version >= 2.5) return { thinkingConfig: { thinkingBudget: 0 } };
+    if (version >= 3) {
+        const level = thinkingLevels[rejectedLevels.get(model) ?? 0];
+        return level ? { thinkingConfig: { thinkingLevel: level } } : {};
+    }
+    if (version >= 2.5 && !rejectedLevels.has(model)) return { thinkingConfig: { thinkingBudget: 0 } };
     return {};
+}
+/** True when Gemini refused the thinking setting; the next call then uses the next level (or none). */
+function rejectThinking(model, error) {
+    if (!(error instanceof GeminiError) || error.status !== 400 || !/thinking/i.test(error.message)) return false;
+    const next = (rejectedLevels.get(model) ?? 0) + 1;
+    if (next >= thinkingLevels.length) return false;
+    rejectedLevels.set(model, next);
+    return true;
 }
 
 const day = /^\d{4}-\d{2}-\d{2}$/;
@@ -158,7 +172,7 @@ export default async function handler(request) {
             const remaining = budgetMs - (Date.now() - started);
             if (remaining < 3_000 || turn === maxTurns) { out.push({ type: "error", error: "too_many_steps" }); break; }
             step = `answer ${turn + 1}`;
-            const request = (name, timeout) => call(`models/${encodeURIComponent(name)}:generateContent`, apiKey, {
+            const send = (name, timeout) => call(`models/${encodeURIComponent(name)}:generateContent`, apiKey, {
                 method: "POST",
                 body: JSON.stringify({
                     systemInstruction: { parts: [{ text: system }] },
@@ -167,6 +181,16 @@ export default async function handler(request) {
                     generationConfig: { maxOutputTokens: 1800, ...thinkingFor(name) },
                 }),
             }, Math.round(timeout));
+            const request = async (name, timeout) => {
+                const start = Date.now();
+                for (;;) {
+                    try {
+                        return await send(name, Math.max(1_000, timeout - (Date.now() - start)));
+                    } catch (error) {
+                        if (!rejectThinking(name, error)) throw error;
+                    }
+                }
+            };
             let data;
             // A slow main model gets about half the remaining time; then the faster lite model answers instead.
             if (models.lite && model !== models.lite && remaining > 12_000) {
