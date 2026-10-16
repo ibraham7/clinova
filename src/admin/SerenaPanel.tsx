@@ -7,11 +7,8 @@ import StopRoundedIcon from "@mui/icons-material/StopRounded";
 import RestartAltRoundedIcon from "@mui/icons-material/RestartAltRounded";
 import { askSerena, messageFor } from "./api";
 import type { ReportFilters } from "./reportTypes";
-import { fill, translated } from "./i18n";
 
-// Shown while Serena reads a report: {from}, {to} and the filters in use.
-const READING = "تقرأ بيانات {from} ← {to}{filters}";
-const T = translated({
+const T = {
     title: "سيرينا",
     subtitle: "مساعدتك الذكية: تقرأ بيانات الموقع وتقترح ماذا نفعل لنطوّر المشروع.",
     placeholder: "اسأل سيرينا عن الزوار، الأقسام، الدول، الاستبيان، أو ما تغيّر بعد تاريخ معيّن…",
@@ -19,6 +16,7 @@ const T = translated({
     stop: "إيقاف",
     reset: "محادثة جديدة",
     thinking: "سيرينا تحلّل البيانات…",
+    reading: (input: ReportFilters) => `تقرأ بيانات ${input.from} ← ${input.to}${["country", "device", "lang", "source", "channel", "path"].map((key) => input[key as keyof ReportFilters]).filter(Boolean).map((value) => ` · ${value}`).join("")}`,
     daily: "حلّل بيانات هذه الفترة: ماذا يحدث على الموقع، أين يتوقف الزوار، ما الذي تغيّر مقارنة بالفترة السابقة، وما أهم 3 خطوات نعملها هذا الأسبوع؟",
     suggestions: [
         "أين يتوقف الزوار وأي قسم يجذب أكثر اهتمام؟",
@@ -27,7 +25,7 @@ const T = translated({
         "كيف أداء نافذة الاستبيان؟ وماذا نحسّن فيها؟",
         "ما الذي تغيّر بعد آخر تعديل على نصوص الموقع؟",
     ],
-});
+};
 
 type Message = { role: "user" | "assistant"; content: string; error?: string; detail?: string; status?: string };
 const storageKey = "clinova.serena";
@@ -91,7 +89,7 @@ export default function SerenaPanel({ view, ready }: { view: ReportFilters; read
         try {
             await askSerena(base.map(({ role, content }) => ({ role, content })), view, (chunk) => {
                 if (chunk.type === "text") answer = { ...answer, content: answer.content + chunk.text, status: undefined };
-                else if (chunk.type === "status") answer = { ...answer, status: fill(READING, { from: chunk.input.from, to: chunk.input.to, filters: (["country", "device", "lang", "source", "channel", "path"] as const).map((key) => chunk.input[key]).filter(Boolean).map((value) => ` · ${value}`).join("") }) };
+                else if (chunk.type === "status") answer = { ...answer, status: T.reading(chunk.input) };
                 else if (chunk.type === "error") answer = { ...answer, error: chunk.error, detail: chunk.detail, status: undefined };
                 else answer = { ...answer, status: undefined };
                 setMessages([...base, answer]);

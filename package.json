@@ -11,7 +11,6 @@
     "check:i18n": "node scripts/verify-i18n.cjs",
     "indexnow": "node scripts/indexnow.mjs",
     "check:admin": "node scripts/verify-admin.mjs",
-    "check:admin-i18n": "node scripts/verify-admin-i18n.mjs",
     "check:reports": "node scripts/verify-reports.mjs",
     "check:serena": "node scripts/verify-serena.mjs"
   },

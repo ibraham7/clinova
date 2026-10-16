@@ -2,13 +2,12 @@ import { useState } from "react";
 import { Box, Button, Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import { languages } from "../i18n";
-import { translated } from "./i18n";
 
-const T = translated({
+const T = {
     title: "تعديل نصوص الموقع",
     hint: "هذه نسخة حيّة من الموقع. مرّر الماوس على أي نص واضغط عليه لتعديله بكل اللغات، ثم اضغط «حفظ ونشر» في الشريط أسفل الصفحة. لاستخدام القوائم والأزرار عطّل «وضع التعديل» مؤقتًا.",
     fullScreen: "فتح بملء الشاشة",
-});
+};
 
 /** Hosts the live site in edit mode (/<lang>?edit), where every text can be clicked and changed. */
 export default function TextsPage() {
