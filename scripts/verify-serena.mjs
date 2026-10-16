@@ -110,6 +110,13 @@ const bad = (await (await ask(question)).text()).trim().split("\n").map((line) =
 assert.equal(bad[0].error, "bad_key");
 assert.match(bad[0].detail, /API key not valid/);
 
+// Demo mode: Serena reads the made-up data, not the database.
+const readsBefore = supabaseReads;
+const demoAnswer = await ask({ ...question, demo: true });
+assert.equal(demoAnswer.status, 200);
+await demoAnswer.text();
+assert.equal(supabaseReads, readsBefore, "demo questions never read the database");
+
 delete process.env.GEMINI_API_KEY;
 assert.equal((await ask(question)).status, 503, "a missing API key is reported");
 

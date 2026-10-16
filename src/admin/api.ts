@@ -30,7 +30,7 @@ export type SerenaChunk = { type: "text"; text: string } | { type: "status"; inp
 
 /** Streams Serena's answer; each line of the response is one JSON chunk. */
 export async function askSerena(messages: { role: "user" | "assistant"; content: string }[], view: ReportFilters, onChunk: (chunk: SerenaChunk) => void, signal?: AbortSignal) {
-    const response = await fetch("/api/serena", { method: "POST", credentials: "same-origin", signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages, view }) });
+    const response = await fetch("/api/serena", { method: "POST", credentials: "same-origin", signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages, view, demo: view.demo === "1" }) });
     if (!response.ok || !response.body) {
         const data = (await response.json().catch(() => ({}))) as { error?: string };
         onChunk({ type: "error", error: data.error ?? "failed" });

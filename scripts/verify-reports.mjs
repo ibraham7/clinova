@@ -188,4 +188,17 @@ assert.equal(health.sheets.ok, true, "the Apps Script health check answers");
 assert.equal(health.cloudinary.ok, false);
 assert.equal(health.cloudinary.optional, true, "video upload is optional");
 
-console.log("Analytics collection, lead copies, change log, report numbers, filters and the reports function passed (mock Supabase)");
+// Demo mode: made-up data, the same on every call, without touching the database.
+const realFetch = globalThis.fetch;
+globalThis.fetch = (input, init) => { assert.notEqual(new URL(String(input.url ?? input)).hostname, "mock.supabase.co", "demo mode never reads the database"); return realFetch(input, init); };
+const monthAgo = new Date(Date.now() + 3 * 3600_000 - 29 * 86_400_000).toISOString().slice(0, 10);
+const demoUrl = `https://clinova.test/.netlify/functions/admin-reports?from=${monthAgo}&to=${today}&demo=1`;
+const demo = (await (await adminReports(new Request(demoUrl, { headers: admin }))).json()).report;
+assert.equal(demo.demo, true);
+assert.ok(demo.summary.visitors > 300 && demo.summary.leads > 10, "a month of demo data has visitors and leads");
+assert.ok(demo.campaigns.some((row) => row.campaign === "insta_oct"), "the demo story includes the Instagram campaign");
+assert.ok(demo.changes.some((change) => change.action === "texts"), "and a text edit");
+assert.deepEqual((await (await adminReports(new Request(demoUrl, { headers: admin }))).json()).report.summary, demo.summary, "demo data is the same on every call");
+globalThis.fetch = realFetch;
+
+console.log("Analytics collection, lead copies, change log, report numbers, filters, demo data and the reports function passed (mock Supabase)");

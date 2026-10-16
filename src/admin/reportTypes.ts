@@ -1,5 +1,5 @@
 // Shape of the report returned by netlify/functions/admin-reports.mjs (built in netlify/lib/reports.mjs).
-export type ReportFilters = { from: string; to: string; country?: string; device?: string; lang?: string; source?: string; channel?: string; path?: string };
+export type ReportFilters = { from: string; to: string; country?: string; device?: string; lang?: string; source?: string; channel?: string; path?: string; demo?: string };
 
 export type Summary = {
     visitors: number; pageViews: number; avgSeconds: number; avgScroll: number; engagedRate: number;
@@ -12,6 +12,8 @@ export type Report = {
     truncated: boolean;
     /** When visitor tracking started (oldest stored event), or null before the first visit. */
     trackingSince?: string | null;
+    /** Made-up data from the demo switch. */
+    demo?: boolean;
     summary: Summary;
     previous: Summary;
     daily: { date: string; visitors: number; pageViews: number; leads: number }[];
