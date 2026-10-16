@@ -27,7 +27,7 @@ const T = {
     ],
 };
 
-type Message = { role: "user" | "assistant"; content: string; error?: string; status?: string };
+type Message = { role: "user" | "assistant"; content: string; error?: string; detail?: string; status?: string };
 const storageKey = "clinova.serena";
 
 function load(): { day: string; messages: Message[] } | null {
@@ -90,7 +90,7 @@ export default function SerenaPanel({ view, ready }: { view: ReportFilters; read
             await askSerena(base.map(({ role, content }) => ({ role, content })), view, (chunk) => {
                 if (chunk.type === "text") answer = { ...answer, content: answer.content + chunk.text, status: undefined };
                 else if (chunk.type === "status") answer = { ...answer, status: T.reading(chunk.input) };
-                else if (chunk.type === "error") answer = { ...answer, error: chunk.error, status: undefined };
+                else if (chunk.type === "error") answer = { ...answer, error: chunk.error, detail: chunk.detail, status: undefined };
                 else answer = { ...answer, status: undefined };
                 setMessages([...base, answer]);
             }, controller.signal);
@@ -143,7 +143,8 @@ export default function SerenaPanel({ view, ready }: { view: ReportFilters; read
                 : <Box key={index} sx={{ px: 2, py: 1.5, borderRadius: "16px", backgroundColor: "rgba(11,17,27,0.55)", border: "1px solid rgba(142,168,232,0.12)" }}>
                     {message.content && <Markdown text={message.content} />}
                     {message.status && <Stack direction="row" sx={{ alignItems: "center", gap: 1, color: "rgba(245,247,250,0.7)", fontSize: "0.84rem", mt: message.content ? 1 : 0 }}><CircularProgress size={14} />{message.status}</Stack>}
-                    {message.error && <Alert severity="error" sx={{ mt: message.content ? 1 : 0 }}>{messageFor(message.error)}</Alert>}
+                    {message.error && <Alert severity="error" sx={{ mt: message.content ? 1 : 0 }}>{messageFor(message.error)}
+                        {message.detail && <Box component="div" dir="ltr" sx={{ mt: 0.5, fontSize: "0.75rem", opacity: 0.8, textAlign: "left" }}>{message.detail}</Box>}</Alert>}
                 </Box>)}
             <div ref={end} />
         </Box>
