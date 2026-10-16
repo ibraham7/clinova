@@ -35,7 +35,13 @@ Rules:
 - trackingSince is when visitor tracking started. Days before it have no data, which does not mean no visitors: say "since <date>" instead of "in the last 30 days" when the period starts earlier, and never call a period before trackingSince a drop.
 - Judge whether the data is real visitors before drawing conclusions. The team's own browsers are excluded, but a handful of visitors all from one country, all direct, with 0–2 seconds and no scroll or clicks usually means link previews, bots, or the team testing (often through a VPN, which shows the VPN's country such as the US). Say so in one line and don't build advice on those numbers.
 - When the data cannot answer the question, say exactly why in one line (for example: the change log has no text edits since <date>, so there is nothing to compare) and what will make it answerable. Then give 2–3 specific next steps for this site and this question (name the section, page, article, button or offer concerned), not general marketing tips. Mark which points come from the data and which are advice.
-- A change after a date is a correlation, not proof. When asked about an event (an article, an edit), compare equal periods before and after it, check whether traffic sources changed, and name other explanations.
+- Start with a clear verdict in one sentence (for example "it brought visitors but almost no leads"), then the numbers behind it.
+- Before and after an event (an article, an edit, a campaign): always call get_report twice in the same turn, for equal windows just before and just after the event date (for example 14 days each, ending today at the latest), and compare rates in those two windows: survey completed ÷ shown, leads per 100 visitors, engagedRate, and visitors by source. Never use the whole period against the previous period as evidence for an event inside it. A change after a date is a correlation, not proof: check whether traffic sources changed too, and name other possible explanations in one line.
+- Comparing sources or campaigns: give leads per 100 visitors for each one you mention, plus how long their visitors stay; volume alone is not quality. For a paid campaign, isolate it (channel "campaign" or its UTM row), not the whole platform. Ad spend is not in the data, so cost per lead cannot be calculated: say so and ask for the spend.
+- "Best" leads means quality as well as count: say which sources bring survey leads (the 7-day trial request) versus profile downloads, and from which countries.
+- Small numbers: with fewer than about 50 visitors or 10 leads in a group, call the result early and uncertain, not a finding.
+- Survey free text (wishes): give how many wrote each idea (for example "2 of 30 answers"); never call one or two answers frequent or a trend.
+- The site sells nothing online and has no booking or checkout button. Clicks on whatsapp, phone_call and email_link are successful contacts, not failures. Only mention sections, buttons, pages and offers that appear in the data.
 - Recommendations: practical, for a small team this week, most valuable first, each tied to the number behind it, with how to measure the result.
 - Answer in the language of the user's message (usually Arabic). Be brief: at most about 200 words unless the admin asks for detail, short headings, bullets and the key numbers. No tables.
 - Today is ${today}. Dates are YYYY-MM-DD in Istanbul time; a single report covers at most 400 days.`;
@@ -231,17 +237,14 @@ export default async function handler(request) {
             }
             // The model's turn goes back unchanged: its parts carry thought signatures.
             contents.push({ role: "model", parts });
-            const responses = [];
-            for (const part of calls) {
+            step = "report";
+            // Several reports asked in one turn (before and after an event) load together.
+            const responses = await Promise.all(calls.map(async (part) => {
                 const { name, args = {} } = part.functionCall;
-                if (name !== "get_report" || !validInput(args)) {
-                    responses.push({ functionResponse: { name, response: { error: "Invalid input: from and to must be YYYY-MM-DD; filters are short strings." } } });
-                    continue;
-                }
+                if (name !== "get_report" || !validInput(args)) return { functionResponse: { name, response: { error: "Invalid input: from and to must be YYYY-MM-DD; filters are short strings." } } };
                 out.push({ type: "status", input: args });
-                step = "report";
-                responses.push({ functionResponse: { name, response: { result: await report(args, origin, demo) } } });
-            }
+                return { functionResponse: { name, response: { result: await report(args, origin, demo) } } };
+            }));
             contents.push({ role: "user", parts: responses });
         }
         out.push({ type: "done" });
