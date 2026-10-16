@@ -1,4 +1,4 @@
-// Anonymous visitor analytics for the admin reports page. No cookies and no browser storage:
+// Anonymous visitor analytics for the admin reports page. No cookies, and nothing is stored on visitors' devices:
 // the server recognises a visit by a hash of IP + browser that changes daily and never stores the IP.
 // Collected: page views, how long each section was on screen, scroll depth, clicks on links and
 // buttons (their label, never anything typed), and survey progress. Never runs in /admin or ?edit.
@@ -93,7 +93,10 @@ export function startTracking() {
     if (started || typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
     // Not the admin, not the text editor, not automated browsers, and not visitors who opt out with Global Privacy Control.
-    if (window.location.pathname.startsWith("/admin") || params.has("edit") || navigator.webdriver || (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl) return;
+    // Browsers that opened the admin panel are the team's own and are not counted either.
+    let teamBrowser = false;
+    try { teamBrowser = localStorage.getItem("clinova.notrack") === "1"; } catch { /* Storage blocked: count the visit. */ }
+    if (teamBrowser || window.location.pathname.startsWith("/admin") || params.has("edit") || navigator.webdriver || (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl) return;
     started = true;
     page = Array.from(crypto.getRandomValues(new Uint8Array(8)), (byte) => byte.toString(16).padStart(2, "0")).join("");
     visibleSince = document.visibilityState === "visible" ? performance.now() : 0;

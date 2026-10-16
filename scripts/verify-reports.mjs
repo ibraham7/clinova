@@ -175,4 +175,17 @@ assert.equal(live.articles[0].slug, "dental-clinic-marketing");
 assert.equal(live.changes.length, 1);
 assert.equal((await adminReports(new Request("https://clinova.test/.netlify/functions/admin-reports?from=2020-01-01&to=2026-01-01", { headers: admin }))).status, 400);
 
+// ---- Connection status ---------------------------------------------------------------------
+const adminHealth = (await import("../netlify/functions/admin-health.mjs")).default;
+assert.equal((await adminHealth(new Request("https://clinova.test/.netlify/functions/admin-health"))).status, 401);
+const health = Object.fromEntries((await (await adminHealth(new Request("https://clinova.test/.netlify/functions/admin-health", { headers: admin }))).json()).checks.map((item) => [item.id, item]));
+assert.equal(health.password.ok, true);
+assert.equal(health.github.ok, true, "GitHub answers with the content file");
+assert.equal(health.supabase.ok, true, "all three tables can be read");
+assert.equal(health.gemini.ok, false);
+assert.match(health.gemini.detail, /GEMINI_API_KEY/);
+assert.equal(health.sheets.ok, true, "the Apps Script health check answers");
+assert.equal(health.cloudinary.ok, false);
+assert.equal(health.cloudinary.optional, true, "video upload is optional");
+
 console.log("Analytics collection, lead copies, change log, report numbers, filters and the reports function passed (mock Supabase)");
