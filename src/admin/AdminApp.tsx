@@ -15,6 +15,7 @@ import TextsPage from "./TextsPage";
 import VideosPage from "./VideosPage";
 import LogosPage from "./LogosPage";
 import ReportsPage from "./ReportsPage";
+import HealthCard from "./HealthCard";
 
 type Page = "home" | "reports" | "texts" | "videos" | "logos";
 const T = {
@@ -29,6 +30,7 @@ const T = {
     intro: "من هنا تتابع تقارير الزوار وتسأل سيرينا، وتعدّل نصوص الموقع وتضيف فيديوهات العملاء وشعاراتهم. كل حفظ يُنشر على الموقع تلقائيًا خلال دقيقة أو دقيقتين، ويبقى محفوظًا في سجل GitHub ويمكن استرجاعه.",
     stats: { texts: "نصوص معدّلة", videos: "فيديوهات", logos: "شعارات" },
     noStorage: "الحفظ غير مفعّل بعد. أضف GITHUB_TOKEN في إعدادات Netlify (راجع docs/admin-panel.md).",
+    notTracked: "زياراتك للموقع من هذا المتصفح لا تُحسب في التقارير، حتى لا تختلط أرقامك بأرقام الزوار.",
 };
 
 function Login({ onDone }: { onDone: () => void }) {
@@ -91,6 +93,8 @@ export default function AdminApp() {
 
 function Dashboard({ session, page, setPage, onLogout }: { session: Session; page: Page; setPage: (page: Page) => void; onLogout: () => void }) {
     const admin = useAdminContent();
+    // This browser belongs to an admin: the site's visitor statistics leave it out (see src/analytics/track.ts).
+    useEffect(() => { try { localStorage.setItem("clinova.notrack", "1"); } catch { /* Private mode. */ } }, []);
     const icons: Record<Page, ReactNode> = { home: <DashboardRoundedIcon />, reports: <InsightsRoundedIcon />, texts: <EditNoteRoundedIcon />, videos: <VideoLibraryRoundedIcon />, logos: <WorkspacesRoundedIcon /> };
     const edited = admin.content ? Object.values(admin.content.texts).reduce((sum, texts) => sum + Object.keys(texts).length, 0) : 0;
     return <Box dir="rtl" sx={{ minHeight: "100vh", display: "flex", flexDirection: { xs: "column", md: "row" }, backgroundColor: "#0B111B", color: "#F5F7FA" }}>
@@ -107,7 +111,7 @@ function Dashboard({ session, page, setPage, onLogout }: { session: Session; pag
         </Box>
         <Box component="main" sx={{ flex: 1, minWidth: 0, p: { xs: 2, md: 4 } }}>
             {!session.storage && <Alert severity="warning" sx={{ mb: 3 }}>{T.noStorage}</Alert>}
-            {admin.error && <Alert severity="error" sx={{ mb: 3 }}>{admin.error}</Alert>}
+            {admin.error && session.storage && <Alert severity="error" sx={{ mb: 3 }}>{admin.error}</Alert>}
             {page === "home" && <Box>
                 <Typography component="h1" sx={{ fontSize: "1.6rem", fontWeight: 700, mb: 1 }}>{T.welcome}</Typography>
                 <Typography sx={{ color: "rgba(245,247,250,0.7)", lineHeight: 1.9, maxWidth: 720, mb: 4 }}>{T.intro}</Typography>
@@ -118,6 +122,8 @@ function Dashboard({ session, page, setPage, onLogout }: { session: Session; pag
                             <Typography sx={{ color: "rgba(245,247,250,0.7)" }}>{T.stats[key]}</Typography>
                         </ButtonBase>)}
                 </Stack>
+                <Typography sx={{ color: "rgba(245,247,250,0.55)", fontSize: "0.8rem", mt: 2, mb: 4 }}>{T.notTracked}</Typography>
+                <HealthCard />
             </Box>}
             {page === "reports" && <ReportsPage />}
             {page === "texts" && <TextsPage />}

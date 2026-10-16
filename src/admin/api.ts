@@ -3,6 +3,7 @@ import type { Report, ReportFilters } from "./reportTypes";
 
 export type VideoUploadConfig = { cloudName: string; uploadPreset: string };
 export type Session = { ok: true; storage: boolean; videoUpload: VideoUploadConfig | null };
+export type HealthCheck = { id: "password" | "github" | "supabase" | "gemini" | "sheets" | "cloudinary"; ok: boolean; optional: boolean; detail: string | null };
 
 async function call<T = Record<string, unknown>>(name: string, init: RequestInit = {}) {
     const response = await fetch(`/.netlify/functions/${name}`, {
@@ -16,6 +17,7 @@ async function call<T = Record<string, unknown>>(name: string, init: RequestInit
 
 export const api = {
     session: () => call<Session>("admin-session"),
+    health: () => call<{ checks: HealthCheck[] }>("admin-health"),
     login: (password: string) => call("admin-login", { method: "POST", body: JSON.stringify({ password }) }),
     logout: () => call("admin-login", { method: "DELETE" }),
     load: () => call<{ content: SiteContent; sha: string }>("admin-content"),
