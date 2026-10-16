@@ -9,16 +9,18 @@ import fr from "../i18n/locales/fr.json";
 import i18n, { languages, type SiteLanguage } from "../i18n";
 import type { SiteContent } from "../content/siteContent";
 import { api, messageFor } from "./api";
+import { fill, isRtl, translated } from "./i18n";
 
 const builtIn: Record<SiteLanguage, Record<string, string>> = { ar, en, tr, fr };
 const codes = languages.map((language) => language.code) as SiteLanguage[];
-const T = {
+// Templates with {placeholders} are translated and filled with fill().
+const UNSAVED = "{count} تعديل غير محفوظ";
+const T = translated({
     checking: "جارٍ التحقق من تسجيل الدخول…",
     signedOut: "وضع التعديل يحتاج تسجيل الدخول.",
     login: "تسجيل الدخول",
     hint: "مرّر الماوس على أي نص واضغط عليه لتعديله",
     browse: "وضع التعديل",
-    unsaved: (count: number) => `${count} تعديل غير محفوظ`,
     clean: "لا توجد تعديلات غير محفوظة",
     save: "حفظ ونشر",
     saving: "جارٍ الحفظ…",
@@ -31,7 +33,7 @@ const T = {
     cancel: "إلغاء",
     reset: "استرجاع النص الأصلي",
     names: { ar: "العربية", en: "English", tr: "Türkçe", fr: "Français" } as Record<SiteLanguage, string>,
-};
+});
 
 const normalize = (text: string) => text.replace(/\s+/g, " ").trim();
 
@@ -165,7 +167,7 @@ export default function EditMode() {
 
     if (status === "checking") return null;
     const bar = { position: "fixed" as const, zIndex: 1500, left: "50%", transform: "translateX(-50%)", bottom: 16 };
-    if (status === "signed-out") return <Box data-clinova-editor dir="rtl" sx={{ ...bar }}>
+    if (status === "signed-out") return <Box data-clinova-editor dir={isRtl() ? "rtl" : "ltr"} sx={{ ...bar }}>
         <Alert severity="warning" action={<Button href="/admin" color="inherit" size="small">{T.login}</Button>}>{T.signedOut}</Alert>
     </Box>;
 
@@ -177,7 +179,7 @@ export default function EditMode() {
             transition: "left 120ms ease, top 120ms ease, width 120ms ease, height 120ms ease",
         }} />}
 
-        <Box data-clinova-editor dir="rtl" sx={{
+        <Box data-clinova-editor dir={isRtl() ? "rtl" : "ltr"} sx={{
             ...bar, display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "center", gap: 1.5, px: 2, py: 1.25, maxWidth: "calc(100vw - 24px)",
             borderRadius: "18px", backgroundColor: "#111B2A", color: "#F5F7FA", border: "1px solid rgba(245, 196, 81, 0.5)", boxShadow: "0 16px 40px rgba(0,0,0,0.5)",
         }}>
@@ -187,12 +189,12 @@ export default function EditMode() {
                 <Switch size="small" checked={enabled} onChange={(event) => setEnabled(event.target.checked)} />
                 <Typography sx={{ fontSize: "0.78rem" }}>{T.browse}</Typography>
             </Stack>
-            <Typography sx={{ fontSize: "0.78rem", color: changes ? "#F5C451" : "rgba(245,247,250,0.6)" }}>{changes ? T.unsaved(changes) : T.clean}</Typography>
+            <Typography sx={{ fontSize: "0.78rem", color: changes ? "#F5C451" : "rgba(245,247,250,0.6)" }}>{changes ? fill(UNSAVED, { count: changes }) : T.clean}</Typography>
             {changes > 0 && <Button size="small" color="inherit" onClick={() => window.location.reload()}>{T.discard}</Button>}
             <Button size="small" variant="contained" disabled={!changes || busy} onClick={save} startIcon={<CloudDoneRoundedIcon />} sx={{ borderRadius: "999px", "& .MuiButton-startIcon": { marginLeft: "8px", marginRight: "-4px" } }}>{busy ? T.saving : T.save}</Button>
         </Box>
 
-        {message && <Box data-clinova-editor dir="rtl" sx={{ position: "fixed", zIndex: 1500, top: 16, left: "50%", transform: "translateX(-50%)", maxWidth: "calc(100vw - 24px)" }}>
+        {message && <Box data-clinova-editor dir={isRtl() ? "rtl" : "ltr"} sx={{ position: "fixed", zIndex: 1500, top: 16, left: "50%", transform: "translateX(-50%)", maxWidth: "calc(100vw - 24px)" }}>
             <Alert severity={message.type} onClose={() => setMessage(null)}>{message.text}</Alert>
         </Box>}
 

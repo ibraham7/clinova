@@ -12,21 +12,22 @@ import { BarList, DailyChart, HourChart } from "./charts";
 import { chart, formatNumber } from "./chartTheme";
 import type { Marker } from "./charts";
 import SerenaPanel from "./SerenaPanel";
+import { adminLocale, fill, isRtl, tr, translated } from "./i18n";
 
-const sectionNames: Record<string, string> = {
+const sectionNames: Record<string, string> = translated({
     home: "الواجهة الرئيسية", about: "من نحن", reach: "لماذا Clinova؟", services: "خدماتنا", "contact-system": "رحلة المريض", specialties: "تخصصاتنا",
     "case-studies": "قصص النجاح", reviews: "التقييمات", testimonials: "آراء العملاء", "client-videos": "فيديوهات العملاء", partners: "شركاؤنا",
     faq: "الأسئلة الشائعة", "contact-cta": "تواصل معنا", ticker: "الشريط المتحرك",
-};
-const channelNames: Record<string, string> = { search: "محركات البحث", ai: "مساعدات الذكاء الاصطناعي", social: "التواصل الاجتماعي", direct: "مباشر", referral: "مواقع أخرى", campaign: "حملات", email: "البريد" };
-const deviceNames: Record<string, string> = { mobile: "جوال", tablet: "تابلت", desktop: "كمبيوتر" };
-const langNames: Record<string, string> = { ar: "العربية", en: "English", tr: "Türkçe", fr: "Français" };
-const purposeNames: Record<string, string> = { company_profile_download: "تحميل البروفايل", trial_survey: "الاستبيان (7 أيام مجانية)" };
-const actionNames: Record<string, string> = { texts: "نصوص", videos: "فيديوهات", logos: "شعارات", logo_upload: "رفع شعار" };
-const eventNames: Record<string, string> = { page_view: "فتح صفحة", section: "شاهد قسمًا", scroll: "تمرير", page_end: "غادر/أخفى الصفحة", click: "نقر", survey: "الاستبيان" };
-const surveyTargets: Record<string, string> = { shown: "ظهر الاستبيان", step: "وصل للخطوة", dismissed: "أغلق الاستبيان", completed: "أكمل الاستبيان" };
+});
+const channelNames: Record<string, string> = translated({ search: "محركات البحث", ai: "مساعدات الذكاء الاصطناعي", social: "التواصل الاجتماعي", direct: "مباشر", referral: "مواقع أخرى", campaign: "حملات", email: "البريد" });
+const deviceNames: Record<string, string> = translated({ mobile: "جوال", tablet: "تابلت", desktop: "كمبيوتر" });
+const langNames: Record<string, string> = translated({ ar: "العربية", en: "English", tr: "Türkçe", fr: "Français" });
+const purposeNames: Record<string, string> = translated({ company_profile_download: "تحميل البروفايل", trial_survey: "الاستبيان (7 أيام مجانية)" });
+const actionNames: Record<string, string> = translated({ texts: "نصوص", videos: "فيديوهات", logos: "شعارات", logo_upload: "رفع شعار" });
+const eventNames: Record<string, string> = translated({ page_view: "فتح صفحة", section: "شاهد قسمًا", scroll: "تمرير", page_end: "غادر/أخفى الصفحة", click: "نقر", survey: "الاستبيان" });
+const surveyTargets: Record<string, string> = translated({ shown: "ظهر الاستبيان", step: "وصل للخطوة", dismissed: "أغلق الاستبيان", completed: "أكمل الاستبيان" });
 
-const T = {
+const T = translated({
     title: "التقارير",
     intro: "كل ما يحدث على الموقع: من أين يأتي الزوار، ماذا يشاهدون، أين يتوقفون، ومن ترك بياناته. البيانات مجهولة الهوية ولا تُحفظ عناوين IP.",
     presets: [["7", "آخر 7 أيام"], ["30", "آخر 30 يومًا"], ["90", "آخر 90 يومًا"], ["365", "آخر سنة"]] as const,
@@ -52,26 +53,35 @@ const T = {
     recent: "آخر النشاطات", empty: "لا توجد بيانات بعد في هذه الفترة.",
     truncated: "البيانات كثيرة جدًا، عُرض أول 150 ألف حدث فقط. اختر فترة أقصر.",
     privacy: "عن الأعمار والجنس: الموقع لا يعرف أعمار الزوار، ولا توجد طريقة دقيقة لمعرفتها دون حساب Google Analytics مع موافقة الزائر على ملفات الارتباط. الدولة والمدينة تقريبية من الشبكة.",
+    unknown: "غير معروف",
+    whatsapp: "زر واتساب", phoneCall: "اتصال هاتفي", emailLink: "رابط الإيميل",
+    stepContact: "خطوة إدخال التواصل",
+});
+// Templates with {placeholders}: translated, then filled with fill().
+const F = {
+    nav: "انتقال إلى: {x}", link: "رابط: {x}", out: "موقع خارجي: {x}", file: "ملف: {x}", button: "زر: {x}",
+    article: "مقالة: {x}", change: "تعديل: {x}", seconds: "{n} ث", leftDetails: "{n} تركوا بياناتهم", visitors: "{n} زائر",
+    reached: "وصلوا إلى {n}% من الصفحة", sectionSeen: "{event}: {section} ({n} ث)", pageEnd: "{event} بعد {n} ث", at: " عند {section}",
 };
 
 const dayString = (date: Date) => new Date(date.getTime() + 3 * 3600_000).toISOString().slice(0, 10);
 const daysAgo = (days: number) => dayString(new Date(Date.now() - days * 86_400_000));
-const regionNames = (() => { try { return new Intl.DisplayNames(["ar"], { type: "region" }); } catch { return null; } })();
-const countryName = (code: string | null, fallback?: string) => (code && code !== "??" && regionNames?.of(code)) || fallback || "غير معروف";
+const regionNames = (lang: string) => { try { return new Intl.DisplayNames([lang], { type: "region" }); } catch { return null; } };
+const countryName = (code: string | null, fallback?: string) => (code && code !== "??" && regionNames(adminLocale())?.of(code)) || fallback || T.unknown;
 const clickName = (target: string) => {
-    if (target === "whatsapp") return "زر واتساب";
-    if (target === "phone_call") return "اتصال هاتفي";
-    if (target === "email_link") return "رابط الإيميل";
+    if (target === "whatsapp") return T.whatsapp;
+    if (target === "phone_call") return T.phoneCall;
+    if (target === "email_link") return T.emailLink;
     const [kind, ...rest] = target.split(":");
     const value = rest.join(":");
-    if (kind === "nav") return `انتقال إلى: ${sectionNames[value] ?? value}`;
-    if (kind === "link") return `رابط: ${value}`;
-    if (kind === "out") return `موقع خارجي: ${value}`;
-    if (kind === "file") return `ملف: ${value}`;
-    if (kind === "button") return `زر: ${value}`;
+    if (kind === "nav") return fill(F.nav, { x: sectionNames[value] ?? value });
+    if (kind === "link") return fill(F.link, { x: value });
+    if (kind === "out") return fill(F.out, { x: value });
+    if (kind === "file") return fill(F.file, { x: value });
+    if (kind === "button") return fill(F.button, { x: value });
     return target;
 };
-const dateTime = (ts: string) => new Intl.DateTimeFormat("ar", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Istanbul" }).format(new Date(ts));
+const dateTime = (ts: string) => new Intl.DateTimeFormat(adminLocale(), { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Istanbul" }).format(new Date(ts));
 
 function Card({ title, note, children, action }: { title: string; note?: string; children: ReactNode; action?: ReactNode }) {
     return <Box component="section" sx={{ p: { xs: 2, md: 2.5 }, borderRadius: "20px", border: "1px solid rgba(142,168,232,0.16)", backgroundColor: "rgba(142,168,232,0.04)", minWidth: 0 }}>
@@ -138,8 +148,8 @@ export default function ReportsPage() {
     const set = (key: keyof ReportFilters, value: string) => setFilters((current) => ({ ...current, [key]: value || undefined }));
     const preset = (days: number) => setFilters((current) => ({ ...current, from: daysAgo(days - 1), to: daysAgo(0) }));
     const markers = useMemo<Marker[]>(() => report ? [
-        ...report.articles.map((article) => ({ date: article.date, label: `مقالة: ${article.title}` })),
-        ...report.changes.map((change) => ({ date: change.date, label: `تعديل: ${change.summary}` })),
+        ...report.articles.map((article) => ({ date: article.date, label: fill(F.article, { x: article.title }) })),
+        ...report.changes.map((change) => ({ date: change.date, label: fill(F.change, { x: change.summary }) })),
     ] : [], [report]);
     // Choices come from the data itself, so every option has visitors behind it.
     const options = {
@@ -191,7 +201,7 @@ export default function ReportsPage() {
 
             <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr" } }}>
                 <Card title={T.sections} note={T.sectionsNote}>
-                    <BarList empty={T.empty} max={100} rows={report.sections.filter((row) => row.visitors).map((row) => ({ key: row.id, label: sectionNames[row.id] ?? row.id, value: row.reach, display: `${formatNumber(row.reach)}%`, note: `${formatNumber(row.avgSeconds)} ث` }))} />
+                    <BarList empty={T.empty} max={100} rows={report.sections.filter((row) => row.visitors).map((row) => ({ key: row.id, label: sectionNames[row.id] ?? row.id, value: row.reach, display: `${formatNumber(row.reach)}%`, note: fill(F.seconds, { n: formatNumber(row.avgSeconds) }) }))} />
                 </Card>
                 <Card title={T.exits} note={T.exitsNote}>
                     <BarList empty={T.empty} rows={report.sections.filter((row) => row.exits).sort((a, b) => b.exits - a.exits).map((row) => ({ key: row.id, label: sectionNames[row.id] ?? row.id, value: row.exits }))} />
@@ -200,10 +210,10 @@ export default function ReportsPage() {
                     <BarList empty={T.empty} rows={report.clicks.slice(0, 15).map((row) => ({ key: row.target, label: clickName(row.target), value: row.count, note: row.section ? sectionNames[row.section] ?? row.section : undefined }))} />
                 </Card>
                 <Card title={T.sources}>
-                    <BarList empty={T.empty} rows={report.sources.slice(0, 12).map((row) => ({ key: row.source, label: `${row.source} · ${channelNames[row.channel] ?? row.channel}`, value: row.visitors, note: row.leads ? `${formatNumber(row.leads)} تركوا بياناتهم` : undefined }))} />
+                    <BarList empty={T.empty} rows={report.sources.slice(0, 12).map((row) => ({ key: row.source, label: `${row.source} · ${channelNames[row.channel] ?? row.channel}`, value: row.visitors, note: row.leads ? fill(F.leftDetails, { n: formatNumber(row.leads) }) : undefined }))} />
                 </Card>
                 <Card title={T.countries}>
-                    <BarList empty={T.empty} rows={report.countries.slice(0, 12).map((row) => ({ key: row.code, label: countryName(row.code, row.name), value: row.visitors, note: row.leads ? `${formatNumber(row.leads)} تركوا بياناتهم` : `${formatNumber(row.share)}%` }))} />
+                    <BarList empty={T.empty} rows={report.countries.slice(0, 12).map((row) => ({ key: row.code, label: countryName(row.code, row.name), value: row.visitors, note: row.leads ? fill(F.leftDetails, { n: formatNumber(row.leads) }) : `${formatNumber(row.share)}%` }))} />
                 </Card>
                 <Card title={T.cities}>
                     <BarList empty={T.empty} rows={report.cities.slice(0, 12).map((row) => ({ key: `${row.city}-${row.country}`, label: `${row.city} · ${countryName(row.country)}`, value: row.visitors }))} />
@@ -212,7 +222,7 @@ export default function ReportsPage() {
                     <BarList empty={T.empty} rows={report.channels.map((row) => ({ key: row.channel, label: channelNames[row.channel] ?? row.channel, value: row.visitors, note: `${formatNumber(row.share)}%` }))} />
                 </Card>
                 <Card title={T.pages}>
-                    <BarList empty={T.empty} rows={report.pages.slice(0, 12).map((row) => ({ key: row.path, label: row.path, value: row.views, note: `${formatNumber(row.visitors)} زائر` }))} />
+                    <BarList empty={T.empty} rows={report.pages.slice(0, 12).map((row) => ({ key: row.path, label: row.path, value: row.views, note: fill(F.visitors, { n: formatNumber(row.visitors) }) }))} />
                 </Card>
                 <Card title={T.devices}>
                     <BarList empty={T.empty} rows={report.devices.map((row) => ({ key: row.device, label: deviceNames[row.device] ?? row.device, value: row.visitors, note: `${formatNumber(row.share)}%` }))} />
@@ -228,7 +238,7 @@ export default function ReportsPage() {
                     <HourChart data={report.hours} label={T.hoursLabel} />
                 </Card>
                 <Card title={T.scroll}>
-                    <BarList empty={T.empty} max={100} rows={report.scroll.map((row) => ({ key: String(row.depth), label: `وصلوا إلى ${row.depth}% من الصفحة`, value: row.share, display: `${formatNumber(row.share)}%`, note: `${formatNumber(row.visitors)} زائر` }))} />
+                    <BarList empty={T.empty} max={100} rows={report.scroll.map((row) => ({ key: String(row.depth), label: fill(F.reached, { n: row.depth }), value: row.share, display: `${formatNumber(row.share)}%`, note: fill(F.visitors, { n: formatNumber(row.visitors) }) }))} />
                 </Card>
             </Box>
 
@@ -242,7 +252,7 @@ export default function ReportsPage() {
                         <Typography sx={{ fontSize: "0.85rem", fontWeight: 600, mb: 1.5 }}>{T.funnel}</Typography>
                         <BarList empty={T.empty} max={Math.max(1, report.survey.shown)} rows={[
                             { key: "shown", label: T.surveyShown, value: report.survey.shown },
-                            ...report.survey.steps.filter((row) => row.visitors).map((row) => ({ key: `step-${row.step}`, label: row.step < survey.questions.length ? `${T.step} ${row.step + 1}` : "خطوة إدخال التواصل", value: row.visitors })),
+                            ...report.survey.steps.filter((row) => row.visitors).map((row) => ({ key: `step-${row.step}`, label: row.step < survey.questions.length ? `${T.step} ${row.step + 1}` : T.stepContact, value: row.visitors })),
                             { key: "completed", label: T.surveyCompleted, value: report.survey.completed },
                             { key: "dismissed", label: T.surveyDismissed, value: report.survey.dismissed },
                         ]} />
@@ -251,8 +261,8 @@ export default function ReportsPage() {
                         {survey.questions.filter((question) => question.type === "choice").map((question) => {
                             const counts = report.survey.answers[question.id] ?? {};
                             return <Box key={question.id}>
-                                <Typography sx={{ fontSize: "0.85rem", fontWeight: 600, mb: 1.5 }}>{question.title}</Typography>
-                                <BarList empty={T.empty} rows={(question.options ?? []).map((option) => ({ key: option, label: option, value: counts[option] ?? 0 })).filter((row) => row.value)} />
+                                <Typography sx={{ fontSize: "0.85rem", fontWeight: 600, mb: 1.5 }}>{tr(question.title)}</Typography>
+                                <BarList empty={T.empty} rows={(question.options ?? []).map((option) => ({ key: option, label: tr(option), value: counts[option] ?? 0 })).filter((row) => row.value)} />
                             </Box>;
                         })}
                     </Box>
@@ -268,8 +278,8 @@ export default function ReportsPage() {
                     <thead><tr>{Object.values(T.columns).map((label) => <th key={label}>{label}</th>)}</tr></thead>
                     <tbody>{report.leads.map((lead, index) => <tr key={`${lead.ts}-${index}`}>
                         <td style={{ whiteSpace: "nowrap" }}>{dateTime(lead.ts)}</td>
-                        <td dir="ltr" style={{ textAlign: "right" }}>{lead.contact}</td>
-                        <td>{purposeNames[lead.purpose] ?? lead.purpose}{lead.answers && <Box sx={{ color: chart.muted, fontSize: "0.75rem", mt: 0.5 }}>{survey.questions.map((question) => lead.answers?.[question.id]).filter(Boolean).join(" · ")}</Box>}</td>
+                        <td dir="ltr" style={{ textAlign: isRtl() ? "right" : "left" }}>{lead.contact}</td>
+                        <td>{purposeNames[lead.purpose] ?? lead.purpose}{lead.answers && <Box sx={{ color: chart.muted, fontSize: "0.75rem", mt: 0.5 }}>{survey.questions.map((question) => lead.answers?.[question.id]).filter(Boolean).map((answer) => (typeof answer === "string" ? tr(answer) : answer)).join(" · ")}</Box>}</td>
                         <td>{countryName(lead.country)}{lead.city ? ` / ${lead.city}` : ""}</td>
                         <td>{lead.source ?? "—"}</td>
                         <td>{lead.consent ? T.yes : T.no}</td>
@@ -301,9 +311,9 @@ export default function ReportsPage() {
                         <td style={{ whiteSpace: "nowrap" }}>{dateTime(event.ts)}</td>
                         <td>{event.type === "survey" ? `${surveyTargets[event.target ?? ""] ?? event.target}${event.target === "step" ? ` ${(event.value ?? 0) + 1}` : ""}`
                             : event.type === "click" ? `${eventNames.click}: ${clickName(event.target ?? "")}`
-                            : event.type === "section" ? `${eventNames.section}: ${sectionNames[event.section ?? ""] ?? event.section} (${formatNumber((event.value ?? 0) / 1000)} ث)`
+                            : event.type === "section" ? fill(F.sectionSeen, { event: eventNames.section, section: sectionNames[event.section ?? ""] ?? event.section ?? "", n: formatNumber((event.value ?? 0) / 1000) })
                             : event.type === "scroll" ? `${eventNames.scroll} ${event.value}%`
-                            : event.type === "page_end" ? `${eventNames.page_end} بعد ${formatNumber((event.value ?? 0) / 1000)} ث${event.section ? ` عند ${sectionNames[event.section] ?? event.section}` : ""}`
+                            : event.type === "page_end" ? fill(F.pageEnd, { event: eventNames.page_end, n: formatNumber((event.value ?? 0) / 1000) }) + (event.section ? fill(F.at, { section: sectionNames[event.section] ?? event.section }) : "")
                             : `${eventNames[event.type] ?? event.type}: ${event.path}`}</td>
                         <td>{countryName(event.country)}{event.city ? ` / ${event.city}` : ""}</td>
                         <td>{deviceNames[event.device ?? ""] ?? event.device}</td>

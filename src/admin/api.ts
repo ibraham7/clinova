@@ -1,5 +1,6 @@
 import type { SiteContent } from "../content/siteContent";
 import type { Report, ReportFilters } from "./reportTypes";
+import { getAdminLang, tr, translated } from "./i18n";
 
 export type VideoUploadConfig = { cloudName: string; uploadPreset: string };
 export type Session = { ok: true; storage: boolean; videoUpload: VideoUploadConfig | null };
@@ -30,7 +31,7 @@ export type SerenaChunk = { type: "text"; text: string } | { type: "status"; inp
 
 /** Streams Serena's answer; each line of the response is one JSON chunk. */
 export async function askSerena(messages: { role: "user" | "assistant"; content: string }[], view: ReportFilters, onChunk: (chunk: SerenaChunk) => void, signal?: AbortSignal) {
-    const response = await fetch("/api/serena", { method: "POST", credentials: "same-origin", signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages, view }) });
+    const response = await fetch("/api/serena", { method: "POST", credentials: "same-origin", signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages, view, lang: getAdminLang() }) });
     if (!response.ok || !response.body) {
         const data = (await response.json().catch(() => ({}))) as { error?: string };
         onChunk({ type: "error", error: data.error ?? "failed" });
@@ -49,7 +50,7 @@ export async function askSerena(messages: { role: "user" | "assistant"; content:
 }
 
 // Admin messages are Arabic only; the admin panel is not translated.
-export const errorMessages: Record<string, string> = {
+export const errorMessages: Record<string, string> = translated({
     wrong_password: "كلمة السر غير صحيحة.",
     not_configured: "لوحة الإدارة غير مفعّلة بعد: أضف ADMIN_PASSWORD في إعدادات Netlify.",
     storage_not_configured: "الحفظ غير مفعّل بعد: أضف GITHUB_TOKEN في إعدادات Netlify.",
@@ -72,9 +73,9 @@ export const errorMessages: Record<string, string> = {
     bad_key: "مفتاح GEMINI_API_KEY غير صحيح أو الموديل غير متاح.",
     timeout: "استغرقت سيرينا وقتًا أطول من المسموح. جرّب سؤالًا أقصر أو فترة أقصر.",
     failed: "تعذر الاتصال بسيرينا. أعد المحاولة.",
-};
+});
 
-export const messageFor = (error?: string) => (error && errorMessages[error]) || "حدث خطأ غير متوقع. أعد المحاولة.";
+export const messageFor = (error?: string) => (error && errorMessages[error]) || tr("حدث خطأ غير متوقع. أعد المحاولة.");
 
 export const newId = (prefix: string) => `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
 

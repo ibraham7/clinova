@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 import { Box, Typography } from "@mui/material";
 import { chart, formatNumber } from "./chartTheme";
+import { isRtl } from "./i18n";
 
 // Small SVG/HTML charts for the reports page. One series per chart, one hue (brand blue on the dark panel),
 // values always written next to the marks so the hover tooltip only adds detail.
@@ -54,7 +55,7 @@ export function DailyChart({ data, label, markers }: { data: { date: string; val
             <rect x={left} y={0} width={width - left - right} height={height - bottom} fill="transparent" onPointerMove={onMove} onPointerLeave={() => setHover(null)} />
         </svg>
         {hover !== null && point && <Tooltip x={`${(x(hover) / width) * 100}%`} y={`${(y(point.value) / height) * 100}%`}>
-            <Box dir="rtl"><Box component="strong" sx={{ fontSize: "0.95rem" }}>{formatNumber(point.value)}</Box> <Box component="span" sx={{ color: chart.muted }}>{label} · {point.date}</Box>
+            <Box dir={isRtl() ? "rtl" : "ltr"}><Box component="strong" sx={{ fontSize: "0.95rem" }}>{formatNumber(point.value)}</Box> <Box component="span" sx={{ color: chart.muted }}>{label} · {point.date}</Box>
                 {hoverMarkers.map((marker) => <Box key={marker.label} sx={{ color: chart.event, mt: 0.25 }}>{marker.label}</Box>)}</Box>
         </Tooltip>}
     </Box>;
@@ -102,7 +103,7 @@ export function HourChart({ data, label }: { data: { hour: number; visitors: num
             <line x1={0} x2={width} y1={height - bottom} y2={height - bottom} stroke={chart.grid} />
         </svg>
         {point && <Tooltip x={`${((point.hour * (barWidth + gap) + barWidth / 2) / width) * 100}%`} y="15%">
-            <Box dir="rtl"><Box component="strong">{formatNumber(point.visitors)}</Box> <Box component="span" sx={{ color: chart.muted }}>{label} · {point.hour}:00</Box></Box>
+            <Box dir={isRtl() ? "rtl" : "ltr"}><Box component="strong">{formatNumber(point.visitors)}</Box> <Box component="span" sx={{ color: chart.muted }}>{label} · {point.hour}:00</Box></Box>
         </Tooltip>}
     </Box>;
 }
