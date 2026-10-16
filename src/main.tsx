@@ -1,32 +1,16 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { useMemo } from "react";
-import { useSiteTranslation } from "./i18n/useSiteTranslation";
-import CssBaseline from "@mui/material/CssBaseline";
 import "./index.css";
 import "./theme/tokens.css";
 import "./motion.css";
-import { ColorModeProvider, useColorMode } from "./theme/ColorMode";
+import { ColorModeProvider } from "./theme/ColorMode";
 import "./i18n";
+import Root from "./Root";
+import { parseRoute } from "./routes";
 
-import App from "./App";
-import { darkTheme, lightTheme } from "./theme";
-
-function LocalizedApp() {
-  const { direction } = useSiteTranslation();
-  const { mode } = useColorMode();
-  const theme = useMemo(() => createTheme(mode === "light" ? lightTheme : darkTheme, { direction }), [direction, mode]);
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline enableColorScheme />
-      <App />
-    </ThemeProvider>
-  );
-}
-
+// Pages arrive prerendered for search engines; the browser then renders the live app in their place.
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ColorModeProvider><LocalizedApp /></ColorModeProvider>
+    <ColorModeProvider><Root route={parseRoute(window.location.pathname)} /></ColorModeProvider>
   </StrictMode>,
 );

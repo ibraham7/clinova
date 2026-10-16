@@ -23,8 +23,13 @@ const company = [
     { label: "احجز مكالمة", href: "#contact-cta" },
 ];
 
-function Footer() {
+// On pages other than the home page, section links point back to the home page (linkBase="/ar").
+function Footer({ linkBase = "" }: { linkBase?: string }) {
     const { direction, t, i18n } = useSiteTranslation();
+    const language = i18n.resolvedLanguage ?? "ar";
+    const withBase = (items: { label: string; href: string }[]) => items.map((item) => ({ ...item, href: `${linkBase}${item.href}` }));
+    // The blog is linked only from here, not from the header menu.
+    const companyLinks = [...withBase(company), { label: "المدونة", href: `/${language}/blog` }];
     const instagramUrl = i18n.resolvedLanguage === "tr"
         ? "https://www.instagram.com/clinova_tr/"
         : "https://www.instagram.com/clinova0/";
@@ -195,7 +200,7 @@ function Footer() {
 
                     <FooterColumn
                         title="الخدمات"
-                        items={services}
+                        items={withBase(services)}
                     />
 
                     {/* =================================
@@ -204,7 +209,7 @@ function Footer() {
 
                     <FooterColumn
                         title="الشركة"
-                        items={company}
+                        items={companyLinks}
                     />
 
                     {/* =================================

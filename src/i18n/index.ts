@@ -18,8 +18,9 @@ export function isSiteLanguage(value: unknown): value is SiteLanguage {
     return languages.some((language) => language.code === value);
 }
 
+// The first path segment carries the language: /ar, /en/, /tr/blog/some-article.
 export function languageFromPath(pathname: string): SiteLanguage | undefined {
-    const code = /^\/([^/]+)\/?$/.exec(pathname)?.[1];
+    const code = /^\/([^/]+)(?:\/|$)/.exec(pathname)?.[1];
     return isSiteLanguage(code) ? code : undefined;
 }
 
@@ -37,8 +38,10 @@ export function initialLanguage(pathname = typeof window !== "undefined" ? windo
 
 export function changeSiteLanguage(language: SiteLanguage) {
     if (typeof window !== "undefined") {
-        const href = `/${language}${window.location.search}${window.location.hash}`;
-        if (window.location.pathname !== `/${language}`) window.history.pushState(null, "", href);
+        // Keep the visitor on the same page (home, blog or article) in the new language.
+        const rest = languageFromPath(window.location.pathname) ? window.location.pathname.replace(/^\/[^/]+/, "").replace(/^\/$/, "") : "";
+        const pathname = `/${language}${rest}`;
+        if (window.location.pathname !== pathname) window.history.pushState(null, "", `${pathname}${window.location.search}${window.location.hash}`);
     }
     return i18n.changeLanguage(language);
 }
