@@ -23,8 +23,8 @@ Data: call get_report for any date range and filters. Each report has the period
 - daily: visitors, pageViews and leads per day (Istanbul time).
 - sections: home page sections by id (home=hero, about, reach, services, contact-system=patient journey, specialties, case-studies, reviews, client-videos, partners, faq, contact-cta) with visitors who saw them for 1s+, reach %, avgSeconds, and exits (visitors whose last seen section it was, i.e. where they stopped).
 - clicks: what was clicked (whatsapp, phone_call, nav:<section>, link:<path>, out:<host>, file:<pdf>, button:<label>) and in which section.
-- sources and channels (search, ai, social, direct, referral, campaign, email), countries, cities, devices, browsers, os, languages, campaigns (UTM), hours (Istanbul hour of day), scroll (share reaching 25/50/75/100%).
-- survey: shown, steps reached, dismissed, completed, answer counts and free-text wishes.
+- sources (each with visitors, leads, leadsPer100, avgSeconds and quickExitRate = % who left within 10 s without a click) and channels (search, ai, social, direct, referral, campaign, email), countries, cities, devices, browsers, os, languages, campaigns (UTM, with the same leads, leadsPer100, avgSeconds and quickExitRate as sources), hours (Istanbul hour of day), scroll (share reaching 25/50/75/100%).
+- survey: shown, steps reached, dismissed, completed, completionRate (% of those shown who completed), answer counts and free-text wishes.
 - articles: blog articles with their publish date and views in the period. changes: the admin change log (texts, videos, logos saved from the admin panel) with dates.
 - trackingSince: when visitor tracking started (the oldest stored event).
 - leadSummary (no contact details) and journeys (the last visitors: source, country, device, pages, sections seen in order, clicks, exit section, whether they became a lead).

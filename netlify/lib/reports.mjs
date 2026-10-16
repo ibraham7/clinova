@@ -146,8 +146,15 @@ export function buildReport({ range, previousRange, events, previousEvents = [],
         return clean(top(map, limit)).map(({ count: _count, ...row }) => ({ ...row, share: share(row.visitors, kept.size) }));
     };
     const leadVisitors = new Set(now.leads.map((lead) => lead.visitor).filter(Boolean));
+    // Quality per group: leads, visible time and quick exits (under 10 s with no click).
+    const quality = (profile) => (row) => {
+        if (leadVisitors.has(profile.visitor)) row.leads += 1;
+        row.totalMs += profile.ms;
+        if (profile.ms < 10_000 && !profile.clicks) row.quick += 1;
+    };
+    const rates = ({ totalMs, quick, ...row }) => ({ ...row, leadsPer100: share(row.leads, row.visitors), avgSeconds: row.visitors ? round(totalMs / row.visitors / 1000) : 0, quickExitRate: share(quick, row.visitors) });
     const sources = new Map();
-    for (const profile of visible) bump(sources, profile.source, { source: profile.source, channel: profile.channel, leads: 0 }, profile.visitor, (row) => { if (leadVisitors.has(profile.visitor)) row.leads += 1; });
+    for (const profile of visible) bump(sources, profile.source, { source: profile.source, channel: profile.channel, leads: 0, totalMs: 0, quick: 0 }, profile.visitor, quality(profile));
 
     const countries = new Map();
     for (const profile of visible) bump(countries, profile.country ?? "??", { code: profile.country ?? "??", name: profile.country_name ?? "unknown", leads: 0 }, profile.visitor, (row) => { if (leadVisitors.has(profile.visitor)) row.leads += 1; });
@@ -167,6 +174,8 @@ export function buildReport({ range, previousRange, events, previousEvents = [],
         }
         if (event.type === "click" && event.target) bump(clicks, event.target, { target: event.target, section: event.section }, event.visitor);
     }
+    for (const row of campaigns.values()) Object.assign(row, { leads: 0, totalMs: 0, quick: 0 });
+    for (const profile of visible) if (profile.campaign && campaigns.has(profile.campaign)) quality(profile)(campaigns.get(profile.campaign));
 
     const scroll = [25, 50, 75, 100].map((depth) => ({ depth, visitors: visible.filter((profile) => profile.scroll >= depth).length }))
         .map((row) => ({ ...row, share: share(row.visitors, kept.size) }));
@@ -201,18 +210,19 @@ export function buildReport({ range, previousRange, events, previousEvents = [],
         pages: clean(top(pages, 25)).map(({ count, ...row }) => ({ ...row, views: count })),
         countries: clean(top(countries, 30)).map(({ count: _count, ...row }) => ({ ...row, share: share(row.visitors, kept.size) })),
         cities: clean(top(cities, 20)).map(({ count: _count, ...row }) => row),
-        sources: clean(top(sources, 25)).map(({ count: _count, ...row }) => ({ ...row, share: share(row.visitors, kept.size) })),
+        sources: clean(top(sources, 25)).map(({ count: _count, ...row }) => ({ ...rates(row), share: share(row.visitors, kept.size) })),
         channels: by("channel", 10),
         devices: by("device", 5),
         browsers: by("browser", 8),
         os: by("os", 8),
         languages: by("lang", 6),
-        campaigns: clean(top(campaigns, 20)).map(({ count: _count, ...row }) => row),
+        campaigns: clean(top(campaigns, 20)).map(({ count: _count, ...row }) => rates(row)),
         hours: hours.map(({ _seen, ...row }) => row),
         clicks: clean(top(clicks, 30, "count")),
         scroll,
         survey: {
             shown: surveyBy("shown"), dismissed: surveyBy("dismissed"), completed: surveyBy("completed"),
+            completionRate: share(surveyBy("completed"), surveyBy("shown")),
             steps: Array.from(stepReach, (set, step) => ({ step, visitors: set?.size ?? 0 })),
             answers, wishes: wishes.slice(-50),
         },

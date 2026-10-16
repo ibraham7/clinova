@@ -147,8 +147,9 @@ assert.deepEqual(report.sections.find((section) => section.id === "services"), {
 assert.equal(report.sections.find((section) => section.id === "home").visitors, 1, "under one second does not count as seen");
 assert.equal(report.sections.find((section) => section.id === "home").exits, 1);
 assert.equal(report.sources.find((row) => row.source === "Google").leads, 1);
+assert.equal(report.sources.find((row) => row.source === "Google").leadsPer100, 100, "leads per 100 visitors of a source");
 assert.equal(report.clicks[0].target, "whatsapp");
-assert.deepEqual(report.survey, { shown: 1, dismissed: 1, completed: 0, steps: [{ step: 0, visitors: 0 }, { step: 1, visitors: 1 }], answers: { specialty: { "طب الأسنان": 1 } }, wishes: ["أكثر"] });
+assert.deepEqual(report.survey, { shown: 1, dismissed: 1, completed: 0, completionRate: 0, steps: [{ step: 0, visitors: 0 }, { step: 1, visitors: 1 }], answers: { specialty: { "طب الأسنان": 1 } }, wishes: ["أكثر"] });
 assert.equal(report.leads[0].contact, "a@b.co");
 assert.equal(report.leads[0].source, "Google");
 assert.equal(report.hours[12].visitors, 1, "09:00 UTC is 12:00 in Istanbul");
@@ -196,7 +197,8 @@ const demoUrl = `https://clinova.test/.netlify/functions/admin-reports?from=${mo
 const demo = (await (await adminReports(new Request(demoUrl, { headers: admin }))).json()).report;
 assert.equal(demo.demo, true);
 assert.ok(demo.summary.visitors > 300 && demo.summary.leads > 10, "a month of demo data has visitors and leads");
-assert.ok(demo.campaigns.some((row) => row.campaign === "insta_oct"), "the demo story includes the Instagram campaign");
+const instagram = demo.campaigns.find((row) => row.campaign === "insta_oct");
+assert.ok(instagram && instagram.quickExitRate > 50 && instagram.leadsPer100 < 3, "the demo Instagram campaign brings quick exits and few leads");
 assert.ok(demo.changes.some((change) => change.action === "texts"), "and a text edit");
 assert.deepEqual((await (await adminReports(new Request(demoUrl, { headers: admin }))).json()).report.summary, demo.summary, "demo data is the same on every call");
 globalThis.fetch = realFetch;
