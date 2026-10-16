@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
-import { Alert, Box, Button, ButtonBase, CircularProgress, GlobalStyles, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, ButtonBase, CircularProgress, GlobalStyles, MenuItem, Stack, TextField, ThemeProvider, Typography } from "@mui/material";
+import TranslateRoundedIcon from "@mui/icons-material/TranslateRounded";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import VideoLibraryRoundedIcon from "@mui/icons-material/VideoLibraryRounded";
@@ -15,10 +16,11 @@ import TextsPage from "./TextsPage";
 import VideosPage from "./VideosPage";
 import LogosPage from "./LogosPage";
 import ReportsPage from "./ReportsPage";
+import { adminLanguages, isRtl, setAdminLang, translated, useAdminLang, type AdminLang } from "./i18n";
 import HealthCard from "./HealthCard";
 
 type Page = "home" | "reports" | "texts" | "videos" | "logos";
-const T = {
+const T = translated({
     title: "لوحة إدارة Clinova",
     password: "كلمة السر",
     signIn: "تسجيل الدخول",
@@ -30,8 +32,9 @@ const T = {
     intro: "من هنا تتابع تقارير الزوار وتسأل سيرينا، وتعدّل نصوص الموقع وتضيف فيديوهات العملاء وشعاراتهم. كل حفظ يُنشر على الموقع تلقائيًا خلال دقيقة أو دقيقتين، ويبقى محفوظًا في سجل GitHub ويمكن استرجاعه.",
     stats: { texts: "نصوص معدّلة", videos: "فيديوهات", logos: "شعارات" },
     noStorage: "الحفظ غير مفعّل بعد. أضف GITHUB_TOKEN في إعدادات Netlify (راجع docs/admin-panel.md).",
+    language: "لغة اللوحة",
     notTracked: "زياراتك للموقع من هذا المتصفح لا تُحسب في التقارير، حتى لا تختلط أرقامك بأرقام الزوار.",
-};
+});
 
 function Login({ onDone }: { onDone: () => void }) {
     const [password, setPassword] = useState("");
@@ -52,8 +55,19 @@ function Login({ onDone }: { onDone: () => void }) {
             <TextField type="password" label={T.password} value={password} onChange={(event) => { setPassword(event.target.value); setError(null); }} fullWidth autoFocus autoComplete="current-password" />
             {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
             <Button type="submit" variant="contained" fullWidth disabled={busy || !password} sx={{ mt: 3, borderRadius: "999px", py: 1.2 }}>{busy ? T.signingIn : T.signIn}</Button>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}><LanguagePicker /></Box>
         </Box>
     </Box>;
+}
+
+/** Switches the admin panel language; Serena answers in it too. */
+function LanguagePicker() {
+    const lang = useAdminLang();
+    return <TextField select size="small" value={lang} onChange={(event) => setAdminLang(event.target.value as AdminLang)}
+        label={<Stack direction="row" component="span" sx={{ alignItems: "center", gap: 0.5 }}><TranslateRoundedIcon sx={{ fontSize: 16 }} />{T.language}</Stack>}
+        sx={{ minWidth: 150, m: 1 }}>
+        {(Object.keys(adminLanguages) as AdminLang[]).map((code) => <MenuItem key={code} value={code}>{adminLanguages[code]}</MenuItem>)}
+    </TextField>;
 }
 
 function NavItem({ icon, label, active, onClick, href }: { icon: ReactNode; label: string; active?: boolean; onClick?: () => void; href?: string }) {
@@ -64,31 +78,38 @@ function NavItem({ icon, label, active, onClick, href }: { icon: ReactNode; labe
     }}>{icon}{label}</ButtonBase>;
 }
 
-/** /admin: password sign-in, then a dashboard with a menu on the right (the panel is Arabic, right to left). */
+/** /admin: password sign-in, then a dashboard with the menu at the start side (right in Arabic, left otherwise). */
 export default function AdminApp() {
     const [session, setSession] = useState<Session | null | "loading">("loading");
     const [page, setPage] = useState<Page>("home");
+    const lang = useAdminLang();
+    const dir = isRtl(lang) ? "rtl" : "ltr";
+    useEffect(() => {
+        document.title = T.title;
+        document.documentElement.dir = dir;
+        document.documentElement.lang = lang;
+    }, [lang, dir]);
     const check = async () => {
         const result = await api.session();
         setSession(result.status === 200 ? result.data : null);
     };
     useEffect(() => {
-        document.title = T.title;
-        document.documentElement.dir = "rtl";
-        document.documentElement.lang = "ar";
         let live = true;
         void api.session().then((result) => { if (live) setSession(result.status === 200 ? result.data : null); });
         return () => { live = false; };
     }, []);
 
-    // MUI's icon spacing is physical (left/right); flip it for the right-to-left admin panel.
-    const rtlIcons = <GlobalStyles styles={{
+    // MUI's icon spacing is physical (left/right); flip it when the panel is right to left.
+    const rtlIcons = dir === "rtl" && <GlobalStyles styles={{
         ".MuiButton-startIcon": { marginLeft: "8px !important", marginRight: "-4px !important" },
         ".MuiButton-endIcon": { marginRight: "8px !important", marginLeft: "-4px !important" },
     }} />;
-    if (session === "loading") return <Box sx={{ minHeight: "100vh", display: "grid", placeItems: "center", backgroundColor: "#0B111B" }}><CircularProgress /></Box>;
-    if (!session) return <Box dir="rtl">{rtlIcons}<Login onDone={check} /></Box>;
-    return <>{rtlIcons}<Dashboard session={session} page={page} setPage={setPage} onLogout={async () => { await api.logout(); setSession(null); }} /></>;
+    let body: ReactNode;
+    if (session === "loading") body = <Box sx={{ minHeight: "100vh", display: "grid", placeItems: "center", backgroundColor: "#0B111B" }}><CircularProgress /></Box>;
+    else if (!session) body = <Box dir={dir}>{rtlIcons}<Login onDone={check} /></Box>;
+    // key: a new language re-renders every page with the new texts.
+    else body = <>{rtlIcons}<Dashboard key={lang} session={session} page={page} setPage={setPage} onLogout={async () => { await api.logout(); setSession(null); }} /></>;
+    return <ThemeProvider theme={(outer: object) => ({ ...outer, direction: dir })}>{body}</ThemeProvider>;
 }
 
 function Dashboard({ session, page, setPage, onLogout }: { session: Session; page: Page; setPage: (page: Page) => void; onLogout: () => void }) {
@@ -97,7 +118,7 @@ function Dashboard({ session, page, setPage, onLogout }: { session: Session; pag
     useEffect(() => { try { localStorage.setItem("clinova.notrack", "1"); } catch { /* Private mode. */ } }, []);
     const icons: Record<Page, ReactNode> = { home: <DashboardRoundedIcon />, reports: <InsightsRoundedIcon />, texts: <EditNoteRoundedIcon />, videos: <VideoLibraryRoundedIcon />, logos: <WorkspacesRoundedIcon /> };
     const edited = admin.content ? Object.values(admin.content.texts).reduce((sum, texts) => sum + Object.keys(texts).length, 0) : 0;
-    return <Box dir="rtl" sx={{ minHeight: "100vh", display: "flex", flexDirection: { xs: "column", md: "row" }, backgroundColor: "#0B111B", color: "#F5F7FA" }}>
+    return <Box dir={isRtl() ? "rtl" : "ltr"} sx={{ minHeight: "100vh", display: "flex", flexDirection: { xs: "column", md: "row" }, backgroundColor: "#0B111B", color: "#F5F7FA" }}>
         <Box component="nav" sx={{
             width: { md: 270 }, flexShrink: 0, p: 2, display: "flex", flexDirection: { xs: "row", md: "column" }, gap: 0.5, overflowX: "auto",
             borderInlineEnd: { md: "1px solid rgba(142,168,232,0.14)" }, borderBottom: { xs: "1px solid rgba(142,168,232,0.14)", md: "none" }, backgroundColor: "#0E1622",
@@ -108,6 +129,7 @@ function Dashboard({ session, page, setPage, onLogout }: { session: Session; pag
             <Box sx={{ flex: { md: 1 } }} />
             <NavItem icon={<OpenInNewRoundedIcon />} label={T.view} href="/ar" />
             <NavItem icon={<LogoutRoundedIcon />} label={T.logout} onClick={onLogout} />
+            <LanguagePicker />
         </Box>
         <Box component="main" sx={{ flex: 1, minWidth: 0, p: { xs: 2, md: 4 } }}>
             {!session.storage && <Alert severity="warning" sx={{ mb: 3 }}>{T.noStorage}</Alert>}

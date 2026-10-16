@@ -10,8 +10,9 @@ import { languages, type SiteLanguage } from "../i18n";
 import { videoPoster, youtubeId, type ClientVideo } from "../content/siteContent";
 import { newId, uploadVideo, type VideoUploadConfig } from "./api";
 import type { useAdminContent } from "./useAdminContent";
+import { translated } from "./i18n";
 
-const T = {
+const T = translated({
     title: "فيديوهات العملاء",
     intro: "تظهر الفيديوهات في قسم «تجارب حقيقية» بالموقع. يظهر القسم تلقائيًا عند إضافة أول فيديو.",
     add: "إضافة فيديو",
@@ -39,7 +40,7 @@ const T = {
     remove: "حذف الفيديو",
     confirmRemove: "هل تريد حذف هذا الفيديو من الموقع؟",
     saved: "تم الحفظ. سيظهر التعديل على الموقع خلال دقيقة أو دقيقتين.",
-};
+});
 
 const empty = (): ClientVideo => ({ id: newId("video"), url: "", name: "", details: {}, quote: {}, addedAt: new Date().toISOString().slice(0, 10) });
 

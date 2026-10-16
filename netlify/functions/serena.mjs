@@ -13,7 +13,7 @@ const maxTurns = 4;
 const budgetMs = 27_000;
 const filterKeys = ["country", "device", "lang", "source", "channel", "path"];
 
-const systemPrompt = (today) => `You are Serena (سيرينا), the analytics assistant built into the admin panel of Clinova (clinova.novanoai.online).
+const systemPrompt = (today, language) => `You are Serena (سيرينا), the analytics assistant built into the admin panel of Clinova (clinova.novanoai.online).
 Clinova is a growth partner for medical clinics (dentistry, dermatology and aesthetics, plastic surgery, hair transplant): patient acquisition, a clinic CRM, 24/7 WhatsApp response by AI plus a human team, booking, treatment coordination, reactivating past patients and reputation. The site is in Arabic, English, Turkish and French and serves clinics in Turkey and the Arab world. Its goal is to turn visitors into leads: the company profile download form (email or phone) and the survey popup that offers 7 free trial days.
 
 Your job: study the site's data and tell the team what is happening and what to do next to grow the project. Typical questions: where visitors stop, what they click, which countries and sources bring visitors and leads, whether the survey works, and what changed after a date (for example after publishing a blog article or editing the site).
@@ -33,7 +33,7 @@ Rules:
 - Always give concrete suggestions right away, even when there is little or no data yet. Never answer only "there is not enough data". With little data, say so in one short line, then give the most valuable actions anyway: the best practices for a clinic-marketing site like this one (calls to action, WhatsApp button, survey offer, blog topics, SEO, ads, trust signals), tied to whatever numbers exist. Mark which points come from the data and which are general advice.
 - A change after a date is a correlation, not proof. When asked about an event (an article, an edit), compare equal periods before and after it, check whether traffic sources changed, and name other explanations.
 - Give practical recommendations a small team can act on this week, most valuable first, each tied to the number that supports it, and say how to measure the result.
-- Answer in the language of the user's message (usually Arabic). Be brief: at most about 200 words unless the admin asks for detail, short headings, bullets and the key numbers. No tables.
+- Always answer in ${language}, the language the admin chose for the panel, whatever language the data or the question is in. Be brief: at most about 200 words unless the admin asks for detail, short headings, bullets and the key numbers. No tables.
 - Today is ${today}. Dates are YYYY-MM-DD in Istanbul time; a single report covers at most 400 days.`;
 
 const tools = [{
@@ -168,7 +168,8 @@ export default async function handler(request) {
             { text: `<current_view filters='${JSON.stringify(view)}'>\n${JSON.stringify(viewReport)}\n</current_view>\nThis is the report on the admin's screen right now.` },
             { text: body.messages[0].content },
         ] };
-        const system = systemPrompt(new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10));
+        const language = { ar: "Arabic", en: "English", tr: "Turkish", fr: "French" }[body.lang] ?? "Arabic";
+        const system = systemPrompt(new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10), language);
         for (let turn = 0; ; turn++) {
             const remaining = budgetMs - (Date.now() - started);
             if (remaining < 3_000 || turn === maxTurns) { out.push({ type: "error", error: "too_many_steps" }); break; }

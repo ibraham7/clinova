@@ -5,8 +5,9 @@ import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import { api, type HealthCheck } from "./api";
+import { isRtl, translated } from "./i18n";
 
-const T = {
+const T = translated({
     title: "حالة الربط",
     intro: "فحص مباشر لكل خدمة يعتمد عليها الموقع ولوحة الإدارة.",
     refresh: "إعادة الفحص",
@@ -19,7 +20,7 @@ const T = {
         sheets: ["الاستبيان وتحميل البروفايل (Google Sheets)", "src/config/profile-leads.json"],
         cloudinary: ["رفع ملفات الفيديو (Cloudinary، اختياري)", "CLOUDINARY_CLOUD_NAME + CLOUDINARY_UPLOAD_PRESET"],
     } as Record<HealthCheck["id"], [string, string]>,
-};
+});
 
 /** Live status of every integration, so the admin sees at a glance what works and what to fix. */
 export default function HealthCard() {
@@ -56,7 +57,7 @@ export default function HealthCard() {
                     <Icon sx={{ mt: 0.25, color: item.ok ? "#7DD3A8" : item.optional ? "#E8B86E" : "#F28B82" }} />
                     <Box sx={{ minWidth: 0 }}>
                         <Typography sx={{ fontSize: "0.92rem", fontWeight: 600 }}>{name}</Typography>
-                        <Typography dir="ltr" sx={{ fontSize: "0.75rem", color: "rgba(245,247,250,0.6)", textAlign: "right", wordBreak: "break-word" }}>{setting}{item.detail ? ` — ${item.detail}` : ""}</Typography>
+                        <Typography dir="ltr" sx={{ fontSize: "0.75rem", color: "rgba(245,247,250,0.6)", textAlign: isRtl() ? "right" : "left", wordBreak: "break-word" }}>{setting}{item.detail ? ` — ${item.detail}` : ""}</Typography>
                     </Box>
                 </Box>;
             })}

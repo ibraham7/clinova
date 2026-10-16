@@ -1,3 +1,5 @@
+import { adminLocale } from "./i18n";
+
 // Colours and number format shared by the reports charts.
 export const chart = {
     mark: "#8EA8E8",
@@ -10,4 +12,4 @@ export const chart = {
     surface: "#111B2A",
 };
 
-export const formatNumber = (value: number) => new Intl.NumberFormat("ar", { maximumFractionDigits: 1 }).format(value);
+export const formatNumber = (value: number) => new Intl.NumberFormat(adminLocale(), { maximumFractionDigits: 1 }).format(value);

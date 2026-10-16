@@ -74,6 +74,7 @@ assert.deepEqual(first.body.generationConfig.thinkingConfig, { thinkingLevel: "l
 assert.deepEqual(second.body.generationConfig.thinkingConfig, { thinkingLevel: "low" }, "the refusal is remembered");
 assert.equal(first.body.tools[0].functionDeclarations[0].name, "get_report");
 assert.match(first.body.systemInstruction.parts[0].text, /Serena/);
+assert.match(first.body.systemInstruction.parts[0].text, /Always answer in Arabic/, "Arabic by default");
 assert.match(first.body.contents[0].parts[0].text, /<current_view[\s\S]*"visitors":0/);
 assert.equal(first.body.contents[0].parts[1].text, "ماذا تغيّر في تركيا؟");
 assert.equal(second.body.contents.length, 3);
@@ -108,6 +109,17 @@ globalThis.fetch = async (input, init) => new URL(String(input)).hostname === "g
 const bad = (await (await ask(question)).text()).trim().split("\n").map((line) => JSON.parse(line));
 assert.equal(bad[0].error, "bad_key");
 assert.match(bad[0].detail, /API key not valid/);
+
+// The panel language decides Serena's language.
+const turkish = [];
+const plain = globalThis.fetch;
+globalThis.fetch = async (input, init) => {
+    if (String(input).includes(":generateContent")) turkish.push(JSON.parse(init.body).systemInstruction.parts[0].text);
+    return plain(input, init);
+};
+await ask({ messages: [{ role: "user", content: "merhaba" }], lang: "tr" });
+assert.match(turkish[0], /Always answer in Turkish/);
+globalThis.fetch = plain;
 
 delete process.env.GEMINI_API_KEY;
 assert.equal((await ask(question)).status, 503, "a missing API key is reported");
