@@ -1,8 +1,13 @@
-/ar  /index.html  200
-/ar/  /index.html  200
-/en  /index.html  200
-/en/  /index.html  200
-/tr  /index.html  200
-/tr/  /index.html  200
-/fr  /index.html  200
-/fr/  /index.html  200
+# Every page is prerendered to <path>/index.html; serve it with and without a trailing slash.
+/ar  /ar/index.html  200
+/ar/  /ar/index.html  200
+/en  /en/index.html  200
+/en/  /en/index.html  200
+/tr  /tr/index.html  200
+/tr/  /tr/index.html  200
+/fr  /fr/index.html  200
+/fr/  /fr/index.html  200
+/:lang/blog  /:lang/blog/index.html  200
+/:lang/blog/  /:lang/blog/index.html  200
+/:lang/blog/:slug  /:lang/blog/:slug/index.html  200
+/:lang/blog/:slug/  /:lang/blog/:slug/index.html  200
