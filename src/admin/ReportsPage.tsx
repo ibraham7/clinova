@@ -31,7 +31,7 @@ const T = {
     intro: "كل ما يحدث على الموقع: من أين يأتي الزوار، ماذا يشاهدون، أين يتوقفون، ومن ترك بياناته. البيانات مجهولة الهوية ولا تُحفظ عناوين IP.",
     presets: [["7", "آخر 7 أيام"], ["30", "آخر 30 يومًا"], ["90", "آخر 90 يومًا"], ["365", "آخر سنة"]] as const,
     from: "من", to: "إلى",
-    country: "الدولة", device: "الجهاز", lang: "اللغة", channel: "نوع المصدر", source: "المصدر", all: "الكل",
+    country: "الدولة", device: "الجهاز", channel: "نوع المصدر", source: "المصدر", all: "الكل",
     refresh: "تحديث", clear: "مسح الفلاتر",
     kpis: { visitors: "زوار", pageViews: "مشاهدات صفحات", avgSeconds: "متوسط مدة الزيارة (ث)", avgScroll: "متوسط عمق التمرير %", engagedRate: "زوار متفاعلون %", leads: "تركوا بياناتهم", conversionRate: "نسبة التحويل %", surveyLeads: "أكملوا الاستبيان" } as Partial<Record<keyof Summary, string>>,
     vsPrevious: "مقارنة بالفترة السابقة",
@@ -144,7 +144,7 @@ export default function ReportsPage() {
     // Choices come from the data itself, so every option has visitors behind it.
     const options = {
         country: report?.countries.filter((row) => row.code !== "??").map((row) => [row.code, countryName(row.code, row.name)]) ?? [],
-        device: Object.entries(deviceNames), lang: Object.entries(langNames), channel: Object.entries(channelNames),
+        device: Object.entries(deviceNames), channel: Object.entries(channelNames),
         source: report?.sources.map((row) => [row.source, row.source]) ?? [],
     };
     const ready = Boolean(report);
@@ -163,7 +163,7 @@ export default function ReportsPage() {
             })}
             <TextField type="date" size="small" label={T.from} value={filters.from} onChange={(event) => event.target.value && set("from", event.target.value)} slotProps={{ inputLabel: { shrink: true } }} />
             <TextField type="date" size="small" label={T.to} value={filters.to} onChange={(event) => event.target.value && set("to", event.target.value)} slotProps={{ inputLabel: { shrink: true } }} />
-            {(["country", "device", "lang", "channel", "source"] as const).map((key) => <TextField key={key} select size="small" label={T[key]} value={filters[key] ?? ""} onChange={(event) => set(key, event.target.value)} sx={{ minWidth: 130 }}>
+            {(["country", "device", "channel", "source"] as const).map((key) => <TextField key={key} select size="small" label={T[key]} value={filters[key] ?? ""} onChange={(event) => set(key, event.target.value)} sx={{ minWidth: 130 }}>
                 <MenuItem value="">{T.all}</MenuItem>
                 {options[key].map(([value, label]) => <MenuItem key={value} value={value}>{label}</MenuItem>)}
                 {filters[key] && !options[key].some(([value]) => value === filters[key]) && <MenuItem value={filters[key]}>{filters[key]}</MenuItem>}
