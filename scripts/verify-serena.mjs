@@ -73,6 +73,7 @@ assert.ok(reportRequests.every((request) => request.cookie === cookie));
 const [first, second] = geminiRequests;
 assert.match(first.url.pathname, /\/models\/gemini-9\.5-flash:streamGenerateContent$/, "newest stable flash model");
 assert.equal(first.url.searchParams.get("alt"), "sse");
+assert.deepEqual(first.body.generationConfig.thinkingConfig, { thinkingLevel: "low" }, "fast answers: little thinking");
 assert.equal(first.body.tools[0].functionDeclarations[0].name, "get_report");
 assert.match(first.body.systemInstruction.parts[0].text, /Serena/);
 assert.match(first.body.contents[0].parts[0].text, /<current_view[\s\S]*"visitors":42/);
