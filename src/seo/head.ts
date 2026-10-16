@@ -10,6 +10,7 @@ import type { Route } from "../routes";
 import { routePath } from "../routes";
 import { blogMeta, homeMeta } from "./meta";
 import { services } from "./services";
+import { localized, siteContent, videoPoster, youtubeId } from "../content/siteContent";
 import { areaServed, bingSiteVerification, contactEmail, contactPhone, googleSiteVerification, siteName, siteUrl, socialProfiles } from "./site";
 
 const dictionaries: Record<SiteLanguage, Record<string, string>> = { ar, en, tr, fr };
@@ -194,6 +195,18 @@ export function buildHead(route: Route, lang: SiteLanguage): PageHead {
             organization(lang),
             website,
             faqPage(faqs.map((item) => ({ q: translate(lang, item.question), a: translate(lang, item.answer) })), canonical, lang),
+            ...siteContent.videos.map((video) => {
+                const id = youtubeId(video.url);
+                return {
+                    "@type": "VideoObject",
+                    name: `${video.name} | ${siteName}`,
+                    description: localized(video.quote, lang) || localized(video.details, lang) || video.name,
+                    thumbnailUrl: videoPoster(video),
+                    uploadDate: video.addedAt,
+                    ...(id ? { embedUrl: `https://www.youtube.com/embed/${id}` } : { contentUrl: video.url }),
+                    publisher: { "@id": organizationId },
+                };
+            }),
         ],
     };
 }

@@ -20,7 +20,7 @@ export { plainText } from "./blog/parse";
 /** Renders one URL to static HTML for search engines and AI crawlers (see scripts/prerender.mjs). */
 export async function render(pathname: string, fallbackLanguage: SiteLanguage = "ar") {
     const route = parseRoute(pathname);
-    const lang = route.lang ?? fallbackLanguage;
+    const lang = (route.kind !== "admin" && route.lang) || fallbackLanguage;
     await i18n.changeLanguage(lang);
     // Collect each page's styles once into <head> instead of inline next to every element.
     const cache = createCache({ key: "css" });

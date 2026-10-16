@@ -36,6 +36,19 @@ for (const page of pages) {
     fs.writeFileSync(file, document);
 }
 
+// /admin is a private app: an empty shell that search engines must not index.
+fs.mkdirSync(path.join(dist, "admin"), { recursive: true });
+fs.writeFileSync(path.join(dist, "admin/index.html"), template
+    .replace(/<title>[\s\S]*?<\/title>/, '<title>Clinova Admin</title>\n    <meta name="robots" content="noindex, nofollow" />')
+    .replace(/<script type="text\/javascript">[\s\S]*?clarity[\s\S]*?<\/script>/, ""));
+
+// Publish dates for the admin reports page and Serena (before and after each article).
+fs.mkdirSync(path.join(dist, "blog"), { recursive: true });
+fs.writeFileSync(path.join(dist, "blog/articles.json"), JSON.stringify(articles.map((article) => {
+    const translation = article.translations.ar ?? Object.values(article.translations)[0];
+    return { slug: article.slug, title: translation.title, date: translation.date, updated: translation.updated ?? null, languages: Object.keys(article.translations) };
+})));
+
 // sitemap.xml with hreflang alternates for every language version.
 const urlFor = (route, lang) => route.kind === "home" ? `${siteUrl}/${lang}` : route.kind === "blog" ? `${siteUrl}/${lang}/blog` : `${siteUrl}/${lang}/blog/${route.slug}`;
 const entries = pages.filter((page) => page.route).map((page) => {
@@ -54,8 +67,9 @@ fs.writeFileSync(path.join(dist, "robots.txt"), [
     "User-agent: *",
     "Allow: /",
     "Disallow: /.netlify/",
+    "Disallow: /admin",
     "",
-    ...aiAgents.flatMap((agent) => [`User-agent: ${agent}`, "Allow: /", "Disallow: /.netlify/", ""]),
+    ...aiAgents.flatMap((agent) => [`User-agent: ${agent}`, "Allow: /", "Disallow: /.netlify/", "Disallow: /admin", ""]),
     `Sitemap: ${siteUrl}/sitemap.xml`,
     "",
 ].join("\n"));

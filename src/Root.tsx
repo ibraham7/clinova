@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { lazy, Suspense, useEffect, useMemo } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useSiteTranslation } from "./i18n/useSiteTranslation";
@@ -11,17 +11,28 @@ import App from "./App";
 import BlogIndex from "./blog/BlogIndex";
 import BlogArticle from "./blog/BlogArticle";
 
+// The admin panel and the on-page text editor load only for /admin and ?edit, keeping the public site light.
+const AdminApp = lazy(() => import("./admin/AdminApp"));
+const EditMode = lazy(() => import("./admin/EditMode"));
+
 /** Picks the page for the current URL; shared by the browser and the prerender step. */
 export default function Root({ route }: { route: Route }) {
     const { direction, i18n } = useSiteTranslation();
     const { mode } = useColorMode();
     const lang = (i18n.resolvedLanguage ?? "ar") as SiteLanguage;
-    const theme = useMemo(() => createTheme(mode === "light" ? lightTheme : darkTheme, { direction }), [direction, mode]);
+    const admin = route.kind === "admin";
+    const theme = useMemo(() => createTheme(mode === "light" && !admin ? lightTheme : darkTheme, { direction: admin ? "rtl" : direction }), [direction, mode, admin]);
+    const editing = typeof window !== "undefined" && !admin && new URLSearchParams(window.location.search).has("edit");
     useEffect(() => {
+        if (route.kind === "admin") return;
         try { applyHead(buildHead(route, lang)); } catch { /* An article missing in this language keeps the previous head. */ }
     }, [route, lang]);
     return <ThemeProvider theme={theme}>
         <CssBaseline enableColorScheme />
-        {route.kind === "home" ? <App /> : route.kind === "blog" ? <BlogIndex /> : <BlogArticle slug={route.slug} />}
+        {route.kind === "admin" ? <Suspense fallback={null}><AdminApp /></Suspense>
+            : route.kind === "home" ? <App />
+            : route.kind === "blog" ? <BlogIndex />
+            : <BlogArticle slug={route.slug} />}
+        {editing && <Suspense fallback={null}><EditMode /></Suspense>}
     </ThemeProvider>;
 }
