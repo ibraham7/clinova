@@ -64,7 +64,7 @@ async function chooseModel(apiKey: string) {
     const configured = Netlify.env.get("GEMINI_MODEL");
     if (configured) return configured;
     if (cachedModel) return cachedModel;
-    const response = await fetch(`${gemini}/models?pageSize=200`, { headers: { "x-goog-api-key": apiKey } });
+    const response = await fetch(`${gemini}/models?pageSize=200`, { headers: { "x-goog-api-key": apiKey }, signal: AbortSignal.timeout(15_000) });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new GeminiError(data?.error?.message ?? "models", response.status);
     const names: string[] = (data.models ?? [])
@@ -78,6 +78,14 @@ async function chooseModel(apiKey: string) {
     return cachedModel;
 }
 
+// Short, fast answers: thinking off on 2.x Flash, low on newer models (they cannot turn it off).
+function thinkingFor(model: string) {
+    const version = Number(model.match(/^gemini-([\d.]+)/)?.[1] ?? 0);
+    if (version >= 3) return { thinkingConfig: { thinkingLevel: "low" } };
+    if (version >= 2.5) return { thinkingConfig: { thinkingBudget: 0 } };
+    return {};
+}
+
 type Part = { text?: string; thought?: boolean; thoughtSignature?: string; functionCall?: { name: string; args?: Record<string, unknown> }; functionResponse?: unknown };
 type Content = { role: "user" | "model"; parts: Part[] };
 
@@ -86,11 +94,13 @@ async function streamTurn(apiKey: string, model: string, system: string, content
     const response = await fetch(`${gemini}/models/${encodeURIComponent(model)}:streamGenerateContent?alt=sse`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+        // Never leave the admin waiting forever: a stuck answer ends with an error.
+        signal: AbortSignal.timeout(90_000),
         body: JSON.stringify({
             systemInstruction: { parts: [{ text: system }] },
             contents,
             tools: [{ functionDeclarations: tools }],
-            generationConfig: { maxOutputTokens: 8192 },
+            generationConfig: { maxOutputTokens: 8192, ...thinkingFor(model) },
         }),
     });
     if (!response.ok || !response.body) {
@@ -154,7 +164,7 @@ function validInput(input: unknown): input is ReportInput {
 async function getReport(request: Request, input: ReportInput) {
     const params = new URLSearchParams({ from: input.from, to: input.to, compact: "1" });
     for (const key of filterKeys) if (input[key]) params.set(key, input[key]!);
-    const response = await fetch(`${new URL(request.url).origin}/.netlify/functions/admin-reports?${params}`, { headers: { cookie: request.headers.get("cookie") ?? "" } });
+    const response = await fetch(`${new URL(request.url).origin}/.netlify/functions/admin-reports?${params}`, { headers: { cookie: request.headers.get("cookie") ?? "" }, signal: AbortSignal.timeout(25_000) });
     const data = await response.json().catch(() => null);
     if (!response.ok || !data?.ok) return { error: data?.error ?? `status_${response.status}` };
     return data.report;
@@ -184,12 +194,13 @@ export default async function handler(request: Request) {
         async start(controller) {
             const send = (data: object) => controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`));
             try {
-                const model = await chooseModel(apiKey);
+                // The model choice and the report on screen are fetched together.
+                const view = validInput(body.view) ? body.view : null;
+                const [model, viewReport] = await Promise.all([chooseModel(apiKey), view ? getReport(request, view) : Promise.resolve(null)]);
                 const contents: Content[] = (body.messages as ChatMessage[]).map((message) => ({ role: message.role === "user" ? "user" : "model", parts: [{ text: message.content }] }));
                 // The report the admin is looking at goes first, so most questions need no extra call.
-                const view = validInput(body.view) ? body.view : null;
                 if (view) {
-                    const report = await getReport(request, view);
+                    const report = viewReport;
                     contents[0] = { role: "user", parts: [
                         { text: `<current_view filters='${JSON.stringify(view)}'>\n${JSON.stringify(report)}\n</current_view>\nThis is the report on the admin's screen right now.` },
                         { text: (body.messages as ChatMessage[])[0].content },
