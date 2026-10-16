@@ -8,9 +8,8 @@ import ImageRoundedIcon from "@mui/icons-material/ImageRounded";
 import type { ClientLogo } from "../content/siteContent";
 import { api, fileToBase64, messageFor, newId } from "./api";
 import type { useAdminContent } from "./useAdminContent";
-import { translated } from "./i18n";
 
-const T = translated({
+const T = {
     title: "شعارات العملاء",
     intro: "تظهر الشعارات في قسم «شركاؤنا» المتحرك. يُفضّل شعار بخلفية شفافة (PNG أو WebP) بعرض 400 بكسل تقريبًا، وحجم حتى 1 ميغابايت.",
     add: "إضافة شعار",
@@ -26,7 +25,7 @@ const T = translated({
     confirmRemove: "هل تريد حذف هذا الشعار من الموقع؟",
     pending: "يظهر على الموقع بعد النشر",
     saved: "تم الحفظ. سيظهر التعديل على الموقع خلال دقيقة أو دقيقتين.",
-});
+};
 
 export default function LogosPage({ admin }: { admin: ReturnType<typeof useAdminContent> }) {
     const [adding, setAdding] = useState(false);
