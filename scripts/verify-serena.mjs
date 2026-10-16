@@ -1,21 +1,17 @@
-// Tests the Serena edge function with a mocked Gemini API and reports function: session check,
-// model choice, request shape, the get_report tool loop and the streamed answer.
-// Run with `npm run check:serena` (Node strips the TypeScript types).
+// Tests the Serena function with mocked Gemini and Supabase APIs: session check, model choice,
+// request shape, the get_report tool loop and the answer lines. Run with `npm run check:serena`.
 import assert from "node:assert/strict";
-import crypto from "node:crypto";
 
-const env = { ADMIN_PASSWORD: "test-password-123", GEMINI_API_KEY: "AIza-test" };
-globalThis.Netlify = { env: { get: (name) => env[name] } };
+process.env.ADMIN_PASSWORD = "test-password-123";
+process.env.GEMINI_API_KEY = "AIza-test";
+process.env.SUPABASE_URL = "https://mock.supabase.co";
+process.env.SUPABASE_SERVICE_ROLE_KEY = "service-key";
 
-const expires = Date.now() + 3600_000;
-const cookie = `clinova_admin=${expires}.${crypto.createHmac("sha256", `${env.ADMIN_PASSWORD}:`).update(`clinova-admin:${expires}`).digest("hex")}`;
-
+const today = new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10);
 const geminiRequests = [];
-const reportRequests = [];
 let modelLists = 0;
-// Gemini streams server-sent events, each one a partial response.
-const sse = (chunks) => new Response(chunks.map((chunk) => `data: ${JSON.stringify(chunk)}\r\n\r\n`).join(""), { headers: { "content-type": "text/event-stream" } });
-const parts = (list, finishReason) => ({ candidates: [{ content: { role: "model", parts: list }, ...(finishReason ? { finishReason } : {}) }] });
+let supabaseReads = 0;
+const reply = (parts, finishReason = "STOP") => Response.json({ candidates: [{ content: { role: "model", parts }, finishReason }] });
 
 globalThis.fetch = async (input, init = {}) => {
     const url = new URL(typeof input === "string" ? input : input.url);
@@ -33,59 +29,62 @@ globalThis.fetch = async (input, init = {}) => {
             ] });
         }
         geminiRequests.push({ url, body: JSON.parse(init.body) });
-        if (geminiRequests.length === 1) return sse([
-            parts([{ text: "سأقارن " }]),
-            parts([{ text: "الفترتين. " }, { functionCall: { name: "get_report", args: { from: "2026-10-01", to: "2026-10-15", country: "TR" } }, thoughtSignature: "sig-1" }], "STOP"),
-        ]);
-        return sse([parts([{ text: "الزوار من تركيا " }]), parts([{ text: "زادوا." }], "STOP")]);
+        if (geminiRequests.length === 1) return reply([{ text: "سأقارن الفترتين. " }, { functionCall: { name: "get_report", args: { from: "2026-10-01", to: "2026-10-15", country: "TR" } }, thoughtSignature: "sig-1" }]);
+        return reply([{ text: "الزوار من تركيا زادوا." }]);
     }
-    if (url.pathname === "/.netlify/functions/admin-reports") {
-        reportRequests.push({ params: url.searchParams, cookie: new Headers(init.headers).get("cookie") });
-        return Response.json({ ok: true, report: { summary: { visitors: 42 }, filters: Object.fromEntries(url.searchParams) } });
+    if (url.hostname === "mock.supabase.co") {
+        supabaseReads += 1;
+        assert.match(url.pathname, /\/rest\/v1\/clinova_/);
+        return Response.json([]);
     }
+    if (url.pathname === "/blog/articles.json") return Response.json([]);
     throw new Error(`Unexpected fetch ${url}`);
 };
 
-const { default: serena, config } = await import("../netlify/edge-functions/serena.ts");
+const { sessionCookie } = await import("../netlify/lib/admin.mjs");
+const { default: serena, config } = await import("../netlify/functions/serena.mjs");
 assert.equal(config.path, "/api/serena");
+const cookie = sessionCookie().split(";")[0];
 
 const ask = (body, headers = { cookie }) => serena(new Request("https://clinova.test/api/serena", { method: "POST", headers: { "content-type": "application/json", origin: "https://clinova.test", ...headers }, body: JSON.stringify(body) }));
-const question = { messages: [{ role: "user", content: "ماذا تغيّر في تركيا؟" }], view: { from: "2026-09-16", to: "2026-10-15" } };
+const question = { messages: [{ role: "user", content: "ماذا تغيّر في تركيا؟" }], view: { from: today, to: today } };
 
 assert.equal((await ask(question, {})).status, 401, "signed-out admins are refused");
 assert.equal((await ask(question, { cookie: cookie.replace(/.$/, "0") })).status, 401, "a forged cookie is refused");
+assert.equal((await ask(question, { cookie, origin: "https://evil.test" })).status, 403, "other sites are refused");
 assert.equal((await ask({ messages: [{ role: "assistant", content: "x" }] })).status, 400, "the conversation must end with a question");
 
 const response = await ask(question);
 assert.equal(response.status, 200);
 const chunks = (await response.text()).trim().split("\n").map((line) => JSON.parse(line));
-assert.deepEqual(chunks.filter((chunk) => chunk.type === "text").map((chunk) => chunk.text).join(""), "سأقارن الفترتين. الزوار من تركيا زادوا.");
+assert.equal(chunks.filter((chunk) => chunk.type === "text").map((chunk) => chunk.text).join(""), "سأقارن الفترتين. الزوار من تركيا زادوا.");
 assert.deepEqual(chunks.find((chunk) => chunk.type === "status").input, { from: "2026-10-01", to: "2026-10-15", country: "TR" });
 assert.equal(chunks.at(-1).type, "done");
-
-// The current view is fetched first, then the tool call, both as the signed-in admin.
-assert.equal(reportRequests.length, 2);
-assert.equal(reportRequests[0].params.get("from"), "2026-09-16");
-assert.equal(reportRequests[0].params.get("compact"), "1");
-assert.equal(reportRequests[1].params.get("country"), "TR");
-assert.ok(reportRequests.every((request) => request.cookie === cookie));
+assert.ok(supabaseReads >= 10, "the on-screen report and the tool report are both read from Supabase");
 
 const [first, second] = geminiRequests;
-assert.match(first.url.pathname, /\/models\/gemini-9\.5-flash:streamGenerateContent$/, "newest stable flash model");
-assert.equal(first.url.searchParams.get("alt"), "sse");
+assert.match(first.url.pathname, /\/models\/gemini-9\.5-flash:generateContent$/, "newest stable flash model");
 assert.deepEqual(first.body.generationConfig.thinkingConfig, { thinkingLevel: "low" }, "fast answers: little thinking");
 assert.equal(first.body.tools[0].functionDeclarations[0].name, "get_report");
 assert.match(first.body.systemInstruction.parts[0].text, /Serena/);
-assert.match(first.body.contents[0].parts[0].text, /<current_view[\s\S]*"visitors":42/);
+assert.match(first.body.contents[0].parts[0].text, /<current_view[\s\S]*"visitors":0/);
 assert.equal(first.body.contents[0].parts[1].text, "ماذا تغيّر في تركيا؟");
 assert.equal(second.body.contents.length, 3);
-assert.equal(second.body.contents[1].role, "model");
 assert.equal(second.body.contents[1].parts.find((part) => part.functionCall).thoughtSignature, "sig-1", "the model turn goes back unchanged");
-assert.deepEqual(second.body.contents[2].parts[0].functionResponse.name, "get_report");
-assert.equal(second.body.contents[2].parts[0].functionResponse.response.result.summary.visitors, 42);
+assert.equal(second.body.contents[2].parts[0].functionResponse.name, "get_report");
+assert.equal(second.body.contents[2].parts[0].functionResponse.response.result.filters.country, "TR");
 assert.equal(modelLists, 1, "the model list is fetched once and cached");
 
-delete env.GEMINI_API_KEY;
+// Google errors reach the admin with Google's own message.
+const working = globalThis.fetch;
+globalThis.fetch = async (input, init) => new URL(String(input)).hostname === "generativelanguage.googleapis.com"
+    ? Response.json({ error: { code: 400, message: "API key not valid. Please pass a valid API key." } }, { status: 400 })
+    : working(input, init);
+const bad = (await (await ask(question)).text()).trim().split("\n").map((line) => JSON.parse(line));
+assert.equal(bad[0].error, "bad_key");
+assert.match(bad[0].detail, /API key not valid/);
+
+delete process.env.GEMINI_API_KEY;
 assert.equal((await ask(question)).status, 503, "a missing API key is reported");
 
-console.log("Serena: session check, model choice, request shape, report tool loop and streamed answer passed (mock Gemini API)");
+console.log("Serena: session check, model choice, request shape, report tool loop, answers and errors passed (mock Gemini and Supabase)");
