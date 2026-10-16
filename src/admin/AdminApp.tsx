@@ -129,9 +129,10 @@ function Dashboard({ session, page, setPage, onLogout }: { session: Session; pag
             <Box sx={{ flex: { md: 1 } }} />
             <NavItem icon={<OpenInNewRoundedIcon />} label={T.view} href="/ar" />
             <NavItem icon={<LogoutRoundedIcon />} label={T.logout} onClick={onLogout} />
-            <LanguagePicker />
         </Box>
         <Box component="main" sx={{ flex: 1, minWidth: 0, p: { xs: 2, md: 4 } }}>
+            {/* At the top of every page, so it is visible on phones too (the nav scrolls sideways there). */}
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}><LanguagePicker /></Box>
             {!session.storage && <Alert severity="warning" sx={{ mb: 3 }}>{T.noStorage}</Alert>}
             {admin.error && session.storage && <Alert severity="error" sx={{ mb: 3 }}>{admin.error}</Alert>}
             {page === "home" && <Box>

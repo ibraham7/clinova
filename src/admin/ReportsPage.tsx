@@ -32,7 +32,7 @@ const T = translated({
     intro: "كل ما يحدث على الموقع: من أين يأتي الزوار، ماذا يشاهدون، أين يتوقفون، ومن ترك بياناته. البيانات مجهولة الهوية ولا تُحفظ عناوين IP.",
     presets: [["7", "آخر 7 أيام"], ["30", "آخر 30 يومًا"], ["90", "آخر 90 يومًا"], ["365", "آخر سنة"]] as const,
     from: "من", to: "إلى",
-    country: "الدولة", device: "الجهاز", lang: "اللغة", channel: "نوع المصدر", source: "المصدر", all: "الكل",
+    country: "الدولة", device: "الجهاز", lang: "لغة الزائر", channel: "نوع المصدر", source: "المصدر", all: "الكل",
     refresh: "تحديث", clear: "مسح الفلاتر",
     kpis: { visitors: "زوار", pageViews: "مشاهدات صفحات", avgSeconds: "متوسط مدة الزيارة (ث)", avgScroll: "متوسط عمق التمرير %", engagedRate: "زوار متفاعلون %", leads: "تركوا بياناتهم", conversionRate: "نسبة التحويل %", surveyLeads: "أكملوا الاستبيان" } as Partial<Record<keyof Summary, string>>,
     vsPrevious: "مقارنة بالفترة السابقة",

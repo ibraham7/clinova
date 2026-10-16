@@ -169,6 +169,8 @@ export default async function handler(request) {
             { text: body.messages[0].content },
         ] };
         const language = { ar: "Arabic", en: "English", tr: "Turkish", fr: "French" }[body.lang] ?? "Arabic";
+        // Earlier answers may be in another language; a reminder on the latest question keeps the switch.
+        if (language !== "Arabic") contents.at(-1).parts.push({ text: `(Answer in ${language}.)` });
         const system = systemPrompt(new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10), language);
         for (let turn = 0; ; turn++) {
             const remaining = budgetMs - (Date.now() - started);
