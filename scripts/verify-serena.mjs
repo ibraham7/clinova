@@ -76,6 +76,7 @@ assert.equal(first.body.tools[0].functionDeclarations[0].name, "get_report");
 assert.match(first.body.systemInstruction.parts[0].text, /Serena/);
 assert.match(first.body.systemInstruction.parts[0].text, /Answer the exact question first[\s\S]*trackingSince/, "answers the question, aware of when tracking started");
 assert.match(first.body.systemInstruction.parts[0].text, /call get_report twice in the same turn, for equal windows just before and just after/, "events are judged before against after");
+assert.match(first.body.systemInstruction.parts[0].text, /copy rates from the report's ready fields[\s\S]*split the change by source/, "ready rates and changes split by source");
 assert.match(first.body.contents[0].parts[0].text, /<current_view[\s\S]*"visitors":0/);
 assert.equal(first.body.contents[0].parts[1].text, "ماذا تغيّر في تركيا؟");
 assert.equal(second.body.contents.length, 3);
