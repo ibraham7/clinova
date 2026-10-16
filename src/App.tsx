@@ -15,14 +15,14 @@ import ServicesSection from "./components/ServicesSection/ServicesSection";
 import SpecialtiesSection from "./components/SpecialtiesSection/SpecialtiesSection";
 import CaseStudiesSection from "./components/CaseStudiesSection/CaseStudiesSection";
 import PartnersSection from "./components/PartnersSection/PartnersSection";
-import TestimonialsSection from "./components/TestimonialsSection/TestimonialsSection";
+import ClientVideosSection from "./components/ClientVideosSection/ClientVideosSection";
+import { siteContent } from "./content/siteContent";
 import ReviewsSection from "./components/ReviewsSection/ReviewsSection";
 import { displayedReviews } from "./config/clientReviews";
 import FAQSection from "./components/FAQSection/FAQSection";
 import CTASection from "./components/CTASection/CTASection";
 import Footer from "./components/layout/Footer";
 import SurveyPopup from "./components/layout/SurveyPopup";
-import { showClinicVideos } from "./config/sections";
 
 function App() {
   return (
@@ -50,7 +50,7 @@ function App() {
       <SpecialtiesSection />
       <CaseStudiesSection />
       <PartnersSection />
-      {showClinicVideos && <TestimonialsSection />}
+      {siteContent.videos.length > 0 && <ClientVideosSection />}
       {displayedReviews.length > 0 && <ReviewsSection />}
       <FAQSection />
       <CTASection />

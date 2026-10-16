@@ -36,6 +36,12 @@ for (const page of pages) {
     fs.writeFileSync(file, document);
 }
 
+// /admin is a private app: an empty shell that search engines must not index.
+fs.mkdirSync(path.join(dist, "admin"), { recursive: true });
+fs.writeFileSync(path.join(dist, "admin/index.html"), template
+    .replace(/<title>[\s\S]*?<\/title>/, '<title>Clinova Admin</title>\n    <meta name="robots" content="noindex, nofollow" />')
+    .replace(/<script type="text\/javascript">[\s\S]*?clarity[\s\S]*?<\/script>/, ""));
+
 // sitemap.xml with hreflang alternates for every language version.
 const urlFor = (route, lang) => route.kind === "home" ? `${siteUrl}/${lang}` : route.kind === "blog" ? `${siteUrl}/${lang}/blog` : `${siteUrl}/${lang}/blog/${route.slug}`;
 const entries = pages.filter((page) => page.route).map((page) => {
@@ -54,8 +60,9 @@ fs.writeFileSync(path.join(dist, "robots.txt"), [
     "User-agent: *",
     "Allow: /",
     "Disallow: /.netlify/",
+    "Disallow: /admin",
     "",
-    ...aiAgents.flatMap((agent) => [`User-agent: ${agent}`, "Allow: /", "Disallow: /.netlify/", ""]),
+    ...aiAgents.flatMap((agent) => [`User-agent: ${agent}`, "Allow: /", "Disallow: /.netlify/", "Disallow: /admin", ""]),
     `Sitemap: ${siteUrl}/sitemap.xml`,
     "",
 ].join("\n"));

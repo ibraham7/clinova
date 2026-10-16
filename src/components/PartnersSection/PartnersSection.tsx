@@ -1,6 +1,7 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import CountUp from "../motion/CountUp";
 import { Box, Container, Stack, Typography } from "@mui/material";
+import { siteContent, type ClientLogo } from "../../content/siteContent";
 
 const partnersTop = [
     "العيادة الأولى",
@@ -19,6 +20,11 @@ const partnersBottom = [
     "العيادة الحادية عشرة",
     "العيادة الثانية عشرة",
 ];
+
+// Logos added in /admin replace the placeholders, split across the two moving rows.
+const logos = siteContent.logos;
+const logosTop = logos.filter((_, index) => index % 2 === 0);
+const logosBottom = logos.length > 1 ? logos.filter((_, index) => index % 2 === 1) : logos;
 
 function PartnersSection() {
     const { direction, t } = useSiteTranslation();
@@ -291,7 +297,7 @@ function PartnersSection() {
                 ================================== */}
 
                 <MarqueeRow
-                    items={partnersTop}
+                    items={logos.length ? logosTop : partnersTop}
                     direction="left"
                     duration={30}
                 />
@@ -301,7 +307,7 @@ function PartnersSection() {
                 ================================== */}
 
                 <MarqueeRow
-                    items={partnersBottom}
+                    items={logos.length ? logosBottom : partnersBottom}
                     direction="right"
                     duration={34}
                 />
@@ -319,7 +325,7 @@ function MarqueeRow({
     direction,
     duration,
 }: {
-    items: string[];
+    items: (string | ClientLogo)[];
     direction: "left" | "right";
     duration: number;
 }) {
@@ -327,7 +333,9 @@ function MarqueeRow({
      * نكرر العناصر مرتين حتى تكون الحركة
      * مستمرة بدون فراغ أو قفزة.
      */
-    const duplicatedItems = [...items, ...items];
+    // Short rows are repeated so the strip always fills the screen.
+    const filled = items.length ? Array.from({ length: Math.max(1, Math.ceil(6 / items.length)) }, () => items).flat() : items;
+    const duplicatedItems = [...filled, ...filled];
 
     return (
         <Box
@@ -382,7 +390,8 @@ function MarqueeRow({
             >
                 {duplicatedItems.map((item, index) => (
                     <PartnerPlaceholder
-                        key={`${item}-${index}`}
+                        key={`${typeof item === "string" ? item : item.id}-${index}`}
+                        logo={typeof item === "string" ? undefined : item}
                     />
                 ))}
             </Box>
@@ -394,7 +403,7 @@ function MarqueeRow({
    PLACEHOLDER
 ========================================= */
 
-function PartnerPlaceholder() {
+function PartnerPlaceholder({ logo }: { logo?: ClientLogo }) {
     return (
         <Box
             sx={{
@@ -437,8 +446,22 @@ function PartnerPlaceholder() {
                 },
             }}
         >
-            {/* Placeholder فقط */}
-            <Box
+            {logo ? <Box
+                component="img"
+                src={logo.src}
+                alt={logo.name}
+                title={logo.name}
+                loading="lazy"
+                sx={{
+                    maxWidth: "70%",
+                    maxHeight: "60%",
+                    objectFit: "contain",
+                    filter: "grayscale(1) brightness(1.4)",
+                    opacity: 0.75,
+                    transition: "filter 500ms ease, opacity 500ms ease",
+                    ".MuiBox-root:hover > &": { filter: "none", opacity: 1 },
+                }}
+            /> : <Box
                 sx={{
                     width: 55,
                     height: 28,
@@ -450,7 +473,7 @@ function PartnerPlaceholder() {
 
                     opacity: 0.5,
                 }}
-            />
+            />}
         </Box>
     );
 }

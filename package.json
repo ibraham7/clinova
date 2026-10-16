@@ -9,7 +9,8 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "check:i18n": "node scripts/verify-i18n.cjs",
-    "indexnow": "node scripts/indexnow.mjs"
+    "indexnow": "node scripts/indexnow.mjs",
+    "check:admin": "node scripts/verify-admin.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

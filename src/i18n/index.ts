@@ -4,6 +4,7 @@ import ar from "./locales/ar.json";
 import en from "./locales/en.json";
 import tr from "./locales/tr.json";
 import fr from "./locales/fr.json";
+import siteContent from "../content/site-content.json";
 
 export const languages = [
     { code: "ar", name: "العربية" },
@@ -67,7 +68,13 @@ export function syncDocumentLanguage(language: string) {
 
 i18n.on("languageChanged", syncDocumentLanguage);
 void i18n.use(initReactI18next).init({
-    resources: { ar: { translation: ar }, en: { translation: en }, tr: { translation: tr }, fr: { translation: fr } },
+    // Texts edited in /admin override the built-in translations.
+    resources: {
+        ar: { translation: { ...ar, ...siteContent.texts.ar } },
+        en: { translation: { ...en, ...siteContent.texts.en } },
+        tr: { translation: { ...tr, ...siteContent.texts.tr } },
+        fr: { translation: { ...fr, ...siteContent.texts.fr } },
+    },
     lng: initialLanguage(),
     fallbackLng: "ar",
     supportedLngs: languages.map((language) => language.code),

@@ -35,7 +35,10 @@ function remember(state: "dismissed" | "done") {
 // Opens after one minute of visible browsing. `?survey` in the URL opens it right away for review.
 function useSurveyTimer(onDue: () => void) {
     useEffect(() => {
-        const forced = new URLSearchParams(window.location.search).has("survey");
+        const params = new URLSearchParams(window.location.search);
+        // Never interrupt the admin while editing texts.
+        if (params.has("edit")) return;
+        const forced = params.has("survey");
         if (!forced && !shouldOffer()) return;
         let visibleMs = forced ? openAfterMs - 1500 : 0;
         const timer = window.setInterval(() => {
