@@ -74,6 +74,7 @@ assert.deepEqual(first.body.generationConfig.thinkingConfig, { thinkingLevel: "l
 assert.deepEqual(second.body.generationConfig.thinkingConfig, { thinkingLevel: "low" }, "the refusal is remembered");
 assert.equal(first.body.tools[0].functionDeclarations[0].name, "get_report");
 assert.match(first.body.systemInstruction.parts[0].text, /Serena/);
+assert.match(first.body.systemInstruction.parts[0].text, /Answer the exact question first[\s\S]*trackingSince/, "answers the question, aware of when tracking started");
 assert.match(first.body.contents[0].parts[0].text, /<current_view[\s\S]*"visitors":0/);
 assert.equal(first.body.contents[0].parts[1].text, "ماذا تغيّر في تركيا؟");
 assert.equal(second.body.contents.length, 3);

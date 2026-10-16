@@ -51,6 +51,7 @@ const T = {
     changes: "سجل التعديلات على الموقع", noChanges: "لا توجد تعديلات مسجّلة بعد.",
     recent: "آخر النشاطات", empty: "لا توجد بيانات بعد في هذه الفترة.",
     truncated: "البيانات كثيرة جدًا، عُرض أول 150 ألف حدث فقط. اختر فترة أقصر.",
+    trackingSince: "تتبّع الزوار بدأ في {date}، فالأيام قبله بلا بيانات (وليس بلا زوار).",
     privacy: "عن الأعمار والجنس: الموقع لا يعرف أعمار الزوار، ولا توجد طريقة دقيقة لمعرفتها دون حساب Google Analytics مع موافقة الزائر على ملفات الارتباط. الدولة والمدينة تقريبية من الشبكة.",
 };
 
@@ -174,6 +175,7 @@ export default function ReportsPage() {
 
         {error && <Alert severity={report ? "error" : "warning"}>{error}</Alert>}
         {report?.truncated && <Alert severity="info">{T.truncated}</Alert>}
+        {report?.trackingSince && report.trackingSince > report.range.from && <Alert severity="info">{T.trackingSince.replace("{date}", dateTime(report.trackingSince))}</Alert>}
         {!report && loading && <Box sx={{ display: "grid", placeItems: "center", py: 6 }}><CircularProgress /></Box>}
 
         {report && <Box sx={{ display: "grid", gap: 3, opacity: loading ? 0.55 : 1, transition: "opacity 300ms ease" }}>

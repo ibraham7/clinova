@@ -43,6 +43,15 @@ export async function selectRange(table, columns, from, to, max = 200_000) {
     return rows;
 }
 
+/** Time of the oldest stored row of a table (when collection started), or null. */
+export async function firstRowTime(table) {
+    if (!analyticsReady()) return null;
+    const response = await supabase(`${tableName(table)}?select=ts&order=ts.asc&limit=1`);
+    if (!response.ok) return null;
+    const [row] = await response.json().catch(() => []);
+    return row?.ts ?? null;
+}
+
 // ---- Visitor -------------------------------------------------------------------------------
 
 export function clientIp(request, context) {

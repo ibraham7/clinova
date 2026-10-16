@@ -10,6 +10,8 @@ type Share = { visitors: number; share: number };
 export type Report = {
     range: { from: string; to: string; fromDay: string; toDay: string };
     truncated: boolean;
+    /** When visitor tracking started (oldest stored event), or null before the first visit. */
+    trackingSince?: string | null;
     summary: Summary;
     previous: Summary;
     daily: { date: string; visitors: number; pageViews: number; leads: number }[];
