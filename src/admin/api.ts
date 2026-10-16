@@ -62,12 +62,12 @@ export const errorMessages: Record<string, string> = {
     analytics_not_configured: "التقارير غير مفعّلة بعد: أضف SUPABASE_URL وSUPABASE_SERVICE_ROLE_KEY في إعدادات Netlify (راجع docs/reports-and-serena.md).",
     analytics_failed: "تعذرت قراءة البيانات من Supabase. تحقق من المفاتيح ومن تشغيل supabase/schema.sql.",
     invalid_range: "نطاق التاريخ غير صالح (الحد الأقصى 400 يوم).",
-    serena_not_configured: "سيرينا غير مفعّلة بعد: أضف ANTHROPIC_API_KEY في إعدادات Netlify.",
+    serena_not_configured: "سيرينا غير مفعّلة بعد: أضف GEMINI_API_KEY (مفتاح Google) في إعدادات Netlify.",
     refusal: "اعتذرت سيرينا عن الإجابة على هذا الطلب. جرّب صياغة أخرى.",
     too_long: "الإجابة أطول من المسموح، اطلب ملخصًا أقصر.",
     too_many_steps: "احتاجت سيرينا خطوات كثيرة. جرّب سؤالًا أكثر تحديدًا.",
-    rate_limited: "ضغط كبير على سيرينا الآن. حاول بعد دقيقة.",
-    bad_key: "مفتاح ANTHROPIC_API_KEY غير صحيح.",
+    rate_limited: "تم تجاوز حد الاستخدام المجاني من Google مؤقتًا. حاول بعد دقيقة.",
+    bad_key: "مفتاح GEMINI_API_KEY غير صحيح أو الموديل غير متاح.",
     failed: "تعذر الاتصال بسيرينا. أعد المحاولة.",
 };
 
