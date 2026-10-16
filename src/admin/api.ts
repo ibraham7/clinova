@@ -1,4 +1,5 @@
 import type { SiteContent } from "../content/siteContent";
+import type { Report, ReportFilters } from "./reportTypes";
 
 export type VideoUploadConfig = { cloudName: string; uploadPreset: string };
 export type Session = { ok: true; storage: boolean; videoUpload: VideoUploadConfig | null };
@@ -20,7 +21,30 @@ export const api = {
     load: () => call<{ content: SiteContent; sha: string }>("admin-content"),
     save: (content: SiteContent, sha: string) => call<{ sha: string }>("admin-content", { method: "PUT", body: JSON.stringify({ content, sha }) }),
     uploadLogo: (name: string, data: string) => call<{ src: string }>("admin-upload", { method: "POST", body: JSON.stringify({ name, data }) }),
+    reports: (filters: ReportFilters) => call<{ report: Report }>(`admin-reports?${new URLSearchParams(Object.entries(filters).filter(([, value]) => value) as [string, string][])}`),
 };
+
+export type SerenaChunk = { type: "text"; text: string } | { type: "status"; input: ReportFilters } | { type: "error"; error: string } | { type: "done" };
+
+/** Streams Serena's answer; each line of the response is one JSON chunk. */
+export async function askSerena(messages: { role: "user" | "assistant"; content: string }[], view: ReportFilters, onChunk: (chunk: SerenaChunk) => void, signal?: AbortSignal) {
+    const response = await fetch("/api/serena", { method: "POST", credentials: "same-origin", signal, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages, view }) });
+    if (!response.ok || !response.body) {
+        const data = (await response.json().catch(() => ({}))) as { error?: string };
+        onChunk({ type: "error", error: data.error ?? "failed" });
+        return;
+    }
+    const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+    let buffer = "";
+    for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += value;
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+        for (const line of lines) if (line.trim()) onChunk(JSON.parse(line) as SerenaChunk);
+    }
+}
 
 // Admin messages are Arabic only; the admin panel is not translated.
 export const errorMessages: Record<string, string> = {
@@ -35,6 +59,16 @@ export const errorMessages: Record<string, string> = {
     invalid_logos: "تحقق من بيانات الشعار: الاسم والصورة مطلوبان.",
     invalid_texts: "أحد النصوص غير صالح أو طويل جدًا.",
     storage_failed: "تعذر الحفظ على GitHub. تحقق من GITHUB_TOKEN ثم أعد المحاولة.",
+    analytics_not_configured: "التقارير غير مفعّلة بعد: أضف SUPABASE_URL وSUPABASE_SERVICE_ROLE_KEY في إعدادات Netlify (راجع docs/reports-and-serena.md).",
+    analytics_failed: "تعذرت قراءة البيانات من Supabase. تحقق من المفاتيح ومن تشغيل supabase/schema.sql.",
+    invalid_range: "نطاق التاريخ غير صالح (الحد الأقصى 400 يوم).",
+    serena_not_configured: "سيرينا غير مفعّلة بعد: أضف ANTHROPIC_API_KEY في إعدادات Netlify.",
+    refusal: "اعتذرت سيرينا عن الإجابة على هذا الطلب. جرّب صياغة أخرى.",
+    too_long: "الإجابة أطول من المسموح، اطلب ملخصًا أقصر.",
+    too_many_steps: "احتاجت سيرينا خطوات كثيرة. جرّب سؤالًا أكثر تحديدًا.",
+    rate_limited: "ضغط كبير على سيرينا الآن. حاول بعد دقيقة.",
+    bad_key: "مفتاح ANTHROPIC_API_KEY غير صحيح.",
+    failed: "تعذر الاتصال بسيرينا. أعد المحاولة.",
 };
 
 export const messageFor = (error?: string) => (error && errorMessages[error]) || "حدث خطأ غير متوقع. أعد المحاولة.";

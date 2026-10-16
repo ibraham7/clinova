@@ -7,24 +7,26 @@ import VideoLibraryRoundedIcon from "@mui/icons-material/VideoLibraryRounded";
 import WorkspacesRoundedIcon from "@mui/icons-material/WorkspacesRounded";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import InsightsRoundedIcon from "@mui/icons-material/InsightsRounded";
 import clinovaLogo from "../../public/logo/logo.png";
 import { api, messageFor, type Session } from "./api";
 import { useAdminContent } from "./useAdminContent";
 import TextsPage from "./TextsPage";
 import VideosPage from "./VideosPage";
 import LogosPage from "./LogosPage";
+import ReportsPage from "./ReportsPage";
 
-type Page = "home" | "texts" | "videos" | "logos";
+type Page = "home" | "reports" | "texts" | "videos" | "logos";
 const T = {
     title: "لوحة إدارة Clinova",
     password: "كلمة السر",
     signIn: "تسجيل الدخول",
     signingIn: "جارٍ الدخول…",
-    nav: { home: "الرئيسية", texts: "تعديل نصوص الموقع", videos: "فيديوهات العملاء", logos: "شعارات العملاء" } as Record<Page, string>,
+    nav: { home: "الرئيسية", reports: "التقارير وسيرينا", texts: "تعديل نصوص الموقع", videos: "فيديوهات العملاء", logos: "شعارات العملاء" } as Record<Page, string>,
     view: "عرض الموقع",
     logout: "تسجيل الخروج",
     welcome: "أهلًا بك في لوحة الإدارة",
-    intro: "من هنا تعدّل نصوص الموقع وتضيف فيديوهات العملاء وشعاراتهم. كل حفظ يُنشر على الموقع تلقائيًا خلال دقيقة أو دقيقتين، ويبقى محفوظًا في سجل GitHub ويمكن استرجاعه.",
+    intro: "من هنا تتابع تقارير الزوار وتسأل سيرينا، وتعدّل نصوص الموقع وتضيف فيديوهات العملاء وشعاراتهم. كل حفظ يُنشر على الموقع تلقائيًا خلال دقيقة أو دقيقتين، ويبقى محفوظًا في سجل GitHub ويمكن استرجاعه.",
     stats: { texts: "نصوص معدّلة", videos: "فيديوهات", logos: "شعارات" },
     noStorage: "الحفظ غير مفعّل بعد. أضف GITHUB_TOKEN في إعدادات Netlify (راجع docs/admin-panel.md).",
 };
@@ -89,7 +91,7 @@ export default function AdminApp() {
 
 function Dashboard({ session, page, setPage, onLogout }: { session: Session; page: Page; setPage: (page: Page) => void; onLogout: () => void }) {
     const admin = useAdminContent();
-    const icons: Record<Page, ReactNode> = { home: <DashboardRoundedIcon />, texts: <EditNoteRoundedIcon />, videos: <VideoLibraryRoundedIcon />, logos: <WorkspacesRoundedIcon /> };
+    const icons: Record<Page, ReactNode> = { home: <DashboardRoundedIcon />, reports: <InsightsRoundedIcon />, texts: <EditNoteRoundedIcon />, videos: <VideoLibraryRoundedIcon />, logos: <WorkspacesRoundedIcon /> };
     const edited = admin.content ? Object.values(admin.content.texts).reduce((sum, texts) => sum + Object.keys(texts).length, 0) : 0;
     return <Box dir="rtl" sx={{ minHeight: "100vh", display: "flex", flexDirection: { xs: "column", md: "row" }, backgroundColor: "#0B111B", color: "#F5F7FA" }}>
         <Box component="nav" sx={{
@@ -117,6 +119,7 @@ function Dashboard({ session, page, setPage, onLogout }: { session: Session; pag
                         </ButtonBase>)}
                 </Stack>
             </Box>}
+            {page === "reports" && <ReportsPage />}
             {page === "texts" && <TextsPage />}
             {page === "videos" && <VideosPage admin={admin} upload={session.videoUpload} />}
             {page === "logos" && <LogosPage admin={admin} />}

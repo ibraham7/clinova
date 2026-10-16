@@ -1,5 +1,6 @@
 import settings from '../../src/config/profile-leads.json' with { type: 'json' };
 import survey from '../../src/config/survey.json' with { type: 'json' };
+import { geo, tryInsert, visitorId } from '../lib/analytics.mjs';
 
 const reply = (status, data) => Response.json(data, { status, headers: { 'Cache-Control': 'no-store' } });
 // Trial survey answers must be one of the listed options; the open answer is optional free text.
@@ -23,7 +24,7 @@ function validLead(p) {
         : p.contact.type === 'phone' && /^\+[1-9]\d{6,14}$/.test(p.contact.value);
 }
 
-export default async function handler(request) {
+export default async function handler(request, context) {
     if (request.method !== 'POST') return reply(405, { ok: false, error: 'method_not_allowed' });
     const origin = request.headers.get('origin');
     if (origin && origin !== new URL(request.url).origin) return reply(403, { ok: false, error: 'invalid_origin' });
@@ -35,6 +36,13 @@ export default async function handler(request) {
         payload = JSON.parse(body);
     } catch { return reply(400, { ok: false, error: 'invalid_request' }); }
     if (!validLead(payload)) return reply(400, { ok: false, error: 'invalid_contact' });
+    // A copy for the admin reports page; the Google Sheet stays the source of truth for the sales team.
+    const { country, city } = geo(context);
+    const stored = tryInsert('leads', [{
+        request_id: payload.requestId, purpose: payload.purpose, contact_type: payload.contact.type, contact: payload.contact.value,
+        phone_country: payload.contact.country ?? null, lang: payload.language, form_source: payload.purpose === 'trial_survey' ? 'survey' : payload.source,
+        consent: payload.marketingConsent, answers: payload.purpose === 'trial_survey' ? payload.answers : null, visitor: visitorId(request, context), country, city,
+    }]);
     // Same requestId across attempts: the Sheets receiver deduplicates under a lock.
     // Follow Google's one-time response redirect on the server, outside browser CORS.
     for (let attempt = 0; attempt < 2; attempt++) {
@@ -47,11 +55,12 @@ export default async function handler(request) {
             });
             if (response.ok) {
                 const result = await response.json();
-                if (result?.ok === true) return reply(200, { ok: true });
+                if (result?.ok === true) { await stored; return reply(200, { ok: true }); }
                 if (['invalid_request','invalid_contact','not_configured','sheet_not_ready'].includes(result?.error)) break;
             } else if (![404,408,429].includes(response.status) && response.status < 500) break;
         } catch { /* Retry transient transport/redirect failures without logging contact data. */ }
         finally { clearTimeout(timeout); }
     }
+    await stored;
     return reply(503, { ok: false, error: 'save_unconfirmed' });
 }

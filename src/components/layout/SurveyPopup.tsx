@@ -9,6 +9,7 @@ import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { parseContact, submitSurveyLead } from "../../config/profileLeads";
 import survey from "../../config/survey.json";
+import { track } from "../../analytics/track";
 
 const storageKey = "clinova.survey";
 const openAfterMs = 60_000;
@@ -64,13 +65,15 @@ export default function SurveyPopup() {
     const requestId = useRef<string | null>(null);
     const advance = useRef<number>(0);
     const titleId = useId();
-    const show = useCallback(() => setOpen(true), []);
+    const show = useCallback(() => { setOpen(true); track({ type: "survey", target: "shown" }); }, []);
     useSurveyTimer(show);
     useEffect(() => () => window.clearTimeout(advance.current), []);
+    // Survey funnel for the reports page: the furthest step each visitor reached.
+    useEffect(() => { if (open && step > 0 && step < doneStep) track({ type: "survey", target: "step", value: step }); }, [open, step]);
 
     const close = () => {
         if (busy) return;
-        if (step !== doneStep) remember("dismissed");
+        if (step !== doneStep) { remember("dismissed"); track({ type: "survey", target: "dismissed", value: step }); }
         setOpen(false);
     };
     const choose = (id: string, option: string) => {
@@ -92,6 +95,7 @@ export default function SurveyPopup() {
                 answers: { ...answers, wish: wish || undefined } as Record<string, string>,
             });
             remember("done");
+            track({ type: "survey", target: "completed" });
             setStep(doneStep);
         } catch { setError("save"); }
         finally { setBusy(false); }

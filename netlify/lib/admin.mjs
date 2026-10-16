@@ -26,14 +26,15 @@ export function passwordMatches(candidate) {
     return crypto.timingSafeEqual(a, b);
 }
 
+// Path=/ so the Serena endpoint (/api/serena, an edge function) receives the session too.
 export function sessionCookie() {
     const key = secret();
     const expires = Date.now() + sessionHours * 3600 * 1000;
     const token = `${expires}.${sign(`clinova-admin:${expires}`, key)}`;
-    return `${cookieName}=${token}; Path=/.netlify/functions/; HttpOnly; Secure; SameSite=Strict; Max-Age=${sessionHours * 3600}`;
+    return `${cookieName}=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${sessionHours * 3600}`;
 }
 
-export const clearedCookie = `${cookieName}=; Path=/.netlify/functions/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`;
+export const clearedCookie = `${cookieName}=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`;
 
 export function isAdmin(request) {
     const key = secret();

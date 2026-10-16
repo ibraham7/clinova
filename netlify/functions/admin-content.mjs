@@ -1,3 +1,4 @@
+import { describeChanges, tryInsert } from "../lib/analytics.mjs";
 import { contentPath, isAdmin, readContent, readJson, reply, sameOrigin, storageReady, validateContent, writeFile } from "../lib/admin.mjs";
 
 // GET returns the latest saved content; PUT { content, sha } validates and commits it to GitHub.
@@ -13,10 +14,13 @@ export default async function handler(request) {
         const error = validateContent(body?.content);
         if (error) return reply(400, { ok: false, error });
         if (typeof body.sha !== "string" || !/^[a-f0-9]{40}$/.test(body.sha)) return reply(400, { ok: false, error: "missing_sha" });
+        const before = await readContent().catch(() => null);
         const file = Buffer.from(`${JSON.stringify(body.content, null, 2)}\n`, "utf8");
         const result = await writeFile(contentPath, file, "Update site content from the admin panel", body.sha);
         // Someone else saved first: the admin must reload before saving again.
         if (result.conflict) return reply(409, { ok: false, error: "conflict" });
+        // The reports page and Serena compare visits before and after each change.
+        if (before) await tryInsert("admin_log", describeChanges(before.content, body.content));
         return reply(200, { ok: true, sha: result.sha });
     } catch {
         return reply(502, { ok: false, error: "storage_failed" });

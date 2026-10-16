@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { tryInsert } from "../lib/analytics.mjs";
 import { imageType, isAdmin, readJson, reply, sameOrigin, storageReady, writeFile } from "../lib/admin.mjs";
 
 const maxBytes = 1_000_000;
@@ -21,6 +22,7 @@ export default async function handler(request) {
     try {
         const result = await writeFile(`public/uploads/logos/${file}`, buffer, `Add client logo ${file} from the admin panel`);
         if (result.conflict) return reply(409, { ok: false, error: "conflict" });
+        await tryInsert("admin_log", [{ action: "logo_upload", summary: `رفع شعار: ${body.name.slice(0, 80)}`, details: { file } }]);
         return reply(200, { ok: true, src: `/uploads/logos/${file}` });
     } catch {
         return reply(502, { ok: false, error: "storage_failed" });
