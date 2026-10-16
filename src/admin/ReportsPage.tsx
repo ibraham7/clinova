@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { Alert, Box, Button, ButtonBase, CircularProgress, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, ButtonBase, CircularProgress, FormControlLabel, MenuItem, Stack, Switch, TextField, Typography } from "@mui/material";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
@@ -51,6 +51,8 @@ const T = {
     changes: "سجل التعديلات على الموقع", noChanges: "لا توجد تعديلات مسجّلة بعد.",
     recent: "آخر النشاطات", empty: "لا توجد بيانات بعد في هذه الفترة.",
     truncated: "البيانات كثيرة جدًا، عُرض أول 150 ألف حدث فقط. اختر فترة أقصر.",
+    demo: "بيانات تجريبية",
+    demoNote: "أنت تشاهد بيانات تجريبية مصنوعة لاختبار التقارير وسيرينا، وليست زوارًا حقيقيين. فيها قصة مخفية: مقالة طب الأسنان قبل 30 يومًا، حملة إنستغرام قبل 20 إلى 13 يومًا، وتعديل نصوص قبل 14 يومًا. اسأل سيرينا ولاحظ هل تكتشفها. أطفئ المفتاح للعودة إلى البيانات الحقيقية.",
     trackingSince: "تتبّع الزوار بدأ في {date}، فالأيام قبله بلا بيانات (وليس بلا زوار).",
     privacy: "عن الأعمار والجنس: الموقع لا يعرف أعمار الزوار، ولا توجد طريقة دقيقة لمعرفتها دون حساب Google Analytics مع موافقة الزائر على ملفات الارتباط. الدولة والمدينة تقريبية من الشبكة.",
 };
@@ -170,10 +172,12 @@ export default function ReportsPage() {
                 {filters[key] && !options[key].some(([value]) => value === filters[key]) && <MenuItem value={filters[key]}>{filters[key]}</MenuItem>}
             </TextField>)}
             <Button size="small" onClick={() => setReload((count) => count + 1)} startIcon={loading ? <CircularProgress size={14} /> : <RefreshRoundedIcon />}>{T.refresh}</Button>
-            {(["country", "device", "lang", "channel", "source", "path"] as const).some((key) => filters[key]) && <Button size="small" onClick={() => setFilters({ from: filters.from, to: filters.to })}>{T.clear}</Button>}
+            {(["country", "device", "lang", "channel", "source", "path"] as const).some((key) => filters[key]) && <Button size="small" onClick={() => setFilters({ from: filters.from, to: filters.to, demo: filters.demo })}>{T.clear}</Button>}
+            <FormControlLabel control={<Switch size="small" checked={filters.demo === "1"} onChange={(event) => set("demo", event.target.checked ? "1" : "")} />} label={T.demo} sx={{ ms: "auto", "& .MuiFormControlLabel-label": { fontSize: "0.85rem" } }} />
         </Stack>
 
         {error && <Alert severity={report ? "error" : "warning"}>{error}</Alert>}
+        {report?.demo && <Alert severity="warning">{T.demoNote}</Alert>}
         {report?.truncated && <Alert severity="info">{T.truncated}</Alert>}
         {report?.trackingSince && report.trackingSince > report.range.from && <Alert severity="info">{T.trackingSince.replace("{date}", dateTime(report.trackingSince))}</Alert>}
         {!report && loading && <Box sx={{ display: "grid", placeItems: "center", py: 6 }}><CircularProgress /></Box>}
@@ -183,7 +187,7 @@ export default function ReportsPage() {
                 {(Object.keys(T.kpis) as (keyof Summary)[]).map((key) => <Kpi key={key} label={T.kpis[key]!} value={report.summary[key]} previous={report.previous[key]} />)}
             </Box>
 
-            <SerenaPanel view={filters} ready={ready} />
+            <SerenaPanel key={filters.demo ?? "live"} view={filters} ready={ready} />
 
             <Card title={T.daily} note={T.dailyNote} action={<Stack direction="row" sx={{ gap: 0.5 }}>
                 {(Object.keys(T.metrics) as (keyof typeof T.metrics)[]).map((key) => <ButtonBase key={key} onClick={() => setMetric(key)} sx={{ px: 1.25, py: 0.5, borderRadius: "999px", fontSize: "0.75rem", backgroundColor: metric === key ? "rgba(142,168,232,0.2)" : "transparent", fontWeight: metric === key ? 700 : 400 }}>{T.metrics[key]}</ButtonBase>)}

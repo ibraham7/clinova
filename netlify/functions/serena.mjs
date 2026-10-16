@@ -125,8 +125,8 @@ function validInput(input) {
     return filterKeys.every((key) => input[key] === undefined || (typeof input[key] === "string" && input[key].length <= 80));
 }
 
-async function report(input, origin) {
-    const params = new URLSearchParams({ from: input.from, to: input.to, compact: "1" });
+async function report(input, origin, demo) {
+    const params = new URLSearchParams({ from: input.from, to: input.to, compact: "1", ...(demo ? { demo: "1" } : {}) });
     for (const key of filterKeys) if (input[key]) params.set(key, input[key]);
     return (await loadReport(params, origin)) ?? { error: "invalid_range" };
 }
@@ -149,10 +149,12 @@ export default async function handler(request) {
     if (!isAdmin(request)) return failure(401, "signed_out");
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) return failure(503, "serena_not_configured");
-    if (!analyticsReady()) return failure(503, "analytics_not_configured");
     let body;
     try { body = await request.json(); } catch { return failure(400, "invalid_request"); }
     if (!validMessages(body?.messages)) return failure(400, "invalid_request");
+    // Demo mode (the reports page's demo switch): Serena reads made-up data and needs no database.
+    const demo = body.demo === true;
+    if (!analyticsReady() && !demo) return failure(503, "analytics_not_configured");
 
     const started = Date.now();
     const origin = new URL(request.url).origin;
@@ -164,7 +166,7 @@ export default async function handler(request) {
         // The model choice and the report on screen are fetched together.
         const view = validInput(body.view) ? body.view : null;
         step = "model list + report";
-        const [models, viewReport] = await Promise.all([chooseModels(apiKey), view ? report(view, origin) : null]);
+        const [models, viewReport] = await Promise.all([chooseModels(apiKey), view ? report(view, origin, demo) : null]);
         let model = null;
         const contents = body.messages.map((message) => ({ role: message.role === "user" ? "user" : "model", parts: [{ text: message.content }] }));
         // The report the admin is looking at goes first, so most questions need no extra call.
@@ -238,7 +240,7 @@ export default async function handler(request) {
                 }
                 out.push({ type: "status", input: args });
                 step = "report";
-                responses.push({ functionResponse: { name, response: { result: await report(args, origin) } } });
+                responses.push({ functionResponse: { name, response: { result: await report(args, origin, demo) } } });
             }
             contents.push({ role: "user", parts: responses });
         }
