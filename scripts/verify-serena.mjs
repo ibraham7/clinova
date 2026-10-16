@@ -114,11 +114,12 @@ assert.match(bad[0].detail, /API key not valid/);
 const turkish = [];
 const plain = globalThis.fetch;
 globalThis.fetch = async (input, init) => {
-    if (String(input).includes(":generateContent")) turkish.push(JSON.parse(init.body).systemInstruction.parts[0].text);
+    if (String(input).includes(":generateContent")) turkish.push(JSON.parse(init.body));
     return plain(input, init);
 };
 await ask({ messages: [{ role: "user", content: "merhaba" }], lang: "tr" });
-assert.match(turkish[0], /Always answer in Turkish/);
+assert.match(turkish[0].systemInstruction.parts[0].text, /Always answer in Turkish/);
+assert.equal(turkish[0].contents.at(-1).parts.at(-1).text, "(Answer in Turkish.)", "the latest question carries a reminder");
 globalThis.fetch = plain;
 
 delete process.env.GEMINI_API_KEY;

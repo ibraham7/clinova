@@ -148,6 +148,7 @@ export const adminTranslations: Record<string, [en: string, tr: string, fr: stri
     "الدولة": ["Country", "Ülke", "Pays"],
     "الجهاز": ["Device", "Cihaz", "Appareil"],
     "اللغة": ["Language", "Dil", "Langue"],
+    "لغة الزائر": ["Visitor language", "Ziyaretçi dili", "Langue du visiteur"],
     "نوع المصدر": ["Source type", "Kaynak türü", "Type de source"],
     "المصدر": ["Source", "Kaynak", "Source"],
     "الكل": ["All", "Tümü", "Tous"],
