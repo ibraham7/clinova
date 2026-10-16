@@ -24,7 +24,7 @@ export const api = {
     reports: (filters: ReportFilters) => call<{ report: Report }>(`admin-reports?${new URLSearchParams(Object.entries(filters).filter(([, value]) => value) as [string, string][])}`),
 };
 
-export type SerenaChunk = { type: "text"; text: string } | { type: "status"; input: ReportFilters } | { type: "error"; error: string } | { type: "done" };
+export type SerenaChunk = { type: "text"; text: string } | { type: "status"; input: ReportFilters } | { type: "error"; error: string; detail?: string } | { type: "done" };
 
 /** Streams Serena's answer; each line of the response is one JSON chunk. */
 export async function askSerena(messages: { role: "user" | "assistant"; content: string }[], view: ReportFilters, onChunk: (chunk: SerenaChunk) => void, signal?: AbortSignal) {

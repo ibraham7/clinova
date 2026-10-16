@@ -222,7 +222,9 @@ export default async function handler(request: Request) {
                 send({ type: "done" });
             } catch (error) {
                 const status = error instanceof GeminiError ? error.status : 0;
-                send({ type: "error", error: status === 429 ? "rate_limited" : status === 400 || status === 401 || status === 403 ? "bad_key" : "failed" });
+                // Google's own message (never contains the key) is shown to the admin to explain the failure.
+                const detail = error instanceof Error ? error.message.slice(0, 300) : undefined;
+                send({ type: "error", error: status === 429 ? "rate_limited" : status === 400 || status === 401 || status === 403 ? "bad_key" : "failed", detail });
             } finally {
                 controller.close();
             }
