@@ -2,6 +2,9 @@
 // No cookies and no stored IP: a visitor is a keyed hash of IP + browser that changes every day.
 import crypto from "node:crypto";
 
+// Tables carry a clinova_ prefix so they can share a Supabase project with other apps.
+const tableName = (table) => `clinova_${table}`;
+
 export const analyticsReady = () => Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 function supabase(path, init = {}) {
@@ -15,7 +18,7 @@ function supabase(path, init = {}) {
 export async function insertRows(table, rows) {
     if (!analyticsReady() || !rows.length) return false;
     const conflict = table === "leads" ? "?on_conflict=request_id" : "";
-    const response = await supabase(table + conflict, { method: "POST", headers: { Prefer: "return=minimal,resolution=ignore-duplicates" }, body: JSON.stringify(rows) });
+    const response = await supabase(tableName(table) + conflict, { method: "POST", headers: { Prefer: "return=minimal,resolution=ignore-duplicates" }, body: JSON.stringify(rows) });
     if (!response.ok) throw new Error(`supabase_insert_${response.status}`);
     return true;
 }
@@ -29,7 +32,7 @@ export async function tryInsert(table, rows) {
 export async function selectRange(table, columns, from, to, max = 200_000) {
     if (!analyticsReady()) return [];
     const rows = [];
-    const query = `${table}?select=${columns}&ts=gte.${encodeURIComponent(from)}&ts=lt.${encodeURIComponent(to)}&order=ts.asc,id.asc`;
+    const query = `${tableName(table)}?select=${columns}&ts=gte.${encodeURIComponent(from)}&ts=lt.${encodeURIComponent(to)}&order=ts.asc,id.asc`;
     for (let offset = 0; offset < max; offset += 10_000) {
         const response = await supabase(query, { headers: { Range: `${offset}-${offset + 9_999}`, "Range-Unit": "items" } });
         if (!response.ok && response.status !== 416) throw new Error(`supabase_read_${response.status}`);

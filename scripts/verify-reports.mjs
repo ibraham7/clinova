@@ -13,7 +13,8 @@ globalThis.fetch = async (input, init = {}) => {
     const url = new URL(typeof input === "string" ? input : input.url);
     if (url.hostname === "mock.supabase.co") {
         assert.equal(init.headers?.Authorization, "Bearer service-key");
-        const table = url.pathname.split("/").pop();
+        assert.match(url.pathname, /\/rest\/v1\/clinova_/, "tables use the clinova_ prefix");
+        const table = url.pathname.split("/").pop().replace(/^clinova_/, "");
         if (init.method === "POST") {
             for (const row of JSON.parse(init.body)) {
                 if (table === "leads" && tables.leads.some((lead) => lead.request_id === row.request_id)) continue;
