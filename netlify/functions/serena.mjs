@@ -10,7 +10,7 @@ export const config = { path: "/api/serena" };
 const gemini = "https://generativelanguage.googleapis.com/v1beta";
 const maxTurns = 4;
 // Netlify stops a function after 30 s; stop earlier with a clear message.
-const budgetMs = 25_000;
+const budgetMs = 27_000;
 const filterKeys = ["country", "device", "lang", "source", "channel", "path"];
 
 const systemPrompt = (today) => `You are Serena (سيرينا), the analytics assistant built into the admin panel of Clinova (clinova.novanoai.online).
@@ -33,7 +33,7 @@ Rules:
 - Small numbers are noise: with fewer than about 30 visitors or 5 leads in a group, say the result is not reliable yet.
 - A change after a date is a correlation, not proof. When asked about an event (an article, an edit), compare equal periods before and after it, check whether traffic sources changed, and name other explanations.
 - Give practical recommendations a small team can act on this week, most valuable first, each tied to the number that supports it, and say how to measure the result.
-- Answer in the language of the user's message (usually Arabic). Be concise: short headings, bullets and the key numbers. No tables wider than 4 columns.
+- Answer in the language of the user's message (usually Arabic). Be brief: at most about 200 words unless the admin asks for detail, short headings, bullets and the key numbers. No tables.
 - Today is ${today}. Dates are YYYY-MM-DD in Istanbul time; a single report covers at most 400 days.`;
 
 const tools = [{
@@ -133,10 +133,15 @@ export default async function handler(request) {
     const started = Date.now();
     const origin = new URL(request.url).origin;
     const out = [];
+    // Which step was running, for the error detail shown to the admin.
+    let step = "start";
+    let modelName = "";
     try {
         // The model choice and the report on screen are fetched together.
         const view = validInput(body.view) ? body.view : null;
+        step = "model list + report";
         const [model, viewReport] = await Promise.all([chooseModel(apiKey), view ? report(view, origin) : null]);
+        modelName = model;
         const contents = body.messages.map((message) => ({ role: message.role === "user" ? "user" : "model", parts: [{ text: message.content }] }));
         // The report the admin is looking at goes first, so most questions need no extra call.
         if (view) contents[0] = { role: "user", parts: [
@@ -147,13 +152,14 @@ export default async function handler(request) {
         for (let turn = 0; ; turn++) {
             const remaining = budgetMs - (Date.now() - started);
             if (remaining < 3_000 || turn === maxTurns) { out.push({ type: "error", error: "too_many_steps" }); break; }
+            step = `answer ${turn + 1}`;
             const data = await call(`models/${encodeURIComponent(model)}:generateContent`, apiKey, {
                 method: "POST",
                 body: JSON.stringify({
                     systemInstruction: { parts: [{ text: system }] },
                     contents,
                     tools: [{ functionDeclarations: tools }],
-                    generationConfig: { maxOutputTokens: 4096, ...thinkingFor(model) },
+                    generationConfig: { maxOutputTokens: 1800, ...thinkingFor(model) },
                 }),
             }, remaining);
             const candidate = data.candidates?.[0];
@@ -176,6 +182,7 @@ export default async function handler(request) {
                     continue;
                 }
                 out.push({ type: "status", input: args });
+                step = "report";
                 responses.push({ functionResponse: { name, response: { result: await report(args, origin) } } });
             }
             contents.push({ role: "user", parts: responses });
@@ -185,7 +192,7 @@ export default async function handler(request) {
         const status = error instanceof GeminiError ? error.status : 0;
         const timedOut = error?.name === "TimeoutError" || error?.name === "AbortError";
         // Google's own message (it never contains the key) tells the admin what went wrong.
-        out.push({ type: "error", error: status === 429 ? "rate_limited" : [400, 401, 403].includes(status) ? "bad_key" : timedOut ? "timeout" : "failed", detail: String(error?.message ?? "").slice(0, 300) || undefined });
+        out.push({ type: "error", error: status === 429 ? "rate_limited" : [400, 401, 403].includes(status) ? "bad_key" : timedOut ? "timeout" : "failed", detail: `${String(error?.message ?? "").slice(0, 240)} [${step}, ${((Date.now() - started) / 1000).toFixed(1)} s${modelName ? `, ${modelName}` : ""}]` });
     }
     return lines(out);
 }
