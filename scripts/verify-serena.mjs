@@ -57,6 +57,7 @@ assert.equal((await ask({ messages: [{ role: "assistant", content: "x" }] })).st
 const response = await ask(question);
 assert.equal(response.status, 200);
 const chunks = (await response.text()).trim().split("\n").map((line) => JSON.parse(line));
+if (process.env.DEBUG) console.log(chunks);
 assert.equal(chunks.filter((chunk) => chunk.type === "text").map((chunk) => chunk.text).join(""), "سأقارن الفترتين. الزوار من تركيا زادوا.");
 assert.deepEqual(chunks.find((chunk) => chunk.type === "status").input, { from: "2026-10-01", to: "2026-10-15", country: "TR" });
 assert.equal(chunks.at(-1).type, "done");
@@ -64,7 +65,7 @@ assert.ok(supabaseReads >= 10, "the on-screen report and the tool report are bot
 
 const [first, second] = geminiRequests;
 assert.match(first.url.pathname, /\/models\/gemini-9\.5-flash:generateContent$/, "newest stable flash model");
-assert.deepEqual(first.body.generationConfig.thinkingConfig, { thinkingLevel: "low" }, "fast answers: little thinking");
+assert.deepEqual(first.body.generationConfig.thinkingConfig, { thinkingLevel: "minimal" }, "fast answers: minimal thinking");
 assert.equal(first.body.tools[0].functionDeclarations[0].name, "get_report");
 assert.match(first.body.systemInstruction.parts[0].text, /Serena/);
 assert.match(first.body.contents[0].parts[0].text, /<current_view[\s\S]*"visitors":0/);

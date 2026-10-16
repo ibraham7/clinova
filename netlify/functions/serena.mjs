@@ -70,27 +70,31 @@ async function call(path, apiKey, init = {}, timeout = 20_000) {
     return data;
 }
 
-// GEMINI_MODEL picks a model; otherwise the newest stable "flash" model the key can use (fast and cheap).
-let cachedModel = null;
-async function chooseModel(apiKey) {
-    if (process.env.GEMINI_MODEL) return process.env.GEMINI_MODEL;
-    if (cachedModel) return cachedModel;
+// GEMINI_MODEL picks a model; otherwise the newest stable "flash" model the key can use (fast and cheap),
+// with the newest "flash-lite" model as a faster fallback when the main one is slow.
+let cachedModels = null;
+// After the main model times out, the lite model answers directly for a while instead of waiting again.
+let liteUntil = 0;
+async function chooseModels(apiKey) {
+    if (cachedModels) return cachedModels;
     const data = await call("models?pageSize=200", apiKey, {}, 8_000);
     const names = (data.models ?? [])
         .filter((model) => model.supportedGenerationMethods?.includes("generateContent"))
         .map((model) => model.name.replace(/^models\//, ""))
-        .filter((name) => /^gemini-[\d.]+-flash/.test(name) && !/lite|image|tts|audio|live|exp|preview|thinking/.test(name));
+        .filter((name) => /^gemini-[\d.]+-flash/.test(name) && !/image|tts|audio|live|exp|preview|thinking/.test(name));
     const version = (name) => Number(name.match(/^gemini-([\d.]+)/)?.[1] ?? 0);
-    names.sort((a, b) => version(b) - version(a) || a.length - b.length);
-    if (!names.length) throw new GeminiError("No Gemini Flash model is available for this key.", 404);
-    cachedModel = names[0];
-    return cachedModel;
+    const newest = (list) => list.sort((a, b) => version(b) - version(a) || a.length - b.length)[0] ?? null;
+    const main = process.env.GEMINI_MODEL || newest(names.filter((name) => !name.includes("lite")));
+    const lite = newest(names.filter((name) => name.includes("lite")));
+    if (!main && !lite) throw new GeminiError("No Gemini Flash model is available for this key.", 404);
+    cachedModels = { main: main ?? lite, lite: lite && lite !== main ? lite : null };
+    return cachedModels;
 }
 
 // Short, fast answers: thinking off on 2.x Flash, low on newer models (they cannot turn it off).
 function thinkingFor(model) {
     const version = Number(model.match(/^gemini-([\d.]+)/)?.[1] ?? 0);
-    if (version >= 3) return { thinkingConfig: { thinkingLevel: "low" } };
+    if (version >= 3) return { thinkingConfig: { thinkingLevel: "minimal" } };
     if (version >= 2.5) return { thinkingConfig: { thinkingBudget: 0 } };
     return {};
 }
@@ -140,7 +144,8 @@ export default async function handler(request) {
         // The model choice and the report on screen are fetched together.
         const view = validInput(body.view) ? body.view : null;
         step = "model list + report";
-        const [model, viewReport] = await Promise.all([chooseModel(apiKey), view ? report(view, origin) : null]);
+        const [models, viewReport] = await Promise.all([chooseModels(apiKey), view ? report(view, origin) : null]);
+        let model = models.lite && Date.now() < liteUntil ? models.lite : models.main;
         modelName = model;
         const contents = body.messages.map((message) => ({ role: message.role === "user" ? "user" : "model", parts: [{ text: message.content }] }));
         // The report the admin is looking at goes first, so most questions need no extra call.
@@ -153,15 +158,30 @@ export default async function handler(request) {
             const remaining = budgetMs - (Date.now() - started);
             if (remaining < 3_000 || turn === maxTurns) { out.push({ type: "error", error: "too_many_steps" }); break; }
             step = `answer ${turn + 1}`;
-            const data = await call(`models/${encodeURIComponent(model)}:generateContent`, apiKey, {
+            const request = (name, timeout) => call(`models/${encodeURIComponent(name)}:generateContent`, apiKey, {
                 method: "POST",
                 body: JSON.stringify({
                     systemInstruction: { parts: [{ text: system }] },
                     contents,
                     tools: [{ functionDeclarations: tools }],
-                    generationConfig: { maxOutputTokens: 1800, ...thinkingFor(model) },
+                    generationConfig: { maxOutputTokens: 1800, ...thinkingFor(name) },
                 }),
-            }, remaining);
+            }, Math.round(timeout));
+            let data;
+            // A slow main model gets about half the remaining time; then the faster lite model answers instead.
+            if (models.lite && model !== models.lite && remaining > 12_000) {
+                try {
+                    data = await request(model, Math.round(Math.min(remaining / 2, 14_000)));
+                } catch (error) {
+                    if (error?.name !== "TimeoutError" && error?.name !== "AbortError") throw error;
+                    model = modelName = models.lite;
+                    liteUntil = Date.now() + 10 * 60_000;
+                    step = `answer ${turn + 1} (lite)`;
+                    data = await request(model, Math.max(1_000, budgetMs - (Date.now() - started) - 500));
+                }
+            } else {
+                data = await request(model, remaining);
+            }
             const candidate = data.candidates?.[0];
             const parts = candidate?.content?.parts ?? [];
             if (!candidate || data.promptFeedback?.blockReason || ["SAFETY", "PROHIBITED_CONTENT"].includes(candidate.finishReason)) { out.push({ type: "error", error: "refusal" }); break; }
