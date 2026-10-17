@@ -1,5 +1,5 @@
 import leadSettings from "../../src/config/profile-leads.json" with { type: "json" };
-import { isAdmin, readContent, reply, storageReady } from "../lib/admin.mjs";
+import { checkWriteAccess, isAdmin, readContent, reply, storageReady } from "../lib/admin.mjs";
 import { analyticsReady, selectRange } from "../lib/analytics.mjs";
 
 // GET: checks every connection the site depends on, for the "connection status" card on the admin home page.
@@ -22,7 +22,10 @@ export default async function handler(request) {
         check("github", async () => {
             if (!storageReady()) throw new Error("missing GITHUB_TOKEN");
             await readContent();
-            return process.env.GITHUB_REPO || "ibraham7/clinova";
+            try { await checkWriteAccess(); } catch (error) {
+                throw new Error(/_40[34]$/.test(error.message) ? "GITHUB_TOKEN can read but not write: give it Contents: Read and write" : /_401$/.test(error.message) ? "GITHUB_TOKEN is invalid or expired" : error.message);
+            }
+            return `${process.env.GITHUB_REPO || "ibraham7/clinova"} (read + write)`;
         }),
         check("supabase", async () => {
             if (!analyticsReady()) throw new Error("missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");

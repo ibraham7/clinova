@@ -86,6 +86,26 @@ export async function readContent() {
     return { content: JSON.parse(Buffer.from(file.content, "base64").toString("utf8")), sha: file.sha };
 }
 
+/**
+ * Proves the token may write, without changing the site: GitHub stores a tiny unreferenced blob (cleaned up
+ * by GitHub later). A read-only token is refused here, while reading the content file still works.
+ */
+export async function checkWriteAccess() {
+    const repo = process.env.GITHUB_REPO || "ibraham7/clinova";
+    const response = await fetch(`https://api.github.com/repos/${repo}/git/blobs`, {
+        method: "POST",
+        headers: { Accept: "application/vnd.github+json", Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "clinova-admin", "Content-Type": "application/json" },
+        body: JSON.stringify({ content: "clinova admin write check", encoding: "utf-8" }),
+    });
+    if (!response.ok) throw new Error(`github_write_${response.status}`);
+}
+
+/** The admin-facing error for a failed GitHub call: a bad token and a token that may only read get their own message. */
+export function storageError(error) {
+    const status = Number(String(error?.message ?? "").match(/^github_(?:read|write)_(\d+)$/)?.[1]);
+    return status === 401 ? "github_token_invalid" : status === 403 || status === 404 ? "github_no_write" : "storage_failed";
+}
+
 /** Commits a file to the site repository; Netlify rebuilds the site from the new commit. */
 export async function writeFile(path, buffer, message, sha) {
     const response = await github(path, {
