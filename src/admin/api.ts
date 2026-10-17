@@ -61,6 +61,8 @@ export const errorMessages: Record<string, string> = {
     invalid_logos: "تحقق من بيانات الشعار: الاسم والصورة مطلوبان.",
     invalid_texts: "أحد النصوص غير صالح أو طويل جدًا.",
     storage_failed: "تعذر الحفظ على GitHub. تحقق من GITHUB_TOKEN ثم أعد المحاولة.",
+    github_token_invalid: "مفتاح GITHUB_TOKEN غير صحيح أو انتهت صلاحيته. أنشئ مفتاحًا جديدًا وضعه في إعدادات Netlify.",
+    github_no_write: "مفتاح GITHUB_TOKEN يقرأ فقط ولا يملك صلاحية الكتابة. أعطه صلاحية Contents: Read and write على مستودع ibraham7/clinova.",
     analytics_not_configured: "التقارير غير مفعّلة بعد: أضف SUPABASE_URL وSUPABASE_SERVICE_ROLE_KEY في إعدادات Netlify (راجع docs/reports-and-serena.md).",
     analytics_failed: "تعذرت قراءة البيانات من Supabase. تحقق من المفاتيح ومن تشغيل supabase/schema.sql.",
     invalid_range: "نطاق التاريخ غير صالح (الحد الأقصى 400 يوم).",

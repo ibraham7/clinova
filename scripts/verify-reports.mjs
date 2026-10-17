@@ -189,6 +189,20 @@ assert.equal(health.sheets.ok, true, "the Apps Script health check answers");
 assert.equal(health.cloudinary.ok, false);
 assert.equal(health.cloudinary.optional, true, "video upload is optional");
 
+// A token that can read but not write shows up in the status card, and saving explains why.
+const withWrite = globalThis.fetch;
+globalThis.fetch = async (input, init = {}) => String(input).endsWith("/git/blobs") || (String(input).includes("api.github.com") && init.method === "PUT")
+    ? Response.json({ message: "Resource not accessible by personal access token" }, { status: 403 })
+    : withWrite(input, init);
+const readOnly = Object.fromEntries((await (await adminHealth(new Request("https://clinova.test/.netlify/functions/admin-health", { headers: admin }))).json()).checks.map((item) => [item.id, item]));
+assert.equal(readOnly.github.ok, false);
+assert.match(readOnly.github.detail, /can read but not write/);
+const { storageError } = await import("../netlify/lib/admin.mjs");
+assert.equal(storageError(new Error("github_write_403")), "github_no_write");
+assert.equal(storageError(new Error("github_write_401")), "github_token_invalid");
+assert.equal(storageError(new Error("timeout")), "storage_failed");
+globalThis.fetch = withWrite;
+
 // A forgotten tab (hours on one section) counts as 30 minutes, and "/ar/" is "/ar".
 assert.equal(tidy({ type: "section", value: 3_941_000, path: "/ar/" }).value, 1_800_000);
 assert.equal(tidy({ type: "page_end", value: 3_941_000, path: "/ar/" }).path, "/ar");
