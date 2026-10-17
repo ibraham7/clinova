@@ -4,6 +4,9 @@ import { analyticsReady, classifySource, clip, geo, isBot, parseAgent, tryInsert
 // Body: { page, path, lang, referrer, utm: { source, medium, campaign }, screen, events: [{ type, section, target, value }] }
 // section: ms a section was on screen; scroll: deepest scroll percent; page_end: visible ms on the page and the last section seen.
 const types = new Set(["page_view", "section", "scroll", "page_end", "click", "survey"]);
+// Times on a section or page are capped: hours mean a forgotten tab, not reading.
+const timed = new Set(["section", "page_end"]);
+const maxTimeMs = 30 * 60_000;
 const ok = () => new Response(null, { status: 204, headers: { "Cache-Control": "no-store" } });
 
 export default async function handler(request, context) {
@@ -20,7 +23,8 @@ export default async function handler(request, context) {
         body = JSON.parse(text);
     } catch { return new Response(null, { status: 400 }); }
     if (!/^[a-z0-9]{8,32}$/.test(body?.page ?? "") || !Array.isArray(body.events) || !body.events.length || body.events.length > 60) return new Response(null, { status: 400 });
-    const path = clip(body.path, 200);
+    // "/ar/" and "/ar" are the same page.
+    const path = clip(body.path, 200)?.replace(/(.)\/+$/, "$1");
     if (!path?.startsWith("/") || path.startsWith("/admin")) return ok();
 
     let referrer = null;
@@ -34,7 +38,7 @@ export default async function handler(request, context) {
     };
     const rows = body.events.filter((event) => types.has(event?.type)).map((event) => ({
         ...shared, type: event.type, section: clip(event.section, 60), target: clip(event.target, 120),
-        value: Number.isFinite(event.value) ? Math.max(0, Math.min(Math.round(event.value), 86_400_000)) : null,
+        value: Number.isFinite(event.value) ? Math.max(0, Math.min(Math.round(event.value), timed.has(event.type) ? maxTimeMs : 86_400_000)) : null,
     }));
     await tryInsert("events", rows);
     return ok();

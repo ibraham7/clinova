@@ -38,7 +38,7 @@ globalThis.fetch = async (input, init = {}) => {
 };
 
 const { classifySource, describeChanges, visitorId } = await import("../netlify/lib/analytics.mjs");
-const { buildReport, parseRange } = await import("../netlify/lib/reports.mjs");
+const { buildReport, parseRange, tidy } = await import("../netlify/lib/reports.mjs");
 const { sessionCookie } = await import("../netlify/lib/admin.mjs");
 const collect = (await import("../netlify/functions/collect.mjs")).default;
 const profileLead = (await import("../netlify/functions/profile-lead.mjs")).default;
@@ -188,6 +188,11 @@ assert.match(health.gemini.detail, /GEMINI_API_KEY/);
 assert.equal(health.sheets.ok, true, "the Apps Script health check answers");
 assert.equal(health.cloudinary.ok, false);
 assert.equal(health.cloudinary.optional, true, "video upload is optional");
+
+// A forgotten tab (hours on one section) counts as 30 minutes, and "/ar/" is "/ar".
+assert.equal(tidy({ type: "section", value: 3_941_000, path: "/ar/" }).value, 1_800_000);
+assert.equal(tidy({ type: "page_end", value: 3_941_000, path: "/ar/" }).path, "/ar");
+assert.equal(tidy({ type: "scroll", value: 100, path: "/" }).path, "/", "the root keeps its slash");
 
 // Demo mode: made-up data, the same on every call, without touching the database.
 const realFetch = globalThis.fetch;

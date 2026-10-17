@@ -14,8 +14,12 @@ let visibleMs = 0;
 let maxScroll = 0;
 let reportedScroll = 0;
 let lastSection: string | undefined;
-// True while the tab is hidden: section and page time stop counting.
+// True while the tab is hidden or nobody has touched the page for a while: section and page time stop counting.
 let paused = false;
+let idle = false;
+let lastActive = 0;
+// A tab left open on screen without a mouse move, scroll, touch or key for this long stops counting.
+const idleAfterMs = 120_000;
 const sectionVisibleSince = new Map<string, number>();
 const sectionMs = new Map<string, number>();
 
@@ -140,6 +144,8 @@ export function startTracking() {
         if (document.visibilityState === "hidden") { report(); paused = true; }
         else {
             paused = false;
+            idle = false;
+            lastActive = performance.now();
             const now = performance.now();
             visibleSince = now;
             // Sections still on screen start counting again.
@@ -147,5 +153,27 @@ export function startTracking() {
         }
     });
     window.addEventListener("pagehide", report);
+
+    // Idle: stop counting at the last sign of life, start again on the next one.
+    lastActive = performance.now();
+    const active = () => {
+        const now = performance.now();
+        lastActive = now;
+        if (!idle) return;
+        idle = false;
+        if (document.visibilityState !== "visible") return;
+        paused = false;
+        visibleSince = now;
+        for (const id of sectionVisibleSince.keys()) sectionVisibleSince.set(id, now);
+    };
+    for (const type of ["pointermove", "pointerdown", "keydown", "wheel", "touchstart", "scroll"]) window.addEventListener(type, active, { passive: true });
+    window.setInterval(() => {
+        if (paused || idle || performance.now() - lastActive < idleAfterMs) return;
+        const at = lastActive + idleAfterMs;
+        closeSections(at);
+        if (visibleSince) { visibleMs += Math.max(0, at - visibleSince); visibleSince = 0; }
+        idle = true;
+        paused = true;
+    }, 10_000);
     window.setInterval(() => flush(), 15_000);
 }
