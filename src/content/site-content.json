@@ -9,16 +9,6 @@
   },
   "videos": [
     {
-      "id": "video-8f112fc1",
-      "url": "https://www.youtube.com/watch?v=72xZ7d7bNdo",
-      "name": "تيست",
-      "details": {
-        "ar": "تيست"
-      },
-      "quote": {},
-      "addedAt": "2026-10-17"
-    },
-    {
       "id": "video-f0a21593",
       "url": "https://www.youtube.com/watch?v=nYaQsaHjjRo",
       "name": "تيست",
