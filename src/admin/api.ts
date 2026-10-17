@@ -21,7 +21,8 @@ export const api = {
     login: (password: string) => call("admin-login", { method: "POST", body: JSON.stringify({ password }) }),
     logout: () => call("admin-login", { method: "DELETE" }),
     load: () => call<{ content: SiteContent; sha: string }>("admin-content"),
-    save: (content: SiteContent, sha: string) => call<{ sha: string }>("admin-content", { method: "PUT", body: JSON.stringify({ content, sha }) }),
+    /** `base` is the content as this page last loaded or saved it; the server applies only the difference to the latest file. */
+    save: (content: SiteContent, sha: string, base: SiteContent) => call<{ sha: string; content: SiteContent }>("admin-content", { method: "PUT", body: JSON.stringify({ content, sha, base }) }),
     uploadLogo: (name: string, data: string) => call<{ src: string }>("admin-upload", { method: "POST", body: JSON.stringify({ name, data }) }),
     reports: (filters: ReportFilters) => call<{ report: Report }>(`admin-reports?${new URLSearchParams(Object.entries(filters).filter(([, value]) => value) as [string, string][])}`),
 };

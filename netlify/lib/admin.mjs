@@ -80,7 +80,8 @@ export const branch = () => process.env.GITHUB_BRANCH || "main";
 export const storageReady = () => Boolean(process.env.GITHUB_TOKEN);
 
 export async function readContent() {
-    const response = await github(`${contentPath}?ref=${encodeURIComponent(branch())}`);
+    // A unique query so a cached copy from a save moments ago is never returned.
+    const response = await github(`${contentPath}?ref=${encodeURIComponent(branch())}&t=${Date.now()}`, { cache: "no-store" });
     if (!response.ok) throw new Error(`github_read_${response.status}`);
     const file = await response.json();
     return { content: JSON.parse(Buffer.from(file.content, "base64").toString("utf8")), sha: file.sha };
@@ -116,6 +117,28 @@ export async function writeFile(path, buffer, message, sha) {
     if (!response.ok) throw new Error(`github_write_${response.status}`);
     const result = await response.json();
     return { sha: result.content?.sha };
+}
+
+/**
+ * Three-way merge of a save: only what this admin changed since they loaded `base` is applied to `latest`
+ * (the file as it is now), so a stale page or a second tab never undoes someone else's saved edits.
+ * Texts merge key by key; the video and logo lists are taken whole when this admin changed them.
+ */
+export function mergeContent(latest, base, next) {
+    const texts = {};
+    for (const lang of Object.keys(next.texts ?? {})) {
+        const result = { ...(latest.texts?.[lang] ?? {}) };
+        const before = base.texts?.[lang] ?? {};
+        const after = next.texts[lang] ?? {};
+        for (const key of new Set([...Object.keys(before), ...Object.keys(after)])) {
+            if (after[key] === before[key]) continue;
+            if (after[key] === undefined) delete result[key];
+            else result[key] = after[key];
+        }
+        texts[lang] = result;
+    }
+    const pick = (field) => JSON.stringify(next[field]) !== JSON.stringify(base[field]) ? next[field] : latest[field] ?? next[field];
+    return { ...latest, ...next, texts, videos: pick("videos"), logos: pick("logos") };
 }
 
 // ---- Validation -----------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 import { describeChanges, tryInsert } from "../lib/analytics.mjs";
-import { contentPath, isAdmin, readContent, readJson, reply, sameOrigin, storageError, storageReady, validateContent, writeFile } from "../lib/admin.mjs";
+import { contentPath, isAdmin, mergeContent, readContent, readJson, reply, sameOrigin, storageError, storageReady, validateContent, writeFile } from "../lib/admin.mjs";
 
 // GET returns the latest saved content; PUT { content, sha } validates and commits it to GitHub.
 export default async function handler(request) {
@@ -14,14 +14,27 @@ export default async function handler(request) {
         const error = validateContent(body?.content);
         if (error) return reply(400, { ok: false, error });
         if (typeof body.sha !== "string" || !/^[a-f0-9]{40}$/.test(body.sha)) return reply(400, { ok: false, error: "missing_sha" });
-        const before = await readContent().catch(() => null);
-        const file = Buffer.from(`${JSON.stringify(body.content, null, 2)}\n`, "utf8");
-        const result = await writeFile(contentPath, file, "Update site content from the admin panel", body.sha);
-        // Someone else saved first: the admin must reload before saving again.
-        if (result.conflict) return reply(409, { ok: false, error: "conflict" });
-        // The reports page and Serena compare visits before and after each change.
-        if (before) await tryInsert("admin_log", describeChanges(before.content, body.content));
-        return reply(200, { ok: true, sha: result.sha });
+        // With `base` (the content as this page loaded it), only this admin's changes are applied to the latest
+        // file, retrying if another save lands in between. Without it, a stale sha is a conflict.
+        const merging = body.base && typeof body.base === "object";
+        for (let attempt = 0; attempt < 3; attempt++) {
+            const before = await readContent().catch(() => null);
+            if (merging && !before) throw new Error("github_read_failed");
+            const content = merging ? mergeContent(before.content, body.base, body.content) : body.content;
+            const invalid = merging && validateContent(content);
+            if (invalid) return reply(400, { ok: false, error: invalid });
+            const file = Buffer.from(`${JSON.stringify(content, null, 2)}\n`, "utf8");
+            const result = await writeFile(contentPath, file, "Update site content from the admin panel", merging ? before.sha : body.sha);
+            if (result.conflict) {
+                if (!merging) return reply(409, { ok: false, error: "conflict" });
+                await new Promise((resolve) => setTimeout(resolve, 800));
+                continue;
+            }
+            // The reports page and Serena compare visits before and after each change.
+            if (before) await tryInsert("admin_log", describeChanges(before.content, content));
+            return reply(200, { ok: true, sha: result.sha, content });
+        }
+        return reply(409, { ok: false, error: "conflict" });
     } catch (error) {
         return reply(502, { ok: false, error: storageError(error) });
     }

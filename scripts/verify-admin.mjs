@@ -55,6 +55,30 @@ assert.equal(commits.at(-1).branch, "main");
 assert.equal(JSON.parse(files.get("src/content/site-content.json").text).texts.en["احجز موعد"], "Book now");
 assert.equal((await call(content, "admin-content", { method: "PUT", cookie, body: { content: next, sha: loaded.sha } })).status, 409, "stale sha conflicts");
 
+// Two pages loaded the same file; each saves only its own change, and neither undoes the other
+// (the bug where a second save dropped the first edit).
+const pageA = (await (await call(content, "admin-content", { cookie })).json());
+const pageB = structuredClone(pageA);
+const editA = structuredClone(pageA.content);
+editA.texts.ar["نرتقي"] = "نرتقا";
+const savedA = await (await call(content, "admin-content", { method: "PUT", cookie, body: { content: editA, sha: pageA.sha, base: pageA.content } })).json();
+assert.equal(savedA.content.texts.ar["نرتقي"], "نرتقا");
+const editB = structuredClone(pageB.content);
+editB.texts.ar["للعيادات الطبية."] = "للعيادات الطبية والتجميلية.";
+editB.logos = [];
+const savedB = await call(content, "admin-content", { method: "PUT", cookie, body: { content: editB, sha: pageB.sha, base: pageB.content } });
+assert.equal(savedB.status, 200, "a page with an old sha still saves its own change");
+const merged = JSON.parse(files.get("src/content/site-content.json").text);
+assert.equal(merged.texts.ar["نرتقي"], "نرتقا", "the other page's edit is kept");
+assert.equal(merged.texts.ar["للعيادات الطبية."], "للعيادات الطبية والتجميلية.");
+assert.equal(merged.texts.en["احجز موعد"], "Book now");
+assert.deepEqual(merged.logos, [], "a list this page changed is taken whole");
+assert.equal(merged.videos.length, 1, "a list this page did not change stays as saved");
+const revert = structuredClone(merged);
+delete revert.texts.ar["نرتقي"];
+await call(content, "admin-content", { method: "PUT", cookie, body: { content: revert, sha: "c".repeat(40), base: merged } });
+assert.equal(JSON.parse(files.get("src/content/site-content.json").text).texts.ar["نرتقي"], undefined, "restoring the original text removes the key");
+
 const bad = (change) => call(content, "admin-content", { method: "PUT", cookie, body: { content: { ...structuredClone(next), ...change }, sha: "c".repeat(40) } });
 assert.equal((await bad({ texts: { ...next.texts, en: { "not a real key": "x" } } })).status, 400, "unknown text keys rejected");
 assert.equal((await bad({ videos: [{ ...next.videos[0], url: "https://evil.test/video.mp4" }] })).status, 400, "unknown video hosts rejected");
