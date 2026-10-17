@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
-import { Alert, Box, Button, ButtonBase, CircularProgress, GlobalStyles, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, ButtonBase, CircularProgress, GlobalStyles, TextField, Typography } from "@mui/material";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import VideoLibraryRoundedIcon from "@mui/icons-material/VideoLibraryRounded";
@@ -14,6 +14,7 @@ import { useAdminContent } from "./useAdminContent";
 import TextsPage from "./TextsPage";
 import VideosPage from "./VideosPage";
 import LogosPage from "./LogosPage";
+import OverviewCard from "./OverviewCard";
 import ReportsPage from "./ReportsPage";
 import HealthCard from "./HealthCard";
 
@@ -115,14 +116,15 @@ function Dashboard({ session, page, setPage, onLogout }: { session: Session; pag
             {page === "home" && <Box>
                 <Typography component="h1" sx={{ fontSize: "1.6rem", fontWeight: 700, mb: 1 }}>{T.welcome}</Typography>
                 <Typography sx={{ color: "rgba(245,247,250,0.7)", lineHeight: 1.9, maxWidth: 720, mb: 4 }}>{T.intro}</Typography>
-                <Stack direction={{ xs: "column", sm: "row" }} sx={{ gap: 2 }}>
+                <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: { xs: 1, sm: 2 } }}>
                     {([["texts", edited], ["videos", admin.content?.videos.length ?? 0], ["logos", admin.content?.logos.length ?? 0]] as [keyof typeof T.stats, number][]).map(([key, value]) =>
-                        <ButtonBase key={key} onClick={() => setPage(key)} sx={{ flex: 1, flexDirection: "column", alignItems: "flex-start", p: 3, borderRadius: "20px", border: "1px solid rgba(142,168,232,0.18)", backgroundColor: "rgba(142,168,232,0.05)", transition: "background-color 400ms ease", "&:hover": { backgroundColor: "rgba(142,168,232,0.1)" } }}>
-                            <Typography sx={{ fontSize: "2rem", fontWeight: 700 }}>{value}</Typography>
-                            <Typography sx={{ color: "rgba(245,247,250,0.7)" }}>{T.stats[key]}</Typography>
+                        <ButtonBase key={key} onClick={() => setPage(key)} sx={{ flexDirection: "column", alignItems: "flex-start", textAlign: "start", p: { xs: 1.5, sm: 3 }, borderRadius: { xs: "14px", sm: "20px" }, border: "1px solid rgba(142,168,232,0.18)", backgroundColor: "rgba(142,168,232,0.05)", transition: "background-color 400ms ease", "&:hover": { backgroundColor: "rgba(142,168,232,0.1)" } }}>
+                            <Typography sx={{ fontSize: { xs: "1.5rem", sm: "2rem" }, fontWeight: 700 }}>{value}</Typography>
+                            <Typography sx={{ color: "rgba(245,247,250,0.7)", fontSize: { xs: "0.78rem", sm: "1rem" } }}>{T.stats[key]}</Typography>
                         </ButtonBase>)}
-                </Stack>
+                </Box>
                 <Typography sx={{ color: "rgba(245,247,250,0.55)", fontSize: "0.8rem", mt: 2, mb: 4 }}>{T.notTracked}</Typography>
+                <OverviewCard openReports={() => setPage("reports")} />
                 <HealthCard />
             </Box>}
             {page === "reports" && <ReportsPage />}

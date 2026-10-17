@@ -40,7 +40,7 @@ export default function HealthCard() {
         return () => { live = false; window.clearTimeout(timer); };
     }, [run]);
 
-    return <Box sx={{ p: 3, borderRadius: "20px", border: "1px solid rgba(142,168,232,0.18)", backgroundColor: "rgba(142,168,232,0.05)", maxWidth: 820 }}>
+    return <Box sx={{ p: { xs: 2, md: 3 }, borderRadius: "20px", border: "1px solid rgba(142,168,232,0.18)", backgroundColor: "rgba(142,168,232,0.05)" }}>
         <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
             <Typography component="h2" sx={{ fontSize: "1.1rem", fontWeight: 700 }}>{T.title}</Typography>
             <Button size="small" startIcon={<RefreshRoundedIcon />} onClick={() => setRun((count) => count + 1)} disabled={!checks && !error}>{T.refresh}</Button>
