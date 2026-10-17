@@ -43,6 +43,7 @@ globalThis.fetch = async (input, init = {}) => {
         return Response.json([]);
     }
     if (url.pathname === "/blog/articles.json") return Response.json([]);
+    if (url.pathname === "/serena/knowledge.json") return Response.json({ home: "نرتقي بتجربة الرعاية الطبية", survey: { questions: [] }, articles: [] });
     throw new Error(`Unexpected fetch ${url}`);
 };
 
@@ -74,10 +75,8 @@ assert.deepEqual(first.body.generationConfig.thinkingConfig, { thinkingLevel: "l
 assert.deepEqual(second.body.generationConfig.thinkingConfig, { thinkingLevel: "low" }, "the refusal is remembered");
 assert.equal(first.body.tools[0].functionDeclarations[0].name, "get_report");
 assert.match(first.body.systemInstruction.parts[0].text, /Serena/);
-assert.match(first.body.systemInstruction.parts[0].text, /Answer the exact question first[\s\S]*trackingSince/, "answers the question, aware of when tracking started");
-assert.match(first.body.systemInstruction.parts[0].text, /call get_report twice in the same turn, for equal windows just before and just after/, "events are judged before against after");
-assert.match(first.body.systemInstruction.parts[0].text, /copy rates from the report's ready fields[\s\S]*split the change by source/, "ready rates and changes split by source");
-assert.match(first.body.systemInstruction.parts[0].text, /an event can only explain changes after its date/, "no credit for changes before an event");
+assert.match(first.body.systemInstruction.parts[0].text, /full general assistant[\s\S]*think like a good analyst[\s\S]*trackingSince/, "a general assistant that still analyses carefully");
+assert.deepEqual(first.body.tools[0].functionDeclarations.map((tool) => tool.name), ["get_report", "get_site_content"]);
 assert.match(first.body.contents[0].parts[0].text, /<current_view[\s\S]*"visitors":0/);
 assert.equal(first.body.contents[0].parts[1].text, "ماذا تغيّر في تركيا؟");
 assert.equal(second.body.contents.length, 3);
@@ -85,6 +84,22 @@ assert.equal(second.body.contents[1].parts.find((part) => part.functionCall).tho
 assert.equal(second.body.contents[2].parts[0].functionResponse.name, "get_report");
 assert.equal(second.body.contents[2].parts[0].functionResponse.response.result.filters.country, "TR");
 assert.equal(modelLists, 1, "the model list is fetched once and cached");
+
+// Site content tool: Serena reads what the site says, then writes.
+const writing = [];
+const plainFetch = globalThis.fetch;
+globalThis.fetch = async (input, init) => {
+    const url = new URL(String(input));
+    if (url.hostname !== "generativelanguage.googleapis.com" || url.pathname.endsWith("/models")) return plainFetch(input, init);
+    const body = JSON.parse(init.body);
+    writing.push(body);
+    if (writing.length === 1) return Response.json({ candidates: [{ content: { role: "model", parts: [{ functionCall: { name: "get_site_content", args: {} } }] }, finishReason: "STOP" }] });
+    return Response.json({ candidates: [{ content: { role: "model", parts: [{ text: "إعلان: نرتقي بتجربة مرضاك" }] }, finishReason: "STOP" }] });
+};
+const ad = (await (await ask({ messages: [{ role: "user", content: "اكتبلي إعلان إنستغرام" }] })).text()).trim().split("\n").map((line) => JSON.parse(line));
+assert.equal(ad[0].text, "إعلان: نرتقي بتجربة مرضاك");
+assert.equal(writing[1].contents.at(-1).parts[0].functionResponse.response.result.home, "نرتقي بتجربة الرعاية الطبية", "the site's own words reach Serena");
+globalThis.fetch = plainFetch;
 
 // A busy model ("high demand", HTTP 503) hands over to the next model in the chain.
 const before = globalThis.fetch;
