@@ -3,3 +3,9 @@
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
+
+# Serena's copy of the site's own texts: public content, but not a page for search engines.
+[[headers]]
+  for = "/serena/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"

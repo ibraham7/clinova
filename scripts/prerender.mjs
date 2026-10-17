@@ -24,8 +24,10 @@ for (const lang of languages) {
     }
 }
 
+let arabicHome = "";
 for (const page of pages) {
     const { html, head, lang, dir } = await render(page.path);
+    if (page.path === "/ar") arabicHome = html;
     const document = template
         .replace(/<html[^>]*>/, `<html lang="${lang}" dir="${dir}">`)
         .replace(/<title>[\s\S]*?<\/title>/, head)
@@ -48,6 +50,26 @@ fs.writeFileSync(path.join(dist, "blog/articles.json"), JSON.stringify(articles.
     const translation = article.translations.ar ?? Object.values(article.translations)[0];
     return { slug: article.slug, title: translation.title, date: translation.date, updated: translation.updated ?? null, languages: Object.keys(article.translations) };
 })));
+
+// What the site says, for Serena: the Arabic home page as text (admin text edits included) and every article in full.
+// All of it is public already; the file only saves Serena from parsing HTML.
+const htmlText = (html) => html.replace(/<(script|style)[\s\S]*?<\/\1>/g, " ").replace(/<\/(h[1-6]|p|li|div|section|article|header|footer|button|a)>|<br\s*\/?>/g, "\n")
+    .replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .split("\n").map((line) => line.replace(/\s+/g, " ").trim()).filter(Boolean).filter((line, index, all) => line !== all[index - 1]).join("\n");
+fs.mkdirSync(path.join(dist, "serena"), { recursive: true });
+fs.writeFileSync(path.join(dist, "serena/knowledge.json"), JSON.stringify({
+    home: htmlText(arabicHome),
+    survey: JSON.parse(fs.readFileSync(path.join(root, "src/config/survey.json"), "utf8")),
+    articles: articles.map((article) => {
+        const translation = article.translations.ar ?? Object.values(article.translations)[0];
+        const blocks = translation.blocks.map((block) => block.type === "h2" ? `## ${block.text}` : "text" in block ? block.text : block.items.map((item) => `- ${item}`).join("\n"));
+        const faq = translation.faq.map((item) => `س: ${item.q}\nج: ${item.a}`);
+        return {
+            slug: article.slug, title: translation.title, description: translation.description, date: translation.date, url: `${siteUrl}/ar/blog/${article.slug}`,
+            text: plainText([translation.summary, ...blocks, ...faq].filter(Boolean).join("\n\n")),
+        };
+    }),
+}));
 
 // sitemap.xml with hreflang alternates for every language version.
 const urlFor = (route, lang) => route.kind === "home" ? `${siteUrl}/${lang}` : route.kind === "blog" ? `${siteUrl}/${lang}/blog` : `${siteUrl}/${lang}/blog/${route.slug}`;
