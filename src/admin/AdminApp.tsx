@@ -23,7 +23,7 @@ const T = {
     password: "كلمة السر",
     signIn: "تسجيل الدخول",
     signingIn: "جارٍ الدخول…",
-    nav: { home: "الرئيسية", reports: "التقارير وسيرينا", texts: "تعديل نصوص الموقع", videos: "فيديوهات العملاء", logos: "شعارات العملاء" } as Record<Page, string>,
+    nav: { home: "الرئيسية", reports: "التقارير وسيرينا", texts: "تعديل نصوص الموقع", videos: "فيديوهات العملاء", logos: "الشعارات" } as Record<Page, string>,
     view: "عرض الموقع",
     logout: "تسجيل الخروج",
     welcome: "أهلًا بك في لوحة الإدارة",

@@ -8,6 +8,7 @@ import ImageRoundedIcon from "@mui/icons-material/ImageRounded";
 import type { ClientLogo } from "../content/siteContent";
 import { api, fileToBase64, messageFor, newId } from "./api";
 import type { useAdminContent } from "./useAdminContent";
+import SiteLogoCard from "./SiteLogoCard";
 
 const T = {
     title: "شعارات العملاء",
@@ -68,6 +69,7 @@ export default function LogosPage({ admin }: { admin: ReturnType<typeof useAdmin
     };
 
     return <Box>
+        <SiteLogoCard />
         <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center", gap: 2, mb: 1 }}>
             <Typography component="h1" sx={{ fontSize: "1.4rem", fontWeight: 700 }}>{T.title}</Typography>
             <Button variant="contained" startIcon={<AddRoundedIcon />} onClick={() => setAdding(true)} disabled={!admin.content}>{T.add}</Button>

@@ -10,13 +10,14 @@ globalThis.fetch = async (url, init = {}) => {
     assert.equal(init.headers.Authorization, "Bearer test-token");
     if (!init.method) {
         const file = files.get(path);
-        return file ? Response.json({ sha: file.sha, content: Buffer.from(file.text).toString("base64") }) : new Response("{}", { status: 404 });
+        return file ? Response.json({ sha: file.sha, content: (file.raw ?? Buffer.from(file.text)).toString("base64") }) : new Response("{}", { status: 404 });
     }
     const body = JSON.parse(init.body);
     const current = files.get(path);
     if (current && body.sha !== current.sha) return new Response("{}", { status: 409 });
     const sha = String(commits.length + 1).padStart(40, "b");
-    files.set(path, { sha, text: Buffer.from(body.content, "base64").toString("utf8") });
+    const raw = Buffer.from(body.content, "base64");
+    files.set(path, { sha, raw, text: raw.toString("utf8") });
     commits.push({ path, message: body.message, branch: body.branch });
     return Response.json({ content: { sha } });
 };
@@ -25,6 +26,7 @@ const { default: login } = await import("../netlify/functions/admin-login.mjs");
 const { default: session } = await import("../netlify/functions/admin-session.mjs");
 const { default: content } = await import("../netlify/functions/admin-content.mjs");
 const { default: upload } = await import("../netlify/functions/admin-upload.mjs");
+const { default: siteLogo } = await import("../netlify/functions/admin-site-logo.mjs");
 const site = "https://clinova.test/.netlify/functions/";
 const call = (handler, name, { method = "GET", body, cookie, origin = "https://clinova.test" } = {}) => handler(new Request(site + name, {
     method, headers: { ...(cookie ? { cookie } : {}), ...(origin ? { origin } : {}), "content-type": "application/json" }, ...(body === undefined ? {} : { body: JSON.stringify(body) }),
@@ -95,6 +97,23 @@ const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1
 assert.equal((await call(upload, "admin-upload", { method: "POST", cookie, body: { name: "x", data: svg.toString("base64") } })).status, 415, "svg uploads refused");
 assert.equal((await call(upload, "admin-upload", { method: "POST", cookie, body: { name: "x", data: Buffer.alloc(1_100_000, 1).toString("base64") } })).status, 413);
 
+// The site logo: replacing keeps the original once, restoring brings it back, and only PNGs are taken.
+const pngHeader = Buffer.from("89504e470d0a1a0a", "hex");
+const firstLogo = Buffer.concat([pngHeader, Buffer.from("original logo")]);
+files.set("public/logo/logo.png", { sha: "d".repeat(40), raw: firstLogo });
+const fileBytes = (path) => files.get(path).raw;
+const newLogo = Buffer.concat([pngHeader, Buffer.from("new logo")]);
+assert.equal((await call(siteLogo, "admin-site-logo", { method: "POST", body: { data: newLogo.toString("base64") } })).status, 401, "needs a session");
+assert.equal((await call(siteLogo, "admin-site-logo", { method: "POST", cookie, body: { data: Buffer.from("\xff\xd8\xff jpeg").toString("base64") } })).status, 415, "only PNG replaces the logo");
+assert.equal((await call(siteLogo, "admin-site-logo", { method: "POST", cookie, body: { data: newLogo.toString("base64") } })).status, 200);
+assert.deepEqual(fileBytes("public/logo/logo.png"), newLogo);
+assert.deepEqual(fileBytes("public/logo/logo-original.png"), firstLogo, "the first logo is kept");
+const newer = Buffer.concat([pngHeader, Buffer.from("newer logo")]);
+await call(siteLogo, "admin-site-logo", { method: "POST", cookie, body: { data: newer.toString("base64") } });
+assert.deepEqual(fileBytes("public/logo/logo-original.png"), firstLogo, "a later replacement does not overwrite the original");
+assert.equal((await call(siteLogo, "admin-site-logo", { method: "POST", cookie, body: { restore: true } })).status, 200);
+assert.deepEqual(fileBytes("public/logo/logo.png"), firstLogo, "restore brings the original back");
+
 const signedOut = await call(login, "admin-login", { method: "DELETE", cookie });
 assert.match(signedOut.headers.get("set-cookie"), /Max-Age=0/);
-console.log("Admin sign-in, sessions, content validation, conflict detection, GitHub commits and logo uploads passed (mock GitHub)");
+console.log("Admin sign-in, sessions, content validation, conflict detection, GitHub commits, logo uploads and the site logo passed (mock GitHub)");

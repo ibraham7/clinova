@@ -107,6 +107,15 @@ export function storageError(error) {
     return status === 401 ? "github_token_invalid" : status === 403 || status === 404 ? "github_no_write" : "storage_failed";
 }
 
+/** Any file of the site repository (up to 1 MB) with its sha, or null when it does not exist. */
+export async function readRepoFile(path) {
+    const response = await github(`${path}?ref=${encodeURIComponent(branch())}&t=${Date.now()}`, { cache: "no-store" });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error(`github_read_${response.status}`);
+    const file = await response.json();
+    return { sha: file.sha, buffer: Buffer.from(file.content ?? "", "base64") };
+}
+
 /** Commits a file to the site repository; Netlify rebuilds the site from the new commit. */
 export async function writeFile(path, buffer, message, sha) {
     const response = await github(path, {
