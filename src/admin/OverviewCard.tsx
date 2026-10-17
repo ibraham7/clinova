@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Button, CircularProgress, Stack, Typography } from "@mui/material";
+import { Box, Button, ButtonBase, CircularProgress, Stack, Typography } from "@mui/material";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import InsightsRoundedIcon from "@mui/icons-material/InsightsRounded";
@@ -7,15 +7,18 @@ import { api } from "./api";
 import type { Report } from "./reportTypes";
 
 const T = {
-    title: "آخر 7 أيام",
-    intro: "مقارنة بالأيام السبعة التي قبلها. التفاصيل الكاملة وسيرينا في صفحة التقارير.",
+    periods: [[1, "اليوم"], [7, "7 أيام"], [30, "30 يومًا"], [90, "90 يومًا"]] as [number, string][],
+    title: { 1: "اليوم", 7: "آخر 7 أيام", 30: "آخر 30 يومًا", 90: "آخر 90 يومًا" } as Record<number, string>,
+    intro: { 1: "مقارنة بالأمس.", 7: "مقارنة بالأيام السبعة التي قبلها.", 30: "مقارنة بالثلاثين يومًا التي قبلها.", 90: "مقارنة بالتسعين يومًا التي قبلها." } as Record<number, string>,
+    more: "التفاصيل الكاملة وسيرينا في صفحة التقارير.",
     visitors: "زوار",
     today: "زوار اليوم",
+    avgSeconds: "متوسط مدة الزيارة",
     leads: "تركوا بياناتهم",
     conversion: "نسبة التحويل",
     latestLeads: "آخر من ترك بياناته",
     latestChanges: "آخر التعديلات على الموقع",
-    noLeads: "لا أحد بعد في هذه الأيام.",
+    noLeads: "لا أحد بعد في هذه الفترة.",
     noChanges: "لا تعديلات بعد.",
     open: "فتح التقارير",
     since: "التتبع بدأ في {date}",
@@ -27,14 +30,25 @@ const dateTime = (ts: string) => new Intl.DateTimeFormat("ar", { dateStyle: "med
 const countryName = (() => { try { const names = new Intl.DisplayNames(["ar"], { type: "region" }); return (code: string | null) => (code ? names.of(code) ?? code : ""); } catch { return (code: string | null) => code ?? ""; } })();
 const number = (value: number) => new Intl.NumberFormat("ar").format(value);
 
-/** The home page's quick look: this week's visitors and leads against last week, and what happened last. */
+const storageKey = "clinova.admin.overviewDays";
+function savedDays() {
+    try { const days = Number(localStorage.getItem(storageKey)); return [1, 7, 30, 90].includes(days) ? days : 7; } catch { return 7; }
+}
+
+/** The home page's quick look: visitors and leads for a chosen period against the one before, and what happened last. */
 export default function OverviewCard({ openReports }: { openReports: () => void }) {
     const [report, setReport] = useState<Report | null>(null);
     const [state, setState] = useState<"loading" | "ready" | "off">("loading");
+    const [days, setDays] = useState(savedDays);
+    const choose = (value: number) => {
+        setDays(value);
+        setReport(null);
+        try { localStorage.setItem(storageKey, String(value)); } catch { /* Remembering is optional. */ }
+    };
 
     useEffect(() => {
         let live = true;
-        void api.reports({ from: istanbulDay(6), to: istanbulDay(0) }).then((result) => {
+        void api.reports({ from: istanbulDay(days - 1), to: istanbulDay(0) }).then((result) => {
             if (!live) return;
             // Reports not configured (or failing): the status card below says why, so this card simply stays away.
             if (result.status !== 200) { setState("off"); return; }
@@ -42,11 +56,29 @@ export default function OverviewCard({ openReports }: { openReports: () => void 
             setState("ready");
         });
         return () => { live = false; };
-    }, []);
+    }, [days]);
 
     if (state === "off") return null;
     const box = { p: { xs: 2, md: 3 }, mb: 4, borderRadius: "20px", border: "1px solid rgba(142,168,232,0.16)", backgroundColor: "rgba(142,168,232,0.04)" };
-    if (!report) return <Box sx={{ ...box, display: "grid", placeItems: "center", minHeight: 160 }}><CircularProgress size={26} /></Box>;
+    const header = <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "flex-start", gap: 2, mb: 2, flexWrap: "wrap" }}>
+        <Box>
+            <Typography component="h2" sx={{ fontSize: "1.15rem", fontWeight: 700 }}>{T.title[days]}</Typography>
+            <Typography sx={{ fontSize: "0.8rem", color: "rgba(245,247,250,0.6)", mt: 0.5 }}>
+                {T.intro[days]} {T.more}{report?.trackingSince && report.trackingSince > report.range.from ? ` ${T.since.replace("{date}", dateTime(report.trackingSince))}.` : ""}
+            </Typography>
+        </Box>
+        <Stack direction="row" sx={{ gap: 1, alignItems: "center", flexWrap: "wrap" }}>
+            <Stack direction="row" role="group" sx={{ gap: 0.5, p: 0.5, borderRadius: "999px", border: "1px solid rgba(142,168,232,0.2)" }}>
+                {T.periods.map(([value, label]) => <ButtonBase key={value} onClick={() => choose(value)} aria-pressed={days === value} sx={{
+                    px: 1.5, py: 0.6, borderRadius: "999px", fontSize: "0.8rem", fontWeight: days === value ? 700 : 400,
+                    color: days === value ? "#F5F7FA" : "rgba(245,247,250,0.65)", backgroundColor: days === value ? "rgba(142,168,232,0.22)" : "transparent",
+                    transition: "background-color 300ms ease, color 300ms ease",
+                }}>{label}</ButtonBase>)}
+            </Stack>
+            <Button size="small" startIcon={<InsightsRoundedIcon />} onClick={openReports}>{T.open}</Button>
+        </Stack>
+    </Stack>;
+    if (!report) return <Box sx={box}>{header}<Box sx={{ display: "grid", placeItems: "center", minHeight: 120 }}><CircularProgress size={26} /></Box></Box>;
 
     const { summary, previous } = report;
     const change = (now: number, before: number) => {
@@ -59,7 +91,7 @@ export default function OverviewCard({ openReports }: { openReports: () => void 
     };
     const tiles: [string, string, ReturnType<typeof change>][] = [
         [T.visitors, number(summary.visitors), change(summary.visitors, previous.visitors)],
-        [T.today, number(report.daily.at(-1)?.visitors ?? 0), null],
+        days === 1 ? [T.avgSeconds, `${number(summary.avgSeconds)} ث`, change(summary.avgSeconds, previous.avgSeconds)] : [T.today, number(report.daily.at(-1)?.visitors ?? 0), null],
         [T.leads, number(summary.leads), change(summary.leads, previous.leads)],
         [T.conversion, `${number(summary.conversionRate)}%`, null],
     ];
@@ -68,15 +100,7 @@ export default function OverviewCard({ openReports }: { openReports: () => void 
     const list = { fontSize: "0.82rem", py: 1, borderTop: "1px solid rgba(142,168,232,0.1)" };
 
     return <Box sx={box}>
-        <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "flex-start", gap: 2, mb: 2, flexWrap: "wrap" }}>
-            <Box>
-                <Typography component="h2" sx={{ fontSize: "1.15rem", fontWeight: 700 }}>{T.title}</Typography>
-                <Typography sx={{ fontSize: "0.8rem", color: "rgba(245,247,250,0.6)", mt: 0.5 }}>
-                    {T.intro}{report.trackingSince && report.trackingSince > report.range.from ? ` ${T.since.replace("{date}", dateTime(report.trackingSince))}.` : ""}
-                </Typography>
-            </Box>
-            <Button size="small" startIcon={<InsightsRoundedIcon />} onClick={openReports}>{T.open}</Button>
-        </Stack>
+        {header}
         <Box sx={{ display: "grid", gap: 1.5, gridTemplateColumns: { xs: "1fr 1fr", md: "repeat(4, 1fr)" }, mb: 3 }}>
             {tiles.map(([label, value, delta]) => <Box key={label} sx={{ p: 2, borderRadius: "14px", backgroundColor: "rgba(142,168,232,0.06)" }}>
                 <Stack direction="row" sx={{ alignItems: "baseline", gap: 1 }}>
