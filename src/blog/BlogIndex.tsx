@@ -20,6 +20,7 @@ export function ArticleCard({ slug, lang }: { slug: string; lang: SiteLanguage }
         "&:hover": { transform: "translateY(-6px)", borderColor: "var(--clinova-rgba-142-168-232-0_35)", boxShadow: "0 18px 40px var(--clinova-rgba-0-0-0-0_28)" },
         "&:hover .clinova-card-arrow": { translate: isRtl ? "-4px 0" : "4px 0" },
     }}>
+        {article.cover && <Box component="img" src={article.cover} alt="" loading="lazy" sx={{ mx: -3, mt: -3, mb: 0.5, width: "calc(100% + 48px)", aspectRatio: "16 / 9", objectFit: "cover", borderRadius: "24px 24px 0 0", display: "block" }} />}
         <Typography sx={{ fontSize: "0.72rem", color: "primary.main" }}>{formatDate(article.date, lang)} · {t("{{count}} دقائق قراءة", { count: readingMinutes(article) })}</Typography>
         <Typography component="h2" sx={{ fontSize: "1.15rem", fontWeight: 600, lineHeight: 1.6, color: "var(--clinova-color-f5f7fa)" }}>
             {/* The whole card is clickable through this link's stretched overlay. */}

@@ -4,10 +4,10 @@
 import { analyticsReady } from "../lib/analytics.mjs";
 import { isAdmin, sameOrigin } from "../lib/admin.mjs";
 import { loadReport } from "../lib/report-data.mjs";
+import { call, chooseModels, GeminiError, rejectThinking, skipUntil, thinkingFor, transient } from "../lib/gemini.mjs";
 
 export const config = { path: "/api/serena" };
 
-const gemini = "https://generativelanguage.googleapis.com/v1beta";
 const maxTurns = 4;
 // Netlify stops a function after 30 s; stop earlier with a clear message.
 const budgetMs = 27_000;
@@ -62,66 +62,6 @@ async function siteContent(origin) {
     knowledge ??= fetch(`${origin}/serena/knowledge.json`).then((response) => response.ok ? response.json() : Promise.reject(new Error(`knowledge_${response.status}`)))
         .catch((error) => { knowledge = null; return { error: `The site content could not be loaded (${error.message}).` }; });
     return knowledge;
-}
-
-class GeminiError extends Error {
-    constructor(message, status) { super(message); this.status = status; }
-}
-
-async function call(path, apiKey, init = {}, timeout = 20_000) {
-    const response = await fetch(`${gemini}/${path}`, {
-        ...init,
-        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-        signal: AbortSignal.timeout(timeout),
-    });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new GeminiError(data?.error?.message ?? `gemini_${response.status}`, response.status);
-    return data;
-}
-
-// The models to try, in order: GEMINI_MODEL if set, then the newest stable Flash, the newest Flash-Lite and
-// the previous generation of each. When one is busy (Google answers "high demand") or slow, the next one answers.
-let cachedModels = null;
-// A model that was busy or slow is skipped for 10 minutes.
-const skipUntil = new Map();
-async function chooseModels(apiKey) {
-    if (cachedModels) return cachedModels;
-    const data = await call("models?pageSize=200", apiKey, {}, 8_000);
-    const names = (data.models ?? [])
-        .filter((model) => model.supportedGenerationMethods?.includes("generateContent"))
-        .map((model) => model.name.replace(/^models\//, ""))
-        .filter((name) => /^gemini-[\d.]+-flash/.test(name) && !/image|tts|audio|live|exp|preview|thinking/.test(name));
-    const version = (name) => Number(name.match(/^gemini-([\d.]+)/)?.[1] ?? 0);
-    const byVersion = (list) => [...list].sort((a, b) => version(b) - version(a) || a.length - b.length);
-    const full = byVersion(names.filter((name) => !name.includes("lite")));
-    const lite = byVersion(names.filter((name) => name.includes("lite")));
-    const chain = [process.env.GEMINI_MODEL, full[0], lite[0], full.find((name) => version(name) < version(full[0] ?? "")), lite.find((name) => version(name) < version(lite[0] ?? ""))];
-    cachedModels = [...new Set(chain.filter(Boolean))].slice(0, 4);
-    if (!cachedModels.length) throw new GeminiError("No Gemini Flash model is available for this key.", 404);
-    return cachedModels;
-}
-const transient = (error) => error?.name === "TimeoutError" || error?.name === "AbortError" || (error instanceof GeminiError && [429, 500, 502, 503, 504].includes(error.status));
-
-// Short, fast answers: the lowest thinking level each model accepts. Models differ ("minimal" is not
-// accepted everywhere), so a level a model rejects is remembered and the next one is tried.
-const thinkingLevels = ["minimal", "low", null];
-const rejectedLevels = new Map();
-function thinkingFor(model) {
-    const version = Number(model.match(/^gemini-([\d.]+)/)?.[1] ?? 0);
-    if (version >= 3) {
-        const level = thinkingLevels[rejectedLevels.get(model) ?? 0];
-        return level ? { thinkingConfig: { thinkingLevel: level } } : {};
-    }
-    if (version >= 2.5 && !rejectedLevels.has(model)) return { thinkingConfig: { thinkingBudget: 0 } };
-    return {};
-}
-/** True when Gemini refused the thinking setting; the next call then uses the next level (or none). */
-function rejectThinking(model, error) {
-    if (!(error instanceof GeminiError) || error.status !== 400 || !/thinking/i.test(error.message)) return false;
-    const next = (rejectedLevels.get(model) ?? 0) + 1;
-    if (next >= thinkingLevels.length) return false;
-    rejectedLevels.set(model, next);
-    return true;
 }
 
 const day = /^\d{4}-\d{2}-\d{2}$/;
