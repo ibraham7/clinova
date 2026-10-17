@@ -154,12 +154,16 @@ export default function EditMode() {
         if (!content || !draft) return;
         setBusy(true);
         const next = { ...content, texts: draft };
-        const result = await api.save(next, sha);
+        const result = await api.save(next, sha, content);
         setBusy(false);
         if (result.status !== 200) { setMessage({ type: "error", text: messageFor(result.data.error) }); return; }
-        setContent(next);
+        // The saved file can hold edits saved meanwhile from another tab or device: show those too.
+        const merged = result.data.content ?? next;
+        setContent(merged);
         setSha(result.data.sha);
-        setSaved(draft);
+        setSaved(merged.texts);
+        setDraft(merged.texts);
+        apply(merged.texts);
         setMessage({ type: "success", text: T.saved });
     };
 

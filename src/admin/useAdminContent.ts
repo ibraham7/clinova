@@ -29,17 +29,19 @@ export function useAdminContent() {
     }, []);
 
     const save = useCallback(async (next: SiteContent) => {
+        if (!content) return messageFor();
         setSaving(true);
-        const result = await api.save(next, sha);
+        const result = await api.save(next, sha, content);
         setSaving(false);
         if (result.status !== 200) {
             if (result.data.error === "conflict") void load();
             return messageFor(result.data.error);
         }
-        setContent(next);
+        // The saved file, with any edits saved meanwhile from elsewhere.
+        setContent(result.data.content ?? next);
         setSha(result.data.sha);
         return null;
-    }, [sha, load]);
+    }, [content, sha, load]);
 
     return { content, error, saving, save, reload: load };
 }
