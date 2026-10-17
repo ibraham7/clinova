@@ -23,6 +23,7 @@ export const api = {
     load: () => call<{ content: SiteContent; sha: string }>("admin-content"),
     /** `base` is the content as this page last loaded or saved it; the server applies only the difference to the latest file. */
     save: (content: SiteContent, sha: string, base: SiteContent) => call<{ sha: string; content: SiteContent }>("admin-content", { method: "PUT", body: JSON.stringify({ content, sha, base }) }),
+    siteLogo: (body: { data: string } | { restore: true }) => call("admin-site-logo", { method: "POST", body: JSON.stringify(body) }),
     uploadLogo: (name: string, data: string) => call<{ src: string }>("admin-upload", { method: "POST", body: JSON.stringify({ name, data }) }),
     reports: (filters: ReportFilters) => call<{ report: Report }>(`admin-reports?${new URLSearchParams(Object.entries(filters).filter(([, value]) => value) as [string, string][])}`),
 };
