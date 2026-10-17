@@ -192,11 +192,12 @@ export default function EditMode() {
             <Button size="small" variant="contained" disabled={!changes || busy} onClick={save} startIcon={<CloudDoneRoundedIcon />} sx={{ borderRadius: "999px", "& .MuiButton-startIcon": { marginLeft: "8px", marginRight: "-4px" } }}>{busy ? T.saving : T.save}</Button>
         </Box>
 
-        {message && <Box data-clinova-editor dir="rtl" sx={{ position: "fixed", zIndex: 1500, top: 16, left: "50%", transform: "translateX(-50%)", maxWidth: "calc(100vw - 24px)" }}>
+        {message && <Box data-clinova-editor dir="rtl" sx={{ position: "fixed", zIndex: 1700, top: 16, left: "50%", transform: "translateX(-50%)", maxWidth: "calc(100vw - 24px)" }}>
             <Alert severity={message.type} onClose={() => setMessage(null)}>{message.text}</Alert>
         </Box>}
 
-        <Dialog open={Boolean(dialog)} onClose={() => setDialog(null)} fullWidth maxWidth="sm" data-clinova-editor slotProps={{ paper: { dir: "rtl" } }}>
+        {/* Above the save bar (z-index 1500), which would otherwise cover the Apply button. */}
+        <Dialog open={Boolean(dialog)} onClose={() => setDialog(null)} fullWidth maxWidth="sm" data-clinova-editor sx={{ zIndex: 1600 }} slotProps={{ paper: { dir: "rtl" } }}>
             <DialogTitle>{T.dialogTitle}</DialogTitle>
             {dialog && <DialogContent>
                 {dialog.keys.length > 1 && <Alert severity="info" sx={{ mb: 2 }}>{T.shared}</Alert>}
