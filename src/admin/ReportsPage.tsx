@@ -14,7 +14,7 @@ import type { Marker } from "./charts";
 import SerenaPanel from "./SerenaPanel";
 
 const sectionNames: Record<string, string> = {
-    home: "الواجهة الرئيسية", about: "من نحن", reach: "لماذا Clinova؟", services: "خدماتنا", "contact-system": "رحلة المريض", specialties: "تخصصاتنا",
+    home: "الواجهة الرئيسية", about: "من نحن", story: "قصتنا", reach: "لماذا Clinova؟", services: "خدماتنا", "contact-system": "رحلة المريض", specialties: "تخصصاتنا",
     "case-studies": "قصص النجاح", reviews: "التقييمات", testimonials: "آراء العملاء", "client-videos": "فيديوهات العملاء", partners: "شركاؤنا",
     faq: "الأسئلة الشائعة", "contact-cta": "تواصل معنا", ticker: "الشريط المتحرك",
 };

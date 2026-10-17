@@ -21,6 +21,14 @@ function bump(map, key, init, visitor, extra) {
 const clean = (rows) => rows.map(({ _seen, ...row }) => row);
 
 /** One profile per visitor, taken from the first page view: where they came from and what they used. */
+// Rows saved before the caps existed: section and page times over 30 minutes count as 30 (a forgotten tab), and "/ar/" is "/ar".
+const maxTimeMs = 30 * 60_000;
+export function tidy(event) {
+    const value = (event.type === "section" || event.type === "page_end") && event.value > maxTimeMs ? maxTimeMs : event.value;
+    const path = typeof event.path === "string" ? event.path.replace(/(.)\/+$/, "$1") : event.path;
+    return value === event.value && path === event.path ? event : { ...event, value, path };
+}
+
 export function visitorProfiles(events) {
     const profiles = new Map();
     for (const event of events) {
@@ -105,7 +113,9 @@ function leadMatches(lead, kept, filters) {
  * @param {object} input.filters country, device, lang, source, channel, path
  * @param {boolean} input.compact for Serena: no contact details and no raw event list
  */
-export function buildReport({ range, previousRange, events, previousEvents = [], leads, previousLeads = [], adminLog = [], articles = [], filters = {}, compact = false, truncated = false }) {
+export function buildReport({ range, previousRange, events: rawEvents, previousEvents: rawPrevious = [], leads, previousLeads = [], adminLog = [], articles = [], filters = {}, compact = false, truncated = false }) {
+    const events = rawEvents.map(tidy);
+    const previousEvents = rawPrevious.map(tidy);
     const now = kpis(events, leads, filters);
     const before = kpis(previousEvents, previousLeads, filters);
     const { profiles, kept } = now;
