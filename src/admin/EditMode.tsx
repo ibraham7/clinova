@@ -36,14 +36,25 @@ const T = {
 const normalize = (text: string) => text.replace(/\s+/g, " ").trim();
 
 /** The text node under the pointer, if the pointer is really over its glyphs. */
+function containsPoint(node: Node, x: number, y: number) {
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    return Array.from(range.getClientRects()).some((rect) => x >= rect.left - 2 && x <= rect.right + 2 && y >= rect.top - 2 && y <= rect.bottom + 2);
+}
+
 function textNodeAt(x: number, y: number): Text | null {
     const doc = document as Document & { caretRangeFromPoint?: (x: number, y: number) => Range | null; caretPositionFromPoint?: (x: number, y: number) => { offsetNode: Node } | null };
     const node = doc.caretRangeFromPoint?.(x, y)?.startContainer ?? doc.caretPositionFromPoint?.(x, y)?.offsetNode;
-    if (!node || node.nodeType !== Node.TEXT_NODE) return null;
-    const range = document.createRange();
-    range.selectNodeContents(node);
-    const inside = Array.from(range.getClientRects()).some((rect) => x >= rect.left - 2 && x <= rect.right + 2 && y >= rect.top - 2 && y <= rect.bottom + 2);
-    return inside ? (node as Text) : null;
+    if (node?.nodeType === Node.TEXT_NODE && containsPoint(node, x, y)) return node as Text;
+    // Buttons (the header's "Book" and menu items) can't be selected, so the caret never lands in them:
+    // look through the text under the pointer instead.
+    const element = document.elementFromPoint(x, y);
+    if (!element) return null;
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    for (let text = walker.nextNode(); text; text = walker.nextNode()) {
+        if (text.textContent?.trim() && containsPoint(text, x, y)) return text as Text;
+    }
+    return null;
 }
 
 const isEditorUi = (target: EventTarget | null) => target instanceof Element && Boolean(target.closest("[data-clinova-editor]"));
@@ -111,12 +122,18 @@ export default function EditMode() {
             setHover({ keys, rect: range.getBoundingClientRect() });
         };
         // Capture clicks before the site's own handlers so links and buttons don't fire while editing.
+        // Off a text, the site keeps working (the header menu, language and theme buttons, in-page links), so
+        // menus can be opened and their texts edited; only links that would leave the page stay blocked.
         const click = (event: MouseEvent) => {
             if (isEditorUi(event.target)) return;
+            const current = hoverRef.current;
+            if (!current) {
+                const href = event.target instanceof Element ? event.target.closest("a[href]")?.getAttribute("href") : null;
+                if (href && !href.startsWith("#")) { event.preventDefault(); event.stopPropagation(); }
+                return;
+            }
             event.preventDefault();
             event.stopPropagation();
-            const current = hoverRef.current;
-            if (!current) return;
             const values = Object.fromEntries(codes.map((code) => [code, (i18n.getResourceBundle(code, "translation") as Record<string, string>)[current.keys[0]] ?? ""])) as Record<SiteLanguage, string>;
             setDialog({ keys: current.keys, values });
         };
