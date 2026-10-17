@@ -7,6 +7,7 @@ import VideoLibraryRoundedIcon from "@mui/icons-material/VideoLibraryRounded";
 import WorkspacesRoundedIcon from "@mui/icons-material/WorkspacesRounded";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import InsightsRoundedIcon from "@mui/icons-material/InsightsRounded";
 import clinovaLogo from "../../public/logo/logo.png";
 import { api, messageFor, type Session } from "./api";
@@ -14,17 +15,18 @@ import { useAdminContent } from "./useAdminContent";
 import TextsPage from "./TextsPage";
 import VideosPage from "./VideosPage";
 import LogosPage from "./LogosPage";
+import BlogPage from "./BlogPage";
 import OverviewCard from "./OverviewCard";
 import ReportsPage from "./ReportsPage";
 import HealthCard from "./HealthCard";
 
-type Page = "home" | "reports" | "texts" | "videos" | "logos";
+type Page = "home" | "reports" | "texts" | "blog" | "videos" | "logos";
 const T = {
     title: "لوحة إدارة Clinova",
     password: "كلمة السر",
     signIn: "تسجيل الدخول",
     signingIn: "جارٍ الدخول…",
-    nav: { home: "الرئيسية", reports: "التقارير وسيرينا", texts: "تعديل نصوص الموقع", videos: "فيديوهات العملاء", logos: "الشعارات" } as Record<Page, string>,
+    nav: { home: "الرئيسية", reports: "التقارير وسيرينا", texts: "تعديل نصوص الموقع", blog: "المدونة", videos: "فيديوهات العملاء", logos: "الشعارات" } as Record<Page, string>,
     view: "عرض الموقع",
     logout: "تسجيل الخروج",
     welcome: "أهلًا بك في لوحة الإدارة",
@@ -96,7 +98,7 @@ function Dashboard({ session, page, setPage, onLogout }: { session: Session; pag
     const admin = useAdminContent();
     // This browser belongs to an admin: the site's visitor statistics leave it out (see src/analytics/track.ts).
     useEffect(() => { try { localStorage.setItem("clinova.notrack", "1"); } catch { /* Private mode. */ } }, []);
-    const icons: Record<Page, ReactNode> = { home: <DashboardRoundedIcon />, reports: <InsightsRoundedIcon />, texts: <EditNoteRoundedIcon />, videos: <VideoLibraryRoundedIcon />, logos: <WorkspacesRoundedIcon /> };
+    const icons: Record<Page, ReactNode> = { home: <DashboardRoundedIcon />, reports: <InsightsRoundedIcon />, texts: <EditNoteRoundedIcon />, blog: <ArticleRoundedIcon />, videos: <VideoLibraryRoundedIcon />, logos: <WorkspacesRoundedIcon /> };
     const edited = admin.content ? Object.values(admin.content.texts).reduce((sum, texts) => sum + Object.keys(texts).length, 0) : 0;
     return <Box dir="rtl" sx={{ minHeight: "100vh", display: "flex", flexDirection: { xs: "column", md: "row" }, backgroundColor: "#0B111B", color: "#F5F7FA" }}>
         <Box component="nav" sx={{
@@ -129,6 +131,7 @@ function Dashboard({ session, page, setPage, onLogout }: { session: Session; pag
             </Box>}
             {page === "reports" && <ReportsPage />}
             {page === "texts" && <TextsPage />}
+            {page === "blog" && <BlogPage />}
             {page === "videos" && <VideosPage admin={admin} upload={session.videoUpload} />}
             {page === "logos" && <LogosPage admin={admin} />}
         </Box>

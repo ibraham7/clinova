@@ -32,6 +32,8 @@ export default function BlogArticle({ slug }: { slug: string }) {
                 </Typography>
             </Box>
 
+            {article.cover && <Box component="img" src={article.cover} alt="" sx={{ mt: 4, width: "100%", aspectRatio: "16 / 9", objectFit: "cover", borderRadius: "24px", border: "1px solid var(--clinova-rgba-142-168-232-0_14)", display: "block" }} />}
+
             {article.summary && <Box component="aside" className="clinova-blog-summary" sx={{ mt: 4, p: { xs: 2.5, md: 3 }, borderRadius: "20px", border: "1px solid var(--clinova-rgba-142-168-232-0_22)", background: "linear-gradient(135deg, var(--clinova-rgba-142-168-232-0_12), var(--clinova-rgba-142-168-232-0_03))" }}>
                 <Stack direction="row" sx={{ alignItems: "center", gap: 1, mb: 1, color: "primary.light" }}>
                     <AutoAwesomeRoundedIcon sx={{ fontSize: 18 }} />

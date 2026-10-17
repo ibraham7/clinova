@@ -76,6 +76,48 @@ function github(path, init = {}) {
     });
 }
 
+/** Any GitHub API path of the site repository (git data API and the like). */
+function githubApi(path, init = {}) {
+    const repo = process.env.GITHUB_REPO || "ibraham7/clinova";
+    return fetch(`https://api.github.com/repos/${repo}/${path}`, {
+        ...init,
+        cache: "no-store",
+        headers: {
+            Accept: "application/vnd.github+json",
+            Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+            "X-GitHub-Api-Version": "2022-11-28",
+            "User-Agent": "clinova-admin",
+            ...(init.body ? { "Content-Type": "application/json" } : {}),
+        },
+    });
+}
+
+async function githubJson(path, init) {
+    const response = await githubApi(path, init);
+    if (!response.ok) throw new Error(`github_${init?.method === undefined ? "read" : "write"}_${response.status}`);
+    return response.json();
+}
+
+/**
+ * Commits several files at once (one commit, so one site rebuild): each change is { path, buffer } to write or
+ * { path, remove: true } to delete. Retries when another commit lands on the branch in between.
+ */
+export async function commitFiles(changes, message) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+        const ref = await githubJson(`git/ref/heads/${encodeURIComponent(branch())}`);
+        const parent = await githubJson(`git/commits/${ref.object.sha}`);
+        const tree = await Promise.all(changes.map(async (change) => change.remove
+            ? { path: change.path, mode: "100644", type: "blob", sha: null }
+            : { path: change.path, mode: "100644", type: "blob", sha: (await githubJson("git/blobs", { method: "POST", body: JSON.stringify({ content: change.buffer.toString("base64"), encoding: "base64" }) })).sha }));
+        const newTree = await githubJson("git/trees", { method: "POST", body: JSON.stringify({ base_tree: parent.tree.sha, tree }) });
+        const commit = await githubJson("git/commits", { method: "POST", body: JSON.stringify({ message, tree: newTree.sha, parents: [ref.object.sha] }) });
+        const update = await githubApi(`git/refs/heads/${encodeURIComponent(branch())}`, { method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false }) });
+        if (update.ok) return { sha: commit.sha };
+        if (update.status !== 422 && update.status !== 409) throw new Error(`github_write_${update.status}`);
+    }
+    return { conflict: true };
+}
+
 export const branch = () => process.env.GITHUB_BRANCH || "main";
 export const storageReady = () => Boolean(process.env.GITHUB_TOKEN);
 

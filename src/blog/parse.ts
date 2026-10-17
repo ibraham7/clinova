@@ -1,5 +1,5 @@
 // A deliberately small Markdown subset for articles:
-// front matter (title, description, date), "> " key takeaway, "## " headings, "- " / "1. " lists,
+// front matter (title, description, date, optional cover image path), "> " key takeaway, "## " headings, "- " / "1. " lists,
 // "Q: " / "A: " FAQ pairs, plain paragraphs, and inline **bold** and [links](/path).
 export type ArticleBlock =
     | { type: "h2"; text: string; id: string }
@@ -13,6 +13,8 @@ export type ParsedArticle = {
     description: string;
     date: string;
     updated?: string;
+    /** Cover image under /uploads/blog (added from the admin panel), shown on the card, the article and in shares. */
+    cover?: string;
     summary: string;
     blocks: ArticleBlock[];
     faq: { q: string; a: string }[];
@@ -68,7 +70,7 @@ export function parseArticle(source: string): ParsedArticle {
     flush();
     const text = [summary.join(" "), ...blocks.map((block) => ("text" in block ? block.text : block.items.join(" "))), ...faq.map((item) => `${item.q} ${item.a}`)].join(" ");
     return {
-        title: meta.title, seoTitle: meta.seoTitle, description: meta.description, date: meta.date, updated: meta.updated,
+        title: meta.title, seoTitle: meta.seoTitle, description: meta.description, date: meta.date, updated: meta.updated, cover: meta.cover || undefined,
         summary: summary.join(" "), blocks, faq, words: plainText(text).split(/\s+/).filter(Boolean).length,
     };
 }

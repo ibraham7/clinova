@@ -12,6 +12,7 @@ import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import clinovaLogo from "../../../public/logo/logo.png";
 import { bookingLinkProps } from "../../config/contact";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
@@ -28,6 +29,8 @@ const navItems: { label: string; short?: string; href: string; icon: typeof Home
     { label: "قصص النجاح", href: "#case-studies", icon: TrendingUpRoundedIcon },
     { label: "شركاؤنا", href: "#partners", icon: HandshakeRoundedIcon },
     { label: "الأسئلة الشائعة", short: "أسئلة شائعة", href: "#faq", icon: HelpOutlineRoundedIcon },
+    // Not a section of this page: the blog's own page in the current language.
+    { label: "المدونة", href: "/blog", icon: ArticleRoundedIcon },
     { label: "تواصل معنا", href: "#contact-cta", icon: PhoneRoundedIcon },
 ];
 
@@ -46,7 +49,8 @@ function Logo({ compact = false }: { compact?: boolean }) {
 }
 
 export default function Header() {
-    const { t, isRtl, direction } = useSiteTranslation();
+    const { t, isRtl, direction, i18n } = useSiteTranslation();
+    const link = (href: string) => href.startsWith("#") ? href : `/${i18n.resolvedLanguage ?? "ar"}${href}`;
     const compact = useMediaQuery("(max-width:1399px)");
     const [active, setActive] = useState("#home");
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -98,7 +102,7 @@ export default function Header() {
                                 {navItems.map((item, index) => {
                                     const current = active === item.href;
                                     return <Button
-                                        component="a" href={item.href} key={item.href} onClick={() => select(item.href)} aria-current={current ? "location" : undefined}
+                                        component="a" href={link(item.href)} key={item.href} onClick={() => select(item.href)} aria-current={current ? "location" : undefined}
                                         className="clinova-nav-item" disableRipple style={{ animationDelay: `${120 + index * 45}ms` }}
                                         sx={{ minWidth: 0, maxWidth: { lg: 84, xl: 104 }, px: { lg: 0.6, xl: 1 }, py: 0.75, gap: 0.4, flexDirection: "column", justifyContent: "flex-start", borderRadius: "18px", fontSize: { lg: "0.7rem", xl: "0.76rem" }, lineHeight: 1.2, textAlign: "center", fontWeight: current ? 600 : 500,
                                             position: "relative", isolation: "isolate", backgroundColor: "transparent",
@@ -126,7 +130,7 @@ export default function Header() {
             <Typography sx={{ fontSize: "0.72rem", color: "primary.main", mb: 1.5 }}>{t("التنقل الرئيسي")}</Typography>
             <Box component="nav" id={drawerId} aria-label={t("التنقل الرئيسي")}>
                 <List disablePadding>
-                    {navItems.map((item, index) => <ListItemButton component="a" href={item.href} key={item.href} selected={active === item.href} aria-current={active === item.href ? "location" : undefined} onClick={() => select(item.href)} sx={{ borderRadius: 2.5, mb: 0.5, py: 1.1, px: 1.5, gap: 1.5, textAlign: "start", "&.Mui-selected": { backgroundColor: "var(--clinova-rgba-142-168-232-0_13)", boxShadow: "inset 0 0 0 1px var(--clinova-rgba-142-168-232-0_18)" } }}>
+                    {navItems.map((item, index) => <ListItemButton component="a" href={link(item.href)} key={item.href} selected={active === item.href} aria-current={active === item.href ? "location" : undefined} onClick={() => select(item.href)} sx={{ borderRadius: 2.5, mb: 0.5, py: 1.1, px: 1.5, gap: 1.5, textAlign: "start", "&.Mui-selected": { backgroundColor: "var(--clinova-rgba-142-168-232-0_13)", boxShadow: "inset 0 0 0 1px var(--clinova-rgba-142-168-232-0_18)" } }}>
                         <ListItemIcon sx={{ minWidth: 0, color: active === item.href ? "primary.light" : "var(--clinova-rgba-142-168-232-0_6)" }}><item.icon sx={{ fontSize: 21 }} /></ListItemIcon>
                         <ListItemText primary={t(item.label)} slotProps={{ primary: { sx: { fontSize: "0.92rem", fontWeight: active === item.href ? 600 : 400 } } }} />
                         <Typography aria-hidden="true" dir="ltr" sx={{ color: "var(--clinova-text-rgba-142-168-232-0_3)", fontSize: "0.65rem" }}>{String(index + 1).padStart(2, "0")}</Typography>

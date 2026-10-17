@@ -3,6 +3,8 @@ import type { Report, ReportFilters } from "./reportTypes";
 
 export type VideoUploadConfig = { cloudName: string; uploadPreset: string };
 export type Session = { ok: true; storage: boolean; videoUpload: VideoUploadConfig | null };
+export type ArticleLang = "ar" | "en" | "tr" | "fr";
+export type AdminArticle = { slug: string; title: string; date: string; updated: string | null; cover: string | null; languages: ArticleLang[] };
 export type HealthCheck = { id: "password" | "github" | "supabase" | "gemini" | "sheets" | "cloudinary"; ok: boolean; optional: boolean; detail: string | null };
 
 async function call<T = Record<string, unknown>>(name: string, init: RequestInit = {}) {
@@ -23,6 +25,11 @@ export const api = {
     load: () => call<{ content: SiteContent; sha: string }>("admin-content"),
     /** `base` is the content as this page last loaded or saved it; the server applies only the difference to the latest file. */
     save: (content: SiteContent, sha: string, base: SiteContent) => call<{ sha: string; content: SiteContent }>("admin-content", { method: "PUT", body: JSON.stringify({ content, sha, base }) }),
+    articles: () => call<{ articles: AdminArticle[] }>("admin-articles"),
+    article: (slug: string) => call<{ files: Partial<Record<ArticleLang, string>> }>(`admin-articles?slug=${encodeURIComponent(slug)}`),
+    saveArticle: (body: { slug: string; isNew: boolean; files: Partial<Record<ArticleLang, string>>; cover?: string; removeCover?: boolean }) => call<{ cover: string | null }>("admin-articles", { method: "PUT", body: JSON.stringify(body) }),
+    deleteArticle: (slug: string) => call(`admin-articles?slug=${encodeURIComponent(slug)}`, { method: "DELETE" }),
+    articleAi: (body: { action: "draft"; topic: string; notes?: string } | { action: "translate"; markdown: string; to: ArticleLang }) => call<{ markdown: string; check: string | null; truncated?: boolean; detail?: string }>("admin-article-ai", { method: "POST", body: JSON.stringify(body) }),
     siteLogo: (body: { data: string } | { restore: true }) => call("admin-site-logo", { method: "POST", body: JSON.stringify(body) }),
     uploadLogo: (name: string, data: string) => call<{ src: string }>("admin-upload", { method: "POST", body: JSON.stringify({ name, data }) }),
     reports: (filters: ReportFilters) => call<{ report: Report }>(`admin-reports?${new URLSearchParams(Object.entries(filters).filter(([, value]) => value) as [string, string][])}`),
@@ -76,6 +83,14 @@ export const errorMessages: Record<string, string> = {
     bad_key: "مفتاح GEMINI_API_KEY غير صحيح أو الموديل غير متاح.",
     timeout: "استغرقت سيرينا وقتًا أطول من المسموح. جرّب سؤالًا أقصر أو فترة أقصر.",
     failed: "تعذر الاتصال بسيرينا. أعد المحاولة.",
+    not_found: "لم يُعثر على المقالة. ربما حُذفت.",
+    article_bad_slug: "رابط المقالة يجب أن يكون بأحرف إنجليزية صغيرة وأرقام وشرطات فقط (مثال: dental-clinic-ads)، من 3 إلى 80 حرفًا.",
+    article_slug_taken: "يوجد مقالة بنفس الرابط. اختر رابطًا آخر.",
+    article_missing_fields: "العنوان والوصف ونص المقالة مطلوبة (والعربية مطلوبة دائمًا).",
+    article_invalid: "صيغة المقالة غير صحيحة. تحقق من التاريخ والحقول.",
+    article_too_long: "المقالة أطول من المسموح.",
+    article_bad_link: "أحد الروابط غير مسموح. استخدم روابط تبدأ بـ / أو https:// أو mailto: أو tel:.",
+    article_topic_missing: "اكتب موضوع المقالة أولًا.",
 };
 
 export const messageFor = (error?: string) => (error && errorMessages[error]) || "حدث خطأ غير متوقع. أعد المحاولة.";

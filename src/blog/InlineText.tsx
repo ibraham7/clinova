@@ -7,6 +7,8 @@ export default function InlineText({ text }: { text: string }) {
         const bold = /^\*\*(.+)\*\*$/.exec(part);
         if (bold) return <Box component="strong" key={index} sx={{ color: "var(--clinova-color-f5f7fa)", fontWeight: 600 }}>{bold[1]}</Box>;
         const link = /^\[(.+?)\]\((.+?)\)$/.exec(part);
+        // Only site paths, anchors and web, mail and phone links become links; anything else stays text.
+        if (link && !/^(\/|#|https?:\/\/|mailto:|tel:)/i.test(link[2])) return <span key={index}>{link[1]}</span>;
         if (link) {
             const external = /^https?:/.test(link[2]);
             return <Box component="a" key={index} href={link[2]} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})} sx={{

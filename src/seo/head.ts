@@ -121,8 +121,10 @@ export function buildHead(route: Route, lang: SiteLanguage): PageHead {
         const article = findArticle(route.slug)?.translations[lang];
         if (!article) throw new Error(`Missing article ${route.slug} in ${lang}`);
         const blogUrl = `${siteUrl}/${lang}/blog`;
+        const image = article.cover ? `${siteUrl}${article.cover}` : base.ogImage;
         return {
             ...base,
+            ogImage: image,
             // Search results show roughly 60 characters; add the brand only when it still fits.
             title: (() => { const title = article.seoTitle ?? article.title; return title.length <= 48 ? `${title} | ${siteName}` : title; })(),
             description: article.description,
@@ -139,7 +141,7 @@ export function buildHead(route: Route, lang: SiteLanguage): PageHead {
                     datePublished: article.date,
                     dateModified: article.updated ?? article.date,
                     wordCount: article.words,
-                    image: base.ogImage,
+                    image,
                     url: canonical,
                     mainEntityOfPage: canonical,
                     author: { "@id": organizationId },
