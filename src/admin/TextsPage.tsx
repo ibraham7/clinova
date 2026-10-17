@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Box, Button, Stack, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import { languages } from "../i18n";
+import { segmentedSx } from "./ui";
 
 const T = {
     title: "تعديل نصوص الموقع",
@@ -20,7 +21,7 @@ export default function TextsPage() {
                 <Typography sx={{ mt: 0.5, fontSize: "0.88rem", color: "rgba(245,247,250,0.7)", maxWidth: 760, lineHeight: 1.8 }}>{T.hint}</Typography>
             </Box>
             <Stack direction="row" sx={{ gap: 1, flexShrink: 0 }}>
-                <ToggleButtonGroup size="small" exclusive value={lang} onChange={(_, value) => value && setLang(value)}>
+                <ToggleButtonGroup sx={segmentedSx} size="small" exclusive value={lang} onChange={(_, value) => value && setLang(value)}>
                     {languages.map((language) => <ToggleButton key={language.code} value={language.code}>{language.name}</ToggleButton>)}
                 </ToggleButtonGroup>
                 <Button href={src} target="_blank" rel="noopener" startIcon={<OpenInNewRoundedIcon />}>{T.fullScreen}</Button>

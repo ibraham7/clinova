@@ -10,6 +10,7 @@ import { languages, type SiteLanguage } from "../i18n";
 import { videoPoster, youtubeId, type ClientVideo } from "../content/siteContent";
 import { newId, uploadVideo, type VideoUploadConfig } from "./api";
 import type { useAdminContent } from "./useAdminContent";
+import { segmentedSx } from "./ui";
 
 const T = {
     title: "فيديوهات العملاء",
@@ -70,7 +71,7 @@ function VideoDialog({ initial, upload, onClose, onSave, saving }: { initial: Cl
             <Stack sx={{ gap: 2.5, pt: 1 }}>
                 <Box>
                     <Typography sx={{ fontSize: "0.8rem", mb: 1, color: "text.secondary" }}>{T.source}</Typography>
-                    <ToggleButtonGroup exclusive size="small" value={source} onChange={(_, value) => { if (value) { setSource(value); setVideo((current) => ({ ...current, url: "", poster: undefined })); } }}>
+                    <ToggleButtonGroup sx={segmentedSx} exclusive size="small" value={source} onChange={(_, value) => { if (value) { setSource(value); setVideo((current) => ({ ...current, url: "", poster: undefined })); } }}>
                         <ToggleButton value="youtube">{T.youtube}</ToggleButton>
                         <ToggleButton value="upload">{T.upload}</ToggleButton>
                     </ToggleButtonGroup>
