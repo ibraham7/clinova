@@ -7,6 +7,17 @@
     "tr": {},
     "fr": {}
   },
-  "videos": [],
+  "videos": [
+    {
+      "id": "video-2880704d",
+      "url": "https://www.youtube.com/watch?v=gfU3_SPoQGY",
+      "name": "تيست",
+      "details": {
+        "ar": "تيست"
+      },
+      "quote": {},
+      "addedAt": "2026-10-17"
+    }
+  ],
   "logos": []
 }
