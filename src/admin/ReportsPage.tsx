@@ -29,7 +29,7 @@ const surveyTargets: Record<string, string> = { shown: "ظهر الاستبيا�
 const T = {
     title: "التقارير",
     intro: "كل ما يحدث على الموقع: من أين يأتي الزوار، ماذا يشاهدون، أين يتوقفون، ومن ترك بياناته. البيانات مجهولة الهوية ولا تُحفظ عناوين IP.",
-    presets: [["7", "آخر 7 أيام"], ["30", "آخر 30 يومًا"], ["90", "آخر 90 يومًا"], ["365", "آخر سنة"]] as const,
+    presets: [["7", "آخر 7 أيام"], ["30", "آخر 30 يومًا"], ["90", "آخر 90 يومًا"]] as const,
     from: "من", to: "إلى",
     country: "الدولة", device: "الجهاز", channel: "نوع المصدر", source: "المصدر", all: "الكل",
     refresh: "تحديث", clear: "مسح الفلاتر",
@@ -139,6 +139,14 @@ export default function ReportsPage() {
     }, [filters, reload]);
 
     const set = (key: keyof ReportFilters, value: string) => setFilters((current) => ({ ...current, [key]: value || undefined }));
+    // A start after the end (or the reverse) moves the other date along, so the range is never empty.
+    const setDay = (key: "from" | "to", value: string) => {
+        if (!value) return;
+        const day = value > daysAgo(0) ? daysAgo(0) : value;
+        setFilters((current) => key === "from"
+            ? { ...current, from: day, to: day > current.to ? day : current.to }
+            : { ...current, to: day, from: day < current.from ? day : current.from });
+    };
     const preset = (days: number) => setFilters((current) => ({ ...current, from: daysAgo(days - 1), to: daysAgo(0) }));
     const markers = useMemo<Marker[]>(() => report ? [
         ...report.articles.map((article) => ({ date: article.date, label: `مقالة: ${article.title}` })),
@@ -147,7 +155,7 @@ export default function ReportsPage() {
     // Choices come from the data itself, so every option has visitors behind it.
     const options = {
         country: report?.countries.filter((row) => row.code !== "??").map((row) => [row.code, countryName(row.code, row.name)]) ?? [],
-        device: Object.entries(deviceNames), channel: Object.entries(channelNames),
+        device: Object.entries(deviceNames),
         source: report?.sources.map((row) => [row.source, row.source]) ?? [],
     };
     const ready = Boolean(report);
@@ -164,9 +172,9 @@ export default function ReportsPage() {
                 const active = filters.to === daysAgo(0) && filters.from === daysAgo(Number(days) - 1);
                 return <ButtonBase key={days} onClick={() => preset(Number(days))} sx={{ px: 1.75, py: 0.9, borderRadius: "999px", fontSize: "0.82rem", border: "1px solid rgba(142,168,232,0.25)", backgroundColor: active ? "rgba(142,168,232,0.2)" : "transparent", fontWeight: active ? 700 : 400 }}>{label}</ButtonBase>;
             })}
-            <TextField type="date" size="small" label={T.from} value={filters.from} onChange={(event) => event.target.value && set("from", event.target.value)} slotProps={{ inputLabel: { shrink: true } }} />
-            <TextField type="date" size="small" label={T.to} value={filters.to} onChange={(event) => event.target.value && set("to", event.target.value)} slotProps={{ inputLabel: { shrink: true } }} />
-            {(["country", "device", "channel", "source"] as const).map((key) => <TextField key={key} select size="small" label={T[key]} value={filters[key] ?? ""} onChange={(event) => set(key, event.target.value)} sx={{ minWidth: 130 }}>
+            <TextField type="date" size="small" label={T.from} value={filters.from} onChange={(event) => setDay("from", event.target.value)} slotProps={{ inputLabel: { shrink: true }, htmlInput: { max: daysAgo(0) } }} />
+            <TextField type="date" size="small" label={T.to} value={filters.to} onChange={(event) => setDay("to", event.target.value)} slotProps={{ inputLabel: { shrink: true }, htmlInput: { max: daysAgo(0) } }} />
+            {(["country", "device", "source"] as const).map((key) => <TextField key={key} select size="small" label={T[key]} value={filters[key] ?? ""} onChange={(event) => set(key, event.target.value)} sx={{ minWidth: 130 }}>
                 <MenuItem value="">{T.all}</MenuItem>
                 {options[key].map(([value, label]) => <MenuItem key={value} value={value}>{label}</MenuItem>)}
                 {filters[key] && !options[key].some(([value]) => value === filters[key]) && <MenuItem value={filters[key]}>{filters[key]}</MenuItem>}
