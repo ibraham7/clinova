@@ -70,6 +70,10 @@
 - **الحفظ:** `admin-articles` يحفظ كل اللغات والغلاف في commit واحد (نشر واحد) في `src/blog/content/<slug>/<lang>.md` و`public/uploads/blog/`. العربية مطلوبة؛ اللغة الفارغة لا تُنشر. الروابط المسموحة فقط: `/`، `#`، `https://`، `mailto:`، `tel:`.
 - **الكتابة بالذكاء الاصطناعي:** `admin-article-ai` (Gemini، نفس مفتاح سيرينا). الاختبار: `npm run check:blog-admin`.
 
+## بكسل Meta (إعلانات فيسبوك وإنستغرام)
+
+ضع رقم البكسل في Netlify باسم `VITE_META_PIXEL_ID` (أرقام فقط) ثم Deploys ← Trigger deploy. يعمل فقط حيث تعمل إحصاءات الموقع (ليس في /admin ولا وضع التعديل ولا متصفحات الفريق ولا مع Global Privacy Control). الأحداث: `PageView`، و`Contact` عند الضغط على واتساب أو الهاتف أو الإيميل، و`Lead` عند إكمال الاستبيان (`trial_survey`) أو تحميل البروفايل (`company_profile_download`). بطاقة «حالة الربط» تعرض الرقم المضبوط. لإيقافه: احذف المتغير وأعد النشر.
+
 ## الأمان
 
 - الدخول بكلمة سر واحدة. الجلسة تدوم 12 ساعة في ملف تعريف ارتباط محمي (HttpOnly وSecure وSameSite=Strict).
