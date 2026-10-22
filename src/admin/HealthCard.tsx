@@ -18,6 +18,7 @@ const T = {
         gemini: ["سيرينا (Google Gemini)", "GEMINI_API_KEY"],
         sheets: ["الاستبيان وتحميل البروفايل (Google Sheets)", "src/config/profile-leads.json"],
         cloudinary: ["رفع ملفات الفيديو (Cloudinary، اختياري)", "CLOUDINARY_CLOUD_NAME + CLOUDINARY_UPLOAD_PRESET"],
+        pixel: ["بكسل Meta لإعلانات فيسبوك وإنستغرام (اختياري)", "VITE_META_PIXEL_ID"],
     } as Record<HealthCheck["id"], [string, string]>,
 };
 

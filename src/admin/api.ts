@@ -5,7 +5,7 @@ export type VideoUploadConfig = { cloudName: string; uploadPreset: string };
 export type Session = { ok: true; storage: boolean; videoUpload: VideoUploadConfig | null };
 export type ArticleLang = "ar" | "en" | "tr" | "fr";
 export type AdminArticle = { slug: string; title: string; date: string; updated: string | null; cover: string | null; languages: ArticleLang[] };
-export type HealthCheck = { id: "password" | "github" | "supabase" | "gemini" | "sheets" | "cloudinary"; ok: boolean; optional: boolean; detail: string | null };
+export type HealthCheck = { id: "password" | "github" | "supabase" | "gemini" | "sheets" | "cloudinary" | "pixel"; ok: boolean; optional: boolean; detail: string | null };
 
 async function call<T = Record<string, unknown>>(name: string, init: RequestInit = {}) {
     const response = await fetch(`/.netlify/functions/${name}`, {

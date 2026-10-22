@@ -54,6 +54,13 @@ export default async function handler(request) {
             if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_UPLOAD_PRESET) throw new Error("not configured: videos can still be added from YouTube");
             return process.env.CLOUDINARY_CLOUD_NAME;
         }, true),
+        // The ad pixel is built into the site, so a new ID needs a deploy (Deploys → Trigger deploy) to go live.
+        check("pixel", async () => {
+            const id = String(process.env.VITE_META_PIXEL_ID ?? "").trim();
+            if (!id) throw new Error("not configured: no Meta ads measurement");
+            if (!/^\d{6,20}$/.test(id)) throw new Error("VITE_META_PIXEL_ID must be the numeric Pixel ID");
+            return `Pixel ${id}`;
+        }, true),
     ]);
     return reply(200, { ok: true, checks });
 }

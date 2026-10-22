@@ -7,6 +7,7 @@ import { AsYouType, getCountries, getCountryCallingCode, parsePhoneNumberFromStr
 import type { CountryCode } from "libphonenumber-js/min";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { detectContactType, normalizeDigits, parseContact, profileDocument, profileFilename, submitProfileLead } from "../../config/profileLeads";
+import { pixelEvent } from "../../analytics/pixel";
 
 export default function ProfileDownloadDialog({ outlined, onClose }: { outlined: boolean; onClose: () => void }) {
     const { t, direction, i18n } = useSiteTranslation();
@@ -46,6 +47,7 @@ export default function ProfileDownloadDialog({ outlined, onClose }: { outlined:
             const payload = JSON.stringify(lead);
             if (submissionRef.current?.payload !== payload) submissionRef.current = { payload, requestId: crypto.randomUUID() };
             await submitProfileLead({ ...lead, requestId: submissionRef.current.requestId });
+            pixelEvent("Lead", { content_name: "company_profile_download" });
             downloadRef.current?.click();
             onClose(); setValue(""); setConsent(false);
         } catch { setError("save"); }

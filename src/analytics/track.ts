@@ -3,6 +3,9 @@
 // Collected: page views, how long each section was on screen, scroll depth, clicks on links and
 // buttons (their label, never anything typed), and survey progress. Never runs in /admin or ?edit.
 
+import { pixelEvent } from "./pixel";
+import { visitorTrackingAllowed } from "./allowed";
+
 type TrackEvent = { type: "page_view" | "section" | "scroll" | "page_end" | "click" | "survey"; section?: string; target?: string; value?: number };
 
 const endpoint = "/.netlify/functions/collect";
@@ -47,6 +50,9 @@ function flush(final = false) {
 /** Records one event; used by components (the survey popup) and by the listeners below. */
 export function track(event: TrackEvent) {
     if (!enabled()) return;
+    // The ad pixel counts the same contacts and survey leads.
+    if (event.type === "click" && ["whatsapp", "phone_call", "email_link"].includes(event.target ?? "")) pixelEvent("Contact", { content_name: event.target! });
+    if (event.type === "survey" && event.target === "completed") pixelEvent("Lead", { content_name: "trial_survey" });
     queue.push(event);
     if (queue.length >= 40) flush();
 }
@@ -94,13 +100,7 @@ function label(element: Element) {
 }
 
 export function startTracking() {
-    if (started || typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
-    // Not the admin, not the text editor, not automated browsers, and not visitors who opt out with Global Privacy Control.
-    // Browsers that opened the admin panel are the team's own and are not counted either.
-    let teamBrowser = false;
-    try { teamBrowser = localStorage.getItem("clinova.notrack") === "1"; } catch { /* Storage blocked: count the visit. */ }
-    if (teamBrowser || window.location.pathname.startsWith("/admin") || params.has("edit") || navigator.webdriver || (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl) return;
+    if (started || !visitorTrackingAllowed()) return;
     started = true;
     page = Array.from(crypto.getRandomValues(new Uint8Array(8)), (byte) => byte.toString(16).padStart(2, "0")).join("");
     visibleSince = document.visibilityState === "visible" ? performance.now() : 0;
