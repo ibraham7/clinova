@@ -56,8 +56,9 @@ export default async function handler(request) {
         }, true),
         // The ad pixel is built into the site, so a new ID needs a deploy (Deploys → Trigger deploy) to go live.
         check("pixel", async () => {
-            const id = String(process.env.VITE_META_PIXEL_ID ?? "").trim();
-            if (!id) throw new Error("not configured: no Meta ads measurement");
+            // Same default as vite.config.ts.
+            const id = String(process.env.VITE_META_PIXEL_ID ?? "3376997799146777").trim();
+            if (!id || id === "off") throw new Error("turned off: no Meta ads measurement");
             if (!/^\d{6,20}$/.test(id)) throw new Error("VITE_META_PIXEL_ID must be the numeric Pixel ID");
             return `Pixel ${id}`;
         }, true),
