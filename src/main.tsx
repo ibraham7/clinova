@@ -9,6 +9,7 @@ import Root from "./Root";
 import { parseRoute } from "./routes";
 import { startTracking } from "./analytics/track";
 import { startPixel } from "./analytics/pixel";
+import { startGoogleTag } from "./analytics/gtag";
 
 // Pages arrive prerendered for search engines; the browser then renders the live app in their place.
 createRoot(document.getElementById("root")!).render(
@@ -21,3 +22,5 @@ createRoot(document.getElementById("root")!).render(
 startTracking();
 // The Meta ad pixel, when VITE_META_PIXEL_ID is set in Netlify (same exclusions as the statistics).
 startPixel();
+// The Google Ads tag (same exclusions).
+startGoogleTag();
