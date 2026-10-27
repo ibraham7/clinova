@@ -2,3 +2,5 @@
 declare const __CLINOVA_REVIEW_SAMPLES__: boolean;
 /** The Meta Pixel ID from VITE_META_PIXEL_ID at build time, or "" (see vite.config.ts and src/analytics/pixel.ts). */
 declare const __META_PIXEL_ID__: string;
+/** The Google Ads tag ID from VITE_GOOGLE_ADS_ID at build time, or "" (see vite.config.ts and src/analytics/gtag.ts). */
+declare const __GOOGLE_ADS_ID__: string;

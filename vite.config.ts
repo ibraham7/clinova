@@ -10,5 +10,7 @@ export default defineConfig({
     // Clinova's Meta ad pixel (see src/analytics/pixel.ts). Public by nature: it appears in every page's source.
     // VITE_META_PIXEL_ID in Netlify replaces it; setting it to "off" turns the pixel off.
     __META_PIXEL_ID__: JSON.stringify(process.env.VITE_META_PIXEL_ID ?? '3376997799146777'),
+    // Clinova's Google Ads tag (see src/analytics/gtag.ts). VITE_GOOGLE_ADS_ID in Netlify replaces it; "off" turns it off.
+    __GOOGLE_ADS_ID__: JSON.stringify(process.env.VITE_GOOGLE_ADS_ID ?? 'AW-18502054674'),
   },
 })
