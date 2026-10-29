@@ -5,7 +5,7 @@ export default async function handler(request) {
     if (!sameOrigin(request)) return reply(403, { ok: false, error: "invalid_origin" });
     if (request.method === "DELETE") return reply(200, { ok: true }, { "Set-Cookie": clearedCookie });
     if (request.method !== "POST") return reply(405, { ok: false, error: "method_not_allowed" });
-    if (!process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD.length < 10) return reply(503, { ok: false, error: "not_configured" });
+    if (!process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD.length < 4) return reply(503, { ok: false, error: "not_configured" });
     let body;
     try { body = await readJson(request, 2048); } catch { return reply(400, { ok: false, error: "invalid_request" }); }
     if (!passwordMatches(body?.password)) {

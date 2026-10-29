@@ -11,7 +11,7 @@ export const reply = (status, data, headers = {}) => Response.json(data, { statu
 
 function secret() {
     const password = process.env.ADMIN_PASSWORD;
-    if (!password || password.length < 10) return null;
+    if (!password || password.length < 4) return null;
     // Changing the password (or the optional extra secret) signs everyone out.
     return `${password}:${process.env.ADMIN_SESSION_SECRET ?? ""}`;
 }
