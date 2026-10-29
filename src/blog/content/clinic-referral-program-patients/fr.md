@@ -1,7 +1,7 @@
 ---
 title: Un programme de recommandation de patients : comment inciter vos patients à en amener de nouveaux
 seoTitle: Programme de recommandation de patients en clinique
-description: Comment votre clinique peut bâtir un programme de recommandation simple et éthique : quand demander une recommandation, comment remercier ceux qui vous recommandent, ce qu'il faut éviter légalement et éthiquement, et comment suivre les patients venus par recommandation.
+description: Comment bâtir un programme de recommandation simple et éthique : quand demander, comment remercier, ce qu'il faut éviter légalement et éthiquement, et comment suivre les patients recommandés.
 date: 2026-11-18
 ---
 > La recommandation d'un patient satisfait est la forme de marketing la plus puissante pour une clinique, car les gens font davantage confiance à ceux qu'ils connaissent qu'à n'importe quelle publicité. Mais les recommandations viennent rarement toutes seules : **un patient satisfait recommande quand on le lui demande aimablement et que c'est facile**. Un programme simple suffit.

@@ -1,7 +1,7 @@
 ---
 title: Les messages de suivi après traitement : que dire au patient et quand
 seoTitle: Messages de suivi après traitement en clinique
-description: Comment suivre un patient après son traitement avec des messages WhatsApp courts et aimables : prise de nouvelles, consignes de soins, rendez-vous de contrôle, réponse aux symptômes inquiétants et demande d'avis, sans harceler ni dépasser les limites médicales.
+description: Comment suivre un patient après son traitement avec des messages WhatsApp courts et aimables : prise de nouvelles, consignes de soins, contrôle, symptômes inquiétants et demande d'avis, sans harceler.
 date: 2026-11-16
 ---
 > Le suivi après traitement n'est pas une simple politesse, il fait partie des soins. Un court message envoyé au bon moment **rassure le patient, lui rappelle les consignes, repère un petit problème avant qu'il ne grandisse et construit la confiance qui le fait revenir et vous recommander**. L'important est que ce soit organisé et humain, pas une automatisation froide.

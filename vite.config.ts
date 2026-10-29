@@ -14,6 +14,6 @@ export default defineConfig({
     __GOOGLE_ADS_ID__: JSON.stringify(process.env.VITE_GOOGLE_ADS_ID ?? 'AW-18502054674'),
     // Articles dated after this day stay unpublished (see src/blog/articles.ts). Defaults to the day of the build, so a
     // scheduled rebuild (netlify/functions/publish-scheduled.mjs) publishes whatever has come due. PUBLISH_UNTIL overrides it.
-    __PUBLISH_UNTIL__: JSON.stringify(process.env.PUBLISH_UNTIL ?? new Date().toISOString().slice(0, 10)),
+    __PUBLISH_UNTIL__: JSON.stringify(process.env.PUBLISH_UNTIL || new Date().toISOString().slice(0, 10)),
   },
 })
