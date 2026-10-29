@@ -6,12 +6,18 @@ const files = import.meta.glob("./content/*/*.md", { query: "?raw", import: "def
 
 export type Article = { slug: string; translations: Partial<Record<SiteLanguage, ParsedArticle>> };
 
+// An article whose date is still in the future is scheduled: it is left out of every page, the sitemap and llms.txt
+// until a build runs on or after that day (the weekly rebuild in netlify/functions/publish-scheduled.mjs).
+const publishUntil = typeof __PUBLISH_UNTIL__ !== "undefined" ? __PUBLISH_UNTIL__ : "9999-12-31";
+
 const bySlug = new Map<string, Article>();
 for (const [path, source] of Object.entries(files)) {
     const [, slug, lang] = /\.\/content\/([^/]+)\/([a-z]{2})\.md$/.exec(path) ?? [];
     if (!slug) continue;
+    const parsed = parseArticle(source);
+    if (parsed.date > publishUntil) continue;
     const article = bySlug.get(slug) ?? { slug, translations: {} };
-    article.translations[lang as SiteLanguage] = parseArticle(source);
+    article.translations[lang as SiteLanguage] = parsed;
     bySlug.set(slug, article);
 }
 
