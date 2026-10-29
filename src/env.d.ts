@@ -4,3 +4,5 @@ declare const __CLINOVA_REVIEW_SAMPLES__: boolean;
 declare const __META_PIXEL_ID__: string;
 /** The Google Ads tag ID from VITE_GOOGLE_ADS_ID at build time, or "" (see vite.config.ts and src/analytics/gtag.ts). */
 declare const __GOOGLE_ADS_ID__: string;
+/** Last day (YYYY-MM-DD) whose articles are published in this build (see vite.config.ts and src/blog/articles.ts). */
+declare const __PUBLISH_UNTIL__: string;
