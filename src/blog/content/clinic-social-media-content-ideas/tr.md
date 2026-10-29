@@ -43,7 +43,7 @@ Her yorum ya da mesaj olası bir başvurudur. Hızlı cevap verin ve gerekirse k
 
 ## Clinova ile içeriği sonuçlara bağlamak
 
-Clinova sosyal medyadan ve WhatsApp'tan gelen başvuruları tek bir [CRM](/tr/blog/clinic-crm-system) içinde toplar ve her hastanın kaynağını kaydeder; böylece hangi paylaşımların ve kampanyaların gerçek hasta getirdiğini bilirsiniz. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova sosyal medyadan ve WhatsApp'tan gelen başvuruları tek bir [CRM](/tr/blog/clinic-crm-system) içinde toplar ve her hastanın kaynağını kaydeder; böylece hangi paylaşımların ve kampanyaların gerçek hasta getirdiğini bilirsiniz. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Profesyonel bir fotoğrafçıya ihtiyacım var mı?
 A: Hayır. Telefonla çekilmiş iyi kalitede gerçek fotoğraf ve videolar yeterlidir; çok cilalı içeriklerden hastalara daha yakın bile hissettirebilir.

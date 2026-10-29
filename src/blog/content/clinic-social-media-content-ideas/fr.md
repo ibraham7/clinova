@@ -43,7 +43,7 @@ Chaque commentaire ou message est une demande potentielle. Répondez vite et dé
 
 ## Relier le contenu aux résultats avec Clinova
 
-Clinova rassemble les demandes venues des réseaux sociaux et de WhatsApp dans un seul [CRM](/fr/blog/clinic-crm-system) et enregistre la source de chaque patient, pour que vous sachiez quelles publications et campagnes amènent de vrais patients. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova rassemble les demandes venues des réseaux sociaux et de WhatsApp dans un seul [CRM](/fr/blog/clinic-crm-system) et enregistre la source de chaque patient, pour que vous sachiez quelles publications et campagnes amènent de vrais patients. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Ai-je besoin d'un photographe professionnel ?
 A: Non. De vraies photos et vidéos de bonne qualité faites au téléphone suffisent, et elles peuvent sembler plus proches des patients qu'un contenu très léché.

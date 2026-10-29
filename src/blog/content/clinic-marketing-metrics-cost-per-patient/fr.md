@@ -48,7 +48,7 @@ Sans enregistrer la source de chaque patient, vous ne pouvez rien calculer. Fait
 
 ## Les chiffres dans Clinova
 
-Clinova enregistre la source, l'étape et l'issue du rendez-vous de chaque patient, et propose des rapports qui aident à voir où les demandes se perdent et quel canal amène des patients. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova enregistre la source, l'étape et l'issue du rendez-vous de chaque patient, et propose des rapports qui aident à voir où les demandes se perdent et quel canal amène des patients. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Quel est le chiffre le plus important si je manque de temps ?
 A: Le coût d'un patient présent pour chaque canal, car il réunit la dépense et le résultat en un seul chiffre.

@@ -45,7 +45,7 @@ WhatsApp düğmesine tıklayan ziyaretçi bir başvuruya dönüşmüştür. Ceva
 
 ## Clinova ile siteden hastaya
 
-Clinova web sitesinden ve WhatsApp'tan gelen başvuruları tek bir [CRM](/tr/blog/clinic-crm-system) içinde toplar ve her hastanın kaynağını ve aşamasını gösterir. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova web sitesinden ve WhatsApp'tan gelen başvuruları tek bir [CRM](/tr/blog/clinic-crm-system) içinde toplar ve her hastanın kaynağını ve aşamasını gösterir. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Bir klinik sitesindeki en önemli unsur nedir?
 A: Net ve kolay bir iletişim düğmesi; çünkü ziyaretçi nasıl iletişime geçeceğini bilmiyorsa en iyi site bile işe yaramaz.

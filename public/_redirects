@@ -10,6 +10,8 @@
 /tr/  /tr/index.html  200
 /fr  /fr/index.html  200
 /fr/  /fr/index.html  200
+/:lang/privacy  /:lang/privacy/index.html  200
+/:lang/privacy/  /:lang/privacy/index.html  200
 /:lang/blog  /:lang/blog/index.html  200
 /:lang/blog/  /:lang/blog/index.html  200
 /:lang/blog/:slug  /:lang/blog/:slug/index.html  200

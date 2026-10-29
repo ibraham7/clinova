@@ -37,7 +37,7 @@ Aynı gün kısa bir teşekkür mesajı, doktorun söylediklerinin özeti ve ran
 
 ## Clinova ile ilk ziyareti düzenlemek
 
-Clinova hasta kaydını ilk WhatsApp başvurusundan itibaren tutar; böylece aynı bilgiler iki kez sorulmaz ve ekip hastanın aşamasını ve takiplerini görür. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova hasta kaydını ilk WhatsApp başvurusundan itibaren tutar; böylece aynı bilgiler iki kez sorulmaz ve ekip hastanın aşamasını ve takiplerini görür. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: İlk ziyarette en önemli şey nedir?
 A: Hastanın anlaşıldığını hissetmesi ve bir sonraki adımı bilmesi, çünkü bu, herhangi bir tedaviden önce güven oluşturur.

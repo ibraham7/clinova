@@ -42,7 +42,7 @@ Aynı gün planın ve maliyetin yazılı özetini gönderin ve ne zaman takip ed
 
 ## Clinova ile planları ve takibi düzenlemek
 
-Clinova hasta kaydını, randevularını, konuşmalarını ve takiplerini tek yerde bağlar; böylece ekip hastaya ne söylendiğini ve bir sonraki adımın ne olduğunu bilir. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova hasta kaydını, randevularını, konuşmalarını ve takiplerini tek yerde bağlar; böylece ekip hastaya ne söylendiğini ve bir sonraki adımın ne olduğunu bilir. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Hastaya tek seçenek mi, birkaç seçenek mi sunmalıyım?
 A: Gerçek seçenekler varsa aralarındaki farkla birlikte sunun, çünkü hastalar alternatifleri gördüklerinde daha güvenle karar verir.

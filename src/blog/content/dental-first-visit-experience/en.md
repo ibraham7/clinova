@@ -37,7 +37,7 @@ A short thank-you message the same day, a summary of what the doctor said, then 
 
 ## Organizing the first visit with Clinova
 
-Clinova keeps the patient's record from the first WhatsApp inquiry, so they aren't asked for the same information twice, and the team sees their stage and follow-ups. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova keeps the patient's record from the first WhatsApp inquiry, so they aren't asked for the same information twice, and the team sees their stage and follow-ups. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: What matters most in the first visit?
 A: That the patient feels understood and knows the next step, because that builds trust before any treatment.

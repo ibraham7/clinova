@@ -48,7 +48,7 @@ Without recording each patient's source you can't calculate anything. Make "How 
 
 ## The numbers inside Clinova
 
-Clinova records each patient's source, stage and appointment outcome, and shows reports that help you see where inquiries are lost and which channel brings patients. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova records each patient's source, stage and appointment outcome, and shows reports that help you see where inquiries are lost and which channel brings patients. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: What is the most important number to follow if I have no time?
 A: The cost of an attended patient for each channel, because it combines spend and result in one figure.

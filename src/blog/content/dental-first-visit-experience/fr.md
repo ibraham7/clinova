@@ -37,7 +37,7 @@ Un court message de remerciement le jour même, un résumé de ce qu'a dit le m�
 
 ## Organiser la première visite avec Clinova
 
-Clinova conserve le dossier du patient dès la première demande WhatsApp, on ne lui redemande donc pas deux fois les mêmes informations, et l'équipe voit son étape et ses relances. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova conserve le dossier du patient dès la première demande WhatsApp, on ne lui redemande donc pas deux fois les mêmes informations, et l'équipe voit son étape et ses relances. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Quel est l'élément le plus important de la première visite ?
 A: Que le patient se sente compris et connaisse la suite, car cela crée la confiance avant tout traitement.

@@ -46,7 +46,7 @@ Faites s'entraîner l'équipe à ces phrases en jouant de courtes situations, et
 
 ## Les réponses prêtes avec Clinova
 
-Clinova permet d'enregistrer des réponses prêtes, appelées rapidement dans la conversation et qui remplissent automatiquement les informations du patient : l'équipe répond vite et d'une seule voix. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova permet d'enregistrer des réponses prêtes, appelées rapidement dans la conversation et qui remplissent automatiquement les informations du patient : l'équipe répond vite et d'une seule voix. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Le personnel doit-il apprendre les textes mot pour mot ?
 A: Non. Il faut la structure et les phrases clés, avec une voix naturelle adaptée à chaque patient.

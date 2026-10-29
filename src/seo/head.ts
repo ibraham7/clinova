@@ -9,6 +9,7 @@ import { faqs } from "../config/faq";
 import type { Route } from "../routes";
 import { routePath } from "../routes";
 import { blogMeta, homeMeta } from "./meta";
+import { privacy } from "../legal/privacy";
 import { services } from "./services";
 import { localized, siteContent, videoPoster, youtubeId } from "../content/siteContent";
 import { areaServed, bingSiteVerification, contactEmail, contactPhone, googleSiteVerification, siteName, siteUrl, socialProfiles } from "./site";
@@ -183,6 +184,20 @@ export function buildHead(route: Route, lang: SiteLanguage): PageHead {
                     })),
                 },
                 breadcrumbs([{ name: siteName, url: `${siteUrl}/${lang}` }, { name: blogLabels[lang], url: canonical }]),
+                organization(lang),
+            ],
+        };
+    }
+
+    if (route.kind === "privacy") {
+        return {
+            ...base,
+            title: `${privacy[lang].title} | ${siteName}`,
+            description: privacy[lang].description,
+            ogType: "website",
+            jsonLd: [
+                { "@type": "WebPage", "@id": `${canonical}#webpage`, url: canonical, name: privacy[lang].title, inLanguage: lang, isPartOf: { "@id": `${siteUrl}/#website` } },
+                breadcrumbs([{ name: siteName, url: `${siteUrl}/${lang}` }, { name: privacy[lang].title, url: canonical }]),
                 organization(lang),
             ],
         };

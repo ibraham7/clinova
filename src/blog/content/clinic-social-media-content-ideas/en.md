@@ -43,7 +43,7 @@ Every comment or message is a potential inquiry. Reply quickly and move the conv
 
 ## Linking content to results with Clinova
 
-Clinova gathers inquiries from social media and WhatsApp in one [CRM](/en/blog/clinic-crm-system) and records each patient's source, so you know which posts and campaigns bring real patients. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova gathers inquiries from social media and WhatsApp in one [CRM](/en/blog/clinic-crm-system) and records each patient's source, so you know which posts and campaigns bring real patients. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: Do I need a professional photographer?
 A: No. Real photos and videos of good quality from a phone are enough, and may feel closer to patients than very polished content.

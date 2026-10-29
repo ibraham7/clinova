@@ -36,7 +36,7 @@ Temel adımlarla başlayın: her yeni talebi kaydedin, her hastaya tek bir aşam
 
 ## Clinova CRM
 
-Clinova, klinikler için tasarlanmış entegre bir CRM sunar. Hastaları, talepleri, randevuları ve takipleri bir araya getirir ve her hastanın ilk temastan tedavi sonrasına kadar yolculuğunu net biçimde gösterir. [Sistemi deneyebilir](https://clisis.novanoai.online/) ya da [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova, klinikler için tasarlanmış entegre bir CRM sunar. Hastaları, talepleri, randevuları ve takipleri bir araya getirir ve her hastanın ilk temastan tedavi sonrasına kadar yolculuğunu net biçimde gösterir. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) ya da [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: CRM küçük klinikler için uygun mu?
 A: Evet. Küçük bir klinik her hastanın kaybını daha çok hisseder ve talepleri kaydedip takip etmek için basit bir sistem yeterlidir.

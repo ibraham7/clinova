@@ -50,7 +50,7 @@ Ne promettez pas ce que vous ne pouvez pas garantir et n'utilisez pas les résul
 
 ## Organiser les demandes avec Clinova
 
-Quand les demandes arrivent de pays différents, l'ordre se perd vite. Clinova rassemble les conversations dans un seul [CRM](/fr/blog/clinic-crm-system) qui affiche l'étape, le pays et la source de chaque patient, et crée des tâches de suivi visibles par toute l'équipe. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Quand les demandes arrivent de pays différents, l'ordre se perd vite. Clinova rassemble les conversations dans un seul [CRM](/fr/blog/clinic-crm-system) qui affiche l'étape, le pays et la source de chaque patient, et crée des tâches de suivi visibles par toute l'équipe. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Puis-je donner un prix définitif avant que le patient vienne à la clinique ?
 A: Vous pouvez donner une estimation préliminaire, mais elle reste soumise à un examen en personne, car le cas peut différer de ce que montrent les photos.

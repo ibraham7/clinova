@@ -41,7 +41,7 @@ Her tedaviden sonra hastaları takip edecek birini görevlendirin, yoksa mesajla
 
 ## Clinova ile hastaları takip etmek
 
-Clinova, belirlediğiniz zamanda her hasta için bir takip görevi oluşturur ve konuşmayı hastanın kaydında tutar; böylece ekip hastaya ne söylendiğini ve bir sorun çıkıp çıkmadığını görür. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova, belirlediğiniz zamanda her hasta için bir takip görevi oluşturur ve konuşmayı hastanın kaydında tutar; böylece ekip hastaya ne söylendiğini ve bir sorun çıkıp çıkmadığını görür. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Tedaviden sonra ilk mesajı ne zaman göndermeliyim?
 A: Aynı gün, ardından bir iki gün sonra bir hal hatır sorma mesajı.

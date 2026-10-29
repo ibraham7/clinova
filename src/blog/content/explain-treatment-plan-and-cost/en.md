@@ -42,7 +42,7 @@ Send a written summary of the plan and cost the same day and tell them when you'
 
 ## Organizing plans and follow-up with Clinova
 
-Clinova links the patient's record, appointments, conversations and follow-ups in one place, so the team knows what the patient was told and what the next step is. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova links the patient's record, appointments, conversations and follow-ups in one place, so the team knows what the patient was told and what the next step is. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: Should I give the patient one option or several?
 A: If real options exist, present them with the difference between them, because patients decide more confidently when they see alternatives.

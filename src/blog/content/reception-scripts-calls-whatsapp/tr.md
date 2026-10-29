@@ -46,7 +46,7 @@ Ekibin bu cümleleri kısa durumları canlandırarak çalışmasını sağlayın
 
 ## Clinova ile hazır cevaplar
 
-Clinova, konuşma içinde hızla çağrılan ve hasta bilgilerini otomatik dolduran hazır cevapları kaydetmenize olanak tanır; böylece ekip hızlı ve tek ağızdan cevap verir. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova, konuşma içinde hızla çağrılan ve hasta bilgilerini otomatik dolduran hazır cevapları kaydetmenize olanak tanır; böylece ekip hızlı ve tek ağızdan cevap verir. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Personel metinleri kelimesi kelimesine ezberlemeli mi?
 A: Hayır. Gereken, her hastaya uyan doğal bir sesle yapı ve temel cümlelerdir.

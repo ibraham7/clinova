@@ -41,7 +41,7 @@ Sıradan WhatsApp'a işletme profili, karşılama mesajı, hızlı yanıtlar ve 
 
 ## Clinova ile WhatsApp
 
-Clinova, kliniğinizin WhatsApp numarasını hasta sistemine bağlar. Böylece ekip konuşmaları farklı yetkilerle paylaşır ve her şey randevular ve takiplerle birlikte hasta kaydının içinde görünür. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşerek](/tr#contact-cta) kliniğinize uygun olanı birlikte belirleyebilirsiniz.
+Clinova, kliniğinizin WhatsApp numarasını hasta sistemine bağlar. Böylece ekip konuşmaları farklı yetkilerle paylaşır ve her şey randevular ve takiplerle birlikte hasta kaydının içinde görünür. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşerek](/tr#contact-cta) kliniğinize uygun olanı birlikte belirleyebilirsiniz.
 
 Q: Kliniğimde tek bir resepsiyonist varsa API'ye ihtiyacım var mı?
 A: Büyük olasılıkla hayır. Cevapları tek kişi veriyorsa ve mesaj hacmi düşükse normal uygulama yeterlidir. Ekip ya da hacim büyüdüğünde geçişi düşünün.

@@ -42,7 +42,7 @@ Many patients call or write to you directly from the profile. Make sure replies 
 
 ## Tracking the source with Clinova
 
-Record "Google" as the source for patients who come from the profile, so Clinova's reports show how many came from it. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Record "Google" as the source for patients who come from the profile, so Clinova's reports show how many came from it. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: Is creating the profile free?
 A: Yes, creating it is free, and it requires verifying that you own the clinic.

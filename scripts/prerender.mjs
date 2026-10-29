@@ -18,6 +18,7 @@ const pages = [{ path: "/", lastmod: today }];
 for (const lang of languages) {
     pages.push({ path: `/${lang}`, lastmod: today, route: { kind: "home" } });
     pages.push({ path: `/${lang}/blog`, lastmod: today, route: { kind: "blog" } });
+    pages.push({ path: `/${lang}/privacy`, lastmod: today, route: { kind: "privacy" } });
     for (const article of articles) {
         const translation = article.translations[lang];
         if (translation) pages.push({ path: `/${lang}/blog/${article.slug}`, lastmod: translation.updated ?? translation.date, route: { kind: "article", slug: article.slug } });

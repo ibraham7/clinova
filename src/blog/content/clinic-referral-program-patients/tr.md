@@ -45,7 +45,7 @@ Google'daki herkese açık bir tavsiye, kişisel tavsiyeyi tamamlar. Yorumu nazi
 
 ## Clinova ile tavsiyeleri izlemek
 
-Clinova her hastanın kaynağını kaydeder; böylece kimin tavsiyeyle geldiğini ve kimin tavsiye ettiğini bilirsiniz, görevler de sizi tavsiye edene teşekkür etmeyi hatırlatır. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova her hastanın kaynağını kaydeder; böylece kimin tavsiyeyle geldiğini ve kimin tavsiye ettiğini bilirsiniz, görevler de sizi tavsiye edene teşekkür etmeyi hatırlatır. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Tavsiye için hastaya ödül vermeli miyim?
 A: Önce ülkenizin yasalarının ve tıbbi etiğin neye izin verdiğini sorun. İçten bir teşekkür her zaman uygundur, maddi teşvikler ise kısıtlanmış olabilir.

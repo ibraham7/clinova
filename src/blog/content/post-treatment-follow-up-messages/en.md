@@ -41,7 +41,7 @@ Assign someone to follow up patients after every treatment, or messages get lost
 
 ## Following up patients with Clinova
 
-Clinova creates a follow-up task for each patient at the time you choose and keeps the conversation in their record, so the team sees what they were told and whether a problem appeared. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova creates a follow-up task for each patient at the time you choose and keeps the conversation in their record, so the team sees what they were told and whether a problem appeared. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: When should I send the first message after treatment?
 A: The same day, then a check-in a day or two later.

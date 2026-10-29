@@ -46,7 +46,7 @@ Have the team practice these phrases by acting out short situations, and review 
 
 ## Ready replies with Clinova
 
-Clinova lets you save ready replies that are called up quickly inside the conversation and automatically fill in the patient's details, so the team replies quickly and with one voice. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova lets you save ready replies that are called up quickly inside the conversation and automatically fill in the patient's details, so the team replies quickly and with one voice. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: Must staff memorize the scripts word for word?
 A: No. What's needed is the structure and the key phrases, in a natural voice that suits each patient.

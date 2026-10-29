@@ -42,7 +42,7 @@ Bir şeyin değişip değişemeyeceğini nazikçe sorun ve nedeni hastanın dosy
 
 ## Clinova ile itirazları izlemek
 
-Tereddüt nedenlerini hasta dosyasına kaydettiğinizde klinik örüntüyü görür: itiraz fiyata mı, güvene mi? Clinova ekibe takip tarihini hatırlatır. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Tereddüt nedenlerini hasta dosyasına kaydettiğinizde klinik örüntüyü görür: itiraz fiyata mı, güvene mi? Clinova ekibe takip tarihini hatırlatır. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Hasta itiraz ederse fiyatı düşürmeli miyim?
 A: İndirimle başlamayın. Önce nedeni anlayın; sorun rakamda değil, güvende ya da ödeme biçiminde olabilir.

@@ -324,5 +324,10 @@
   "تشغيل الفيديو": "Play video",
   "الفيديوهات السابقة": "Previous videos",
   "الفيديوهات التالية": "Next videos",
-  "صفحة الفيديوهات {{page}}": "Videos page {{page}}"
+  "صفحة الفيديوهات {{page}}": "Videos page {{page}}",
+  "سياسة الخصوصية": "Privacy policy",
+  "إعدادات الكوكيز": "Cookie settings",
+  "نستخدم كوكيز لأدوات الإعلانات والتحليل (Meta وGoogle وMicrosoft Clarity) فقط إذا وافقت. إحصاءاتنا الخاصة لا تستخدم كوكيز.": "We use cookies for advertising and analytics tools (Meta, Google and Microsoft Clarity) only if you agree. Our own statistics use no cookies.",
+  "رفض": "Decline",
+  "قبول": "Accept"
 }

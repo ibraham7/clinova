@@ -39,7 +39,7 @@ L'IA peut répondre la nuit aux questions répétitives, comme l'adresse, les ho
 
 ## Organiser les messages de nuit avec Clinova
 
-Clinova rassemble les conversations WhatsApp au même endroit : le matin, l'équipe voit tous ceux qui ont écrit pendant la nuit et leur statut, et se répartit les relances avec des tâches et des rappels. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova rassemble les conversations WhatsApp au même endroit : le matin, l'équipe voit tous ceux qui ont écrit pendant la nuit et leur statut, et se répartit les relances avec des tâches et des rappels. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Ai-je besoin d'un message automatique si mon équipe répond jusqu'au soir ?
 A: Oui, car certains patients écrivent après les heures ou les jours fériés, et le message les rassure et fixe un délai de réponse.

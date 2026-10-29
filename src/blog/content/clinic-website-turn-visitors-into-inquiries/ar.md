@@ -45,7 +45,7 @@ date: 2026-11-13
 
 ## من الموقع إلى المريض مع Clinova
 
-يجمع Clinova الاستفسارات القادمة من الموقع وWhatsApp في [نظام CRM](/ar/blog/clinic-crm-system) واحد، ويعرض مصدر كل مريض ومرحلته. ويمكنك [تجربة النظام](https://clisis.novanoai.online/) أو [التحدث مع فريقنا](/ar#contact-cta).
+يجمع Clinova الاستفسارات القادمة من الموقع وWhatsApp في [نظام CRM](/ar/blog/clinic-crm-system) واحد، ويعرض مصدر كل مريض ومرحلته. ويمكنك [تجربة النظام](https://clinic.novanoai.online/auth) أو [التحدث مع فريقنا](/ar#contact-cta).
 
 Q: ما أهم عنصر في موقع العيادة؟
 A: زر تواصل واضح وسهل، لأن أفضل موقع لا يفيد إذا لم يعرف الزائر كيف يتواصل.

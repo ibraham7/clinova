@@ -42,7 +42,7 @@ Envoyez le jour même un résumé écrit du plan et du coût, et dites-lui quand
 
 ## Organiser les plans et le suivi avec Clinova
 
-Clinova relie le dossier du patient, ses rendez-vous, ses conversations et ses relances au même endroit : l'équipe sait ce qui a été dit au patient et quelle est la prochaine étape. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova relie le dossier du patient, ses rendez-vous, ses conversations et ses relances au même endroit : l'équipe sait ce qui a été dit au patient et quelle est la prochaine étape. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Dois-je proposer une seule option ou plusieurs au patient ?
 A: S'il existe de vraies options, présentez-les avec leurs différences, car le patient décide avec plus d'assurance quand il voit des alternatives.

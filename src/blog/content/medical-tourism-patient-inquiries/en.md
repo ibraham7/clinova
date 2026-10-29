@@ -50,7 +50,7 @@ Don't promise what you can't guarantee, and don't use other patients' results wi
 
 ## Organizing inquiries with Clinova
 
-When inquiries arrive from different countries, order is lost quickly. Clinova brings the conversations into one [CRM](/en/blog/clinic-crm-system) that shows each patient's stage, country and source, and creates follow-up tasks the whole team can see. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+When inquiries arrive from different countries, order is lost quickly. Clinova brings the conversations into one [CRM](/en/blog/clinic-crm-system) that shows each patient's stage, country and source, and creates follow-up tasks the whole team can see. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: Can I give a final price before the patient visits the clinic?
 A: You can give a preliminary estimate, but it stays subject to an in-person exam because the case may differ from what the photos show.

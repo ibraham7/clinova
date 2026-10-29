@@ -53,7 +53,7 @@ Les questions que vous avez écrites peuvent devenir des réponses prêtes pour 
 
 ## La FAQ avec Clinova
 
-Clinova enregistre les réponses prêtes que l'équipe utilise dans la conversation et rassemble les demandes dans un [CRM](/fr/blog/clinic-crm-system) : vous voyez quelles questions reviennent le plus. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova enregistre les réponses prêtes que l'équipe utilise dans la conversation et rassemble les demandes dans un [CRM](/fr/blog/clinic-crm-system) : vous voyez quelles questions reviennent le plus. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Combien de questions mettre sur la page ?
 A: Commencez par dix à quinze vraies questions et ajoutez-en quand de nouvelles apparaissent. La qualité compte plus que la quantité.

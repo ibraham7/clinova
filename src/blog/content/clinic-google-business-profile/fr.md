@@ -42,7 +42,7 @@ Beaucoup de patients vous appellent ou vous écrivent directement depuis la fich
 
 ## Suivre la source avec Clinova
 
-Enregistrez « Google » comme source des patients venus de la fiche, afin que les rapports de Clinova montrent combien en proviennent. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Enregistrez « Google » comme source des patients venus de la fiche, afin que les rapports de Clinova montrent combien en proviennent. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: La création de la fiche est-elle gratuite ?
 A: Oui, elle est gratuite, et il faut valider que vous êtes bien le propriétaire de la clinique.

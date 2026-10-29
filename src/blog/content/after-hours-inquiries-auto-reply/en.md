@@ -39,7 +39,7 @@ AI can answer repeated questions at night, such as location, hours and services,
 
 ## Organizing night messages with Clinova
 
-Clinova gathers WhatsApp conversations in one place, so in the morning the team sees everyone who wrote overnight and their status, and shares the follow-up with tasks and reminders. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova gathers WhatsApp conversations in one place, so in the morning the team sees everyone who wrote overnight and their status, and shares the follow-up with tasks and reminders. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: Do I need an automatic message if my team replies until evening?
 A: Yes, because some patients write after hours or on holidays, and the message reassures them and sets a reply time.

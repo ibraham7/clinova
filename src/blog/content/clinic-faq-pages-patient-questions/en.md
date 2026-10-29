@@ -53,7 +53,7 @@ The questions you wrote can become ready replies for the team on WhatsApp, so an
 
 ## FAQs with Clinova
 
-Clinova stores ready replies that the team uses inside the conversation, and gathers inquiries in a [CRM](/en/blog/clinic-crm-system) so you see which questions repeat most. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova stores ready replies that the team uses inside the conversation, and gathers inquiries in a [CRM](/en/blog/clinic-crm-system) so you see which questions repeat most. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: How many questions should I put on the page?
 A: Start with ten to fifteen real questions and add more as new ones appear. Quality matters more than quantity.

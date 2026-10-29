@@ -53,7 +53,7 @@ Yazdığınız sorular, ekibin WhatsApp'ta kullanacağı hazır cevaplara dönü
 
 ## Clinova ile SSS
 
-Clinova, ekibin konuşma içinde kullandığı hazır cevapları saklar ve başvuruları bir [CRM](/tr/blog/clinic-crm-system) içinde toplar; böylece en çok hangi soruların tekrarlandığını görürsünüz. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova, ekibin konuşma içinde kullandığı hazır cevapları saklar ve başvuruları bir [CRM](/tr/blog/clinic-crm-system) içinde toplar; böylece en çok hangi soruların tekrarlandığını görürsünüz. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Sayfaya kaç soru koymalıyım?
 A: On ila on beş gerçek soruyla başlayın ve yenileri çıktıkça ekleyin. Kalite sayıdan önemlidir.
