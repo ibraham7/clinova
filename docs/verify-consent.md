@@ -40,7 +40,7 @@ docker run --rm --ipc=host -v /opt/clinova/landing-check:/t -w /t mcr.microsoft.
   sh -c "cd /tmp && npm init -y >/dev/null && npm i playwright@1.49.0 >/dev/null && curl -fsSL https://raw.githubusercontent.com/ibraham7/clinova/main/scripts/verify-consent.mjs -o v.mjs && node v.mjs https://clinova.novanoai.online --live"
 ```
 
-النتيجة المتوقعة: `RESULT: 24 passed, 0 failed`.
+النتيجة المتوقعة: `RESULT: 27 passed, 0 failed`. قد يظهر سطر `WARN` عن كوكي Clarity (`_clck`): Clarity لا يضع كوكيز في المتصفحات الآلية، فتأكد منها يدويًا من DevTools. هذا التحذير لا يُحسب فشلًا.
 
 ## ماذا يعني الفشل
 - **FAIL قبل أي اختيار:** شيء يتتبع الزائر دون موافقته. يجب إصلاحه قبل الإعلانات.
