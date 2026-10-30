@@ -45,7 +45,7 @@ A visitor who clicked the WhatsApp button has become an inquiry. If the reply is
 
 ## From the website to the patient with Clinova
 
-Clinova gathers inquiries coming from the website and WhatsApp in one [CRM](/en/blog/clinic-crm-system) and shows each patient's source and stage. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova gathers inquiries coming from the website and WhatsApp in one [CRM](/en/blog/clinic-crm-system) and shows each patient's source and stage. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: What is the most important element on a clinic website?
 A: A clear, easy contact button, because the best site is useless if the visitor doesn't know how to get in touch.

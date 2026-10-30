@@ -373,7 +373,7 @@ function Hero() {
                         </Button>
 
                             <Button
-                                href="https://clisis.novanoai.online/"
+                                href="https://clinic.novanoai.online/auth"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 variant="outlined"

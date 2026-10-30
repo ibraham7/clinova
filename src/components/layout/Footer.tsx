@@ -1,3 +1,5 @@
+import { contactEmail } from "../../seo/site";
+import { openConsentSettings } from "../../legal/ConsentBanner";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import {
     Box,
@@ -250,7 +252,7 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
 
                         <Typography
                             component="a"
-                            href="mailto:hello@clinova.com"
+                            href={`mailto:${contactEmail}`}
                             sx={{
                                 fontFamily:
                                     '"Plus Jakarta Sans", sans-serif',
@@ -326,6 +328,11 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
                         © {new Date().getFullYear()} Clinova.
                         {t("All rights reserved.")}
                     </Typography>
+
+                    <Stack direction="row" sx={{ gap: 2, justifyContent: "center", fontSize: "0.72rem", "& a, & button": { color: "var(--clinova-rgba-245-247-250-0_42)", textDecoration: "none", font: "inherit", "&:hover": { color: "primary.light" } } }}>
+                        <a href={`/${language}/privacy`}>{t("سياسة الخصوصية")}</a>
+                        <Box component="button" type="button" onClick={openConsentSettings} sx={{ p: 0, border: 0, background: "none", cursor: "pointer" }}>{t("إعدادات الكوكيز")}</Box>
+                    </Stack>
 
                     <Typography
                         sx={{

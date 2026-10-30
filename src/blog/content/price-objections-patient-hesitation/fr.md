@@ -42,7 +42,7 @@ Demandez gentiment si quelque chose pourrait changer et notez la raison dans son
 
 ## Suivre les objections avec Clinova
 
-Quand vous consignez les raisons d'hésitation dans le dossier du patient, la clinique voit la tendance : l'objection porte-t-elle sur le prix ou sur la confiance ? Clinova rappelle à l'équipe la date de relance. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Quand vous consignez les raisons d'hésitation dans le dossier du patient, la clinique voit la tendance : l'objection porte-t-elle sur le prix ou sur la confiance ? Clinova rappelle à l'équipe la date de relance. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Dois-je baisser le prix si le patient s'y oppose ?
 A: Ne commencez pas par une remise. Comprenez d'abord la raison, car le problème peut venir de la confiance ou du mode de paiement plutôt que du chiffre.

@@ -41,7 +41,7 @@ Désignez quelqu'un qui suit les patients après chaque traitement, sinon les me
 
 ## Suivre les patients avec Clinova
 
-Clinova crée une tâche de suivi pour chaque patient au moment que vous choisissez et garde la conversation dans son dossier : l'équipe voit ce qui lui a été dit et si un problème est apparu. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova crée une tâche de suivi pour chaque patient au moment que vous choisissez et garde la conversation dans son dossier : l'équipe voit ce qui lui a été dit et si un problème est apparu. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Quand envoyer le premier message après le traitement ?
 A: Le jour même, puis un message de prise de nouvelles un ou deux jours plus tard.

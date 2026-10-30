@@ -45,7 +45,7 @@ A public recommendation on Google complements a personal one. Ask for the review
 
 ## Tracking referrals with Clinova
 
-Clinova records each patient's source, so you know who came through a referral and who referred them, and tasks remind you to thank the person who recommended you. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova records each patient's source, so you know who came through a referral and who referred them, and tasks remind you to thank the person who recommended you. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: Should I give a patient a reward for a referral?
 A: First ask what your country's laws and medical ethics allow. A sincere thank-you is always fine, while material incentives may be restricted.

@@ -48,7 +48,7 @@ Her hastanın kaynağını kaydetmeden hiçbir şeyi hesaplayamazsınız. "Bizi 
 
 ## Rakamlar Clinova içinde
 
-Clinova her hastanın kaynağını, aşamasını ve randevu sonucunu kaydeder; başvuruların nerede kaybolduğunu ve hangi kanalın hasta getirdiğini görmenize yardımcı olan raporlar sunar. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova her hastanın kaynağını, aşamasını ve randevu sonucunu kaydeder; başvuruların nerede kaybolduğunu ve hangi kanalın hasta getirdiğini görmenize yardımcı olan raporlar sunar. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Vaktim yoksa takip etmem gereken en önemli rakam nedir?
 A: Her kanal için gelen hastanın maliyeti, çünkü harcamayı ve sonucu tek bir rakamda birleştirir.

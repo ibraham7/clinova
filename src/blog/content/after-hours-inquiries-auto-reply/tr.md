@@ -39,7 +39,7 @@ Yapay zekâ gece konum, çalışma saatleri ve hizmetler gibi tekrar eden sorula
 
 ## Clinova ile gece mesajlarını düzenlemek
 
-Clinova WhatsApp konuşmalarını tek yerde toplar; böylece ekip sabah gece boyunca yazan herkesi ve durumlarını görür, takibi görevler ve hatırlatmalarla aralarında paylaşır. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova WhatsApp konuşmalarını tek yerde toplar; böylece ekip sabah gece boyunca yazan herkesi ve durumlarını görür, takibi görevler ve hatırlatmalarla aralarında paylaşır. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Ekibim akşama kadar cevap veriyorsa otomatik mesaja ihtiyacım var mı?
 A: Evet, çünkü bazı hastalar mesai sonrasında ya da tatilde yazar; mesaj onları rahatlatır ve yanıt zamanını belirler.

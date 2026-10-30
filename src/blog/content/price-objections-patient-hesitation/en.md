@@ -42,7 +42,7 @@ Ask gently whether anything could change, and note the reason in their file. Aft
 
 ## Tracking objections with Clinova
 
-When you record reasons for hesitation in the patient's file, the clinic sees the pattern: is the objection about price or about trust? Clinova reminds the team of the follow-up date. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+When you record reasons for hesitation in the patient's file, the clinic sees the pattern: is the objection about price or about trust? Clinova reminds the team of the follow-up date. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: Should I lower the price if the patient objects?
 A: Don't start with a discount. Understand the reason first, because the problem may be trust or the way of paying rather than the number.

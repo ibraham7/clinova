@@ -10,6 +10,8 @@ import { applyHead, buildHead } from "./seo/head";
 import App from "./App";
 import BlogIndex from "./blog/BlogIndex";
 import BlogArticle from "./blog/BlogArticle";
+import PrivacyPage from "./legal/PrivacyPage";
+import ConsentBanner from "./legal/ConsentBanner";
 
 // The admin panel and the on-page text editor load only for /admin and ?edit, keeping the public site light.
 const AdminApp = lazy(() => import("./admin/AdminApp"));
@@ -32,7 +34,9 @@ export default function Root({ route }: { route: Route }) {
         {route.kind === "admin" ? <Suspense fallback={null}><AdminApp /></Suspense>
             : route.kind === "home" ? <App />
             : route.kind === "blog" ? <BlogIndex />
+            : route.kind === "privacy" ? <PrivacyPage />
             : <BlogArticle slug={route.slug} />}
         {editing && <Suspense fallback={null}><EditMode /></Suspense>}
+        {!admin && !editing && <ConsentBanner />}
     </ThemeProvider>;
 }

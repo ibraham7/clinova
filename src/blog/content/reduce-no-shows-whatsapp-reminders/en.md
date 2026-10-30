@@ -37,7 +37,7 @@ Record every appointment with its outcome: attended, rescheduled, cancelled or n
 
 ## Reminders with Clinova
 
-Clinova connects your clinic's WhatsApp conversations to the patient record and the appointments, so the team sees everything in one place and follows up with anyone who hasn't confirmed through tasks and reminders inside the system. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova connects your clinic's WhatsApp conversations to the patient record and the appointments, so the team sees everything in one place and follows up with anyone who hasn't confirmed through tasks and reminders inside the system. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: How many reminders are enough for one appointment?
 A: A confirmation when booking, a reminder the day before, and one on the morning of the visit. More than that annoys the patient.

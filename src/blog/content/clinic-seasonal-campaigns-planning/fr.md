@@ -46,7 +46,7 @@ Enregistrez la source de chaque patient pendant la saison et comparez le nombre 
 
 ## Planifier et suivre les résultats avec Clinova
 
-Clinova enregistre la source, l'étape et l'issue du rendez-vous de chaque patient et rappelle les relances à l'équipe : vous comparez vos saisons avec les chiffres de votre propre clinique. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova enregistre la source, l'étape et l'issue du rendez-vous de chaque patient et rappelle les relances à l'équipe : vous comparez vos saisons avec les chiffres de votre propre clinique. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Quand commencer à préparer une saison ?
 A: Au moins six à huit semaines avant, car les rendez-vous se remplissent bien avant la saison.

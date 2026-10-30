@@ -46,7 +46,7 @@ Record each patient's source during the season, and compare the number of inquir
 
 ## Planning and tracking results with Clinova
 
-Clinova records each patient's source, stage and appointment outcome and reminds the team of follow-ups, so you compare your seasons using your own clinic's numbers. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova records each patient's source, stage and appointment outcome and reminds the team of follow-ups, so you compare your seasons using your own clinic's numbers. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: When should I start preparing for a season?
 A: At least six to eight weeks ahead, because appointments fill up well before the season.

@@ -47,7 +47,7 @@ Tous les trois mois : sortez la liste des utilisateurs, supprimez ceux qui ne tr
 
 ## Les droits d'accès dans Clinova
 
-Clinova permet de créer des rôles et des droits flexibles pour l'équipe, limite ce que chaque utilisateur voit selon son rôle et sépare les données de chaque clinique de celles des autres. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta) pour concevoir les rôles adaptés à votre clinique.
+Clinova permet de créer des rôles et des droits flexibles pour l'équipe, limite ce que chaque utilisateur voit selon son rôle et sépare les données de chaque clinique de celles des autres. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta) pour concevoir les rôles adaptés à votre clinique.
 
 Q: Le propriétaire doit-il tout voir ?
 A: En général oui, mais même le propriétaire gagne à avoir un compte personnel et une trace de qui a fait quoi.

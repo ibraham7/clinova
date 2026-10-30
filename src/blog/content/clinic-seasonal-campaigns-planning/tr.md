@@ -46,7 +46,7 @@ Sezon boyunca her hastanın kaynağını kaydedin ve başvuru, randevu, gelme sa
 
 ## Clinova ile planlama ve sonuçları izleme
 
-Clinova her hastanın kaynağını, aşamasını ve randevu sonucunu kaydeder ve ekibe takipleri hatırlatır; böylece sezonlarınızı kendi kliniğinizin rakamlarıyla karşılaştırırsınız. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova her hastanın kaynağını, aşamasını ve randevu sonucunu kaydeder ve ekibe takipleri hatırlatır; böylece sezonlarınızı kendi kliniğinizin rakamlarıyla karşılaştırırsınız. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Bir sezona hazırlığa ne zaman başlamalıyım?
 A: En az altı ila sekiz hafta önce; çünkü randevular sezondan çok önce dolar.

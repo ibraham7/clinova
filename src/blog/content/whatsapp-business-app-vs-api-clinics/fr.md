@@ -41,7 +41,7 @@ Pensez-y si deux de ces situations vous concernent :
 
 ## WhatsApp avec Clinova
 
-Clinova relie le numéro WhatsApp de votre clinique au système patient : l'équipe partage les conversations avec des droits différents et tout apparaît dans le dossier du patient avec les rendez-vous et les relances. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta) pour trouver ce qui convient à votre clinique.
+Clinova relie le numéro WhatsApp de votre clinique au système patient : l'équipe partage les conversations avec des droits différents et tout apparaît dans le dossier du patient avec les rendez-vous et les relances. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta) pour trouver ce qui convient à votre clinique.
 
 Q: Ai-je besoin de l'API si ma clinique n'a qu'une seule réceptionniste ?
 A: Probablement pas. Si une seule personne répond et que le volume est faible, l'application classique suffit. Pensez à passer à l'API quand l'équipe ou le volume grandit.

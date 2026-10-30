@@ -36,7 +36,7 @@ Start with the basics: log every new inquiry, give each patient one stage, and c
 
 ## Clinova's CRM
 
-Clinova offers an integrated CRM built for clinics. It brings patients, inquiries, appointments and follow-ups together and gives you a clear view of every patient's journey from first contact to after treatment. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta).
+Clinova offers an integrated CRM built for clinics. It brings patients, inquiries, appointments and follow-ups together and gives you a clear view of every patient's journey from first contact to after treatment. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta).
 
 Q: Is a CRM suitable for small clinics?
 A: Yes. A small clinic feels the loss of each patient more, and a simple system is enough to log inquiries and follow up without complexity.

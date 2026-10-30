@@ -50,7 +50,7 @@ Garanti edemeyeceğiniz şeyleri vaat etmeyin ve diğer hastaların sonuçların
 
 ## Clinova ile başvuruları düzenlemek
 
-Başvurular farklı ülkelerden geldiğinde düzen çabuk bozulur. Clinova konuşmaları, her hastanın aşamasını, ülkesini ve kaynağını gösteren tek bir [CRM](/tr/blog/clinic-crm-system) içinde toplar ve tüm ekibin görebildiği takip görevleri oluşturur. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Başvurular farklı ülkelerden geldiğinde düzen çabuk bozulur. Clinova konuşmaları, her hastanın aşamasını, ülkesini ve kaynağını gösteren tek bir [CRM](/tr/blog/clinic-crm-system) içinde toplar ve tüm ekibin görebildiği takip görevleri oluşturur. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Hasta kliniğe gelmeden kesin fiyat verebilir miyim?
 A: Ön bir tahmin verebilirsiniz, ancak fotoğrafların gösterdiğinden farklı bir durum çıkabileceği için yüz yüze muayeneye bağlı kalır.

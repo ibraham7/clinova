@@ -41,7 +41,7 @@ Start thinking about moving if two of these apply to you:
 
 ## WhatsApp with Clinova
 
-Clinova connects your clinic's WhatsApp number to the patient system, so the team shares conversations with different permissions and everything appears inside the patient's record with appointments and follow-ups. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta) and we'll suggest what fits your clinic.
+Clinova connects your clinic's WhatsApp number to the patient system, so the team shares conversations with different permissions and everything appears inside the patient's record with appointments and follow-ups. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta) and we'll suggest what fits your clinic.
 
 Q: Do I need the API if my clinic has only one receptionist?
 A: Probably not. If one person replies and the message volume is low, the regular app is enough. Think about moving when the team or the volume grows.

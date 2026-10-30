@@ -37,7 +37,7 @@ Her randevuyu sonucuyla kaydedin: geldi, ertelendi, iptal etti veya gelmedi. Bir
 
 ## Clinova ile hatırlatmalar
 
-Clinova, kliniğinizin WhatsApp konuşmalarını hasta kaydı ve randevularla bağlar. Ekip her şeyi tek yerde görür ve onay vermeyenleri sistemdeki görev ve hatırlatmalarla takip eder. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova, kliniğinizin WhatsApp konuşmalarını hasta kaydı ve randevularla bağlar. Ekip her şeyi tek yerde görür ve onay vermeyenleri sistemdeki görev ve hatırlatmalarla takip eder. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Bir randevu için kaç hatırlatma yeterlidir?
 A: Randevu alınırken bir onay, bir gün önce bir hatırlatma ve randevu sabahı bir hatırlatma. Fazlası hastayı rahatsız eder.

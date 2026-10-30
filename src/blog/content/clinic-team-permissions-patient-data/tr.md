@@ -47,7 +47,7 @@ Her üç ayda bir: kullanıcı listesini çıkarın, artık çalışmayanları s
 
 ## Clinova'da yetkiler
 
-Clinova, ekip için esnek roller ve yetkiler oluşturmanıza olanak tanır, her kullanıcının gördüklerini rolüne göre sınırlar ve her kliniğin verisini diğerlerinden ayrı tutar. Kliniğinize uygun rolleri tasarlamak için [sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Clinova, ekip için esnek roller ve yetkiler oluşturmanıza olanak tanır, her kullanıcının gördüklerini rolüne göre sınırlar ve her kliniğin verisini diğerlerinden ayrı tutar. Kliniğinize uygun rolleri tasarlamak için [sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Klinik sahibi her şeyi görmeli mi?
 A: Genellikle evet, ancak sahibi bile kendi kişisel hesabından ve kimin ne yaptığını gösteren bir kayıttan yarar görür.

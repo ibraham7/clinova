@@ -324,5 +324,10 @@
   "تشغيل الفيديو": "Videoyu oynat",
   "الفيديوهات السابقة": "Önceki videolar",
   "الفيديوهات التالية": "Sonraki videolar",
-  "صفحة الفيديوهات {{page}}": "Video sayfası {{page}}"
+  "صفحة الفيديوهات {{page}}": "Video sayfası {{page}}",
+  "سياسة الخصوصية": "Gizlilik politikası",
+  "إعدادات الكوكيز": "Çerez ayarları",
+  "نستخدم كوكيز لأدوات الإعلانات والتحليل (Meta وGoogle وMicrosoft Clarity) فقط إذا وافقت. إحصاءاتنا الخاصة لا تستخدم كوكيز.": "Reklam ve analiz araçları (Meta, Google ve Microsoft Clarity) için yalnızca kabul ederseniz çerez kullanırız. Kendi istatistiklerimiz çerez kullanmaz.",
+  "رفض": "Reddet",
+  "قبول": "Kabul et"
 }

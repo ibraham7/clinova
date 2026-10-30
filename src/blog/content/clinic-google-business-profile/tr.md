@@ -42,7 +42,7 @@ Birçok hasta size doğrudan profilden arar ya da yazar. Cevapların hızlı old
 
 ## Clinova ile kaynağı izlemek
 
-Profilden gelen hastaların kaynağını "Google" olarak kaydedin; böylece Clinova raporları kaç hastanın oradan geldiğini gösterir. [Sistemi deneyebilir](https://clisis.novanoai.online/) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
+Profilden gelen hastaların kaynağını "Google" olarak kaydedin; böylece Clinova raporları kaç hastanın oradan geldiğini gösterir. [Sistemi deneyebilir](https://clinic.novanoai.online/auth) veya [ekibimizle görüşebilirsiniz](/tr#contact-cta).
 
 Q: Profili oluşturmak ücretsiz mi?
 A: Evet, oluşturmak ücretsizdir; kliniğin sahibi olduğunuzu doğrulamanız gerekir.

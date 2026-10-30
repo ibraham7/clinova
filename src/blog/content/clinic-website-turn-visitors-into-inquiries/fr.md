@@ -45,7 +45,7 @@ Un visiteur qui a cliqué sur le bouton WhatsApp est devenu une demande. Si la r
 
 ## Du site au patient avec Clinova
 
-Clinova rassemble les demandes venues du site et de WhatsApp dans un seul [CRM](/fr/blog/clinic-crm-system) et affiche la source et l'étape de chaque patient. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova rassemble les demandes venues du site et de WhatsApp dans un seul [CRM](/fr/blog/clinic-crm-system) et affiche la source et l'étape de chaque patient. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Quel est l'élément le plus important d'un site de clinique ?
 A: Un bouton de contact clair et facile, car le meilleur site ne sert à rien si le visiteur ne sait pas comment vous joindre.

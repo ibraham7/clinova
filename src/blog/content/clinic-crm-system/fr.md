@@ -37,7 +37,7 @@ Commencez par l'essentiel : enregistrez chaque nouvelle demande, attribuez une �
 
 ## Le CRM de Clinova
 
-Clinova propose un CRM intégré conçu pour les cliniques. Il réunit patients, demandes, rendez-vous et relances, et offre une vision claire du parcours de chaque patient, du premier contact à l'après-traitement. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova propose un CRM intégré conçu pour les cliniques. Il réunit patients, demandes, rendez-vous et relances, et offre une vision claire du parcours de chaque patient, du premier contact à l'après-traitement. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Un CRM convient-il aux petites cliniques ?
 A: Oui. Une petite clinique ressent davantage la perte de chaque patient, et un système simple suffit pour enregistrer les demandes et relancer sans complexité.

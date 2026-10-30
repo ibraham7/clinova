@@ -47,7 +47,7 @@ Every three months: pull the list of users, remove anyone who no longer works th
 
 ## Permissions in Clinova
 
-Clinova lets you create flexible roles and permissions for the team, limits what each user sees according to their role, and keeps each clinic's data separate from the others. You can [try the system](https://clisis.novanoai.online/) or [talk to our team](/en#contact-cta) to design roles that fit your clinic.
+Clinova lets you create flexible roles and permissions for the team, limits what each user sees according to their role, and keeps each clinic's data separate from the others. You can [try the system](https://clinic.novanoai.online/auth) or [talk to our team](/en#contact-cta) to design roles that fit your clinic.
 
 Q: Should the owner see everything?
 A: Usually yes, but even the owner benefits from a personal account and a record of who did what.

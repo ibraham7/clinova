@@ -37,7 +37,7 @@ Enregistrez chaque rendez-vous avec son issue : présent, reporté, annulé ou a
 
 ## Les rappels avec Clinova
 
-Clinova relie les conversations WhatsApp de votre clinique au dossier du patient et aux rendez-vous : l'équipe voit tout au même endroit et relance ceux qui n'ont pas confirmé grâce aux tâches et aux rappels du système. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova relie les conversations WhatsApp de votre clinique au dossier du patient et aux rendez-vous : l'équipe voit tout au même endroit et relance ceux qui n'ont pas confirmé grâce aux tâches et aux rappels du système. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Combien de rappels suffisent pour un rendez-vous ?
 A: Une confirmation à la réservation, un rappel la veille et un le matin même. Au-delà, cela agace le patient.

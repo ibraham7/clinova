@@ -13,7 +13,8 @@
     "check:admin": "node scripts/verify-admin.mjs",
     "check:blog-admin": "node scripts/verify-blog-admin.mjs",
     "check:reports": "node scripts/verify-reports.mjs",
-    "check:serena": "node scripts/verify-serena.mjs"
+    "check:serena": "node scripts/verify-serena.mjs",
+    "check:consent": "node scripts/verify-consent.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

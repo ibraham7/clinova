@@ -45,7 +45,7 @@ Une recommandation publique sur Google complète la recommandation personnelle. 
 
 ## Suivre les recommandations avec Clinova
 
-Clinova enregistre la source de chaque patient : vous savez qui est venu par recommandation et qui l'a recommandé, et les tâches vous rappellent de remercier la personne. Vous pouvez [essayer le système](https://clisis.novanoai.online/) ou [parler à notre équipe](/fr#contact-cta).
+Clinova enregistre la source de chaque patient : vous savez qui est venu par recommandation et qui l'a recommandé, et les tâches vous rappellent de remercier la personne. Vous pouvez [essayer le système](https://clinic.novanoai.online/auth) ou [parler à notre équipe](/fr#contact-cta).
 
 Q: Dois-je donner une récompense au patient pour une recommandation ?
 A: Renseignez-vous d'abord sur ce qu'autorisent les lois et la déontologie médicale de votre pays. Un remerciement sincère est toujours possible, alors que les incitations matérielles peuvent être limitées.
