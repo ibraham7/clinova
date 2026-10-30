@@ -26,6 +26,7 @@ export const privacy: Record<SiteLanguage, PrivacyText> = {
             { heading: "خياراتك وحقوقك", paragraphs: [
                 "يمكنك تغيير اختيارك للكوكيز في أي وقت من رابط \"إعدادات الكوكيز\" أسفل الموقع. ويحترم الموقع إشارة Global Privacy Control في متصفحك.",
                 "يمكنك طلب الاطلاع على بياناتك أو تصحيحها أو حذفها، أو سحب موافقتك على الرسائل التسويقية، بالتواصل معنا. وحسب بلدك قد تكون لك حقوق إضافية وفق قوانين مثل KVKK في تركيا أو GDPR في أوروبا.",
+                "الكوكيز التي تضعها Meta أو Google أو Microsoft على نطاقاتها الخاصة لا يستطيع هذا الموقع حذفها. يمكنك حذفها من إعدادات متصفحك، وبدون موافقتك لا يرسل موقعنا أي طلب إلى هذه الشركات.",
             ] },
             { heading: "التغييرات", paragraphs: ["قد نحدّث هذه السياسة، ونذكر تاريخ آخر تحديث أعلاها."] },
         ],
@@ -47,6 +48,7 @@ export const privacy: Record<SiteLanguage, PrivacyText> = {
             { heading: "Your choices and rights", paragraphs: [
                 "You can change your cookie choice at any time from the \"Cookie settings\" link at the bottom of the site. The site also respects your browser's Global Privacy Control signal.",
                 "You can ask to see, correct or delete your data, or withdraw your consent to marketing messages, by contacting us. Depending on your country you may have additional rights under laws such as KVKK in Türkiye or the GDPR in Europe.",
+                "Cookies that Meta, Google or Microsoft set on their own domains cannot be deleted by this site. You can remove them in your browser settings, and without your consent our site sends no request to those companies.",
             ] },
             { heading: "Changes", paragraphs: ["We may update this policy and will show the date of the latest update at the top."] },
         ],
@@ -68,6 +70,7 @@ export const privacy: Record<SiteLanguage, PrivacyText> = {
             { heading: "Seçimleriniz ve haklarınız", paragraphs: [
                 "Çerez tercihinizi sitenin altındaki \"Çerez ayarları\" bağlantısından istediğiniz zaman değiştirebilirsiniz. Site, tarayıcınızın Global Privacy Control sinyaline de uyar.",
                 "Bizimle iletişime geçerek verilerinizi görmeyi, düzeltmeyi veya silmeyi ya da pazarlama mesajlarına verdiğiniz izni geri çekmeyi isteyebilirsiniz. Ülkenize göre Türkiye'de KVKK veya Avrupa'da GDPR gibi yasalar kapsamında ek haklarınız olabilir.",
+                "Meta, Google veya Microsoft'un kendi alan adlarına yerleştirdiği çerezleri bu site silemez. Bunları tarayıcı ayarlarınızdan kaldırabilirsiniz; izniniz olmadan sitemiz bu şirketlere hiçbir istek göndermez.",
             ] },
             { heading: "Değişiklikler", paragraphs: ["Bu politikayı güncelleyebiliriz; son güncelleme tarihini sayfanın üstünde gösteririz."] },
         ],
@@ -89,6 +92,7 @@ export const privacy: Record<SiteLanguage, PrivacyText> = {
             { heading: "Vos choix et vos droits", paragraphs: [
                 "Vous pouvez modifier votre choix concernant les cookies à tout moment via le lien « Paramètres des cookies » en bas du site. Le site respecte aussi le signal Global Privacy Control de votre navigateur.",
                 "Vous pouvez demander à consulter, corriger ou supprimer vos données, ou retirer votre accord aux messages marketing, en nous contactant. Selon votre pays, vous pouvez disposer de droits supplémentaires au titre de lois comme le RGPD en Europe ou la KVKK en Turquie.",
+                "Les cookies que Meta, Google ou Microsoft déposent sur leurs propres domaines ne peuvent pas être supprimés par ce site. Vous pouvez les supprimer dans les paramètres de votre navigateur, et sans votre accord notre site n'envoie aucune requête à ces sociétés.",
             ] },
             { heading: "Modifications", paragraphs: ["Nous pouvons mettre à jour cette politique et indiquerons la date de la dernière mise à jour en haut de la page."] },
         ],
