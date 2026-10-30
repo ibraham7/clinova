@@ -29,6 +29,7 @@ const STUB = [
 const launchOptions = process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {};
 const browser = await chromium.launch(launchOptions);
 const results = [];
+const info = (name, detail) => console.log(`INFO  ${name} — ${detail}`);
 const warn = (name, detail) => console.log(`WARN  ${name} — ${detail}`);
 const check = (name, ok, detail = "") => { results.push(ok); console.log(`${ok ? "PASS" : "FAIL"}  ${name}${detail ? ` — ${detail}` : ""}`); };
 
@@ -51,10 +52,15 @@ async function session({ gpc = false, stored = null } = {}) {
     });
     const page = await context.newPage();
     page.on("pageerror", (e) => errors.push(e.message));
-    const cookies = async () => (await context.cookies()).filter((c) => TRACKING_COOKIE.test(c.name)).map((c) => c.name);
+    // The site can only read and delete its own cookies (this host and its parent domains). Cookies the tools set on their
+    // own domains (clarity.ms, bing.com, facebook.com…) belong to the browser's jar but not to the site: see thirdParty().
+    const host = new URL(BASE).hostname;
+    const isOwn = (c) => { const d = c.domain.replace(/^\./, ""); return host === d || host.endsWith(`.${d}`); };
+    const cookies = async () => (await context.cookies()).filter((c) => isOwn(c) && TRACKING_COOKIE.test(c.name)).map((c) => c.name);
+    const thirdParty = async () => (await context.cookies()).filter((c) => !isOwn(c) && TRACKING_COOKIE.test(c.name)).map((c) => `${c.name} (${c.domain.replace(/^\./, "")})`);
     const consent = () => page.evaluate(() => localStorage.getItem("clinova.consent"));
     const settle = (ms = 2500) => page.waitForTimeout(ms);
-    return { context, page, requests, errors, cookies, consent, settle };
+    return { context, page, requests, errors, cookies, thirdParty, consent, settle };
 }
 const banner = (page, lang = "en") => page.getByRole("dialog", { name: /Cookie settings|إعدادات الكوكيز|Çerez ayarları|Paramètres des cookies/ });
 const click = (page, lang, which) => page.getByRole("button", { name: LANGS[lang][which], exact: true }).click();
@@ -75,7 +81,7 @@ for (const lang of Object.keys(LANGS)) {
     await s.page.goto(`${BASE}/en`, { waitUntil: "networkidle" });
     await s.settle();
     check("before any choice: no request to Meta, Google or Clarity", s.requests.length === 0, s.requests.join(", "));
-    check("before any choice: no tracking cookie", (await s.cookies()).length === 0, (await s.cookies()).join(", "));
+    check("before any choice: no tracking cookie of the site", (await s.cookies()).length === 0, (await s.cookies()).join(", "));
     check("before any choice: nothing stored", (await s.consent()) === null);
     await s.page.goto(`${BASE}/en/blog`, { waitUntil: "networkidle" }); await s.settle(1500);
     check("browsing another page without choosing still loads nothing", s.requests.length === 0 && (await s.cookies()).length === 0);
@@ -112,8 +118,10 @@ for (const lang of Object.keys(LANGS)) {
     s.requests.length = 0;
     await s.settle(3500);
     check("withdrawing consent: the page reloads and the choice is saved as denied", (await s.consent()) === "denied");
-    check("withdrawing consent: tracking cookies are deleted", (await s.cookies()).length === 0, (await s.cookies()).join(", "));
+    check("withdrawing consent: the site's own tracking cookies are deleted", (await s.cookies()).length === 0, (await s.cookies()).join(", "));
     check("withdrawing consent: no tool request after the reload", s.requests.length === 0, s.requests.join(", "));
+    const left = await s.thirdParty();
+    if (left.length) info("withdrawing consent: cookies the tools set on their own domains remain in the browser", `${[...new Set(left)].join(", ")}. A site cannot delete another domain's cookies; they are only sent to those companies when the browser contacts them, and the check above proves it no longer does. The visitor can remove them in the browser's cookie settings.`);
     await s.context.close();
 }
 
