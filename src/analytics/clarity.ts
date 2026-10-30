@@ -13,6 +13,8 @@ export function startClarity() {
     active = true;
     // Clarity's standard loader: queue calls until the tag arrives.
     window.clarity = window.clarity || Object.assign(function (...args: unknown[]) { (window.clarity!.q = window.clarity!.q || []).push(args); }, {});
+    // Clarity needs an explicit consent signal before it sets cookies for visitors in the EEA, UK and Switzerland.
+    window.clarity("consentv2", { ad_Storage: "granted", analytics_Storage: "granted" });
     const script = document.createElement("script");
     script.async = true;
     script.src = `https://www.clarity.ms/tag/${projectId}`;

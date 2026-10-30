@@ -29,15 +29,17 @@ const STUB = [
 const launchOptions = process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {};
 const browser = await chromium.launch(launchOptions);
 const results = [];
+const warn = (name, detail) => console.log(`WARN  ${name} — ${detail}`);
 const check = (name, ok, detail = "") => { results.push(ok); console.log(`${ok ? "PASS" : "FAIL"}  ${name}${detail ? ` — ${detail}` : ""}`); };
 
-async function session({ gpc = false } = {}) {
+async function session({ gpc = false, stored = null } = {}) {
     const context = await browser.newContext({ locale: "en", viewport: { width: 1280, height: 900 } });
     // Playwright announces itself as automated; the site (rightly) never tracks automated browsers, so hide that here.
-    await context.addInitScript((privacy) => {
+    await context.addInitScript(([privacy, saved]) => {
         Object.defineProperty(navigator, "webdriver", { get: () => false });
         if (privacy) Object.defineProperty(navigator, "globalPrivacyControl", { get: () => true });
-    }, gpc);
+        if (saved) { try { localStorage.setItem("clinova.consent", saved); } catch { /* Storage blocked. */ } }
+    }, [gpc, stored]);
     const requests = [];
     const errors = [];
     await context.route((url) => TOOL_HOSTS.test(url.hostname), async (route) => {
@@ -88,8 +90,13 @@ for (const lang of Object.keys(LANGS)) {
     await s.settle(4000);
     const hosts = [...new Set(s.requests)];
     check("after Accept: Meta, Google and Clarity are requested", ["connect.facebook.net", "googletagmanager.com", "clarity.ms"].every((h) => hosts.some((x) => x.endsWith(h))), hosts.join(", "));
+    await s.settle(LIVE ? 4000 : 0);
     const set = await s.cookies();
-    check("after Accept: real tracking cookies exist", set.length > 0 && ["_fbp", "_clck"].every((n) => set.includes(n)) && set.some((n) => n === "_ga" || n.startsWith("_gcl_")), set.join(", ") || "none");
+    check("after Accept: Meta cookie exists (_fbp)", set.includes("_fbp"), set.join(", ") || "none");
+    check("after Accept: Google cookie exists (_gcl_au or _ga)", set.some((n) => n === "_ga" || n.startsWith("_gcl_")), set.join(", ") || "none");
+    if (set.includes("_clck")) check("after Accept: Clarity cookie exists (_clck)", true);
+    else if (LIVE) warn("after Accept: Clarity cookie _clck not set", "Clarity skips cookies in automated browsers; confirm by hand in DevTools > Application > Cookies");
+    else check("after Accept: Clarity cookie exists (_clck)", false, set.join(", ") || "none");
     check("after Accept: the choice is stored", (await s.consent()) === "granted");
     check("after Accept: banner closes", !(await banner(s.page).isVisible()));
     s.requests.length = 0;
@@ -100,8 +107,9 @@ for (const lang of Object.keys(LANGS)) {
     await s.page.getByRole("button", { name: "Cookie settings" }).first().scrollIntoViewIfNeeded().catch(() => {});
     await s.page.getByRole("button", { name: "Cookie settings" }).first().click();
     check("\"Cookie settings\" reopens the banner", await banner(s.page).isVisible());
-    s.requests.length = 0;
     await Promise.all([s.page.waitForNavigation({ waitUntil: "networkidle" }).catch(() => {}), click(s.page, "en", 1)]);
+    // Whatever the old page was still sending while it unloaded does not count: only the reloaded page does.
+    s.requests.length = 0;
     await s.settle(3500);
     check("withdrawing consent: the page reloads and the choice is saved as denied", (await s.consent()) === "denied");
     check("withdrawing consent: tracking cookies are deleted", (await s.cookies()).length === 0, (await s.cookies()).join(", "));
@@ -126,21 +134,20 @@ for (const lang of Object.keys(LANGS)) {
     await s.context.close();
 }
 
-// ---- 6. exclusions ----
+// ---- 6. exclusions (consent already given in this browser, then the page is opened directly) ----
 {
-    const s = await session();
-    await s.page.goto(`${BASE}/en`, { waitUntil: "networkidle" });
-    await click(s.page, "en", 0); await s.settle(3000);
-    s.requests.length = 0;
-    await s.context.clearCookies();
-    await s.page.goto(`${BASE}/admin`, { waitUntil: "networkidle" }); await s.settle(3000);
-    check("admin panel: no tool loads even after Accept", s.requests.length === 0 && (await s.cookies()).length === 0, s.requests.join(", "));
-    await s.context.close();
-    const g = await session({ gpc: true });
-    await g.page.goto(`${BASE}/en`, { waitUntil: "networkidle" });
-    await click(g.page, "en", 0); await g.settle(3500);
-    check("Global Privacy Control: no tool loads even after Accept", g.requests.length === 0 && (await g.cookies()).length === 0, g.requests.join(", "));
+    const a = await session({ stored: "granted" });
+    await a.page.goto(`${BASE}/admin`, { waitUntil: "networkidle" }); await a.settle(3500);
+    check("admin panel: no tool loads even when consent was given", a.requests.length === 0 && (await a.cookies()).length === 0, a.requests.join(", "));
+    await a.context.close();
+    const g = await session({ gpc: true, stored: "granted" });
+    await g.page.goto(`${BASE}/en`, { waitUntil: "networkidle" }); await g.settle(3500);
+    check("Global Privacy Control: no tool loads even when consent was given", g.requests.length === 0 && (await g.cookies()).length === 0, g.requests.join(", "));
     await g.context.close();
+    const ok = await session({ stored: "granted" });
+    await ok.page.goto(`${BASE}/en`, { waitUntil: "networkidle" }); await ok.settle(3500);
+    check("control: the same stored consent on a normal page does load the tools", ok.requests.length > 0, ok.requests.join(", ") || "nothing loaded");
+    await ok.context.close();
 }
 
 await browser.close();

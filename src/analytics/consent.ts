@@ -33,6 +33,12 @@ export function clearTrackingCookies() {
     }
 }
 
+/** Tells the tools that are already running to stop collecting, before the page reloads without them. */
+function stopTools() {
+    try { window.clarity?.("stop"); } catch { /* Clarity not loaded. */ }
+    try { window.fbq?.("consent", "revoke"); } catch { /* Pixel not loaded. */ }
+}
+
 /**
  * Stores the visitor's choice. Withdrawing a consent that was given earlier also deletes the tracking cookies and
  * reloads the page: the tools that already loaded keep running until then, so only a reload really stops them.
@@ -40,7 +46,7 @@ export function clearTrackingCookies() {
 export function setConsent(value: Consent) {
     const before = savedConsent();
     try { localStorage.setItem(storageKey, value); } catch { /* Storage blocked: the choice lasts for this page only. */ }
-    if (value === "denied" && before === "granted") { clearTrackingCookies(); window.location.reload(); return; }
+    if (value === "denied" && before === "granted") { stopTools(); clearTrackingCookies(); window.location.reload(); return; }
     window.dispatchEvent(new CustomEvent(eventName, { detail: value }));
 }
 

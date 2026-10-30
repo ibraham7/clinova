@@ -20,6 +20,8 @@ export function startGoogleTag() {
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${tagId}`;
     document.head.appendChild(script);
+    // The visitor has accepted (the tag never loads otherwise): tell Google so, for its consent-aware features.
+    window.gtag("consent", "default", { ad_storage: "granted", ad_user_data: "granted", ad_personalization: "granted", analytics_storage: "granted" });
     window.gtag("js", new Date());
     window.gtag("config", tagId);
 }
