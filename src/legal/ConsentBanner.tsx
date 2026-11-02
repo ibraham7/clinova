@@ -33,9 +33,9 @@ export default function ConsentBanner() {
             {t("نستخدم كوكيز لأدوات الإعلانات والتحليل (Meta وGoogle وMicrosoft Clarity) فقط إذا وافقت. إحصاءاتنا الخاصة لا تستخدم كوكيز.")}{" "}
             <Box component="a" href={`/${lang}/privacy`} sx={{ color: "primary.light" }}>{t("سياسة الخصوصية")}</Box>
         </Typography>
-        <Stack direction="row" sx={{ mt: 2, gap: 1, justifyContent: "flex-end" }}>
-            <Button variant="outlined" size="small" onClick={() => choose("denied")}>{t("رفض")}</Button>
-            <Button variant="contained" size="small" onClick={() => choose("granted")}>{t("قبول")}</Button>
+        <Stack sx={{ mt: 2, gap: 0.5, alignItems: "stretch" }}>
+            <Button variant="contained" size="large" fullWidth onClick={() => choose("granted")}>{t("قبول")}</Button>
+            <Button variant="text" size="small" onClick={() => choose("denied")} sx={{ alignSelf: "center", fontSize: "0.75rem", color: "var(--clinova-rgba-245-247-250-0_72)" }}>{t("رفض")}</Button>
         </Stack>
     </Box>;
 }
