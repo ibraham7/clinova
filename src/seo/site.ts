@@ -1,7 +1,7 @@
 // One place for the facts search engines and AI assistants read about Clinova.
 export const siteUrl = "https://clinova.novanoai.online";
 export const siteName = "Clinova";
-export const contactEmail = "hello@clinova.com";
+export const contactEmail = "clinova@novanoai.online";
 export const contactPhone = "+905516886988";
 
 // Paste the codes from Google Search Console / Bing Webmaster Tools here (meta tag method).

@@ -278,7 +278,7 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
                                 },
                             }}
                         >
-                            hello@clinova.com
+                            clinova@novanoai.online
                         </Typography>
                     </Stack>
                 </Box>
