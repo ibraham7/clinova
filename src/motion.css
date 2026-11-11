@@ -887,3 +887,123 @@ footer a:hover .MuiSvgIcon-root {
   .queue-panel::after,
   .stat-arrow { animation: none; }
 }
+
+/* ---- Services: bars shimmer, the panel scans, the active tab and step glow, arrows pass the baton ---- */
+.svc-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.svc-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.38), transparent);
+  translate: -130% 0;
+  animation: svc-shimmer 3.6s ease-in-out calc(var(--i, 0) * 0.45s + 1s) infinite;
+}
+
+@keyframes svc-shimmer {
+  0%, 45% { translate: -130% 0; }
+  100% { translate: 340% 0; }
+}
+
+.svc-panel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  height: 70px;
+  background: linear-gradient(180deg, transparent, var(--clinova-rgba-142-168-232-0_1), transparent);
+  pointer-events: none;
+  opacity: 0;
+  animation: svc-scan 6.5s ease-in-out infinite;
+}
+
+@keyframes svc-scan {
+  0% { translate: 0 -80px; opacity: 0; }
+  12%, 82% { opacity: 1; }
+  100% { translate: 0 340px; opacity: 0; }
+}
+
+.svc-live {
+  animation: clinova-ring-pulse 2s ease-out infinite;
+}
+
+.svc-tab.is-active .svc-num {
+  animation: svc-num-ring 2.4s ease-out infinite;
+}
+
+@keyframes svc-num-ring {
+  0% { box-shadow: 0 0 0 0 var(--clinova-rgba-142-168-232-0_45); }
+  70%, 100% { box-shadow: 0 0 0 12px transparent; }
+}
+
+.svc-tab.is-active::after,
+.svc-step.is-active::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--clinova-color-dce6ff), transparent) no-repeat;
+  background-size: 40% 100%;
+  pointer-events: none;
+  animation: svc-sweep 2.8s linear infinite;
+}
+
+.svc-tab.is-active::after {
+  left: 22px;
+  right: 22px;
+  bottom: 0;
+}
+
+.svc-step.is-active::after {
+  left: 0;
+  right: 0;
+  top: -1px;
+}
+
+@keyframes svc-sweep {
+  from { background-position: -40% 0; }
+  to { background-position: 140% 0; }
+}
+
+.svc-step > .MuiSvgIcon-root {
+  animation: svc-flow 3s ease-in-out infinite;
+}
+
+.svc-step:nth-child(2) > .MuiSvgIcon-root { animation-delay: 0.5s; }
+.svc-step:nth-child(3) > .MuiSvgIcon-root { animation-delay: 1s; }
+.svc-step:nth-child(4) > .MuiSvgIcon-root { animation-delay: 1.5s; }
+.svc-step:nth-child(5) > .MuiSvgIcon-root { animation-delay: 2s; }
+
+@keyframes svc-flow {
+  0%, 100% { opacity: 0.4; translate: 0 0; }
+  35% { opacity: 1; translate: 5px 0; }
+}
+
+[dir="rtl"] .svc-step > .MuiSvgIcon-root {
+  animation-name: svc-flow-rtl;
+}
+
+@keyframes svc-flow-rtl {
+  0%, 100% { opacity: 0.4; translate: 0 0; }
+  35% { opacity: 1; translate: -5px 0; }
+}
+
+/* Icons in freshly swapped panels pop in after the text. */
+.clinova-swap .MuiSvgIcon-root {
+  animation: clinova-pop-in 700ms var(--clinova-ease-out) 350ms backwards;
+}
+
+@keyframes clinova-pop-in {
+  from { opacity: 0; scale: 0.3; rotate: -40deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-bar::after, .svc-panel::after, .svc-live, .svc-tab.is-active .svc-num,
+  .svc-tab.is-active::after, .svc-step.is-active::after, .svc-step > .MuiSvgIcon-root,
+  .clinova-swap .MuiSvgIcon-root { animation: none; }
+}
