@@ -12,7 +12,7 @@ import { useEffect } from "react";
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 const hotSelector = "a[href], button, [role=button], [role=tab], input, textarea, select, summary, [data-fx]";
 
-type Lean = { el: HTMLElement; tx: number; ty: number; x: number; y: number; hover: boolean; magnet: boolean };
+type Lean = { el: HTMLElement; tx: number; ty: number; x: number; y: number; lt: number; l: number; hover: boolean; magnet: boolean };
 
 export default function MotionEngine() {
     useEffect(() => {
@@ -119,7 +119,7 @@ export default function MotionEngine() {
 
             const lean = (el: HTMLElement, magnet: boolean) => {
                 let entry = leans.get(el);
-                if (!entry) { entry = { el, tx: 0, ty: 0, x: 0, y: 0, hover: true, magnet }; leans.set(el, entry); }
+                if (!entry) { entry = { el, tx: 0, ty: 0, x: 0, y: 0, lt: 0, l: 0, hover: true, magnet }; leans.set(el, entry); }
                 entry.hover = true;
                 return entry;
             };
@@ -141,9 +141,9 @@ export default function MotionEngine() {
                 if (tilt) {
                     const rect = tilt.getBoundingClientRect();
                     const entry = lean(tilt, false);
-                    entry.tx = ((event.clientX - rect.left) / rect.width - 0.5) * 9;
-                    entry.ty = -((event.clientY - rect.top) / rect.height - 0.5) * 7;
-                    tilt.style.setProperty("--fx-lift", "-5px");
+                    entry.tx = ((event.clientX - rect.left) / rect.width - 0.5) * 6;
+                    entry.ty = -((event.clientY - rect.top) / rect.height - 0.5) * 5;
+                    entry.lt = -4;
                     now.add(tilt);
                 }
                 if (spot) {
@@ -153,6 +153,8 @@ export default function MotionEngine() {
                         glow.className = "fx-spot";
                         glow.setAttribute("aria-hidden", "true");
                         spot.prepend(glow);
+                        // Switched on one frame later, so the first hover fades in like every other one.
+                        requestAnimationFrame(() => requestAnimationFrame(() => glow.classList.add("is-live")));
                     }
                     spot.style.setProperty("--fx-mx", `${(event.clientX - rect.left).toFixed(0)}px`);
                     spot.style.setProperty("--fx-my", `${(event.clientY - rect.top).toFixed(0)}px`);
@@ -168,8 +170,7 @@ export default function MotionEngine() {
                 for (const el of hovered) {
                     if (now.has(el)) continue;
                     const entry = leans.get(el);
-                    if (entry) { entry.hover = false; entry.tx = 0; entry.ty = 0; }
-                    el.style.removeProperty("--fx-lift");
+                    if (entry) { entry.hover = false; entry.tx = 0; entry.ty = 0; entry.lt = 0; }
                 }
                 hovered = now;
             };
@@ -183,14 +184,17 @@ export default function MotionEngine() {
                 dot.style.transform = `translate3d(${px}px, ${py}px, 0)`;
                 let busy = Math.abs(px - rx) + Math.abs(py - ry) > 0.4;
                 for (const entry of leans.values()) {
-                    entry.x += (entry.tx - entry.x) * 0.14;
-                    entry.y += (entry.ty - entry.y) * 0.14;
+                    // Slow, springy easing: the card rises and leans gradually instead of jumping.
+                    entry.x += (entry.tx - entry.x) * 0.08;
+                    entry.y += (entry.ty - entry.y) * 0.08;
+                    entry.l += (entry.lt - entry.l) * 0.07;
                     if (entry.magnet) entry.el.style.translate = `${entry.x.toFixed(2)}px ${entry.y.toFixed(2)}px`;
                     else {
                         entry.el.style.setProperty("--fx-rx", `${entry.y.toFixed(2)}deg`);
                         entry.el.style.setProperty("--fx-ry", `${entry.x.toFixed(2)}deg`);
+                        entry.el.style.setProperty("--fx-lift", `${entry.l.toFixed(2)}px`);
                     }
-                    if (!entry.hover && Math.abs(entry.x) + Math.abs(entry.y) < 0.02) {
+                    if (!entry.hover && Math.abs(entry.x) + Math.abs(entry.y) + Math.abs(entry.l) < 0.03) {
                         if (entry.magnet) entry.el.style.translate = "";
                         else ["--fx-rx", "--fx-ry", "--fx-lift"].forEach((name) => entry.el.style.removeProperty(name));
                         leans.delete(entry.el);
@@ -213,7 +217,7 @@ export default function MotionEngine() {
                 dot.classList.remove("is-on");
                 seen = false;
                 pending = null;
-                for (const entry of leans.values()) { entry.hover = false; entry.tx = 0; entry.ty = 0; }
+                for (const entry of leans.values()) { entry.hover = false; entry.tx = 0; entry.ty = 0; entry.lt = 0; }
                 hovered.clear();
                 kick();
             };
