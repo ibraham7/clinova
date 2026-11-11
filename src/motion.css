@@ -684,3 +684,146 @@ section[data-section="shown"]::before {
   html[data-header="hide"] .clinova-header-bar { translate: none; }
   section[id]:not(#home)::before { transform: scaleX(1); transition: none; }
 }
+
+/* ======================================================================
+   Section touches: small, cheap animations that make each part of the page feel alive.
+   Only transform, opacity and a few hovers; the infinite ones are on tiny elements.
+   ====================================================================== */
+
+/* ---- Hero: a slow dashed ring and a light travelling around the cards ---- */
+.hero-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: clinova-spin 90s linear infinite;
+}
+
+.hero-orbit {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: clinova-spin 16s linear infinite;
+}
+
+@keyframes clinova-spin {
+  to { rotate: 360deg; }
+}
+
+/* ---- Slow dashed rings behind the headline of About, Story, Partners, FAQ and the call to action ---- */
+:is(#about, #story, #partners, #faq, #contact-cta) .MuiContainer-root {
+  position: relative;
+  isolation: isolate;
+}
+
+:is(#about, #story, #partners, #faq, #contact-cta) .MuiContainer-root::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  width: min(760px, 94vw);
+  aspect-ratio: 1;
+  margin: calc(min(760px, 94vw) / -2) 0 0 calc(min(760px, 94vw) / -2);
+  border-radius: 50%;
+  border: 1px dashed var(--clinova-rgba-142-168-232-0_16);
+  pointer-events: none;
+  animation: clinova-spin 140s linear infinite;
+}
+
+:is(#story, #faq) .MuiContainer-root::before {
+  width: min(980px, 100vw);
+  margin: calc(min(980px, 100vw) / -2) 0 0 calc(min(980px, 100vw) / -2);
+  animation-direction: reverse;
+  animation-duration: 180s;
+}
+
+#contact-cta .MuiContainer-root::before {
+  border-style: solid;
+  border-color: var(--clinova-rgba-142-168-232-0_1);
+}
+
+/* ---- Cards and icons answer the pointer ---- */
+[data-fx~="spot"] .MuiSvgIcon-root {
+  transition: translate 500ms var(--clinova-ease-out), scale 500ms var(--clinova-ease-out), rotate 500ms var(--clinova-ease-out);
+}
+
+[data-fx~="spot"]:hover .MuiSvgIcon-root {
+  translate: 0 -3px;
+  scale: 1.12;
+  rotate: -6deg;
+}
+
+footer a .MuiSvgIcon-root,
+footer button .MuiSvgIcon-root {
+  transition: translate 400ms var(--clinova-ease-out), scale 400ms var(--clinova-ease-out);
+}
+
+footer a:hover .MuiSvgIcon-root {
+  translate: 0 -3px;
+  scale: 1.15;
+}
+
+/* ---- Story: the arrow between the two cards nudges toward the next step ---- */
+.clinova-pulse-ring svg {
+  animation: clinova-nudge 2s ease-in-out infinite;
+}
+
+@keyframes clinova-nudge {
+  50% { translate: -5px 0; }
+}
+
+[dir="ltr"] .clinova-pulse-ring svg {
+  animation-name: clinova-nudge-ltr;
+}
+
+@keyframes clinova-nudge-ltr {
+  50% { translate: 5px 0; }
+}
+
+/* ---- Partners: the logo strips stop under the pointer, logos lift ---- */
+.clinova-marquee-row:hover > div {
+  animation-play-state: paused;
+}
+
+.clinova-marquee-row [data-fx~="spot"] {
+  transition: translate 500ms var(--clinova-ease-out), border-color 500ms ease;
+}
+
+.clinova-marquee-row [data-fx~="spot"]:hover {
+  translate: 0 -5px;
+}
+
+/* ---- Call to action: a light runs around the panel's edge, the main button pulses ---- */
+@property --fx-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.clinova-glow-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from var(--fx-angle), transparent 0 72%, var(--clinova-color-8ea8e8) 86%, var(--clinova-color-dce6ff) 92%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+  animation: clinova-edge 7s linear infinite;
+}
+
+@keyframes clinova-edge {
+  to { --fx-angle: 360deg; }
+}
+
+#contact-cta .clinova-shine {
+  animation: clinova-ring-pulse 2.8s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-spin, .hero-orbit,
+  :is(#about, #story, #partners, #faq, #contact-cta) .MuiContainer-root::before,
+  .clinova-pulse-ring svg, .clinova-glow-border::before, #contact-cta .clinova-shine { animation: none; }
+  [data-fx~="spot"]:hover .MuiSvgIcon-root, footer a:hover .MuiSvgIcon-root { translate: none; scale: none; rotate: none; }
+}

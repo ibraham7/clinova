@@ -67,7 +67,11 @@ export default function HeroVisual() {
 
                 <circle className="hero-halo" cx="260" cy="260" r="245" fill="url(#clinova-hero-glow)" />
                 <circle cx="260" cy="260" r="204" stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.12" />
-                <circle cx="260" cy="260" r="155" stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.16" strokeDasharray="3 10" />
+                <circle className="hero-spin" cx="260" cy="260" r="155" stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.16" strokeDasharray="3 10" />
+                <g className="hero-orbit">
+                    <circle cx="260" cy="105" r="9" fill="var(--clinova-color-8ea8e8)" fillOpacity="0.16" />
+                    <circle cx="260" cy="105" r="3.2" fill="var(--clinova-color-b8c8ef)" />
+                </g>
                 <path d="M100 180C150 180 158 220 198 244M328 244C360 210 377 158 415 152M275 333C290 385 335 402 383 398" stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.18" />
                 <path className="hero-signal" d="M100 180C150 180 158 220 198 244M328 244C360 210 377 158 415 152M275 333C290 385 335 402 383 398" stroke="var(--clinova-color-b8c8ef)" strokeOpacity="0.65" strokeWidth="2" strokeDasharray="5 75" strokeLinecap="round" />
 

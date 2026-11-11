@@ -32,7 +32,7 @@ function CTASection() {
                 direction: direction,
             }}
         >
-            <Container> <Box data-fx="spot" sx={{ position: "relative", overflow: "hidden", minHeight: { xs: 320, md: 360, },
+            <Container> <Box data-fx="spot" className="clinova-glow-border" sx={{ position: "relative", overflow: "hidden", minHeight: { xs: 320, md: 360, },
 
                         display: "flex",
 
