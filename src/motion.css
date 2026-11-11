@@ -466,11 +466,11 @@ html.fx-hover [data-fx~="tilt"] {
   border-radius: inherit;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 400ms ease;
-  background: radial-gradient(300px circle at var(--fx-mx, 50%) var(--fx-my, 50%), var(--clinova-rgba-142-168-232-0_16), transparent 70%);
+  transition: opacity 900ms ease;
+  background: radial-gradient(340px circle at var(--fx-mx, 50%) var(--fx-my, 50%), var(--clinova-rgba-142-168-232-0_12), transparent 72%);
 }
 
-[data-fx~="spot"]:hover > .fx-spot {
+[data-fx~="spot"]:hover > .fx-spot.is-live {
   opacity: 1;
 }
 
@@ -491,7 +491,7 @@ html.fx-hover [data-fx~="tilt"] {
   margin: -19px 0 0 -19px;
   border-radius: 50%;
   border: 1px solid color-mix(in srgb, var(--clinova-color-8ea8e8) 65%, transparent);
-  transition: opacity 300ms ease, width 400ms var(--clinova-ease-out), height 400ms var(--clinova-ease-out), margin 400ms var(--clinova-ease-out), background-color 400ms ease;
+  transition: opacity 400ms ease, width 700ms var(--clinova-ease-out), height 700ms var(--clinova-ease-out), margin 700ms var(--clinova-ease-out), background-color 700ms ease;
 }
 
 .fx-cursor-dot {
