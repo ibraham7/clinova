@@ -67,7 +67,6 @@ section[data-section="shown"] {
   from {
     opacity: 0;
     translate: var(--clinova-slide) 0;
-    filter: blur(8px);
   }
 }
 
@@ -75,7 +74,6 @@ section[data-section="shown"] {
   from {
     opacity: 0;
     translate: calc(var(--clinova-slide) * -1) 0;
-    filter: blur(8px);
   }
 }
 
@@ -84,7 +82,6 @@ section[data-section="shown"] {
     opacity: 0;
     translate: 0 48px;
     scale: 0.92;
-    filter: blur(6px);
   }
 }
 
@@ -138,7 +135,6 @@ section[data-section="shown"] {
     opacity: 0;
     translate: 0 36px;
     scale: 0.98;
-    filter: blur(8px);
   }
 }
 
@@ -308,7 +304,6 @@ section[data-section="shown"] {
     opacity: 0;
     translate: 0 40px;
     scale: 0.9;
-    filter: blur(6px);
   }
 }
 
@@ -416,17 +411,11 @@ html.is-ready #home h1 > span[data-accent] {
 #home h1 > span:nth-child(3) { --l: 2; }
 
 @keyframes clinova-hero-in {
-  from { opacity: 0; translate: 0 36px; filter: blur(10px); }
+  from { opacity: 0; translate: 0 36px; }
 }
 
 @keyframes clinova-hero-line {
-  from { opacity: 0; translate: 0 0.55em; clip-path: inset(0 0 105% 0); filter: blur(10px); }
-}
-
-/* The hero leaves slowly as the page scrolls (--clinova-hero goes 0 to 1). */
-#home > .MuiContainer-root {
-  translate: 0 calc(var(--clinova-hero, 0) * 70px);
-  opacity: calc(1 - var(--clinova-hero, 0) * 1.15);
+  from { opacity: 0; translate: 0 0.55em; clip-path: inset(0 0 105% 0); }
 }
 
 .clinova-hero-canvas {
@@ -436,17 +425,15 @@ html.is-ready #home h1 > span[data-accent] {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  -webkit-mask-image: radial-gradient(ellipse at 50% 45%, #000 35%, transparent 78%);
-  mask-image: radial-gradient(ellipse at 50% 45%, #000 35%, transparent 78%);
 }
 
 /* ---- Heading reveal: a wipe that also clears a blur ---- */
 @keyframes clinova-reveal-heading {
-  from { opacity: 0; translate: 0 22px; filter: blur(10px); clip-path: inset(-20% 100% -40% -10%); }
+  from { opacity: 0; translate: 0 22px; clip-path: inset(-20% 100% -40% -10%); }
 }
 
 @keyframes clinova-reveal-heading-rtl {
-  from { opacity: 0; translate: 0 22px; filter: blur(10px); clip-path: inset(-20% -10% -40% 100%); }
+  from { opacity: 0; translate: 0 22px; clip-path: inset(-20% -10% -40% 100%); }
 }
 
 /* ---- Text that fills in line by line while it scrolls into view ---- */
@@ -542,6 +529,7 @@ html.fx-hover [data-fx~="tilt"] {
 
 .clinova-ticker > div {
   transform: skewX(calc(var(--clinova-vel, 0) * -9deg));
+  will-change: transform;
   transition: transform 350ms ease-out;
 }
 
@@ -564,7 +552,7 @@ html.fx-hover [data-fx~="tilt"] {
 }
 
 @keyframes clinova-swap {
-  from { opacity: 0; translate: 0 26px; filter: blur(8px); }
+  from { opacity: 0; translate: 0 26px; }
 }
 
 /* ---- Back to top: a ring that fills as the page is read ---- */
@@ -582,9 +570,7 @@ html.fx-hover [data-fx~="tilt"] {
   border-radius: 50%;
   cursor: pointer;
   color: var(--clinova-color-b8c8ef);
-  background: color-mix(in srgb, var(--clinova-color-111b2a) 86%, transparent);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  background: var(--clinova-color-111b2a);
   box-shadow: 0 10px 30px var(--clinova-rgba-0-0-0-0_28);
   opacity: 0;
   pointer-events: none;
@@ -660,7 +646,6 @@ html.fx-hover [data-fx~="tilt"] {
   .clinova-pulse-ring,
   .clinova-swap { animation: none; }
 
-  #home > .MuiContainer-root { translate: none; opacity: 1; }
   .clinova-ticker > div { transform: none; }
   .clinova-top, .clinova-top .MuiSvgIcon-root { transition: none; }
 }

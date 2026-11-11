@@ -5,7 +5,8 @@ import { useEffect } from "react";
 export default function PointerParallax() {
     useEffect(() => {
         const media = window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
-        const root = document.documentElement;
+        // Only the hero uses these values; writing them on <html> would restyle the whole page on every move.
+        const root = document.getElementById("home") ?? document.documentElement;
         let frame = 0;
         let x = 0;
         let y = 0;
