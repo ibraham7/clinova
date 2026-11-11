@@ -338,15 +338,7 @@ function MarqueeRow({
     const duplicatedItems = [...filled, ...filled];
 
     return (
-        <Box
-            sx={{
-                position: "relative",
-
-                width: "100%",
-
-                overflow: "hidden",
-
-                mb: 2,
+        <Box className="clinova-marquee-row" sx={{ position: "relative", width: "100%", overflow: "hidden", mb: 2,
 
                 direction: "ltr",
             }}
