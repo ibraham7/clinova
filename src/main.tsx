@@ -20,6 +20,9 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>,
 );
 
+// Lets the opening animation in index.html finish once the app is on screen.
+requestAnimationFrame(() => (window as unknown as { __clinovaMounted?: () => void }).__clinovaMounted?.());
+
 // Anonymous visit statistics for the admin reports page (skipped in /admin and ?edit).
 startTracking();
 // The Meta ad pixel, the Google Ads tag and Microsoft Clarity: same exclusions as the statistics, and only once the

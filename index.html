@@ -7,11 +7,76 @@
     <script>
       try { document.documentElement.dataset.theme = localStorage.getItem("clinova.theme") === "light" ? "light" : "dark"; } catch { document.documentElement.dataset.theme = "dark"; }
       document.documentElement.style.colorScheme = document.documentElement.dataset.theme;
+      // Opening animation: the home page, once per browser session, never in the text editor or with reduced motion.
+      // Without this class (and without JavaScript) the loader below stays hidden, so search engines never see it.
+      try {
+        var home = /^\/(ar|en|tr|fr)?$/.test(location.pathname.replace(/\/+$/, "") || "/");
+        var skip = !home || /[?&]edit\b/.test(location.search) || sessionStorage.getItem("clinova.loaded") || matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (!skip) document.documentElement.classList.add("has-loader");
+      } catch (e) { /* No loader. */ }
     </script>
+    <style>
+      #clinova-loader { display: none; }
+      html.has-loader { overflow: hidden; }
+      html.has-loader #clinova-loader {
+        position: fixed; inset: 0; z-index: 3000; display: grid; place-items: center; align-content: center; gap: 28px;
+        background: radial-gradient(circle at 50% 42%, var(--clinova-rgba-142-168-232-0_12, rgba(142,168,232,.12)), transparent 55%), var(--clinova-color-0b111b, #0B111B);
+        clip-path: inset(0 0 0 0); transition: clip-path 1000ms cubic-bezier(0.77, 0, 0.18, 1);
+      }
+      #clinova-loader.out { clip-path: inset(0 0 100% 0); }
+      #clinova-loader .cl-logo {
+        width: min(210px, 52vw); height: auto; display: block; filter: var(--clinova-logo-filter, none);
+        animation: cl-logo 1400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        -webkit-mask-image: linear-gradient(100deg, #000 40%, rgba(0,0,0,.25) 50%, #000 60%); mask-image: linear-gradient(100deg, #000 40%, rgba(0,0,0,.25) 50%, #000 60%);
+        -webkit-mask-size: 260% 100%; mask-size: 260% 100%;
+        animation: cl-logo 1400ms cubic-bezier(0.22, 1, 0.36, 1) both, cl-sweep 2200ms ease-in-out 600ms infinite;
+      }
+      #clinova-loader .cl-meter { width: min(260px, 60vw); display: grid; gap: 12px; direction: ltr; }
+      #clinova-loader .cl-line { height: 2px; background: var(--clinova-rgba-142-168-232-0_18, rgba(142,168,232,.18)); overflow: hidden; border-radius: 2px; }
+      #clinova-loader .cl-line i { display: block; height: 100%; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, var(--clinova-color-7894d2, #7894D2), var(--clinova-color-b8c8ef, #B8C8EF)); }
+      #clinova-loader .cl-num { font: 600 0.72rem "Plus Jakarta Sans", sans-serif; letter-spacing: 0.3em; color: var(--clinova-color-8ea8e8, #8EA8E8); text-align: end; font-variant-numeric: tabular-nums; }
+      #clinova-loader.out .cl-logo, #clinova-loader.out .cl-meter { opacity: 0; transition: opacity 350ms ease; }
+      @keyframes cl-sweep { from { -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-position: 0% 0; mask-position: 0% 0; } }
+      @keyframes cl-logo { from { opacity: 0; transform: translateY(18px) scale(0.94); filter: blur(10px); } }
+    </style>
     <title>Clinova</title>
   </head>
   <body>
+    <div id="clinova-loader" aria-hidden="true">
+      <img class="cl-logo" src="/logo/logo.png" alt="" />
+      <div class="cl-meter"><div class="cl-line"><i></i></div><div class="cl-num">000</div></div>
+    </div>
     <div id="root"></div>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var loader = document.getElementById("clinova-loader");
+        if (!root.classList.contains("has-loader") || !loader) { root.classList.add("is-ready"); return; }
+        var num = loader.querySelector(".cl-num"), bar = loader.querySelector(".cl-line i");
+        var start = performance.now(), MIN = 1500, mounted = false, finished = false;
+        function frame(now) {
+          var p = Math.min((now - start) / MIN, 1), e = 1 - Math.pow(1 - p, 3);
+          num.textContent = String(Math.round(e * 100)).padStart(3, "0");
+          bar.style.transform = "scaleX(" + e + ")";
+          if (!finished) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+        function finish() {
+          if (finished) return;
+          finished = true;
+          num.textContent = "100"; bar.style.transform = "scaleX(1)";
+          loader.classList.add("out");
+          root.classList.add("is-ready");
+          try { sessionStorage.setItem("clinova.loaded", "1"); } catch (e) { /* Optional. */ }
+          clearInterval(poll);
+          setTimeout(function () { root.classList.remove("has-loader"); }, 1100);
+        }
+        function check() { if (mounted && performance.now() - start >= MIN) finish(); }
+        window.__clinovaMounted = function () { mounted = true; check(); };
+        var poll = setInterval(check, 100);
+        setTimeout(finish, 5000);
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

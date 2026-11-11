@@ -275,14 +275,7 @@ function SpecialtyCard({
     const Icon = specialty.icon;
 
     return (
-        <Box
-            component="button"
-            onClick={onClick}
-            sx={{
-                position: "relative",
-
-                minHeight: {
-                    xs: 380,
+        <Box component="button" data-fx="spot" onClick={onClick} sx={{ position: "relative", minHeight: { xs: 380,
                     sm: 360,
                     md: 365,
                 },

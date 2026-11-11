@@ -377,9 +377,7 @@ function CaseStudiesSection() {
                         RESULT CARD
                     ================================== */}
 
-                    <ResultCard
-                        caseStudy={activeCase}
-                    />
+                    <ResultCard key={activeCase.number} caseStudy={activeCase} />
                 </Box>
             </Container>
         </Box>
@@ -402,15 +400,7 @@ function CaseItem({
     const { direction, t } = useSiteTranslation();
 
     return (
-        <Box
-            component="button"
-            onClick={onClick}
-            sx={{
-                position: "relative",
-
-                width: "100%",
-
-                minHeight: 68,
+        <Box component="button" data-fx="spot" onClick={onClick} sx={{ position: "relative", width: "100%", minHeight: 68,
 
                 display: "grid",
 
@@ -564,8 +554,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
 
     return (
         <Box
-            component="article"
-            aria-label={t("تجربة {{name}}", { name: t(caseStudy.name) })}
+            component="article" className="clinova-swap" aria-label={t("تجربة {{name}}", { name: t(caseStudy.name) })}
             sx={{
                 order: { xs: 1, lg: 2 },
                 minWidth: 0,

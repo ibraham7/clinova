@@ -55,6 +55,7 @@ function MedicalTicker() {
     return (
         <Box
             ref={viewportRef}
+            className="clinova-ticker-wrap"
             sx={{
                 width: "100%",
                 overflow: "hidden",

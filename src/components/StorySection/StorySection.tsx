@@ -86,6 +86,7 @@ function StorySection() {
 
                     {/* Description */}
                     <Typography
+                        data-fill=""
                         sx={{
                             mt: 3,
 
@@ -145,13 +146,7 @@ function StorySection() {
                         />
 
                         {/* Arrow */}
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-
-                                width: 58,
+                        <Box className="clinova-pulse-ring" sx={{ display: "flex", alignItems: "center", justifyContent: "center", width: 58,
                                 height: 58,
 
                                 flexShrink: 0,
@@ -205,13 +200,7 @@ function StoryCard({
 }) {
     const { t } = useSiteTranslation();
 
-    return (
-        <Box
-            sx={{
-                position: "relative",
-
-                width: "100%",
-                maxWidth: 380,
+    return ( <Box data-fx="tilt spot" sx={{ position: "relative", width: "100%", maxWidth: 380,
 
                 minHeight: 250,
 
