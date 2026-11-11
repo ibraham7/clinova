@@ -283,6 +283,9 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
                     </Stack>
                 </Box>
 
+                {/* The logo again, huge and faint; the pointer lights it up (see motion.css). */}
+                <Box component="img" src={clinovaLogo} alt="" aria-hidden="true" className="clinova-mega" sx={{ maxWidth: 880, height: "auto" }} />
+
                 {/* =====================================
                     BOTTOM
                 ====================================== */}

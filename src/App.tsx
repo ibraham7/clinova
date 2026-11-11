@@ -4,6 +4,8 @@ import AmbientOrbs from "./components/motion/AmbientOrbs";
 import PointerParallax from "./components/motion/PointerParallax";
 import ScrollProgress from "./components/motion/ScrollProgress";
 import ScrollReveal from "./components/motion/ScrollReveal";
+import MotionEngine from "./motion/MotionEngine";
+import ScrollTopRing from "./motion/ScrollTopRing";
 import Header from "./components/layout/Header";
 import Hero from "./components/Hero/Hero";
 import MedicalTicker from "./components/MedicalTicker/MedicalTicker";
@@ -37,6 +39,7 @@ function App() {
       <AmbientOrbs />
       <ScrollProgress />
       <ScrollReveal />
+      <MotionEngine />
       <PointerParallax />
       <MouseGlow />
       <Header />
@@ -55,6 +58,7 @@ function App() {
       <FAQSection />
       <CTASection />
       <Footer />
+      <ScrollTopRing />
       <SurveyPopup />
     </Box>
   );

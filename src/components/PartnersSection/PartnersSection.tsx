@@ -403,10 +403,7 @@ function MarqueeRow({
    PLACEHOLDER
 ========================================= */
 
-function PartnerPlaceholder({ logo }: { logo?: ClientLogo }) {
-    return (
-        <Box
-            sx={{
+function PartnerPlaceholder({ logo }: { logo?: ClientLogo }) { return ( <Box data-fx="spot" sx={{
                 width: {
                     xs: 180,
                     sm: 210,

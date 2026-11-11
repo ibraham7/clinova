@@ -388,3 +388,314 @@ section[data-section="shown"] {
     transition: opacity 450ms ease;
   }
 }
+
+/* ======================================================================
+   Landing motion layer (src/motion/*): hero entrance, pointer effects, scroll-driven text, cursor, back-to-top.
+   Everything here is decoration: with reduced motion the static look stays, and without JavaScript nothing is hidden.
+   ====================================================================== */
+
+/* ---- Hero entrance: waits for the loader (html.is-ready), lines rise one after another ---- */
+html.has-loader:not(.is-ready) .hero-in,
+html.has-loader:not(.is-ready) #home h1 > span {
+  opacity: 0;
+}
+
+html.is-ready .hero-in {
+  animation: clinova-hero-in 1100ms var(--clinova-ease-out) calc(var(--i, 0) * 120ms + 300ms) backwards;
+}
+
+html.is-ready #home h1 > span {
+  animation: clinova-hero-line 1200ms var(--clinova-ease-out) calc(var(--l, 0) * 140ms + 250ms) backwards;
+}
+
+html.is-ready #home h1 > span[data-accent] {
+  animation: clinova-hero-line 1200ms var(--clinova-ease-out) calc(var(--l, 0) * 140ms + 250ms) backwards, clinova-accent-sweep 7s ease-in-out infinite;
+}
+
+#home h1 > span:nth-child(2) { --l: 1; }
+#home h1 > span:nth-child(3) { --l: 2; }
+
+@keyframes clinova-hero-in {
+  from { opacity: 0; translate: 0 36px; filter: blur(10px); }
+}
+
+@keyframes clinova-hero-line {
+  from { opacity: 0; translate: 0 0.55em; clip-path: inset(0 0 105% 0); filter: blur(10px); }
+}
+
+/* The hero leaves slowly as the page scrolls (--clinova-hero goes 0 to 1). */
+#home > .MuiContainer-root {
+  translate: 0 calc(var(--clinova-hero, 0) * 70px);
+  opacity: calc(1 - var(--clinova-hero, 0) * 1.15);
+}
+
+.clinova-hero-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 45%, #000 35%, transparent 78%);
+  mask-image: radial-gradient(ellipse at 50% 45%, #000 35%, transparent 78%);
+}
+
+/* ---- Heading reveal: a wipe that also clears a blur ---- */
+@keyframes clinova-reveal-heading {
+  from { opacity: 0; translate: 0 22px; filter: blur(10px); clip-path: inset(-20% 100% -40% -10%); }
+}
+
+@keyframes clinova-reveal-heading-rtl {
+  from { opacity: 0; translate: 0 22px; filter: blur(10px); clip-path: inset(-20% -10% -40% 100%); }
+}
+
+/* ---- Text that fills in line by line while it scrolls into view ---- */
+.fx-fill {
+  background: linear-gradient(180deg,
+    var(--fx-fill-on) 0,
+    var(--fx-fill-on) calc(var(--fx-fill, 0) * 140% - 28%),
+    color-mix(in srgb, var(--fx-fill-on) 24%, transparent) calc(var(--fx-fill, 0) * 140% + 4%),
+    color-mix(in srgb, var(--fx-fill-on) 24%, transparent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent !important;
+}
+
+/* ---- Pointer effects (only where there is a real mouse, see MotionEngine) ---- */
+html.fx-hover [data-fx~="tilt"] {
+  transform: perspective(1100px) rotateX(var(--fx-rx, 0deg)) rotateY(var(--fx-ry, 0deg)) translateY(var(--fx-lift, 0px)) !important;
+  transition: box-shadow 500ms ease, border-color 500ms ease, background 500ms ease !important;
+}
+
+:where([data-fx~="spot"]) {
+  position: relative;
+}
+
+.fx-spot {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  background: radial-gradient(300px circle at var(--fx-mx, 50%) var(--fx-my, 50%), var(--clinova-rgba-142-168-232-0_16), transparent 70%);
+}
+
+[data-fx~="spot"]:hover > .fx-spot {
+  opacity: 1;
+}
+
+.fx-cursor,
+.fx-cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2000;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+}
+
+.fx-cursor {
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--clinova-color-8ea8e8) 65%, transparent);
+  transition: opacity 300ms ease, width 400ms var(--clinova-ease-out), height 400ms var(--clinova-ease-out), margin 400ms var(--clinova-ease-out), background-color 400ms ease;
+}
+
+.fx-cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: var(--clinova-color-b8c8ef);
+  transition: opacity 300ms ease;
+}
+
+.fx-cursor.is-on,
+.fx-cursor-dot.is-on {
+  opacity: 1;
+}
+
+.fx-cursor.is-hot {
+  width: 66px;
+  height: 66px;
+  margin: -33px 0 0 -33px;
+  background-color: color-mix(in srgb, var(--clinova-color-8ea8e8) 14%, transparent);
+}
+
+.fx-cursor.is-down {
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+}
+
+/* ---- Ticker: fades at both ends, leans with the scroll speed, pauses on hover ---- */
+.clinova-ticker-wrap {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+
+.clinova-ticker > div {
+  transform: skewX(calc(var(--clinova-vel, 0) * -9deg));
+  transition: transform 350ms ease-out;
+}
+
+.clinova-ticker-wrap:hover .clinova-ticker {
+  animation-play-state: paused;
+}
+
+/* ---- Story: the arrow between the two cards pulses, a new case study eases in ---- */
+.clinova-pulse-ring {
+  animation: clinova-ring-pulse 2.8s ease-out infinite;
+}
+
+@keyframes clinova-ring-pulse {
+  0% { box-shadow: 0 0 0 0 var(--clinova-rgba-142-168-232-0_4), 0 0 35px var(--clinova-rgba-142-168-232-0_18); }
+  70%, 100% { box-shadow: 0 0 0 22px transparent, 0 0 35px var(--clinova-rgba-142-168-232-0_18); }
+}
+
+.clinova-swap {
+  animation: clinova-swap 750ms var(--clinova-ease-out) backwards;
+}
+
+@keyframes clinova-swap {
+  from { opacity: 0; translate: 0 26px; filter: blur(8px); }
+}
+
+/* ---- Back to top: a ring that fills as the page is read ---- */
+.clinova-top {
+  position: fixed;
+  inset-inline-end: 20px;
+  bottom: 24px;
+  z-index: 1250;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--clinova-color-b8c8ef);
+  background: color-mix(in srgb, var(--clinova-color-111b2a) 86%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px var(--clinova-rgba-0-0-0-0_28);
+  opacity: 0;
+  pointer-events: none;
+  translate: 0 22px;
+  transition: opacity 500ms ease, translate 600ms var(--clinova-ease-out), color 400ms ease;
+}
+
+.clinova-top.is-shown {
+  opacity: 1;
+  pointer-events: auto;
+  translate: 0 0;
+}
+
+.clinova-top:hover {
+  color: var(--clinova-color-f5f7fa);
+}
+
+.clinova-top svg:first-child {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  rotate: -90deg;
+  fill: none;
+}
+
+.clinova-top-track {
+  stroke: var(--clinova-rgba-142-168-232-0_22);
+  stroke-width: 2;
+}
+
+.clinova-top-fill {
+  stroke: var(--clinova-color-8ea8e8);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.clinova-top .MuiSvgIcon-root {
+  font-size: 22px;
+  transition: translate 400ms var(--clinova-ease-out);
+}
+
+.clinova-top:hover .MuiSvgIcon-root {
+  translate: 0 -2px;
+}
+
+/* ---- Footer wordmark: the logo, huge and faint, lit by the pointer ---- */
+.clinova-mega {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0 auto 28px;
+  opacity: 0.1;
+  filter: var(--clinova-logo-filter);
+  transition: opacity 900ms ease;
+  -webkit-mask-image: radial-gradient(520px circle at var(--fx-mx, 50%) var(--fx-my, 60%), #000 0%, rgba(0, 0, 0, 0.32) 60%, rgba(0, 0, 0, 0.18) 100%);
+  mask-image: radial-gradient(520px circle at var(--fx-mx, 50%) var(--fx-my, 60%), #000 0%, rgba(0, 0, 0, 0.32) 60%, rgba(0, 0, 0, 0.18) 100%);
+}
+
+.clinova-mega:hover {
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.has-loader:not(.is-ready) .hero-in,
+  html.has-loader:not(.is-ready) #home h1 > span { opacity: 1; }
+
+  html.is-ready .hero-in,
+  html.is-ready #home h1 > span,
+  html.is-ready #home h1 > span[data-accent],
+  .clinova-pulse-ring,
+  .clinova-swap { animation: none; }
+
+  #home > .MuiContainer-root { translate: none; opacity: 1; }
+  .clinova-ticker > div { transform: none; }
+  .clinova-top, .clinova-top .MuiSvgIcon-root { transition: none; }
+}
+
+/* ---- Header slips away on the way down, comes back on the way up ---- */
+.clinova-header-bar {
+  transition: translate 600ms var(--clinova-ease-out);
+}
+
+html[data-header="hide"] .clinova-header-bar {
+  translate: 0 -150%;
+}
+
+/* ---- A thin light line draws across the top of every section as it arrives ---- */
+section[id]:not(#home)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  width: min(760px, 72%);
+  height: 1px;
+  translate: -50% 0;
+  background: linear-gradient(90deg, transparent, var(--clinova-color-8ea8e8), transparent);
+  opacity: 0.45;
+  transform: scaleX(0);
+  transition: transform 1600ms var(--clinova-ease-out) 200ms;
+  pointer-events: none;
+}
+
+section[data-section="shown"]::before {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-header="hide"] .clinova-header-bar { translate: none; }
+  section[id]:not(#home)::before { transform: scaleX(1); transition: none; }
+}

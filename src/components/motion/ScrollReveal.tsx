@@ -3,12 +3,12 @@ import { useEffect } from "react";
 // Sections and their content animate into view as the visitor scrolls. With reduced
 // motion the CSS turns every reveal into a plain fade; without IntersectionObserver
 // content simply stays visible.
+// The hero is left out: it has its own entrance that waits for the opening animation (see motion.css).
 const contentTargets = [
-    "#home .MuiContainer-root > * > *",
     "section[id]:not(#home) .MuiContainer-root > *",
     "[data-reveal-group] > *",
 ].join(", ");
-const headingTargets = "section[id] h1, section[id] h2";
+const headingTargets = "section[id]:not(#home) h1, section[id]:not(#home) h2";
 
 // Grid and flex rows reveal piece by piece: two columns slide in from their own side,
 // longer rows rise in card by card.

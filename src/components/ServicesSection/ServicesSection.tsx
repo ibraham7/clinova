@@ -382,22 +382,7 @@ function ServicesSection() {
 
                         {/* =================================
                             CONTENT
-                        ================================== */}
-
-                        <Box
-                            sx={{
-                                px: {
-                                    xs: 1,
-                                    md: 2,
-                                },
-
-                                py: {
-                                    xs: 2,
-                                    md: 3,
-                                },
-
-                                textAlign: "start",
-                            }}
+                        ================================== */} <Box key={active.number} className="clinova-swap" sx={{ px: { xs: 1, md: 2, }, py: { xs: 2, md: 3, }, textAlign: "start", }}
                         >
                             {/* Badge */}
                             <Box
@@ -735,14 +720,7 @@ function ServiceTopTab({
     const { t } = useSiteTranslation();
 
     return (
-        <Box
-            component="button"
-            onClick={onClick}
-            sx={{
-                position: "relative",
-
-                minHeight: {
-                    xs: 90,
+        <Box component="button" data-fx="spot" onClick={onClick} sx={{ position: "relative", minHeight: { xs: 90,
                     md: 82,
                 },
 

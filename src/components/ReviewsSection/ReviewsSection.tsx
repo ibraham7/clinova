@@ -24,7 +24,7 @@ function Stars({ rating, size = 18 }: { rating: number; size?: number }) {
 function ReviewCard({ review, copy = false }: { review: ClientReview; copy?: boolean }) {
     const { direction } = useSiteTranslation();
     const initials = review.name.split(/\s+/).filter((part) => !/^(د\.|dr\.?)$/i.test(part)).slice(0, 2).map((part) => part[0]).join("");
-    return <Box component="article" dir={direction} aria-hidden={copy || undefined} inert={copy || undefined} sx={{
+    return <Box component="article" data-fx="spot" dir={direction} aria-hidden={copy || undefined} inert={copy || undefined} sx={{
         flex: "0 0 auto", width: { xs: 280, sm: 330 }, minHeight: 230, p: 3, display: "flex", flexDirection: "column", gap: 2,
         borderRadius: "24px", border: "1px solid var(--clinova-rgba-142-168-232-0_14)",
         background: "linear-gradient(160deg, var(--clinova-rgba-142-168-232-0_08), var(--clinova-rgba-142-168-232-0_025) 60%)",

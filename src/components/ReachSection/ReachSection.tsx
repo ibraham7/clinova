@@ -321,8 +321,7 @@ function ReachSection() {
                                 {coverageLocations.map((location, index) => (
                                     <Box
                                         key={location.code}
-                                        tabIndex={0}
-                                        className={focus === location.code ? "is-focus" : undefined}
+                                        tabIndex={0} data-fx="spot" className={focus === location.code ? "is-focus" : undefined}
                                         onPointerEnter={() => setFocus(location.code)}
                                         onPointerLeave={() => setFocus(null)}
                                         onFocus={() => setFocus(location.code)}

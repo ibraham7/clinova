@@ -5,6 +5,7 @@ import { bookingLinkProps } from "../../config/contact";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ProfileDownloadButton from "../layout/ProfileDownloadButton";
 import HeroVisual from "./HeroVisual";
+import HeroCanvas from "../../motion/HeroCanvas";
 
 function Hero() {
     const { direction, t, isRtl } = useSiteTranslation();
@@ -53,6 +54,8 @@ function Hero() {
                     pointerEvents: "none",
                 }}
             />
+
+            <HeroCanvas />
 
             <Container>
                 <Box
@@ -125,6 +128,8 @@ function Hero() {
                     >
                         {/* Eyebrow */}
                         <Box
+                            className="hero-in"
+                            style={{ "--i": 0 } as React.CSSProperties}
                             sx={{
                                 display: "inline-flex",
                                 alignItems: "center",
@@ -294,6 +299,8 @@ function Hero() {
 
                         <Typography
                             variant="body1"
+                            className="hero-in"
+                            style={{ "--i": 4 } as React.CSSProperties}
                             sx={{
                                 mt: 4,
 
@@ -326,6 +333,8 @@ function Hero() {
                         ========================== */}
 
                         <Stack
+                            className="hero-in"
+                            style={{ "--i": 5 } as React.CSSProperties}
                             sx={{
                                 flexDirection: {
                                     xs: "column",
@@ -400,7 +409,7 @@ function Hero() {
                                 {t("جرّب نظام الـ CRM")}
                             </Button>
                         </Stack>
-                        <Box sx={{ mt: 1.5, display: "flex", justifyContent: { xs: "center", lg: "flex-start" } }}>
+                        <Box className="hero-in" style={{ "--i": 6 } as React.CSSProperties} sx={{ mt: 1.5, display: "flex", justifyContent: { xs: "center", lg: "flex-start" } }}>
                             <ProfileDownloadButton />
                         </Box>
                     </Box>

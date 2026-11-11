@@ -175,6 +175,7 @@ function AboutSection() {
 
                     {/* Description */}
                     <Typography
+                        data-fill=""
                         sx={{
                             mt: {
                                 xs: 3,

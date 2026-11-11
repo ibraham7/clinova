@@ -234,12 +234,7 @@ function FAQItem({
 }) {
     const { direction, t } = useSiteTranslation();
 
-    return (
-        <Box
-            sx={{
-                position: "relative",
-
-                mb: 1.2,
+    return ( <Box data-fx="spot" sx={{ position: "relative", mb: 1.2,
 
                 borderRadius: 2.5,
 
