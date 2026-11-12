@@ -1358,3 +1358,49 @@ footer a:hover .MuiSvgIcon-root {
   .story-ring, .story-node, .story-core, .story-stop.is-on .story-stop-dot { animation: none; }
   .story-node { rotate: calc(var(--ang) * -1); }
 }
+
+/* ---- Story without the scroll story (phones, reduced motion, text editor): a vertical timeline, picture first ---- */
+.story-track:not([data-animated]) .story-panels {
+  gap: 56px;
+}
+
+.story-track:not([data-animated]) .story-panel {
+  padding-inline-start: 68px;
+  min-height: 70px;
+}
+
+.story-track:not([data-animated]) .story-big {
+  direction: inherit;
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  top: -4px;
+  z-index: 1;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_4);
+  background: var(--clinova-color-111b2a);
+  color: var(--clinova-color-8ea8e8);
+  font: 600 0.8rem "Plus Jakarta Sans", sans-serif;
+  -webkit-text-stroke: 0;
+  box-shadow: 0 0 22px var(--clinova-rgba-142-168-232-0_22);
+}
+
+.story-track:not([data-animated]) .story-panel:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 23px;
+  top: 52px;
+  bottom: -52px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--clinova-color-8ea8e8), var(--clinova-rgba-142-168-232-0_16));
+}
+
+@media (max-width: 899px) {
+  .story-track:not([data-animated]) .story-visual {
+    order: -1;
+    width: min(340px, 84vw);
+  }
+}
