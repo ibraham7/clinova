@@ -1091,3 +1091,86 @@ footer a:hover .MuiSvgIcon-root {
   .spec-card.is-active .spec-num, .spec-card.is-active::after, .spec-card.is-active .spec-tag,
   :is(#specialties, #case-studies) .MuiContainer-root::before { animation: none; }
 }
+
+/* ---- Case studies: the list shows a countdown, the big number glows and shimmers, the figures rise in ---- */
+.case-item.is-active::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--clinova-color-5f78b5), var(--clinova-color-b8c8ef));
+  transform-origin: left;
+  pointer-events: none;
+  animation: case-progress 6.5s linear forwards;
+}
+
+@keyframes case-progress {
+  from { transform: scaleX(0); }
+}
+
+.case-item.is-active > .MuiSvgIcon-root {
+  animation: case-arrow 1.8s ease-in-out infinite;
+}
+
+@keyframes case-arrow {
+  50% { scale: 1.3; opacity: 0.6; }
+}
+
+.case-big {
+  position: relative;
+  overflow: hidden;
+}
+
+.case-big::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 35%;
+  background: linear-gradient(100deg, transparent, var(--clinova-rgba-142-168-232-0_1), transparent);
+  translate: -140% 0;
+  pointer-events: none;
+  animation: case-shimmer 5s ease-in-out 1.2s infinite;
+}
+
+@keyframes case-shimmer {
+  0%, 50% { translate: -140% 0; }
+  100% { translate: 360% 0; }
+}
+
+.case-big > p:first-of-type {
+  animation: case-glow 3.4s ease-in-out infinite;
+}
+
+@keyframes case-glow {
+  50% { text-shadow: 0 0 22px var(--clinova-rgba-142-168-232-0_45); }
+}
+
+.case-result .case-stat {
+  animation: case-rise 750ms var(--clinova-ease-out) calc(var(--i, 0) * 130ms + 550ms) backwards;
+}
+
+@keyframes case-rise {
+  from { opacity: 0; translate: 0 22px; scale: 0.92; }
+}
+
+.case-result::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--clinova-color-dce6ff), transparent) no-repeat;
+  background-size: 30% 100%;
+  pointer-events: none;
+  animation: svc-sweep 3.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-item.is-active::after { animation: none; }
+  .case-item.is-active > .MuiSvgIcon-root, .case-big::after, .case-big > p:first-of-type,
+  .case-result .case-stat, .case-result::after { animation: none; }
+}
