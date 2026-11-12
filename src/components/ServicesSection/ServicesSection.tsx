@@ -377,11 +377,11 @@ function ServicesSection() {
                             ANALYTICS
                         ================================== */}
 
-                        <AnalyticsPanel key={active.number} stats={active.stats} />
+                        <AnalyticsPanel key={`panel-${active.number}`} stats={active.stats} />
 
                         {/* =================================
                             CONTENT
-                        ================================== */} <Box key={active.number} className="clinova-swap" sx={{ px: { xs: 1, md: 2, }, py: { xs: 2, md: 3, }, textAlign: "start", }}
+                        ================================== */} <Box key={`content-${active.number}`} className="clinova-swap" sx={{ px: { xs: 1, md: 2, }, py: { xs: 2, md: 3, }, textAlign: "start", }}
                         >
                             {/* Badge */}
                             <Box
