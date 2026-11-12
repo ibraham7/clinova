@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import CountUp from "../motion/CountUp";
 import { Box, Container, Stack, Typography } from "@mui/material";
@@ -40,6 +41,21 @@ const conversations = [
 
 function ContactSection() {
     const { direction, t } = useSiteTranslation();
+    // The live queue "takes" the next call every few seconds (only while on screen, never with reduced motion).
+    const queue = useRef<HTMLDivElement>(null);
+    const [live, setLive] = useState(1);
+    useEffect(() => {
+        const element = queue.current;
+        if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        let timer = 0;
+        const stop = () => { window.clearInterval(timer); timer = 0; };
+        const observer = new IntersectionObserver(([entry]) => {
+            stop();
+            if (entry?.isIntersecting) timer = window.setInterval(() => { if (document.visibilityState === "visible") setLive((value) => (value + 1) % conversations.length); }, 3200);
+        }, { threshold: 0.3 });
+        observer.observe(element);
+        return () => { observer.disconnect(); stop(); };
+    }, []);
 
     return (
         <Box
@@ -302,13 +318,7 @@ function ContactSection() {
                         LIVE QUEUE
                     ================================== */}
 
-                    <Box
-                        sx={{
-                            position: "relative",
-                            zIndex: 1,
-
-                            width: "100%",
-                            maxWidth: 430,
+                    <Box ref={queue} className="queue-panel" data-fx="tilt" sx={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 430,
 
                             mx: {
                                 xs: "auto",
@@ -445,11 +455,7 @@ function ContactSection() {
                         >
                             {conversations.map(
                                 (conversation, index) => (
-                                    <Conversation
-                                        key={conversation.name}
-                                        {...conversation}
-                                        active={index === 1}
-                                    />
+                                    <Conversation key={conversation.name} {...conversation} index={index} active={index === live} />
                                 ),
                             )}
                         </Box>
@@ -588,12 +594,7 @@ function ContactSection() {
                             {t("مركز اتصال داخلي")}
                         </Typography>
 
-                        {/* Description */}
-                        <Typography
-                            sx={{
-                                mt: 2,
-
-                                maxWidth: 520,
+                        {/* Description */} <Typography data-fill="" sx={{ mt: 2, maxWidth: 520,
 
                                 ml: {
                                     lg: "auto",
@@ -655,9 +656,7 @@ function ContactSection() {
                                 label="متوسط الرد"
                             />
 
-                            <ArrowOutwardRoundedIcon
-                                sx={{
-                                    ml: "auto",
+                            <ArrowOutwardRoundedIcon className="stat-arrow" sx={{ ml: "auto",
 
                                     display: {
                                         xs: "none",
@@ -682,27 +681,10 @@ function ContactSection() {
    CONVERSATION
 ========================================= */
 
-function Conversation({
-    name,
-    location,
-    status,
-    time,
-    active,
-}: {
-    name: string;
-    location: string;
-    status: string;
-    time: string;
-    active: boolean;
-}) {
+function Conversation({ name, location, status, time, active, index, }: { name: string; location: string; status: string; time: string; active: boolean; index: number; }) {
     const { t } = useSiteTranslation();
 
-    return (
-        <Box
-            sx={{
-                display: "grid",
-
-                gridTemplateColumns: "72px 1fr 70px",
+    return ( <Box className={active ? "queue-row is-live" : "queue-row"} data-fx="spot" style={{ "--i": index } as React.CSSProperties} sx={{ display: "grid", gridTemplateColumns: "72px 1fr 70px",
 
                 alignItems: "center",
 
@@ -864,8 +846,7 @@ function VoiceWave({ active }: { active: boolean }) {
 
                 height: 28,
 
-                opacity: active ? 1 : 0.35,
-            }}
+                opacity: active ? 1 : 0.35, transition: "opacity 0.8s ease", }}
         >
             {bars.map((height, index) => (
                 <Box
@@ -883,9 +864,8 @@ function VoiceWave({ active }: { active: boolean }) {
                         transformOrigin: "center",
 
                         animation: active
-                            ? `clinovaWave ${0.55 + (index % 4) * 0.12
-                            }s ease-in-out infinite alternate`
-                            : "none",
+                            ? `clinovaWave ${0.55 + (index % 4) * 0.12}s ease-in-out infinite alternate`
+                            : `clinovaWave ${1.6 + (index % 4) * 0.3}s ease-in-out infinite alternate`,
 
                         animationDelay: `${index * 0.055
                             }s`,

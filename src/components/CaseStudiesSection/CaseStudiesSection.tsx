@@ -1,6 +1,6 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import CountUp from "../motion/CountUp";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     Box,
     Container,
@@ -152,6 +152,24 @@ function CaseStudiesSection() {
     const { direction, t } = useSiteTranslation();
 
     const [activeId, setActiveId] = useState("dalya");
+    // The shown case moves on by itself every few seconds while the section is on screen; a click or the pointer pauses it.
+    const touched = useRef(0);
+    useEffect(() => {
+        const section = document.getElementById("case-studies");
+        if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        let timer = 0;
+        const stop = () => { window.clearInterval(timer); timer = 0; };
+        const observer = new IntersectionObserver(([entry]) => {
+            stop();
+            if (!entry?.isIntersecting) return;
+            timer = window.setInterval(() => {
+                if (document.visibilityState !== "visible" || Date.now() - touched.current < 12000) return;
+                setActiveId((current) => caseStudies[(caseStudies.findIndex((item) => item.id === current) + 1) % caseStudies.length].id);
+            }, 6500);
+        }, { threshold: 0.4 });
+        observer.observe(section);
+        return () => { observer.disconnect(); stop(); };
+    }, []);
 
     const activeCase =
         caseStudies.find(
@@ -359,16 +377,7 @@ function CaseStudiesSection() {
                                 activeId === caseStudy.id;
 
                             return (
-                                <CaseItem
-                                    key={caseStudy.id}
-                                    caseStudy={caseStudy}
-                                    active={active}
-                                    onClick={() =>
-                                        setActiveId(
-                                            caseStudy.id,
-                                        )
-                                    }
-                                />
+                                <CaseItem key={caseStudy.id} caseStudy={caseStudy} active={active} onHover={() => { touched.current = Date.now(); }} onClick={() => { touched.current = Date.now(); setActiveId( caseStudy.id, ); }} />
                             );
                         })}
                     </Stack>
@@ -388,19 +397,11 @@ function CaseStudiesSection() {
    CASE ITEM
 ========================================= */
 
-function CaseItem({
-    caseStudy,
-    active,
-    onClick,
-}: {
-    caseStudy: CaseStudy;
-    active: boolean;
-    onClick: () => void;
-}) {
+function CaseItem({ caseStudy, active, onClick, onHover, }: { caseStudy: CaseStudy; active: boolean; onClick: () => void; onHover: () => void; }) {
     const { direction, t } = useSiteTranslation();
 
     return (
-        <Box component="button" data-fx="spot" onClick={onClick} sx={{ position: "relative", width: "100%", minHeight: 68,
+        <Box component="button" data-fx="spot" className={active ? "case-item is-active" : "case-item"} onPointerMove={onHover} onClick={onClick} sx={{ position: "relative", width: "100%", minHeight: 68,
 
                 display: "grid",
 
@@ -554,7 +555,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
 
     return (
         <Box
-            component="article" className="clinova-swap" aria-label={t("تجربة {{name}}", { name: t(caseStudy.name) })}
+            component="article" data-fx="spot" className="clinova-swap case-result" aria-label={t("تجربة {{name}}", { name: t(caseStudy.name) })}
             sx={{
                 order: { xs: 1, lg: 2 },
                 minWidth: 0,
@@ -643,12 +644,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                 </Typography>
             )}
 
-            <Box
-                sx={{
-                    mt: 3,
-                    p: { xs: 2, sm: 3 },
-                    borderRadius: 3,
-                    border: "1px solid var(--clinova-rgba-142-168-232-0_14)",
+            <Box className="case-big" sx={{ mt: 3, p: { xs: 2, sm: 3 }, borderRadius: 3, border: "1px solid var(--clinova-rgba-142-168-232-0_14)",
                     backgroundColor: "var(--clinova-rgba-142-168-232-0_04)",
                 }}
             >
@@ -677,11 +673,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                     gap: 1.5,
                 }}
             >
-                {caseStudy.stats.map((stat) => (
-                    <Box
-                        key={stat.label}
-                        sx={{
-                            p: 2,
+                {caseStudy.stats.map((stat, statIndex) => ( <Box key={stat.label} data-fx="spot" className="case-stat" style={{ "--i": statIndex } as React.CSSProperties} sx={{ p: 2,
                             textAlign: "center",
                             borderRadius: 2,
                             border: "1px solid var(--clinova-rgba-142-168-232-0_1)",

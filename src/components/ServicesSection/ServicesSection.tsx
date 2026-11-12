@@ -1,5 +1,6 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { useState } from "react";
+import CountUp from "../motion/CountUp";
 import {
     Box,
     Container,
@@ -376,9 +377,7 @@ function ServicesSection() {
                             ANALYTICS
                         ================================== */}
 
-                        <AnalyticsPanel
-                            stats={active.stats}
-                        />
+                        <AnalyticsPanel key={active.number} stats={active.stats} />
 
                         {/* =================================
                             CONTENT
@@ -552,40 +551,17 @@ function ServicesSection() {
                     BOTTOM SERVICES NAV
                 ========================================== */}
 
-                <Box
-                    sx={{
-                        display: "grid",
-
-                        gridTemplateColumns: {
-                            xs: "repeat(2, 1fr)",
-                            sm: "repeat(3, 1fr)",
-                            md: "repeat(6, 1fr)",
+                <Box className="svc-steps" sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)", md: "repeat(6, 1fr)",
                         },
 
-                        columnGap: 3,
-                        mt: 3,
-
-                        borderTop:
-                            "1px solid var(--clinova-rgba-142-168-232-0_1)",
-                    }}
+                        columnGap: 3, mt: 3, borderTop: "1px solid var(--clinova-rgba-142-168-232-0_1)", }}
                 >
                     {services.map((service, index) => {
                         const isActive =
                             activeService === service.id;
 
                         return (
-                            <Box
-                                key={service.id}
-                                component="button"
-                                onClick={() =>
-                                    setActiveService(
-                                        service.id,
-                                    )
-                                }
-                                sx={{
-                                    position: "relative",
-
-                                    border: 0,
+                            <Box key={service.id} component="button" className={isActive ? "svc-step is-active" : "svc-step"} onClick={() => setActiveService( service.id, ) } sx={{ position: "relative", border: 0,
 
                                     background:
                                         "transparent",
@@ -720,7 +696,7 @@ function ServiceTopTab({
     const { t } = useSiteTranslation();
 
     return (
-        <Box component="button" data-fx="spot" onClick={onClick} sx={{ position: "relative", minHeight: { xs: 90,
+        <Box component="button" data-fx="spot" className={active ? "svc-tab is-active" : "svc-tab"} onClick={onClick} sx={{ position: "relative", minHeight: { xs: 90,
                     md: 82,
                 },
 
@@ -798,11 +774,7 @@ function ServiceTopTab({
                 </Typography>
             </Box>
 
-            {/* Number */}
-            <Box
-                sx={{
-                    width: 34,
-                    height: 34,
+            {/* Number */} <Box className="svc-num" sx={{ width: 34, height: 34,
 
                     display: "flex",
 
@@ -846,19 +818,7 @@ function ServiceTopTab({
    ANALYTICS PANEL
 ========================================= */
 
-function AnalyticsPanel({
-    stats,
-}: {
-    stats: Service["stats"];
-}) {
-    const { t } = useSiteTranslation();
-
-    return (
-        <Box
-            sx={{
-                position: "relative",
-
-                width: "100%",
+function AnalyticsPanel({ stats, }: { stats: Service["stats"]; }) { const { t } = useSiteTranslation(); return ( <Box className="svc-panel" data-fx="tilt" sx={{ position: "relative", width: "100%",
 
                 minHeight: {
                     xs: 280,
@@ -938,24 +898,7 @@ function AnalyticsPanel({
                         {t("LIVE")}
                         </Typography>
 
-                    <Box
-                        sx={{
-                            width: 6,
-                            height: 6,
-
-                            borderRadius: "50%",
-
-                            backgroundColor:
-                                "primary.main",
-
-                            boxShadow:
-                                "0 0 10px var(--clinova-rgba-142-168-232-0_8)",
-                        }}
-                    />
-                </Stack>
-            </Stack>
-
-            {/* Bars */}
+                    <Box className="svc-live" sx={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "primary.main", boxShadow: "0 0 10px var(--clinova-rgba-142-168-232-0_8)", }} /> </Stack> </Stack> {/* Bars */}
             <Box
                 sx={{
                     display: "flex",
@@ -1015,11 +958,7 @@ function AnalyticsPanel({
                                 overflow: "hidden",
                             }}
                         >
-                            <Box
-                                sx={{
-                                    width: stat.value,
-
-                                    height: "100%",
+                            <Box className="svc-bar" style={{ "--i": index } as React.CSSProperties} sx={{ width: stat.value, height: "100%",
 
                                     borderRadius:
                                         "999px",
@@ -1063,10 +1002,7 @@ function AnalyticsPanel({
                                     "primary.light",
                             }}
                         >
-                            {t(stat.value)}
-                        </Typography>
-                    </Box>
-                ))}
+                            <CountUp value={t(stat.value)} duration={1300} /> </Typography> </Box> ))}
             </Box>
 
             {/* Footer */}

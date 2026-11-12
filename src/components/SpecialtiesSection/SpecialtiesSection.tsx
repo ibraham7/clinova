@@ -1,5 +1,5 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     Box,
     Container,
@@ -60,6 +60,24 @@ function SpecialtiesSection() {
     const { direction, t } = useSiteTranslation();
 
     const [activeId, setActiveId] = useState("dental");
+    // The highlight moves on by itself every few seconds while the section is on screen, and waits after a click or a hover.
+    const touched = useRef(0);
+    useEffect(() => {
+        const section = document.getElementById("specialties");
+        if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        let timer = 0;
+        const stop = () => { window.clearInterval(timer); timer = 0; };
+        const observer = new IntersectionObserver(([entry]) => {
+            stop();
+            if (!entry?.isIntersecting) return;
+            timer = window.setInterval(() => {
+                if (document.visibilityState !== "visible" || Date.now() - touched.current < 9000) return;
+                setActiveId((current) => specialties[(specialties.findIndex((item) => item.id === current) + 1) % specialties.length].id);
+            }, 4200);
+        }, { threshold: 0.4 });
+        observer.observe(section);
+        return () => { observer.disconnect(); stop(); };
+    }, []);
 
     return (
         <Box
@@ -240,17 +258,7 @@ function SpecialtiesSection() {
                             activeId === specialty.id;
 
                         return (
-                            <SpecialtyCard
-                                key={specialty.id}
-                                specialty={specialty}
-                                active={active}
-                                first={index === 0}
-                                onClick={() =>
-                                    setActiveId(
-                                        specialty.id,
-                                    )
-                                }
-                            />
+                            <SpecialtyCard key={specialty.id} specialty={specialty} active={active} first={index === 0} onHover={() => { touched.current = Date.now(); }} onClick={() => { touched.current = Date.now(); setActiveId( specialty.id, ); }} />
                         );
                     })}
                 </Box>
@@ -259,23 +267,16 @@ function SpecialtiesSection() {
     );
 }
 
-function SpecialtyCard({
-    specialty,
-    active,
-    first,
-    onClick,
-}: {
+function SpecialtyCard({ specialty, active, first, onClick, onHover, }: {
     specialty: (typeof specialties)[number];
     active: boolean;
-    first: boolean;
-    onClick: () => void;
-}) {
+    first: boolean; onClick: () => void; onHover: () => void; }) {
     const { t } = useSiteTranslation();
 
     const Icon = specialty.icon;
 
     return (
-        <Box component="button" data-fx="spot" onClick={onClick} sx={{ position: "relative", minHeight: { xs: 380,
+        <Box component="button" data-fx="spot" className={active ? "spec-card is-active" : "spec-card"} onPointerMove={onHover} onClick={onClick} sx={{ position: "relative", minHeight: { xs: 380,
                     sm: 360,
                     md: 365,
                 },
@@ -373,11 +374,7 @@ function SpecialtyCard({
                     direction: "ltr",
                 }}
             >
-                {/* Number */}
-                <Box
-                    sx={{
-                        width: 34,
-                        height: 34,
+                {/* Number */} <Box className="spec-num" sx={{ width: 34, height: 34,
 
                         display: "flex",
 
@@ -408,15 +405,7 @@ function SpecialtyCard({
                     </Typography>
                 </Box>
 
-                {/* Icon */}
-                <Box
-                    sx={{
-                        display: "flex",
-
-                        alignItems: "center",
-                        justifyContent: "center",
-
-                        color: active
+                {/* Icon */} <Box className="spec-icon" sx={{ display: "flex", alignItems: "center", justifyContent: "center", color: active
                             ? "primary.main"
                             : "primary.light",
 
@@ -514,11 +503,7 @@ function SpecialtyCard({
                         "1px solid var(--clinova-rgba-142-168-232-0_1)",
                 }}
             >
-                {specialty.tags.map((tag) => (
-                    <Box
-                        key={tag}
-                        sx={{
-                            px: 1.2,
+                {specialty.tags.map((tag, tagIndex) => ( <Box key={tag} className="spec-tag" style={{ "--t": tagIndex } as React.CSSProperties} sx={{ px: 1.2,
                             py: 0.55,
 
                             borderRadius: "999px",
