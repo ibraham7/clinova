@@ -1171,3 +1171,237 @@ footer a:hover .MuiSvgIcon-root {
   .case-item.is-active > .MuiSvgIcon-root, .case-big::after, .case-big > p:first-of-type,
   .case-result .case-stat, .case-result::after { animation: none; }
 }
+
+/* ======================================================================
+   Story ("Our story"): a scroll-driven story. --p (0 to 1) comes from the scroll position (StorySection.tsx);
+   without it (--p stays 1) the full picture and both chapters are shown.
+   ====================================================================== */
+#story .MuiContainer-root::before {
+  display: none;
+}
+
+.story-visual {
+  position: relative;
+  width: min(440px, 100%, 46vh);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+.story-track:not([data-animated]) .story-visual {
+  width: min(440px, 100%);
+}
+
+.story-visual::before {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--clinova-rgba-142-168-232-0_16), transparent 66%);
+  scale: calc(0.55 + var(--p, 1) * 0.5);
+  opacity: calc(0.45 + var(--p, 1) * 0.55);
+  pointer-events: none;
+}
+
+.story-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--size);
+  aspect-ratio: 1;
+  margin-left: calc(var(--size) / -2);
+  margin-top: calc(var(--size) / -2);
+  border-radius: 50%;
+  border: 1px dashed var(--clinova-rgba-142-168-232-0_28);
+  scale: calc(0.55 + var(--p, 1) * 0.45);
+  opacity: calc(0.35 + var(--p, 1) * 0.65);
+  animation: story-spin var(--dur) linear infinite var(--dir);
+}
+
+.story-ring-1 {
+  border-style: solid;
+  border-color: var(--clinova-rgba-142-168-232-0_22);
+  scale: calc(0.86 + var(--p, 1) * 0.14);
+  opacity: 1;
+}
+
+@keyframes story-spin {
+  to { rotate: 360deg; }
+}
+
+.story-arm {
+  position: absolute;
+  inset: 0;
+}
+
+.story-node {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_35);
+  background: var(--clinova-color-121e30);
+  color: var(--clinova-color-b8c8ef);
+  box-shadow: 0 0 24px var(--clinova-rgba-142-168-232-0_22);
+  scale: clamp(0, calc(var(--p, 1) * 4 - var(--k, 0)), 1);
+  opacity: clamp(0, calc(var(--p, 1) * 4 - var(--k, 0)), 1);
+  animation: story-counter var(--dur) linear infinite var(--dir);
+}
+
+.story-node svg {
+  font-size: 22px;
+}
+
+@keyframes story-counter {
+  from { rotate: calc(var(--ang) * -1); }
+  to { rotate: calc(var(--ang) * -1 - 360deg); }
+}
+
+.story-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 26%;
+  aspect-ratio: 1;
+  margin: -13% 0 0 -13%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_4);
+  background: radial-gradient(circle at 35% 30%, var(--clinova-color-24344f), var(--clinova-color-101925));
+  box-shadow: 0 0 40px var(--clinova-rgba-142-168-232-0_28);
+  animation: story-core 4s ease-in-out infinite;
+}
+
+@keyframes story-core {
+  50% { box-shadow: 0 0 78px var(--clinova-rgba-142-168-232-0_45); }
+}
+
+/* Chapters: in the scroll story they sit on top of each other and swap; otherwise both are simply shown. */
+.story-panel {
+  isolation: isolate;
+}
+
+.story-track[data-animated] .story-panels > .story-panel {
+  grid-area: 1 / 1;
+  transition: opacity 700ms ease, translate 900ms var(--clinova-ease-out);
+}
+
+.story-panel.is-off {
+  opacity: 0;
+  translate: 0 30px;
+  pointer-events: none;
+}
+
+.story-panel.is-on {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.story-big {
+  position: absolute;
+  z-index: -1;
+  top: -0.42em;
+  inset-inline-end: 0;
+  font: 700 clamp(6rem, 11vw, 9.5rem) / 1 "Plus Jakarta Sans", sans-serif;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--clinova-rgba-142-168-232-0_22);
+  pointer-events: none;
+  user-select: none;
+  direction: ltr;
+}
+
+/* The clickable timeline under the chapters. */
+.story-timeline {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 6px;
+}
+
+.story-stop {
+  position: relative;
+  z-index: 2;
+  width: 104px;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: var(--clinova-rgba-245-247-250-0_55);
+  font-family: var(--clinova-font-family);
+  font-size: 0.8rem;
+  transition: color 500ms ease;
+}
+
+.story-stop-dot {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_35);
+  background: var(--clinova-color-111b2a);
+  font: 600 0.78rem "Plus Jakarta Sans", sans-serif;
+  transition: background-color 500ms ease, color 500ms ease, scale 500ms var(--clinova-ease-out);
+}
+
+.story-stop:hover .story-stop-dot {
+  scale: 1.12;
+}
+
+.story-stop.is-on {
+  color: var(--clinova-color-f5f7fa);
+}
+
+.story-stop.is-on .story-stop-dot {
+  background: var(--clinova-color-8ea8e8);
+  color: var(--clinova-color-0b111b);
+  animation: svc-num-ring 2.4s ease-out infinite;
+}
+
+.story-line {
+  position: absolute;
+  z-index: 1;
+  inset-inline: 52px;
+  top: 29px;
+  height: 2px;
+  background: var(--clinova-rgba-142-168-232-0_22);
+}
+
+.story-line i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--clinova-color-5f78b5), var(--clinova-color-b8c8ef));
+  transform-origin: left;
+  transform: scaleX(var(--p, 1));
+}
+
+[dir="rtl"] .story-line i {
+  transform-origin: right;
+  background: linear-gradient(270deg, var(--clinova-color-5f78b5), var(--clinova-color-b8c8ef));
+}
+
+.story-line b {
+  position: absolute;
+  top: 50%;
+  inset-inline-start: calc(var(--p, 1) * 100%);
+  width: 14px;
+  height: 14px;
+  margin: -7px;
+  border-radius: 50%;
+  background: var(--clinova-color-dce6ff);
+  box-shadow: 0 0 16px var(--clinova-color-8ea8e8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-ring, .story-node, .story-core, .story-stop.is-on .story-stop-dot { animation: none; }
+  .story-node { rotate: calc(var(--ang) * -1); }
+}
