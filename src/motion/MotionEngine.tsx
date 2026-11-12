@@ -4,13 +4,12 @@ import { useEffect } from "react";
 //   data-fx="tilt"    card leans toward the pointer (3D)             data-fx="spot"   soft light that follows the pointer
 //   data-fx="magnet"  button drifts toward the pointer               data-fill        text fills in line by line while scrolling
 // It also drifts the background glows with the scroll, eases the hero out as it leaves, skews the ticker with scroll speed,
-// hides the header while reading downward, and draws a trailing cursor ring. Nothing runs in the text editor (?edit);
+// and hides the header while reading downward. The mouse pointer itself is left alone. Nothing runs in the text editor (?edit);
 // with reduced motion only the static look stays.
 //
 // Kept cheap on purpose: one animation frame per scroll or pointer burst, all measuring first and writing after (no layout
 // thrash), only what is on screen is touched, and no custom property is written on :root (that would restyle the whole page).
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
-const hotSelector = "a[href], button, [role=button], [role=tab], input, textarea, select, summary, [data-fx]";
 
 type Lean = { el: HTMLElement; tx: number; ty: number; x: number; y: number; lt: number; l: number; hover: boolean; magnet: boolean };
 
@@ -99,19 +98,9 @@ export default function MotionEngine() {
             });
         }
 
-        /* ---------- Pointer: cursor ring, tilt, spotlight, magnetic buttons ---------- */
+        /* ---------- Pointer: tilt, spotlight, magnetic buttons ---------- */
         if (fine && !reduce) {
             root.classList.add("fx-hover");
-            const ring = document.createElement("div");
-            const dot = document.createElement("div");
-            ring.className = "fx-cursor";
-            dot.className = "fx-cursor-dot";
-            ring.setAttribute("aria-hidden", "true");
-            dot.setAttribute("aria-hidden", "true");
-            document.body.append(ring, dot);
-
-            let px = -200, py = -200, rx = -200, ry = -200;
-            let seen = false;
             let pending: PointerEvent | null = null;
             let hovered = new Set<HTMLElement>();
             const leans = new Map<HTMLElement, Lean>();
@@ -127,7 +116,6 @@ export default function MotionEngine() {
             // The pointer is only looked at once per frame, however many events arrived.
             const handle = (event: PointerEvent) => {
                 const target = event.target instanceof Element ? event.target : null;
-                ring.classList.toggle("is-hot", Boolean(target?.closest(hotSelector)));
                 const now = new Set<HTMLElement>();
                 const tilt = target?.closest<HTMLElement>('[data-fx~="tilt"]') ?? null;
                 const spot = target?.closest<HTMLElement>('[data-fx~="spot"]') ?? null;
@@ -178,11 +166,7 @@ export default function MotionEngine() {
             const loop = () => {
                 running = 0;
                 if (pending) { handle(pending); pending = null; }
-                rx += (px - rx) * 0.2;
-                ry += (py - ry) * 0.2;
-                ring.style.transform = `translate3d(${rx.toFixed(1)}px, ${ry.toFixed(1)}px, 0)`;
-                dot.style.transform = `translate3d(${px}px, ${py}px, 0)`;
-                let busy = Math.abs(px - rx) + Math.abs(py - ry) > 0.4;
+                let busy = false;
                 for (const entry of leans.values()) {
                     // Slow, springy easing: the card rises and leans gradually instead of jumping.
                     entry.x += (entry.tx - entry.x) * 0.08;
@@ -206,38 +190,24 @@ export default function MotionEngine() {
 
             const move = (event: PointerEvent) => {
                 if (event.pointerType !== "mouse") return;
-                px = event.clientX;
-                py = event.clientY;
                 pending = event;
-                if (!seen) { seen = true; rx = px; ry = py; ring.classList.add("is-on"); dot.classList.add("is-on"); }
                 kick();
             };
             const hide = () => {
-                ring.classList.remove("is-on");
-                dot.classList.remove("is-on");
-                seen = false;
                 pending = null;
                 for (const entry of leans.values()) { entry.hover = false; entry.tx = 0; entry.ty = 0; entry.lt = 0; }
                 hovered.clear();
                 kick();
             };
-            const down = () => ring.classList.add("is-down");
-            const up = () => ring.classList.remove("is-down");
             window.addEventListener("pointermove", move, { passive: true });
-            window.addEventListener("pointerdown", down, { passive: true });
-            window.addEventListener("pointerup", up, { passive: true });
             root.addEventListener("pointerleave", hide);
             window.addEventListener("blur", hide);
             undo.push(() => {
                 cancelAnimationFrame(running);
                 window.removeEventListener("pointermove", move);
-                window.removeEventListener("pointerdown", down);
-                window.removeEventListener("pointerup", up);
                 root.removeEventListener("pointerleave", hide);
                 window.removeEventListener("blur", hide);
                 root.classList.remove("fx-hover");
-                ring.remove();
-                dot.remove();
                 for (const entry of leans.values()) { entry.el.style.translate = ""; entry.el.style.removeProperty("--fx-rx"); entry.el.style.removeProperty("--fx-ry"); }
             });
         }
