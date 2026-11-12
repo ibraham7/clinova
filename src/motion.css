@@ -474,53 +474,6 @@ html.fx-hover [data-fx~="tilt"] {
   opacity: 1;
 }
 
-.fx-cursor,
-.fx-cursor-dot {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 2000;
-  pointer-events: none;
-  opacity: 0;
-  will-change: transform;
-}
-
-.fx-cursor {
-  width: 38px;
-  height: 38px;
-  margin: -19px 0 0 -19px;
-  border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--clinova-color-8ea8e8) 65%, transparent);
-  transition: opacity 400ms ease, width 700ms var(--clinova-ease-out), height 700ms var(--clinova-ease-out), margin 700ms var(--clinova-ease-out), background-color 700ms ease;
-}
-
-.fx-cursor-dot {
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
-  border-radius: 50%;
-  background: var(--clinova-color-b8c8ef);
-  transition: opacity 300ms ease;
-}
-
-.fx-cursor.is-on,
-.fx-cursor-dot.is-on {
-  opacity: 1;
-}
-
-.fx-cursor.is-hot {
-  width: 66px;
-  height: 66px;
-  margin: -33px 0 0 -33px;
-  background-color: color-mix(in srgb, var(--clinova-color-8ea8e8) 14%, transparent);
-}
-
-.fx-cursor.is-down {
-  width: 26px;
-  height: 26px;
-  margin: -13px 0 0 -13px;
-}
-
 /* ---- Ticker: fades at both ends, leans with the scroll speed, pauses on hover ---- */
 .clinova-ticker-wrap {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
