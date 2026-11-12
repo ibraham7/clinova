@@ -1007,3 +1007,87 @@ footer a:hover .MuiSvgIcon-root {
   .svc-tab.is-active::after, .svc-step.is-active::after, .svc-step > .MuiSvgIcon-root,
   .clinova-swap .MuiSvgIcon-root { animation: none; }
 }
+
+/* ---- Specialties: the lit card breathes (icon, number ring, light along the top, tags popping in) ---- */
+.spec-icon {
+  position: relative;
+}
+
+.spec-icon::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 1px solid var(--clinova-color-8ea8e8);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spec-card.is-active .spec-icon > svg {
+  animation: spec-float 3.4s ease-in-out infinite;
+}
+
+.spec-card.is-active .spec-icon::before {
+  animation: spec-halo 2.6s ease-out infinite;
+}
+
+@keyframes spec-float {
+  50% { translate: 0 -6px; rotate: -4deg; }
+}
+
+@keyframes spec-halo {
+  from { opacity: 0.55; scale: 0.7; }
+  to { opacity: 0; scale: 1.6; }
+}
+
+.spec-card.is-active .spec-num {
+  animation: svc-num-ring 2.4s ease-out infinite;
+}
+
+.spec-card.is-active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--clinova-color-dce6ff), transparent) no-repeat;
+  background-size: 35% 100%;
+  pointer-events: none;
+  animation: svc-sweep 3s linear infinite;
+}
+
+.spec-card.is-active .spec-tag {
+  animation: spec-tag-in 650ms var(--clinova-ease-out) calc(var(--t, 0) * 100ms + 150ms) backwards;
+}
+
+@keyframes spec-tag-in {
+  from { opacity: 0; translate: 0 12px; scale: 0.8; }
+}
+
+/* The same slow ring behind the headings of Specialties and Case studies. */
+:is(#specialties, #case-studies) .MuiContainer-root {
+  position: relative;
+  isolation: isolate;
+}
+
+:is(#specialties, #case-studies) .MuiContainer-root::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  width: min(900px, 96vw);
+  aspect-ratio: 1;
+  margin: calc(min(900px, 96vw) / -2) 0 0 calc(min(900px, 96vw) / -2);
+  border-radius: 50%;
+  border: 1px dashed var(--clinova-rgba-142-168-232-0_14);
+  pointer-events: none;
+  animation: clinova-spin 160s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spec-card.is-active .spec-icon > svg, .spec-card.is-active .spec-icon::before,
+  .spec-card.is-active .spec-num, .spec-card.is-active::after, .spec-card.is-active .spec-tag,
+  :is(#specialties, #case-studies) .MuiContainer-root::before { animation: none; }
+}
