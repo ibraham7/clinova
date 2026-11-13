@@ -1,0 +1,478 @@
+/* Interactive section pieces: About orbits, the appointment book in the call to action, the FAQ dial and the section rail.
+   Everything here is decoration on top of unchanged content. Pointer-driven parts read --px/--py/--mx/--my, which
+   usePointerStage writes only for a real mouse; with reduced motion the animations stop and the static look stays. */
+
+/* ======================================================================
+   About: three orbits around the headline
+   ====================================================================== */
+#about .MuiContainer-root::before {
+  content: none; /* the orbits replace the flat dashed ring */
+}
+
+.about-gyro {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  margin: auto;
+  width: min(980px, 150vw);
+  aspect-ratio: 1;
+  pointer-events: none;
+  perspective: 1500px;
+}
+
+.about-gyro-tilt {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(calc(var(--py, 0) * -10deg)) rotateY(calc(var(--px, 0) * 14deg));
+}
+
+.gyro-ring {
+  position: absolute;
+  inset: var(--gyro-inset, 0);
+  border-radius: 50%;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_14);
+  transform: rotateZ(var(--gyro-roll, 0deg)) rotateX(var(--gyro-flat, 72deg));
+  transform-style: preserve-3d;
+}
+
+.gyro-ring-a { --gyro-inset: 2%; --gyro-roll: -8deg; --gyro-flat: 74deg; --gyro-time: 26s; }
+.gyro-ring-b { --gyro-inset: 9%; --gyro-roll: 32deg; --gyro-flat: 70deg; --gyro-time: 34s; }
+.gyro-ring-c { --gyro-inset: 16%; --gyro-roll: -38deg; --gyro-flat: 68deg; --gyro-time: 21s; }
+
+/* A comet: a bright head with a fading tail, travelling along the ring. */
+.gyro-ring > i {
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  padding: 1.5px;
+  background: conic-gradient(from 0deg, transparent 0 74%, var(--clinova-rgba-142-168-232-0_45) 96%, var(--clinova-color-dce6ff) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: clinova-spin var(--gyro-time, 28s) linear infinite;
+}
+
+.gyro-ring-b > i { animation-direction: reverse; }
+
+.gyro-ring::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  animation: clinova-spin var(--gyro-time, 28s) linear infinite;
+  background: radial-gradient(circle 5px at 50% 1px, var(--clinova-color-dce6ff) 0 2.5px, var(--clinova-rgba-142-168-232-0_45) 3px, transparent 5px);
+}
+
+.gyro-ring-b::after { animation-direction: reverse; }
+
+/* While the mouse is over the section the orbits wake up: brighter rings, a soft light under the pointer. */
+.about-stage .gyro-ring { transition: border-color 900ms ease; }
+.about-stage.is-live .gyro-ring { border-color: var(--clinova-rgba-142-168-232-0_3); }
+
+.about-lens {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 900ms ease;
+  background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 40%), var(--clinova-rgba-142-168-232-0_12), transparent 70%);
+}
+
+.about-stage.is-live .about-lens { opacity: 1; }
+
+/* The text floats a little against the orbits, nearer layers moving more. */
+.about-copy > :nth-child(1) { translate: calc(var(--px, 0) * -14px) calc(var(--py, 0) * -10px); }
+.about-copy > :nth-child(2) { translate: calc(var(--px, 0) * -8px) calc(var(--py, 0) * -6px); }
+.about-copy > :nth-child(3) { translate: calc(var(--px, 0) * -4px) calc(var(--py, 0) * -3px); }
+
+.about-star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--clinova-color-b8c8ef);
+  box-shadow: 0 0 10px var(--clinova-rgba-142-168-232-0_7);
+  opacity: 0;
+  animation: about-twinkle 5.5s ease-in-out infinite;
+}
+
+.about-star:nth-of-type(1) { top: 34%; left: 12%; animation-delay: -0.4s; }
+.about-star:nth-of-type(2) { top: 62%; left: 20%; animation-delay: -2.1s; }
+.about-star:nth-of-type(3) { top: 40%; left: 86%; animation-delay: -3.3s; }
+.about-star:nth-of-type(4) { top: 66%; left: 78%; animation-delay: -1.2s; }
+.about-star:nth-of-type(5) { top: 30%; left: 64%; animation-delay: -4.4s; }
+.about-star:nth-of-type(6) { top: 70%; left: 44%; animation-delay: -2.8s; }
+.about-star:nth-of-type(7) { top: 28%; left: 34%; animation-delay: -5s; }
+
+@keyframes about-twinkle {
+  0%, 100% { opacity: 0; scale: 0.4; }
+  50% { opacity: 0.9; scale: 1.4; }
+}
+
+.about-stage.is-offscreen :is(.gyro-ring > i, .gyro-ring::after, .about-star) { animation-play-state: paused; }
+
+@media (max-width: 599px) {
+  .about-gyro { width: 126vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gyro-ring > i, .gyro-ring::after, .about-star { animation: none; }
+  .about-star { opacity: 0.5; }
+}
+
+/* ======================================================================
+   Call to action: the appointment book behind the text
+   ====================================================================== */
+.book-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+  align-content: start;
+  gap: 10px;
+  padding: 16px;
+  overflow: hidden;
+  border-radius: inherit;
+  /* Clear behind the text, visible toward the edges. */
+  -webkit-mask-image: radial-gradient(ellipse 46% 62% at 50% 50%, transparent 0 62%, #000 100%);
+  mask-image: radial-gradient(ellipse 46% 62% at 50% 50%, transparent 0 62%, #000 100%);
+}
+
+.book-cell {
+  position: relative;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_1);
+  background: transparent;
+  transition: background 700ms ease, border-color 700ms ease, box-shadow 700ms ease, scale 500ms var(--clinova-ease-out, ease);
+}
+
+.book-cell svg {
+  width: 46%;
+  height: 46%;
+  fill: none;
+  stroke: var(--clinova-color-dce6ff);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 22;
+  stroke-dashoffset: 22;
+  opacity: 0;
+  transition: stroke-dashoffset 520ms ease 120ms, opacity 300ms ease;
+}
+
+.book-cell.is-booked {
+  border-color: var(--clinova-rgba-142-168-232-0_35);
+  background: linear-gradient(140deg, var(--clinova-rgba-142-168-232-0_2), var(--clinova-rgba-95-120-181-0_1));
+  box-shadow: 0 0 22px var(--clinova-rgba-142-168-232-0_12), inset 0 1px 0 var(--clinova-rgba-142-168-232-0_18);
+}
+
+.book-cell.is-booked svg {
+  stroke-dashoffset: 0;
+  opacity: 0.85;
+}
+
+/* A slot booked by the visitor's own mouse: brighter, with a small pop and a ring that spreads out. */
+.book-cell.is-mine {
+  border-color: var(--clinova-color-8ea8e8);
+  background: linear-gradient(140deg, var(--clinova-rgba-142-168-232-0_45), var(--clinova-rgba-142-168-232-0_16));
+  animation: book-pop 520ms var(--clinova-ease-out, ease);
+}
+
+.book-cell.is-mine::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid var(--clinova-color-8ea8e8);
+  opacity: 0;
+  animation: book-ring 900ms ease-out;
+}
+
+@keyframes book-pop {
+  0% { scale: 0.82; }
+  55% { scale: 1.1; }
+  100% { scale: 1; }
+}
+
+@keyframes book-ring {
+  0% { opacity: 0.8; scale: 1; }
+  100% { opacity: 0; scale: 1.9; }
+}
+
+@media (max-width: 599px) {
+  .book-grid { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); gap: 8px; padding: 12px; -webkit-mask-image: radial-gradient(ellipse 70% 52% at 50% 50%, transparent 0 70%, #000 100%); mask-image: radial-gradient(ellipse 70% 52% at 50% 50%, transparent 0 70%, #000 100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-cell, .book-cell svg { transition: none; }
+  .book-cell.is-mine, .book-cell.is-mine::after { animation: none; }
+}
+
+/* ======================================================================
+   FAQ: the dial beside the questions (wide screens)
+   ====================================================================== */
+.faq-dial {
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+}
+
+.faq-dial-face {
+  position: relative;
+  width: 236px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 38%, var(--clinova-rgba-142-168-232-0_12), transparent 62%),
+    var(--clinova-rgba-11-17-27-0_45);
+  box-shadow: inset 0 0 0 1px var(--clinova-rgba-142-168-232-0_14), 0 24px 60px var(--clinova-rgba-0-0-0-0_2);
+}
+
+.faq-dial-face svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.faq-dial-track {
+  fill: none;
+  stroke: var(--clinova-rgba-142-168-232-0_12);
+  stroke-width: 3;
+}
+
+.faq-dial-progress {
+  fill: none;
+  stroke: var(--clinova-color-8ea8e8);
+  stroke-width: 3;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px var(--clinova-rgba-142-168-232-0_45));
+  transition: stroke-dashoffset 900ms var(--clinova-ease-out, ease);
+}
+
+.faq-dial-tick {
+  stroke: var(--clinova-rgba-142-168-232-0_3);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke 500ms ease;
+}
+
+.faq-dial-tick.is-done { stroke: var(--clinova-color-8ea8e8); }
+.faq-dial-tick.is-point { stroke: var(--clinova-color-dce6ff); stroke-width: 3; }
+
+/* The needle: a light on the rim that swings to the question in focus. */
+.faq-dial-needle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: rotate 800ms var(--clinova-ease-out, ease), opacity 400ms ease;
+}
+
+.faq-dial-needle > i {
+  position: absolute;
+  top: calc(50% - 86 / 200 * 100% - 6px);
+  left: calc(50% - 6px);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--clinova-color-dce6ff);
+  box-shadow: 0 0 0 4px var(--clinova-rgba-142-168-232-0_2), 0 0 22px var(--clinova-color-8ea8e8);
+}
+
+.faq-dial-num {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: var(--clinova-color-f5f7fa);
+}
+
+.faq-dial-num > span {
+  display: block;
+  font-size: 4.4rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  animation: faq-num-in 520ms var(--clinova-ease-out, ease);
+}
+
+.faq-dial-face.is-peek .faq-dial-num > span { color: var(--clinova-color-8ea8e8); }
+
+.faq-dial-num > small {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  color: var(--clinova-rgba-245-247-250-0_62);
+}
+
+@keyframes faq-num-in {
+  from { opacity: 0; translate: 0 18px; scale: 0.9; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+
+.faq-dial-keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 236px;
+}
+
+.faq-dial-keys > button {
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_14);
+  background: transparent;
+  color: var(--clinova-rgba-245-247-250-0_62);
+  font: 500 0.72rem "Plus Jakarta Sans", sans-serif;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: border-color 400ms ease, background 400ms ease, color 400ms ease, translate 400ms var(--clinova-ease-out, ease);
+}
+
+.faq-dial-keys > button:hover,
+.faq-dial-keys > button.is-peek {
+  border-color: var(--clinova-rgba-142-168-232-0_45);
+  color: var(--clinova-color-f5f7fa);
+  translate: 0 -2px;
+}
+
+.faq-dial-keys > button.is-active {
+  border-color: var(--clinova-color-8ea8e8);
+  background: var(--clinova-rgba-142-168-232-0_16);
+  color: var(--clinova-color-f5f7fa);
+  box-shadow: 0 0 18px var(--clinova-rgba-142-168-232-0_18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-dial-progress, .faq-dial-needle, .faq-dial-keys > button { transition: none; }
+  .faq-dial-num > span { animation: none; }
+}
+
+/* ======================================================================
+   Section rail: one mark per section at the side of wide screens
+   ====================================================================== */
+.section-rail {
+  position: fixed;
+  z-index: 40;
+  top: 50%;
+  inset-inline-end: 22px;
+  translate: 0 -50%;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  transition: opacity 600ms ease, translate 600ms var(--clinova-ease-out, ease);
+}
+
+@media (min-width: 1280px) and (hover: hover) and (pointer: fine) {
+  .section-rail { display: flex; inset-inline-end: 10px; }
+}
+
+@media (min-width: 1440px) and (hover: hover) and (pointer: fine) {
+  .section-rail { inset-inline-end: 22px; }
+}
+
+/* On the hero the rail stays out of the way. */
+.section-rail.is-top {
+  opacity: 0;
+  pointer-events: none;
+  translate: 12px -50%;
+}
+
+[dir="rtl"].section-rail.is-top { translate: -12px -50%; }
+
+.section-rail-line {
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  inset-inline-end: 6px;
+  width: 1px;
+  background: var(--clinova-rgba-142-168-232-0_14);
+}
+
+.section-rail-line > i {
+  display: block;
+  width: 100%;
+  background: linear-gradient(180deg, transparent, var(--clinova-color-8ea8e8));
+  transition: height 700ms var(--clinova-ease-out, ease);
+}
+
+.section-rail > button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 26px;
+  height: 28px;
+  padding: 0;
+  padding-inline-end: 1px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.section-rail > button > b {
+  flex: 0 0 auto;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_35);
+  background: var(--clinova-color-0b111b);
+  transition: scale 500ms var(--clinova-ease-out, ease), background 500ms ease, border-color 500ms ease, box-shadow 500ms ease;
+}
+
+.section-rail > button.is-passed > b {
+  background: var(--clinova-rgba-142-168-232-0_45);
+  border-color: transparent;
+  scale: 0.72;
+}
+
+.section-rail > button.is-current > b {
+  background: var(--clinova-color-8ea8e8);
+  border-color: var(--clinova-color-dce6ff);
+  box-shadow: 0 0 0 5px var(--clinova-rgba-142-168-232-0_16), 0 0 18px var(--clinova-color-8ea8e8);
+  scale: 1.15;
+}
+
+.section-rail > button > span {
+  position: absolute;
+  top: 50%;
+  inset-inline-end: 24px;
+  margin-top: -14px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_18);
+  background: var(--clinova-rgba-11-17-27-0_45);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--clinova-color-f5f7fa);
+  font-size: 0.72rem;
+  white-space: nowrap;
+  opacity: 0;
+  translate: 8px 0;
+  pointer-events: none;
+  transition: opacity 400ms ease, translate 400ms var(--clinova-ease-out, ease);
+}
+
+[dir="rtl"].section-rail > button > span { translate: -8px 0; }
+
+.section-rail > button:hover > span {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.section-rail > button:hover > b { scale: 1.35; border-color: var(--clinova-color-8ea8e8); }
+
+@media (prefers-reduced-motion: reduce) {
+  .section-rail, .section-rail-line > i, .section-rail > button > b, .section-rail > button > span { transition: none; }
+}

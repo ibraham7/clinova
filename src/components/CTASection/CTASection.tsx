@@ -8,6 +8,7 @@ import {
 
 import ProfileDownloadButton from "../layout/ProfileDownloadButton";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
+import BookingGrid from "./BookingGrid";
 import { bottomBookingLinkProps } from "../../config/contact";
 
 function CTASection() {
@@ -257,43 +258,8 @@ function CTASection() {
                         </Stack>
                     </Stack>
 
-                    {/* =================================
-                        DECORATIVE GRID
-                    ================================== */}
-
-                    <Box
-                        sx={{
-                            position:
-                                "absolute",
-
-                            inset: 0,
-
-                            opacity: 0.18,
-
-                            backgroundImage: `
-                                linear-gradient(
-                                    var(--clinova-rgba-142-168-232-0_07) 1px,
-                                    transparent 1px
-                                ),
-                                linear-gradient(
-                                    90deg,
-                                    var(--clinova-rgba-142-168-232-0_07) 1px,
-                                    transparent 1px
-                                )
-                            `,
-
-                            backgroundSize:
-                                "55px 55px",
-
-                            maskImage:
-                                "radial-gradient(circle at center, black, transparent 72%)",
-
-                            pointerEvents:
-                                "none",
-
-                            zIndex: -1,
-                        }}
-                    />
+                    {/* The appointment book that fills by itself and under the mouse (BookingGrid, interactive.css). */}
+                    <BookingGrid />
                 </Box>
             </Container>
         </Box>

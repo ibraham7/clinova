@@ -6,6 +6,7 @@ import ScrollProgress from "./components/motion/ScrollProgress";
 import ScrollReveal from "./components/motion/ScrollReveal";
 import MotionEngine from "./motion/MotionEngine";
 import ScrollTopRing from "./motion/ScrollTopRing";
+import SectionRail from "./components/motion/SectionRail";
 import Header from "./components/layout/Header";
 import Hero from "./components/Hero/Hero";
 import MedicalTicker from "./components/MedicalTicker/MedicalTicker";
@@ -59,6 +60,7 @@ function App() {
       <CTASection />
       <Footer />
       <ScrollTopRing />
+      <SectionRail />
       <SurveyPopup />
     </Box>
   );

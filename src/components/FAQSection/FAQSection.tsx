@@ -1,5 +1,5 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
-import { useState } from "react";
+import { useState, type KeyboardEvent } from "react";
 import {
     Box,
     Container,
@@ -8,12 +8,19 @@ import {
 
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { faqs } from "../../config/faq";
+import FaqDial from "./FaqDial";
 
 
 function FAQSection() {
     const { direction, t } = useSiteTranslation();
 
     const [activeId, setActiveId] = useState("01");
+    const [hoverId, setHoverId] = useState("");
+    // A key of the dial opens its question and brings it into view.
+    const pick = (id: string) => {
+        setActiveId(id);
+        document.getElementById(`faq-item-${id}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    };
 
     const handleToggle = (id: string) => {
         setActiveId((current) =>
@@ -27,7 +34,8 @@ function FAQSection() {
             id="faq"
             sx={{
                 position: "relative",
-                overflow: "hidden",
+                // "clip" hides the glows like "hidden" did, but lets the dial stay sticky while the questions scroll.
+                overflow: "clip",
 
                 py: {
                     xs: 10,
@@ -184,12 +192,18 @@ function FAQSection() {
                 <Box
                     sx={{
                         width: "100%",
-
-                        maxWidth: 1050,
-
+                        maxWidth: { xs: 1050, lg: 1240 },
                         mx: "auto",
+                        display: "grid",
+                        gridTemplateColumns: { xs: "minmax(0, 1fr)", lg: "260px minmax(0, 1fr)" },
+                        gap: { lg: 7 },
+                        alignItems: "start",
                     }}
                 >
+                <Box sx={{ display: { xs: "none", lg: "block" }, position: "sticky", top: 120 }}>
+                    <FaqDial ids={faqs.map((faq) => faq.id)} activeId={activeId} hoverId={hoverId} onPick={pick} />
+                </Box>
+                <Box data-faq-list="" sx={{ minWidth: 0 }}>
                     {faqs.map((faq) => {
                         const active =
                             activeId === faq.id;
@@ -206,9 +220,11 @@ function FAQSection() {
                                         faq.id,
                                     )
                                 }
+                                onHover={(over) => setHoverId(over ? faq.id : "")}
                             />
                         );
                     })}
+                </Box>
                 </Box>
             </Container>
         </Box>
@@ -225,16 +241,29 @@ function FAQItem({
     answer,
     active,
     onClick,
+    onHover,
 }: {
     id: string;
     question: string;
     answer: string;
     active: boolean;
     onClick: () => void;
+    onHover: (over: boolean) => void;
 }) {
     const { direction, t } = useSiteTranslation();
+    // Arrow keys, Home and End move between the questions.
+    const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+        const step = { ArrowDown: 1, ArrowUp: -1, Home: -Infinity, End: Infinity }[event.key];
+        if (step === undefined) return;
+        const buttons = Array.from(event.currentTarget.closest("[data-faq-list]")?.querySelectorAll<HTMLElement>("button[aria-expanded]") ?? []);
+        const index = buttons.indexOf(event.currentTarget);
+        const next = buttons[Math.max(0, Math.min(buttons.length - 1, step === -Infinity ? 0 : step === Infinity ? buttons.length - 1 : index + step))];
+        if (!next || next === event.currentTarget) return;
+        event.preventDefault();
+        next.focus();
+    };
 
-    return ( <Box data-fx="spot" sx={{ position: "relative", mb: 1.2,
+    return ( <Box data-fx="spot" id={`faq-item-${id}`} onMouseEnter={() => onHover(true)} onMouseLeave={() => onHover(false)} sx={{ position: "relative", mb: 1.2, scrollMarginBlock: "120px",
 
                 borderRadius: 2.5,
 
@@ -285,6 +314,7 @@ function FAQItem({
             <Box
                 component="button"
                 onClick={onClick}
+                onKeyDown={onKeyDown}
                 aria-expanded={active}
                 sx={{
                     width: "100%",
