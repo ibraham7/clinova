@@ -9,20 +9,26 @@
   content: none; /* the orbits replace the flat dashed ring */
 }
 
+/* The layer covers the whole section and fades out toward its top and bottom, so the orbits never end in a hard line
+   where the section stops. */
 .about-gyro {
   position: absolute;
   inset: 0;
   z-index: 0;
-  margin: auto;
-  width: min(980px, 150vw);
-  aspect-ratio: 1;
+  overflow: hidden;
   pointer-events: none;
   perspective: 1500px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 62%, transparent 96%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 62%, transparent 96%);
 }
 
 .about-gyro-tilt {
   position: absolute;
-  inset: 0;
+  top: 46%;
+  left: 50%;
+  width: min(980px, 150vw);
+  aspect-ratio: 1;
+  translate: -50% -50%;
   transform-style: preserve-3d;
   transform: rotateX(calc(var(--py, 0) * -10deg)) rotateY(calc(var(--px, 0) * 14deg));
 }
@@ -79,6 +85,8 @@
   opacity: 0;
   transition: opacity 900ms ease;
   background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 40%), var(--clinova-rgba-142-168-232-0_12), transparent 70%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 62%, transparent 96%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 62%, transparent 96%);
 }
 
 .about-stage.is-live .about-lens { opacity: 1; }
@@ -115,7 +123,7 @@
 .about-stage.is-offscreen :is(.gyro-ring > i, .gyro-ring::after, .about-star) { animation-play-state: paused; }
 
 @media (max-width: 599px) {
-  .about-gyro { width: 126vw; }
+  .about-gyro-tilt { width: 126vw; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -475,4 +483,580 @@
 
 @media (prefers-reduced-motion: reduce) {
   .section-rail, .section-rail-line > i, .section-rail > button > b, .section-rail > button > span { transition: none; }
+}
+
+/* ======================================================================
+   Specialties: three panels, the open one wide, the others narrow tabs
+   ====================================================================== */
+.spx {
+  container-type: inline-size;
+  display: flex;
+  gap: 12px;
+  height: 480px;
+}
+
+.spx-panel {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_12);
+  background: var(--clinova-rgba-11-17-27-0_35);
+  transition: flex-grow 850ms var(--clinova-ease-out, cubic-bezier(0.22, 1, 0.36, 1)), border-color 600ms ease, background 600ms ease, box-shadow 600ms ease;
+}
+
+.spx-panel.is-active {
+  flex-grow: 4.6;
+  border-color: var(--clinova-rgba-142-168-232-0_3);
+  background: linear-gradient(145deg, var(--clinova-rgba-142-168-232-0_14), var(--clinova-rgba-95-120-181-0_06) 55%, var(--clinova-rgba-11-17-27-0_35));
+  box-shadow: 0 30px 70px var(--clinova-rgba-0-0-0-0_2);
+}
+
+.spx-panel:not(.is-active):hover {
+  flex-grow: 1.22;
+  border-color: var(--clinova-rgba-142-168-232-0_3);
+  background: var(--clinova-rgba-142-168-232-0_06);
+}
+
+/* One bar per specialty at the foot of the open panel; the current one fills during the countdown to the next. */
+.spx-pager {
+  display: none;
+  gap: 8px;
+  align-self: end;
+}
+
+.spx-pager > button {
+  all: unset;
+  position: relative;
+  width: 44px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.spx-pager > button::before,
+.spx-pager > button > i {
+  content: "";
+  position: absolute;
+  top: 8px;
+  inset-inline: 0;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--clinova-rgba-142-168-232-0_18);
+  transition: background 400ms ease;
+}
+
+.spx-pager > button:hover::before { background: var(--clinova-rgba-142-168-232-0_45); }
+.spx-pager > button.is-current { width: 76px; }
+.spx-pager > button.is-current::before { background: var(--clinova-rgba-142-168-232-0_3); }
+
+.spx-pager > button > i {
+  background: linear-gradient(90deg, var(--clinova-color-7894d2), var(--clinova-color-dce6ff));
+  transform-origin: 0 50%;
+  animation: spx-count var(--spx-ms, 6500ms) linear both;
+}
+
+[dir="rtl"] .spx-pager > button > i { transform-origin: 100% 50%; }
+
+@keyframes spx-count {
+  from { scale: 0 1; }
+  to { scale: 1 1; }
+}
+
+.spx-inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}
+
+/* ---- The head: a tall tab when closed, the heading of the panel when open ---- */
+.spx-head {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 30px 12px 34px;
+  animation: spx-fade 600ms ease 250ms both;
+}
+
+.spx-head:focus-visible {
+  outline: 2px solid var(--clinova-color-8ea8e8);
+  outline-offset: -6px;
+  border-radius: 24px;
+}
+
+.spx-num {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_18);
+  font: 500 0.66rem "Plus Jakarta Sans", sans-serif;
+  letter-spacing: 0.06em;
+  color: var(--clinova-rgba-245-247-250-0_62);
+  transition: border-color 500ms ease, color 500ms ease, box-shadow 500ms ease;
+}
+
+.spx-icon {
+  display: grid;
+  place-items: center;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  color: var(--clinova-color-b8c8ef);
+  background: radial-gradient(circle, var(--clinova-rgba-142-168-232-0_12), transparent 70%);
+  transition: scale 600ms var(--clinova-ease-out, ease), color 500ms ease;
+}
+
+.spx-icon svg { font-size: 40px; }
+
+.spx-title {
+  writing-mode: vertical-rl;
+  font-size: 1.3rem !important;
+  line-height: 1.3 !important;
+  white-space: nowrap;
+  opacity: 0.82;
+  transition: opacity 500ms ease;
+}
+
+.spx-panel:not(.is-active):hover .spx-icon { scale: 1.12; color: var(--clinova-color-dce6ff); }
+.spx-panel:not(.is-active):hover .spx-title { opacity: 1; }
+.spx-panel:not(.is-active):hover .spx-num { border-color: var(--clinova-color-8ea8e8); color: var(--clinova-color-f5f7fa); }
+
+.spx-more { display: none; }
+
+/* ---- Open panel (wide screens): text on one side, the orbit on the other. Its content keeps the final width while the
+        panel grows, so the text never re-wraps during the movement. ---- */
+@media (min-width: 900px) {
+  .spx-panel.is-active .spx-inner {
+    width: calc(100cqw * 4.6 / 6.6 - 10px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 12px;
+    padding: 44px 44px 40px;
+    box-sizing: border-box;
+  }
+
+  .spx-panel.is-active .spx-head {
+    grid-column: 1;
+    grid-row: 1;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 18px;
+    padding: 0;
+    cursor: default;
+    animation: spx-rise 700ms var(--clinova-ease-out, ease) 320ms both;
+  }
+
+  .spx-panel.is-active .spx-icon { display: none; }
+  .spx-panel.is-active .spx-num { border-color: var(--clinova-color-8ea8e8); color: var(--clinova-color-f5f7fa); box-shadow: 0 0 0 5px var(--clinova-rgba-142-168-232-0_1); }
+  .spx-panel.is-active .spx-title { writing-mode: horizontal-tb; white-space: normal; font-size: clamp(1.9rem, 2.6cqw, 2.5rem) !important; opacity: 1; }
+
+  .spx-panel.is-active .spx-more,
+  .spx-panel.is-active .spx-more-in { display: contents; }
+
+  .spx-panel.is-active .spx-inner { grid-template-rows: auto auto 1fr; }
+
+  .spx-panel.is-active .spx-desc {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 26px;
+    max-width: 440px;
+    animation: spx-rise 700ms var(--clinova-ease-out, ease) 420ms both;
+  }
+
+  .spx-panel.is-active .spx-pager {
+    display: flex;
+    grid-column: 1;
+    grid-row: 3;
+    animation: spx-fade 700ms ease 620ms both;
+  }
+
+  .spx-panel.is-active .spx-stage {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    animation: spx-fade 900ms ease 380ms both;
+  }
+}
+
+@keyframes spx-fade {
+  from { opacity: 0; }
+}
+
+@keyframes spx-rise {
+  from { opacity: 0; translate: 0 22px; }
+}
+
+/* ---- The orbit: the specialty's icon in the middle, its services circling it ---- */
+.spx-stage {
+  --r: clamp(104px, 13.5cqw, 150px);
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 300px;
+  perspective: 900px;
+}
+
+.spx-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--r) * 2);
+  aspect-ratio: 1;
+  margin: calc(var(--r) * -1) 0 0 calc(var(--r) * -1);
+  border-radius: 50%;
+  border: 1px dashed var(--clinova-rgba-142-168-232-0_3);
+  transform: rotateX(calc(var(--py, 0) * -14deg)) rotateY(calc(var(--px, 0) * 14deg));
+  animation: clinova-spin 70s linear infinite;
+}
+
+.spx-ring-b {
+  width: calc(var(--r) * 1.18);
+  margin: calc(var(--r) * -0.59) 0 0 calc(var(--r) * -0.59);
+  border-style: solid;
+  border-color: var(--clinova-rgba-142-168-232-0_14);
+  animation: none;
+}
+
+.spx-core {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  color: var(--clinova-color-dce6ff);
+  background: radial-gradient(circle at 35% 30%, var(--clinova-rgba-142-168-232-0_45), var(--clinova-rgba-95-120-181-0_16) 60%, var(--clinova-rgba-11-17-27-0_45));
+  box-shadow: 0 0 0 1px var(--clinova-rgba-142-168-232-0_35), 0 0 60px var(--clinova-rgba-142-168-232-0_3), inset 0 1px 0 var(--clinova-rgba-142-168-232-0_45);
+  translate: calc(var(--px, 0) * 10px) calc(var(--py, 0) * 10px);
+  animation: spx-breathe 4.5s ease-in-out infinite;
+}
+
+.spx-core svg { font-size: 50px; }
+
+.spx-core::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid var(--clinova-color-8ea8e8);
+  opacity: 0;
+  animation: spx-halo 3s ease-out infinite;
+}
+
+@keyframes spx-breathe {
+  50% { scale: 1.06; }
+}
+
+@keyframes spx-halo {
+  from { opacity: 0.6; scale: 1; }
+  to { opacity: 0; scale: 1.9; }
+}
+
+.spx-tags {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: clinova-spin 46s linear infinite;
+}
+
+/* Each service sits on the ring at its own angle; the label is turned back so it always reads straight. */
+.spx-tags > li {
+  --a: calc(360deg / var(--n) * var(--i) - 90deg + 360deg / var(--n) / 2);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  rotate: var(--a);
+  animation: spx-pop 700ms var(--clinova-ease-out, ease) calc(var(--i) * 110ms + 520ms) both;
+}
+
+.spx-tags > li > i {
+  position: absolute;
+  top: -0.5px;
+  left: 58px;
+  width: calc(var(--r) - 62px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--clinova-rgba-142-168-232-0_35));
+  transition: background 400ms ease;
+}
+
+.spx-tags > li > span {
+  position: absolute;
+  top: 0;
+  left: var(--r);
+  display: block;
+  translate: -50% -50%;
+  transform: rotate(calc(var(--a) * -1)); /* "rotate" itself is taken by the counter-spin below */
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_3);
+  background: var(--clinova-color-0b111b);
+  white-space: nowrap;
+  cursor: default;
+  animation: clinova-spin 46s linear infinite reverse;
+  transition: border-color 400ms ease, box-shadow 400ms ease, background 400ms ease;
+}
+
+.spx-tags > li:hover > span {
+  border-color: var(--clinova-color-8ea8e8);
+  background: color-mix(in srgb, var(--clinova-color-8ea8e8) 22%, var(--clinova-color-0b111b));
+  box-shadow: 0 0 0 4px var(--clinova-rgba-142-168-232-0_12), 0 0 26px var(--clinova-rgba-142-168-232-0_35);
+}
+
+.spx-tags > li:hover > i { background: linear-gradient(90deg, transparent, var(--clinova-color-dce6ff)); }
+
+/* Under the mouse the orbit stops so the services can be read. */
+.spx-stage:hover .spx-tags,
+.spx-stage:hover .spx-tags > li > span,
+.spx-stage:hover .spx-ring { animation-play-state: paused; }
+
+@keyframes spx-pop {
+  from { opacity: 0; scale: 0.4; }
+}
+
+/* ---- Phones and tablets: the panels stack; the open one grows downward ---- */
+@media (max-width: 899px) {
+  .spx { flex-direction: column; height: auto; gap: 10px; }
+  .spx-panel, .spx-panel.is-active, .spx-panel:not(.is-active):hover { flex: 0 0 auto; border-radius: 22px; }
+  .spx-head { flex-direction: row; justify-content: flex-start; gap: 14px; height: auto; padding: 16px 18px; animation: none; }
+  .spx-icon { width: 46px; height: 46px; }
+  .spx-icon svg { font-size: 26px; }
+  .spx-title { writing-mode: horizontal-tb; white-space: normal; font-size: 1.25rem !important; }
+  .spx-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 600ms var(--clinova-ease-out, ease); }
+  .spx-panel.is-active .spx-more { grid-template-rows: 1fr; }
+  .spx-more-in { min-height: 0; overflow: hidden; padding: 0 18px; }
+  .spx-panel.is-active .spx-more-in { padding-bottom: 20px; }
+  .spx-stage { --r: 112px; min-height: 290px; margin-top: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spx-panel, .spx-more { transition: none; }
+  .spx-head, .spx-panel.is-active .spx-head, .spx-panel.is-active .spx-desc, .spx-panel.is-active .spx-stage,
+  .spx-ring, .spx-core, .spx-core::after, .spx-tags, .spx-tags > li, .spx-tags > li > span, .spx-pager > button > i, .spx-panel.is-active .spx-pager { animation: none; }
+}
+
+/* ======================================================================
+   Case studies: a light that slides down the list, a card that arrives from the side it was asked from,
+   and three small instruments under the big figure
+   ====================================================================== */
+.csx-glider {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  inset-inline: -6px;
+  height: var(--csx-h, 68px);
+  translate: 0 var(--csx-y, 0px);
+  border-radius: 20px;
+  pointer-events: none;
+  background: radial-gradient(120% 140% at 50% 50%, var(--clinova-rgba-142-168-232-0_16), transparent 70%);
+  box-shadow: 0 0 44px var(--clinova-rgba-142-168-232-0_18);
+  transition: translate 650ms var(--clinova-ease-out, cubic-bezier(0.22, 1, 0.36, 1)), height 650ms var(--clinova-ease-out, ease);
+}
+
+.csx-glider::before {
+  content: "";
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  inset-inline-start: -4px;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--clinova-color-dce6ff), var(--clinova-color-7894d2));
+  box-shadow: 0 0 14px var(--clinova-color-8ea8e8);
+}
+
+.csx-list > .case-item { z-index: 1; transition: translate 500ms var(--clinova-ease-out, ease); }
+.csx-list > .case-item:not(.is-active):hover { translate: -4px 0; }
+[dir="rtl"] .csx-list > .case-item:not(.is-active):hover { translate: 4px 0; }
+
+.csx-card {
+  translate: var(--csx-drag, 0px) 0;
+  transition: translate 450ms var(--clinova-ease-out, ease);
+  touch-action: pan-y;
+}
+
+.csx-card.is-next { animation: csx-from-end 700ms var(--clinova-ease-out, ease) both; }
+.csx-card.is-prev { animation: csx-from-start 700ms var(--clinova-ease-out, ease) both; }
+
+@keyframes csx-from-end {
+  from { opacity: 0; transform: translateX(46px) scale(0.985); }
+}
+
+@keyframes csx-from-start {
+  from { opacity: 0; transform: translateX(-46px) scale(0.985); }
+}
+
+[dir="rtl"] .csx-card.is-next { animation-name: csx-from-start; }
+[dir="rtl"] .csx-card.is-prev { animation-name: csx-from-end; }
+
+.csx-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: border-color 500ms ease, background 500ms ease, translate 500ms var(--clinova-ease-out, ease);
+}
+
+.csx-tile:hover {
+  border-color: var(--clinova-rgba-142-168-232-0_35) !important;
+  background: var(--clinova-rgba-142-168-232-0_06);
+  translate: 0 -4px;
+}
+
+/* Booked appointments of the five clinics; the shown one is lit, any bar can be clicked. */
+.csx-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 7px;
+  width: min(100%, 150px);
+  height: 52px;
+  margin-top: 14px;
+}
+
+.csx-bars > button {
+  all: unset;
+  position: relative;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+}
+
+.csx-bars > button > i {
+  display: block;
+  width: 100%;
+  height: var(--h);
+  border-radius: 5px 5px 2px 2px;
+  background: var(--clinova-rgba-142-168-232-0_2);
+  transform-origin: 50% 100%;
+  animation: csx-grow 800ms var(--clinova-ease-out, ease) calc(var(--i) * 70ms + 500ms) both;
+  transition: background 400ms ease, box-shadow 400ms ease;
+}
+
+.csx-bars > button:hover > i { background: var(--clinova-rgba-142-168-232-0_45); }
+
+.csx-bars > button.is-current > i {
+  background: linear-gradient(180deg, var(--clinova-color-dce6ff), var(--clinova-color-7894d2));
+  box-shadow: 0 0 18px var(--clinova-rgba-142-168-232-0_45);
+}
+
+.csx-bars > button > span {
+  position: absolute;
+  z-index: 5;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  translate: -50% 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_3);
+  background: var(--clinova-color-0b111b);
+  color: var(--clinova-color-f5f7fa);
+  font: 500 0.66rem var(--clinova-font-family);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease, translate 300ms var(--clinova-ease-out, ease);
+}
+
+.csx-bars > button:hover > span { opacity: 1; translate: -50% 0; }
+
+@keyframes csx-grow {
+  from { scale: 1 0; }
+}
+
+/* Return on investment: a half circle that sweeps up to the figure, with a needle. */
+.csx-gauge {
+  width: 112px;
+  margin-top: 10px;
+  overflow: visible;
+}
+
+.csx-gauge-track,
+.csx-gauge-fill {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.csx-gauge-track { stroke: var(--clinova-rgba-142-168-232-0_14); }
+
+.csx-gauge-fill {
+  stroke: var(--clinova-color-8ea8e8);
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--off);
+  filter: drop-shadow(0 0 5px var(--clinova-rgba-142-168-232-0_45));
+  animation: csx-sweep 1300ms var(--clinova-ease-out, ease) 600ms both;
+}
+
+@keyframes csx-sweep {
+  from { stroke-dashoffset: var(--len); }
+}
+
+.csx-gauge-needle {
+  transform-origin: 50px 50px;
+  transform: rotate(var(--turn));
+  animation: csx-needle 1300ms var(--clinova-ease-out, ease) 600ms both;
+}
+
+.csx-gauge-needle line { stroke: var(--clinova-color-f5f7fa); stroke-width: 2; stroke-linecap: round; }
+.csx-gauge-needle circle { fill: var(--clinova-color-f5f7fa); }
+
+@keyframes csx-needle {
+  from { transform: rotate(-90deg); }
+}
+
+/* Average revenue per appointment: three coins dropping onto a stack, again and again. */
+.csx-coin {
+  position: relative;
+  display: block;
+  width: 54px;
+  height: 52px;
+  margin-top: 14px;
+}
+
+.csx-coin > i {
+  position: absolute;
+  left: 0;
+  bottom: calc(var(--k) * 11px);
+  width: 54px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--clinova-rgba-142-168-232-0_45);
+  background: linear-gradient(180deg, var(--clinova-rgba-142-168-232-0_3), var(--clinova-rgba-95-120-181-0_16));
+  box-shadow: 0 3px 0 var(--clinova-rgba-142-168-232-0_16);
+  animation: csx-coin 3.6s var(--clinova-ease-out, ease) calc(var(--k) * 260ms) infinite both;
+}
+
+.csx-coin > i:nth-child(1) { --k: 0; }
+.csx-coin > i:nth-child(2) { --k: 1; }
+.csx-coin > i:nth-child(3) { --k: 2; }
+
+@keyframes csx-coin {
+  0% { opacity: 0; translate: 0 -22px; }
+  18%, 82% { opacity: 1; translate: 0 0; }
+  100% { opacity: 0; translate: 0 0; }
+}
+
+.csx-tile:hover .csx-coin > i { border-color: var(--clinova-color-dce6ff); }
+
+@media (prefers-reduced-motion: reduce) {
+  .csx-glider, .csx-card, .csx-tile, .csx-list > .case-item { transition: none; }
+  .csx-card.is-next, .csx-card.is-prev, .csx-bars > button > i, .csx-gauge-fill, .csx-gauge-needle, .csx-coin > i { animation: none; }
 }
