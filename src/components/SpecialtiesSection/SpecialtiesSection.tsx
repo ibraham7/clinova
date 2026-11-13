@@ -1,5 +1,5 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import {
     Box,
     Container,
@@ -9,6 +9,7 @@ import {
 import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
 import FaceRetouchingNaturalOutlinedIcon from "@mui/icons-material/FaceRetouchingNaturalOutlined";
 import HealingOutlinedIcon from "@mui/icons-material/HealingOutlined";
+import { isEditing, prefersReducedMotion, usePointerStage } from "../../motion/usePointerStage";
 
 const specialties = [
     {
@@ -56,33 +57,60 @@ const specialties = [
     },
 ];
 
+const autoMs = 6500;
+
 function SpecialtiesSection() {
     const { direction, t } = useSiteTranslation();
 
     const [activeId, setActiveId] = useState("dental");
-    // The highlight moves on by itself every few seconds while the section is on screen, and waits after a click or a hover.
-    const touched = useRef(0);
+    // The open panel moves on by itself while the section is on screen and nobody is using the panels (mouse over them or focus inside). "run" counts the
+    // countdowns so the progress line restarts with each one; 0 means paused.
+    const [run, setRun] = useState(0);
+    const section = useRef<HTMLElement>(null);
+    const board = useRef<HTMLDivElement>(null);
+    const busy = useRef(false);
+    // Once the visitor has chosen a specialty it stays until they scroll away; the panels never move on while someone reads.
+    const chosen = useRef(false);
     useEffect(() => {
-        const section = document.getElementById("specialties");
-        if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const element = section.current;
+        const zone = board.current;
+        // Stacked on small screens the open panel changes the height of the page, so nothing moves by itself there.
+        if (!element || !zone || isEditing() || prefersReducedMotion() || window.matchMedia("(max-width: 899px)").matches) return;
+        let onScreen = false;
         let timer = 0;
-        const stop = () => { window.clearInterval(timer); timer = 0; };
-        const observer = new IntersectionObserver(([entry]) => {
-            stop();
-            if (!entry?.isIntersecting) return;
-            timer = window.setInterval(() => {
-                if (document.visibilityState !== "visible" || Date.now() - touched.current < 9000) return;
+        const start = () => {
+            window.clearTimeout(timer);
+            if (!onScreen || busy.current || chosen.current || document.visibilityState !== "visible") { setRun(0); return; }
+            setRun((value) => value + 1);
+            timer = window.setTimeout(() => {
                 setActiveId((current) => specialties[(specialties.findIndex((item) => item.id === current) + 1) % specialties.length].id);
-            }, 4200);
-        }, { threshold: 0.4 });
-        observer.observe(section);
-        return () => { observer.disconnect(); stop(); };
-    }, []);
-
+            }, autoMs);
+        };
+        const observer = new IntersectionObserver(([entry]) => { onScreen = !!entry?.isIntersecting; if (!onScreen) chosen.current = false; start(); }, { threshold: 0.35 });
+        observer.observe(element);
+        const enter = () => { busy.current = true; start(); };
+        const leave = () => { busy.current = false; start(); };
+        zone.addEventListener("pointerenter", enter);
+        zone.addEventListener("pointerleave", leave);
+        zone.addEventListener("focusin", enter);
+        zone.addEventListener("focusout", leave);
+        document.addEventListener("visibilitychange", start);
+        start();
+        return () => {
+            window.clearTimeout(timer);
+            observer.disconnect();
+            zone.removeEventListener("pointerenter", enter);
+            zone.removeEventListener("pointerleave", leave);
+            zone.removeEventListener("focusin", enter);
+            zone.removeEventListener("focusout", leave);
+            document.removeEventListener("visibilitychange", start);
+        };
+    }, [activeId]);
     return (
         <Box
             component="section"
             id="specialties"
+            ref={section}
             sx={{
                 position: "relative",
                 overflow: "hidden",
@@ -232,316 +260,84 @@ function SpecialtiesSection() {
                         </Typography>
                 </Box>
 
-                {/* =====================================
-                    SPECIALTY CARDS
-                ====================================== */}
-
-                <Box
-                    sx={{
-                        display: "grid",
-
-                        gridTemplateColumns: {
-                            xs: "1fr",
-                            md: "repeat(3, 1fr)",
-                        },
-
-                        border:
-                            "1px solid var(--clinova-rgba-142-168-232-0_12)",
-
-                        borderRadius: 5,
-
-                        overflow: "hidden",
-                    }}
-                >
-                    {specialties.map((specialty, index) => {
-                        const active =
-                            activeId === specialty.id;
-
-                        return (
-                            <SpecialtyCard key={specialty.id} specialty={specialty} active={active} first={index === 0} onHover={() => { touched.current = Date.now(); }} onClick={() => { touched.current = Date.now(); setActiveId( specialty.id, ); }} />
-                        );
-                    })}
+                {/* Three panels: the open one is wide and shows the specialty in full, the others are narrow tabs.
+                    A click, a tap or the arrow keys open another one (interactive.css, "Specialties"). */}
+                <Box ref={board} className="spx" style={{ "--spx-ms": `${autoMs}ms` } as CSSProperties}>
+                    {specialties.map((specialty) => (
+                        <SpecialtyPanel key={specialty.id} specialty={specialty} active={activeId === specialty.id}
+                            progress={activeId === specialty.id && run > 0 ? run : 0} onPick={(id) => { chosen.current = true; setActiveId(id); }} />
+                    ))}
                 </Box>
             </Container>
         </Box>
     );
 }
 
-function SpecialtyCard({ specialty, active, first, onClick, onHover, }: {
+function SpecialtyPanel({ specialty, active, progress, onPick }: {
     specialty: (typeof specialties)[number];
     active: boolean;
-    first: boolean; onClick: () => void; onHover: () => void; }) {
-    const { t } = useSiteTranslation();
-
+    /** Number of the running countdown, 0 when there is none. */
+    progress: number;
+    onPick: (id: string) => void;
+}) {
+    const onOpen = () => onPick(specialty.id);
+    const { t, isRtl } = useSiteTranslation();
+    const stage = usePointerStage<HTMLDivElement>();
     const Icon = specialty.icon;
-
+    const bodyId = `specialty-${specialty.id}`;
+    // Arrow keys move between the three panels (following the reading direction), Home and End jump to the ends.
+    const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+        const forward = isRtl ? "ArrowLeft" : "ArrowRight";
+        const back = isRtl ? "ArrowRight" : "ArrowLeft";
+        const step = event.key === forward || event.key === "ArrowDown" ? 1 : event.key === back || event.key === "ArrowUp" ? -1 : event.key === "Home" ? -9 : event.key === "End" ? 9 : 0;
+        if (!step) return;
+        const heads = Array.from(event.currentTarget.closest(".spx")?.querySelectorAll<HTMLElement>(".spx-head") ?? []);
+        const next = heads[Math.max(0, Math.min(heads.length - 1, heads.indexOf(event.currentTarget) + step))];
+        if (!next || next === event.currentTarget) return;
+        event.preventDefault();
+        next.focus();
+        next.click();
+    };
     return (
-        <Box component="button" data-fx="spot" className={active ? "spec-card is-active" : "spec-card"} onPointerMove={onHover} onClick={onClick} sx={{ position: "relative", minHeight: { xs: 380,
-                    sm: 360,
-                    md: 365,
-                },
-
-                display: "flex",
-                flexDirection: "column",
-
-                alignItems: "flex-end",
-
-                justifyContent: "flex-start",
-
-                p: {
-                    xs: 3,
-                    md: 4,
-                    lg: 5,
-                },
-
-                textAlign: "start",
-
-                border: 0,
-
-                borderLeft: {
-                    xs: "none",
-                    md: first
-                        ? "none"
-                        : "1px solid var(--clinova-rgba-142-168-232-0_1)",
-                },
-
-                borderBottom: {
-                    xs: "1px solid var(--clinova-rgba-142-168-232-0_1)",
-                    md: "none",
-                },
-
-                cursor: "pointer",
-
-                background: active
-                    ? "linear-gradient(145deg, var(--clinova-rgba-142-168-232-0_16), var(--clinova-rgba-95-120-181-0_07))"
-                    : "var(--clinova-rgba-11-17-27-0_35)",
-
-                color: "inherit",
-
-                transition:
-                    "background 0.35s ease, transform 0.35s ease",
-
-                "&:last-child": {
-                    borderBottom: "none",
-                },
-
-                "&:hover": {
-                    background: active
-                        ? "linear-gradient(145deg, var(--clinova-rgba-142-168-232-0_18), var(--clinova-rgba-95-120-181-0_08))"
-                        : "var(--clinova-rgba-142-168-232-0_045)",
-                },
-
-                "&::before": {
-                    content: '""',
-
-                    position: "absolute",
-
-                    top: 0,
-                    right: 0,
-
-                    width: "100%",
-                    height: 2,
-
-                    background: active
-                        ? "linear-gradient(90deg, transparent, var(--clinova-color-8ea8e8))"
-                        : "transparent",
-
-                    boxShadow: active
-                        ? "0 0 20px var(--clinova-rgba-142-168-232-0_35)"
-                        : "none",
-                },
-            }}
-        >
-            {/* =================================
-                ICON + NUMBER
-            ================================== */}
-
-            <Box
-                sx={{
-                    width: "100%",
-
-                    display: "flex",
-
-                    alignItems: "center",
-
-                    justifyContent: "space-between",
-
-                    mb: {
-                        xs: 5,
-                        md: 7,
-                    },
-
-                    direction: "ltr",
-                }}
-            >
-                {/* Number */} <Box className="spec-num" sx={{ width: 34, height: 34,
-
-                        display: "flex",
-
-                        alignItems: "center",
-                        justifyContent: "center",
-
-                        borderRadius: "50%",
-
-                        border:
-                            "1px solid var(--clinova-rgba-142-168-232-0_15)",
-
-                        backgroundColor:
-                            "var(--clinova-rgba-142-168-232-0_03)",
-                    }}
-                >
-                    <Typography
-                        sx={{
-                            fontFamily:
-                                '"Plus Jakarta Sans", sans-serif',
-
-                            fontSize: "0.55rem",
-
-                            color:
-                                "var(--clinova-rgba-245-247-250-0_35)",
-                        }}
-                    >
-                        {specialty.number}
+        <Box component="article" data-fx="spot" className={active ? "spx-panel is-active" : "spx-panel"}>
+            <div className="spx-inner">
+                <Box component="button" type="button" className="spx-head" aria-expanded={active} aria-controls={bodyId} onClick={onOpen} onKeyDown={onKeyDown}>
+                    <span className="spx-num" dir="ltr">{specialty.number}</span>
+                    <span className="spx-icon" aria-hidden="true"><Icon /></span>
+                    <Typography component="h3" className="spx-title" sx={{ fontFamily: "var(--clinova-font-family)", fontWeight: 600, color: "var(--clinova-color-f5f7fa)" }}>
+                        {t(specialty.title)}
                     </Typography>
                 </Box>
-
-                {/* Icon */} <Box className="spec-icon" sx={{ display: "flex", alignItems: "center", justifyContent: "center", color: active
-                            ? "primary.main"
-                            : "primary.light",
-
-                        transition:
-                            "color 0.3s ease",
-
-                        "& svg": {
-                            fontSize: {
-                                xs: 38,
-                                md: 42,
-                            },
-
-                            strokeWidth: 1,
-                        },
-                    }}
-                >
-                    <Icon />
-                </Box>
-            </Box>
-
-            {/* =================================
-                TITLE
-            ================================== */}
-
-            <Typography
-                component="h3"
-                sx={{
-                    fontFamily:
-                        "var(--clinova-font-family)",
-
-                    fontSize: {
-                        xs: "1.65rem",
-                        md: "1.85rem",
-                    },
-
-                    fontWeight: 600,
-
-                    lineHeight: 1.4,
-
-                    color: active
-                        ? "var(--clinova-color-f5f7fa)"
-                        : "var(--clinova-rgba-245-247-250-0_82)",
-
-                    transition:
-                        "color 0.3s ease",
-                }}
-            >
-                {t(specialty.title)}
-            </Typography>
-
-            {/* =================================
-                DESCRIPTION
-            ================================== */}
-
-            <Typography
-                sx={{
-                    mt: 2.5,
-
-                    fontFamily:
-                        "var(--clinova-font-family)",
-
-                    fontSize: {
-                        xs: "0.82rem",
-                        md: "0.86rem",
-                    },
-
-                    lineHeight: 2,
-
-                    color: "text.secondary",
-                }}
-            >
-                {t(specialty.description)}
-            </Typography>
-
-            {/* =================================
-                TAGS
-            ================================== */}
-
-            <Box
-                sx={{
-                    width: "100%",
-
-                    mt: "auto",
-                    pt: 3,
-
-                    display: "flex",
-
-                    flexWrap: "wrap",
-
-                    justifyContent: "flex-start",
-
-                    gap: 0.8,
-
-                    borderTop:
-                        "1px solid var(--clinova-rgba-142-168-232-0_1)",
-                }}
-            >
-                {specialty.tags.map((tag, tagIndex) => ( <Box key={tag} className="spec-tag" style={{ "--t": tagIndex } as React.CSSProperties} sx={{ px: 1.2,
-                            py: 0.55,
-
-                            borderRadius: "999px",
-
-                            border: active
-                                ? "1px solid var(--clinova-rgba-142-168-232-0_28)"
-                                : "1px solid var(--clinova-rgba-142-168-232-0_1)",
-
-                            backgroundColor:
-                                active
-                                    ? "var(--clinova-rgba-142-168-232-0_06)"
-                                    : "var(--clinova-rgba-255-255-255-0_015)",
-
-                            transition:
-                                "all 0.3s ease",
-                        }}
-                    >
-                        <Typography
-                            sx={{
-                                fontFamily:
-                                    "var(--clinova-font-family)",
-
-                                fontSize: "0.65rem",
-
-                                whiteSpace:
-                                    "nowrap",
-
-                                color:
-                                    active
-                                        ? "primary.light"
-                                        : "text.secondary",
-                            }}
-                        >
-                            {t(tag)}
+                <div className="spx-more" id={bodyId} inert={!active || undefined}>
+                    <div className="spx-more-in">
+                        <Typography className="spx-desc" sx={{ fontFamily: "var(--clinova-font-family)", fontSize: { xs: "0.86rem", md: "0.95rem" }, lineHeight: 2, color: "text.secondary" }}>
+                            {t(specialty.description)}
                         </Typography>
-                    </Box>
-                ))}
-            </Box>
+                        {/* One bar per specialty; the open one fills while it waits to move on. Mouse only: the tabs are the real controls. */}
+                        <div aria-hidden="true" className="spx-pager">
+                            {specialties.map((item) => (
+                                <button key={item.id} type="button" tabIndex={-1} className={item.id === specialty.id ? "is-current" : undefined} onClick={() => onPick(item.id)}>
+                                    {item.id === specialty.id && progress > 0 && <i key={progress} />}
+                                </button>
+                            ))}
+                        </div>
+                        {/* The services of the specialty circle its icon; they pause under the mouse. */}
+                        <div ref={stage} className="spx-stage">
+                            <span aria-hidden="true" className="spx-ring spx-ring-a" />
+                            <span aria-hidden="true" className="spx-ring spx-ring-b" />
+                            <span aria-hidden="true" className="spx-core"><Icon /></span>
+                            <ul className="spx-tags" style={{ "--n": specialty.tags.length } as CSSProperties}>
+                                {specialty.tags.map((tag, index) => (
+                                    <li key={tag} style={{ "--i": index } as CSSProperties}>
+                                        <i aria-hidden="true" />
+                                        <Typography component="span" sx={{ fontFamily: "var(--clinova-font-family)", fontSize: { xs: "0.72rem", md: "0.78rem" }, fontWeight: 500, color: "var(--clinova-color-f5f7fa)" }}>{t(tag)}</Typography>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </Box>
     );
 }

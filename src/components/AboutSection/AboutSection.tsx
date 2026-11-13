@@ -24,7 +24,7 @@ function AboutSection() {
                     lg: 20,
                 },
 
-                pb: { xs: 4, md: 6 },
+                pb: { xs: 7, md: 12 },
 
                 background:
                     "radial-gradient(circle at 50% 0%, var(--clinova-rgba-95-120-181-0_1), transparent 38%), var(--clinova-color-0b111b)",
