@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { AppBar, Box, Button, Container, Stack, Toolbar } from "@mui/material";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
-import clinovaLogo from "../../public/logo/logo.png";
+import { logoSmall as clinovaLogo } from "../config/logo";
 import { bookingLinkProps } from "../config/contact";
 import { useSiteTranslation } from "../i18n/useSiteTranslation";
 import Footer from "../components/layout/Footer";
@@ -30,7 +30,7 @@ export default function BlogLayout({ children }: { children: ReactNode }) {
                     backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
                 }}>
                     <Box component="a" href={`/${language}`} sx={{ display: "flex", flexShrink: 0 }}>
-                        <Box component="img" src={clinovaLogo} alt="Clinova Healthcare" sx={{ width: { xs: 104, md: 128 }, height: "auto", filter: "var(--clinova-logo-filter)" }} />
+                        <Box component="img" src={clinovaLogo} alt="Clinova Healthcare" width={440} height={147} sx={{ width: { xs: 104, md: 128 }, height: "auto", filter: "var(--clinova-logo-filter)" }} />
                     </Box>
                     <Box component="nav" aria-label={t("التنقل الرئيسي")} sx={{ flex: 1, display: { xs: "none", sm: "flex" }, justifyContent: "center", gap: 0.5 }}>
                         <Box component="a" href={`/${language}`} sx={linkSx}>{t("الرئيسية")}</Box>

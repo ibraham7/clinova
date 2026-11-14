@@ -218,8 +218,9 @@
   .book-grid { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); gap: 8px; padding: 12px; -webkit-mask-image: radial-gradient(ellipse 70% 52% at 50% 50%, transparent 0 70%, #000 100%); mask-image: radial-gradient(ellipse 70% 52% at 50% 50%, transparent 0 70%, #000 100%); }
 }
 
+/* Reduce motion: the slots still get booked (colour and the tick only), without the pop and the ring. */
 @media (prefers-reduced-motion: reduce) {
-  .book-cell, .book-cell svg { transition: none; }
+  .book-cell { transition: background 900ms ease, border-color 900ms ease; scale: none; }
   .book-cell.is-mine, .book-cell.is-mine::after { animation: none; }
 }
 
@@ -361,9 +362,10 @@
   box-shadow: 0 0 18px var(--clinova-rgba-142-168-232-0_18);
 }
 
+/* Reduce motion: the ring still fills and the number still changes (a fade); the needle and the keys do not move. */
 @media (prefers-reduced-motion: reduce) {
-  .faq-dial-progress, .faq-dial-needle, .faq-dial-keys > button { transition: none; }
-  .faq-dial-num > span { animation: none; }
+  .faq-dial-needle, .faq-dial-keys > button { transition: none; }
+  .faq-dial-num > span { animation: spx-fade 450ms ease; }
 }
 
 /* ======================================================================
@@ -845,10 +847,12 @@
   .spx-stage { --r: 112px; min-height: 290px; margin-top: 8px; }
 }
 
+/* Reduce motion: the panels switch at once and the content fades in; nothing circles, breathes or counts down. */
 @media (prefers-reduced-motion: reduce) {
   .spx-panel, .spx-more { transition: none; }
-  .spx-head, .spx-panel.is-active .spx-head, .spx-panel.is-active .spx-desc, .spx-panel.is-active .spx-stage,
-  .spx-ring, .spx-core, .spx-core::after, .spx-tags, .spx-tags > li, .spx-tags > li > span, .spx-pager > button > i, .spx-panel.is-active .spx-pager { animation: none; }
+  .spx-head, .spx-panel.is-active .spx-head, .spx-panel.is-active .spx-desc, .spx-panel.is-active .spx-stage, .spx-tags > li { animation: spx-fade 500ms ease both; }
+  .spx-ring, .spx-core, .spx-core::after, .spx-tags, .spx-tags > li > span, .spx-pager > button > i { animation: none; }
+  .spx-panel.is-active .spx-pager { animation: spx-fade 500ms ease both; }
 }
 
 /* ======================================================================
@@ -1056,7 +1060,58 @@
 
 .csx-tile:hover .csx-coin > i { border-color: var(--clinova-color-dce6ff); }
 
+/* Reduce motion: the card fades in, the bars and the gauge still fill once; the light does not slide and the coins do not loop. */
 @media (prefers-reduced-motion: reduce) {
   .csx-glider, .csx-card, .csx-tile, .csx-list > .case-item { transition: none; }
-  .csx-card.is-next, .csx-card.is-prev, .csx-bars > button > i, .csx-gauge-fill, .csx-gauge-needle, .csx-coin > i { animation: none; }
+  .csx-card.is-next, .csx-card.is-prev { animation: spx-fade 450ms ease both; }
+  .csx-coin > i { animation: none; opacity: 1; }
+}
+
+
+/* ======================================================================
+   Speed: endless animations stop where nobody can see them, and phones get a lighter page
+   ====================================================================== */
+
+/* OffscreenPause marks every section that is out of view; nothing inside it needs to keep animating. */
+.is-offscreen,
+.is-offscreen *,
+.is-offscreen *::before,
+.is-offscreen *::after {
+  animation-play-state: paused !important;
+}
+
+/* Phones and touch screens. The things below cost a phone's graphics chip a lot and add little on a small screen:
+   blurring what is behind a panel, animating clip paths and text gradients, big spinning rings and drifting full-screen glows. */
+@media (max-width: 899px), (pointer: coarse) {
+  :root *,
+  :root *::before,
+  :root *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* The big drifting glows behind the page: one stays, still. */
+  .clinova-ambient span { animation: none; will-change: auto; }
+  .clinova-ambient span:nth-child(n + 2) { display: none; }
+
+  /* Rings behind the headings, the About orbits and the specialties orbit: still on a phone. */
+  :is(#about, #story, #partners, #faq, #contact-cta, #specialties, #case-studies) .MuiContainer-root::before { animation: none; }
+  .gyro-ring > i, .gyro-ring::after { animation: none; }
+  .spx-ring { animation: none; }
+
+  /* A section arrives with a fade instead of a growing clip path, a heading without the blur wipe. */
+  section[data-section="shown"] { animation: clinova-fade 600ms ease backwards; }
+  [data-reveal="shown"][data-reveal-variant="heading"] { animation: clinova-reveal 800ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--clinova-reveal-delay, 0ms) backwards; }
+
+  /* The coloured heading words stay still (a moving gradient inside text repaints it on every frame). */
+  [data-accent] { animation: none; }
+  html.is-ready #home h1 > span[data-accent] { animation: clinova-hero-line 1200ms var(--clinova-ease-out) calc(var(--l, 0) * 140ms + 250ms) backwards; }
+}
+
+/* A page that was already revealed before React took over does not play the hero entrance a second time. */
+html.is-live .hero-in,
+html.is-live #home h1 > span { animation: none !important; }
+html.is-live #home h1 > span[data-accent] { animation: clinova-accent-sweep 7s ease-in-out infinite !important; }
+@media (max-width: 899px), (pointer: coarse) {
+  html.is-live #home h1 > span[data-accent] { animation: none !important; }
 }

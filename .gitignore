@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Small logo copies made by scripts/build-logos.mjs
+public/logo/logo-s.webp
+public/logo/logo-m.webp

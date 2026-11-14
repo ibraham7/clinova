@@ -7,7 +7,7 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
-import clinovaLogo from "../../../public/logo/logo.png";
+import { logoMedium, logoSmall as clinovaLogo } from "../../config/logo";
 import { displayedReviews } from "../../config/clientReviews";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -284,7 +284,7 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
                 </Box>
 
                 {/* The logo again, huge and faint; the pointer lights it up (see motion.css). */}
-                <Box component="img" src={clinovaLogo} alt="" aria-hidden="true" className="clinova-mega" sx={{ maxWidth: 880, height: "auto" }} />
+                <Box component="img" src={logoMedium} alt="" aria-hidden="true" loading="lazy" className="clinova-mega" sx={{ maxWidth: 880, height: "auto" }} />
 
                 {/* =====================================
                     BOTTOM
