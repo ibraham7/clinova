@@ -14,14 +14,15 @@ export const gentleMotion = prefersReducedMotion;
  * Makes an element a "stage" that knows where the mouse is. While a real mouse moves over it, the element gets
  *   --px / --py   pointer position from -1 to 1 (0 in the middle), eased
  *   --mx / --my   the same position in percent, for gradients that follow the pointer
- * and the class "is-live". Everything visual is done in CSS (interactive.css). Touch screens, reduced motion and the text
- * editor get nothing, so the static look stays.
+ * and the class "is-live". Everything visual is done in CSS (interactive.css). Reduced motion and the text editor get nothing, so
+ * the static look stays.
  */
 export function usePointerStage<T extends HTMLElement>() {
     const ref = useRef<T>(null);
     useEffect(() => {
         const el = ref.current;
-        if (!el || isEditing() || prefersReducedMotion() || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+        // Mouse, finger or pen: the stage leans toward whatever touches it (a finger drags it, and it settles when lifted).
+        if (!el || isEditing() || prefersReducedMotion()) return;
         let frame = 0;
         let tx = 0, ty = 0, x = 0, y = 0;
         const paint = () => {
@@ -34,7 +35,6 @@ export function usePointerStage<T extends HTMLElement>() {
             frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.002 ? requestAnimationFrame(paint) : 0;
         };
         const move = (event: PointerEvent) => {
-            if (event.pointerType !== "mouse") return;
             const box = el.getBoundingClientRect();
             tx = ((event.clientX - box.left) / box.width) * 2 - 1;
             ty = ((event.clientY - box.top) / box.height) * 2 - 1;
@@ -48,10 +48,14 @@ export function usePointerStage<T extends HTMLElement>() {
         };
         el.addEventListener("pointermove", move);
         el.addEventListener("pointerleave", leave);
+        el.addEventListener("pointerup", leave);
+        el.addEventListener("pointercancel", leave);
         return () => {
             cancelAnimationFrame(frame);
             el.removeEventListener("pointermove", move);
             el.removeEventListener("pointerleave", leave);
+            el.removeEventListener("pointerup", leave);
+            el.removeEventListener("pointercancel", leave);
         };
     }, []);
     return ref;
