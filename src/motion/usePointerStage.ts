@@ -3,6 +3,12 @@ import { useEffect, useRef } from "react";
 /** True in the on-page text editor (?edit): decorative motion stays off there so texts are easy to click. */
 export const isEditing = () => typeof window !== "undefined" && new URLSearchParams(window.location.search).has("edit");
 export const prefersReducedMotion = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/**
+ * "Reduce motion" (on Android also switched on by battery saver) does not mean "no life at all": short fades, counting numbers,
+ * bars that fill once and slow colour changes are kept, while everything that moves a lot or loops forever (spinning, parallax,
+ * waves, floating, auto-advancing panels) is switched off. The CSS has the same split in its reduced-motion blocks.
+ */
+export const gentleMotion = prefersReducedMotion;
 
 /**
  * Makes an element a "stage" that knows where the mouse is. While a real mouse moves over it, the element gets

@@ -17,10 +17,8 @@ export default function BookingGrid() {
         const cells = Array.from(element.children) as HTMLElement[];
         // Only the slots that fit in the panel take part (the rest are clipped).
         const shown = () => cells.filter((cell) => cell.offsetTop + cell.offsetHeight <= element.clientHeight + 2);
-        if (prefersReducedMotion()) {
-            shown().forEach((cell, index) => { if (index % 4 === 1 || index % 7 === 3) cell.classList.add("is-booked"); });
-            return;
-        }
+        // With "reduce motion" the slots still get booked, only more slowly and with colour alone (see interactive.css).
+        const calm = prefersReducedMotion();
 
         let timer = 0;
         const timers: number[] = [];
@@ -34,7 +32,7 @@ export default function BookingGrid() {
                 return;
             }
             free[Math.floor(Math.random() * free.length)]?.classList.add("is-booked");
-            timer = window.setTimeout(step, 240 + Math.random() * 380);
+            timer = window.setTimeout(step, calm ? 900 + Math.random() * 900 : 240 + Math.random() * 380);
         };
         const visible = new IntersectionObserver(([entry]) => {
             window.clearTimeout(timer);

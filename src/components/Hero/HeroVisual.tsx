@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { keyframes } from "@emotion/react";
-import clinovaLogo from "../../../public/logo/logo.png";
+import { logoSmall as clinovaLogo } from "../../config/logo";
 
 const float = keyframes`
     0%, 100% { transform: translateY(0); }
