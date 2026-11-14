@@ -1080,6 +1080,16 @@
   animation-play-state: paused !important;
 }
 
+/* On phones a paused animation still costs the main thread on every frame (measured: ~150 paused loops kept it ~90% busy),
+   so out of view the endless loops are removed altogether and start again when the section comes back. */
+@media (max-width: 899px), (pointer: coarse) {
+  .is-offscreen *,
+  .is-offscreen *::before,
+  .is-offscreen *::after {
+    animation: none !important;
+  }
+}
+
 /* Phones and touch screens. The things below cost a phone's graphics chip a lot and add little on a small screen:
    blurring what is behind a panel, animating clip paths and text gradients, big spinning rings and drifting full-screen glows. */
 @media (max-width: 899px), (pointer: coarse) {
@@ -1091,7 +1101,7 @@
   }
 
   /* The big drifting glows behind the page: one stays, still. */
-  .clinova-ambient span { animation: none; will-change: auto; }
+  .clinova-ambient span, .clinova-ambient span:nth-child(n) { animation: none; will-change: auto; }
   .clinova-ambient span:nth-child(n + 2) { display: none; }
 
   /* Big dashed rings behind the headings, and the specialties ring: still on a phone. (The About orbits keep moving: see below.) */
@@ -1133,4 +1143,11 @@ html.is-live #home h1 > span { animation: none !important; }
 html.is-live #home h1 > span[data-accent] { animation: clinova-accent-sweep 7s ease-in-out infinite !important; }
 @media (max-width: 899px), (pointer: coarse) {
   html.is-live #home h1 > span[data-accent] { animation: none !important; }
+}
+
+/* Reduce motion: the rings, the breathing glow of the story core and of the case figure stand still. */
+@media (prefers-reduced-motion: reduce) {
+  .clinova-pulse-ring::after, .svc-live::after, .svc-tab.is-active .svc-num::after, .story-stop.is-on .story-stop-dot::after,
+  .story-core::after, .case-big::before { animation: none; opacity: 0; }
+  .story-core::after, .case-big::before { opacity: 0.55; }
 }

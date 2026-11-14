@@ -92,6 +92,11 @@ export default function PatientJourneyVisual() {
                 "& .journey-ring": { transformBox: "fill-box", transformOrigin: "center", animation: `${spin} 70s linear infinite` },
                 "& .journey-fill": { strokeDasharray: 168, animation: `${fillLine} 6s ease-in-out infinite` },
                 "& .journey-spark": { transformBox: "fill-box", transformOrigin: "center", animation: `${twinkle} 3.4s ease-in-out infinite` },
+                // Phones: cards, travelling lights, step pulses, ripples, the tick and the filling line keep moving; the glow, halo, turning ring,
+                // sparkles and typing bar stay still, so fewer SVG animations run at once.
+                "@media (max-width: 899px), (pointer: coarse)": {
+                    "& .journey-glow, & .journey-halo, & .journey-ring, & .journey-spark, & .journey-type": { animation: "none" },
+                },
                 "@media (prefers-reduced-motion: reduce)": {
                     "& .journey-card": { animationName: `${gentleDrift}`, animationDuration: "12s" },
                     "& .journey-signal": { animationDuration: "18s" },
