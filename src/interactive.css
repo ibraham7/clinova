@@ -1094,9 +1094,8 @@
   .clinova-ambient span { animation: none; will-change: auto; }
   .clinova-ambient span:nth-child(n + 2) { display: none; }
 
-  /* Rings behind the headings, the About orbits and the specialties orbit: still on a phone. */
-  :is(#about, #story, #partners, #faq, #contact-cta, #specialties, #case-studies) .MuiContainer-root::before { animation: none; }
-  .gyro-ring > i, .gyro-ring::after { animation: none; }
+  /* Big dashed rings behind the headings, and the specialties ring: still on a phone. (The About orbits keep moving: see below.) */
+  :is(#story, #partners, #faq, #contact-cta, #specialties, #case-studies) .MuiContainer-root::before { animation: none; }
   .spx-ring { animation: none; }
 
   /* A section arrives with a fade instead of a growing clip path, a heading without the blur wipe. */
@@ -1106,6 +1105,26 @@
   /* The coloured heading words stay still (a moving gradient inside text repaints it on every frame). */
   [data-accent] { animation: none; }
   html.is-ready #home h1 > span[data-accent] { animation: clinova-hero-line 1200ms var(--clinova-ease-out) calc(var(--l, 0) * 140ms + 250ms) backwards; }
+}
+
+/* About on a phone: nobody holds a mouse, so the orbits move by themselves (comets travelling along the rings, the whole set slowly
+   turning and breathing, stars twinkling); a finger on the section also tilts it (usePointerStage). Cheap: only transforms animate,
+   and OffscreenPause stops them when the section is not on screen. */
+@media (max-width: 899px), (pointer: coarse) {
+  .about-gyro-tilt { animation: about-sway 12s ease-in-out infinite alternate; }
+  .about-stage .gyro-ring { border-color: var(--clinova-rgba-142-168-232-0_22); }
+  /* A sideways finger tilts the orbits; an up-and-down finger still scrolls the page. */
+  .about-stage { touch-action: pan-y; }
+  .about-star { animation-duration: 3.8s; }
+}
+
+@keyframes about-sway {
+  from { scale: 0.96; rotate: -4deg; }
+  to { scale: 1.06; rotate: 4deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-gyro-tilt { animation: none; }
 }
 
 /* A page that was already revealed before React took over does not play the hero entrance a second time. */
