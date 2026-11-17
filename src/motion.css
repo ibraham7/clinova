@@ -1447,15 +1447,41 @@ html .clinova-shine.clinova-shine .MuiSvgIcon-root {
   70%, 100% { box-shadow: 0 0 0 22px transparent, 0 6px 24px rgba(201, 154, 75, 0.32); }
 }
 
-/* ---- Hero: the promise itself ("within 45 days") in gold ---- */
-html #home h1 > span:nth-child(3),
-html #home h1 > span[data-accent]:nth-child(3) {
-  background: linear-gradient(100deg, var(--clinova-gold-2) 15%, #f5d99a 45%, var(--clinova-gold) 62%, var(--clinova-gold-2) 90%);
-  background-size: 250% 100%;
+/* ---- Hero: the promise ("we add 15 new patients") shines in gold, the guarantee ("or we work for free") is underlined in gold ---- */
+.gold-shine {
+  font-weight: inherit;
+  background: linear-gradient(100deg, var(--clinova-gold-2) 10%, #f7dfa6 30%, #fff6dc 42%, var(--clinova-gold) 56%, var(--clinova-gold-2) 90%);
+  background-size: 260% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+  filter: drop-shadow(0 0 16px var(--clinova-gold-glow));
+  animation: gold-glint 4.2s ease-in-out infinite;
+}
+
+@keyframes gold-glint {
+  0%, 100% { background-position: 100% 0; }
+  50% { background-position: 0% 0; }
+}
+
+.gold-underline {
+  text-decoration: none;
+  padding-bottom: 0.12em;
+  background: linear-gradient(90deg, var(--clinova-gold-2), #f3d28f, var(--clinova-gold)) no-repeat 100% 100% / 100% 0.07em;
+  animation: gold-draw 1000ms var(--clinova-ease-out) 1.4s backwards;
+}
+
+[dir="ltr"] .gold-underline {
+  background-position: 0 100%;
+}
+
+@keyframes gold-draw {
+  from { background-size: 0 0.07em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gold-shine, .gold-underline { animation: none; }
 }
 
 /* ---- Small signals ---- */

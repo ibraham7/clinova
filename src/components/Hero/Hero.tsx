@@ -245,7 +245,7 @@ function Hero() {
                                     color: "var(--clinova-color-f5f7fa)",
                                 }}
                             >
-                                {t("نضيف 15 مريضاً جديداً")}
+                                <Box component="b" className="gold-shine">{t("نضيف 15 مريضاً جديداً")}</Box>
                         </Typography>
 
                             {/* السطر الثاني */}
@@ -274,7 +274,7 @@ function Hero() {
                                     backgroundClip: "text",
                                 }}
                             >
-                                {t("إلى عيادتك")}
+                                {t("إلى عيادتك")}{" "}{t("خلال 45 يوماً.")}
                         </Typography>
 
                             {/* السطر الثالث */}
@@ -294,7 +294,7 @@ function Hero() {
                                     color: "primary.main",
                                 }}
                             >
-                                {t("خلال 45 يوماً.")}
+                                {t("أو")}{" "}<Box component="u" className="gold-underline">{t("نشتغلك مجاناً.")}</Box>
                         </Typography>
                         </Box>
 
