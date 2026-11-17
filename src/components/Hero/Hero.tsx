@@ -159,11 +159,7 @@ function Hero() {
                                 backdropFilter: "blur(10px)",
                             }}
                         >
-                            <Box
-                                sx={{
-                                    width: 6,
-                                    height: 6,
-                                    flexShrink: 0,
+                            <Box className="hero-dot" sx={{ width: 6, height: 6, flexShrink: 0,
 
                                     borderRadius: "50%",
 
@@ -185,7 +181,7 @@ function Hero() {
                                     fontWeight: 500,
                                 }}
                             >
-                                {t("رعاية طبية أكثر وضوحًا وثقة")}
+                                {t("أرقام حقيقية مش وعود 💯")}
                         </Typography>
                         </Box>
 

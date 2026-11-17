@@ -1541,3 +1541,19 @@ html .svc-tab.is-active .svc-num {
     margin-top: 20px;
   }
 }
+
+/* ---- Hero label: the dot is gold and blinks like a live signal ---- */
+html .hero-dot {
+  background-color: var(--clinova-gold);
+  box-shadow: 0 0 12px var(--clinova-gold-glow);
+  animation: hero-dot-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes hero-dot-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 14px var(--clinova-gold-glow), 0 0 4px var(--clinova-gold); }
+  50% { opacity: 0.12; box-shadow: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html .hero-dot { animation: none; }
+}
