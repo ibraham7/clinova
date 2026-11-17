@@ -12,7 +12,7 @@ import survey from "../../config/survey.json";
 import { track } from "../../analytics/track";
 
 const storageKey = "clinova.survey";
-const openAfterMs = 60_000;
+const openAfterMs = 10_000;
 const snoozeMs = 3 * 24 * 60 * 60 * 1000;
 const questions = survey.questions;
 const contactStep = questions.length;
@@ -33,7 +33,7 @@ function remember(state: "dismissed" | "done") {
     try { localStorage.setItem(storageKey, JSON.stringify({ state, at: Date.now() })); } catch { /* Storage is optional. */ }
 }
 
-// Opens after one minute of visible browsing. `?survey` in the URL opens it right away for review.
+// Opens after ten seconds of visible browsing. `?survey` in the URL opens it right away for review.
 function useSurveyTimer(onDue: () => void) {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
