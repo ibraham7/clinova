@@ -199,11 +199,11 @@ function Hero() {
                                     "var(--clinova-font-family)",
 
                                 fontSize: {
-                                    xs: "3rem",
-                                    sm: "4rem",
-                                    md: "5rem",
-                                    lg: "6rem",
-                                    xl: "6.5rem",
+                                    xs: "2.2rem",
+                                    sm: "2.9rem",
+                                    md: "3.5rem",
+                                    lg: "3.9rem",
+                                    xl: "4.4rem",
                                 },
 
                                 fontWeight: 600,
@@ -240,7 +240,7 @@ function Hero() {
                                     color: "var(--clinova-color-f5f7fa)",
                                 }}
                             >
-                                {t("نرتقي")}
+                                {t("نضيف 15 مريضاً جديداً")}
                         </Typography>
 
                             {/* السطر الثاني */}
@@ -269,7 +269,7 @@ function Hero() {
                                     backgroundClip: "text",
                                 }}
                             >
-                                {t("بتجربة")}
+                                {t("إلى عيادتك")}
                         </Typography>
 
                             {/* السطر الثالث */}
@@ -289,7 +289,7 @@ function Hero() {
                                     color: "primary.main",
                                 }}
                             >
-                                {t("الرعاية الطبية")}
+                                {t("خلال 45 يوماً.")}
                         </Typography>
                         </Box>
 
@@ -325,7 +325,7 @@ function Hero() {
                                 direction: direction,
                             }}
                         >
-                            {t("في Clinova نساعد العيادات والأطباء على بناء حضور رقمي احترافي، وتجربة طبية أكثر سهولة ووضوحًا للمرضى، من خلال حلول رقمية مصممة بعناية.")}
+                            {t("في Clinova نقدم لك Clinic Growth Engine؛ منظومة نمو متكاملة تجمع بين التسويق الرقمي، والذكاء الاصطناعي، وفريق المبيعات وإدارة السمعة الرقمية، لندير رحلة المريض كاملة.")}
                         </Typography>
 
                         {/* =========================
