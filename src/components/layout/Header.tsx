@@ -16,10 +16,11 @@ import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import { logoSmall as clinovaLogo } from "../../config/logo";
 import { bookingLinkProps } from "../../config/contact";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
+import { showPartners } from "../../config/sections";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-const navItems: { label: string; short?: string; href: string; icon: typeof HomeRoundedIcon }[] = [
+const allNavItems: { label: string; short?: string; href: string; icon: typeof HomeRoundedIcon }[] = [
     { label: "الرئيسية", href: "#home", icon: HomeRoundedIcon },
     { label: "من نحن", href: "#about", icon: InfoRoundedIcon },
     { label: "لماذا Clinova؟", href: "#reach", icon: AutoAwesomeRoundedIcon },
@@ -33,6 +34,9 @@ const navItems: { label: string; short?: string; href: string; icon: typeof Home
     { label: "المدونة", href: "/blog", icon: ArticleRoundedIcon },
     { label: "تواصل معنا", href: "#contact-cta", icon: PhoneRoundedIcon },
 ];
+
+// The partners link goes away together with its section.
+const navItems = allNavItems.filter((item) => showPartners || item.href !== "#partners");
 
 const bookingStyle = {
     borderRadius: "999px", flexShrink: 0, minHeight: 44,

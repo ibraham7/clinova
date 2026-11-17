@@ -1,6 +1,6 @@
 import { useId, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
-import { Alert, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, IconButton, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AsYouType, getCountries, getCountryCallingCode, parsePhoneNumberFromString } from "libphonenumber-js/min";
@@ -13,7 +13,6 @@ export default function ProfileDownloadDialog({ outlined, onClose }: { outlined:
     const { t, direction, i18n } = useSiteTranslation();
     const [value, setValue] = useState("");
     const [country, setCountry] = useState<CountryCode>("TR");
-    const [consent, setConsent] = useState(false);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<"invalid" | "save" | null>(null);
     const titleId = useId();
@@ -43,13 +42,13 @@ export default function ProfileDownloadDialog({ outlined, onClose }: { outlined:
         if (!contact) { setError("invalid"); return; }
         setError(null); setBusy(true);
         try {
-            const lead = { contact, language, source: outlined ? "contact_cta" as const : "hero" as const, marketingConsent: consent };
+            const lead = { contact, language, source: outlined ? "contact_cta" as const : "hero" as const, marketingConsent: true };
             const payload = JSON.stringify(lead);
             if (submissionRef.current?.payload !== payload) submissionRef.current = { payload, requestId: crypto.randomUUID() };
             await submitProfileLead({ ...lead, requestId: submissionRef.current.requestId });
             pixelEvent("Lead", { content_name: "company_profile_download" });
             downloadRef.current?.click();
-            onClose(); setValue(""); setConsent(false);
+            onClose(); setValue("");
         } catch { setError("save"); }
         finally { setBusy(false); }
     };
@@ -78,7 +77,6 @@ export default function ProfileDownloadDialog({ outlined, onClose }: { outlined:
                         }} label={t("الإيميل أو رقم الهاتف")} type="text" autoComplete={type === "phone" ? "tel-national" : "email"} slotProps={{ htmlInput: { dir: "ltr", inputMode: type === "phone" ? "tel" : "text", maxLength: 254, "data-clarity-mask": "true" } }} error={error === "invalid"} />
                     </Stack>
                     {type === "phone" && <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1 }}>{t("اختر دولة الرقم المحلي، أو اكتب الرقم الدولي مع علامة +.")}</Typography>}
-                    <FormControlLabel sx={{ mt: 1.5, mx: 0, alignItems: "flex-start", gap: 0.5 }} control={<Checkbox disabled={busy} checked={consent} onChange={event => setConsent(event.target.checked)} />} label={<Typography variant="body2" sx={{ pt: 1.15 }}>{t("أوافق على التواصل معي حول خدمات Clinova (اختياري).")}</Typography>} />
                     {error && <Alert severity="error" sx={{ mt: 1 }}>{error === "invalid" ? t("أدخل إيميلاً صحيحاً أو رقم هاتف صحيحاً مع رمز الدولة.") : t("تعذر حفظ بياناتك. حاول مرة أخرى.")}</Alert>}
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 3 }}>

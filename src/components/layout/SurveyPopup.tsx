@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { FormEvent } from "react";
-import { Alert, Box, Button, ButtonBase, Checkbox, Dialog, FormControlLabel, IconButton, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, ButtonBase, Dialog, IconButton, Stack, TextField, Typography } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CardGiftcardRoundedIcon from "@mui/icons-material/CardGiftcardRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
@@ -59,7 +59,6 @@ export default function SurveyPopup() {
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [contact, setContact] = useState("");
-    const [consent, setConsent] = useState(false);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<"invalid" | "save" | null>(null);
     const requestId = useRef<string | null>(null);
@@ -91,7 +90,7 @@ export default function SurveyPopup() {
             requestId.current ??= crypto.randomUUID();
             const wish = answers.wish?.trim();
             await submitSurveyLead({
-                contact: parsed, language: i18n.resolvedLanguage ?? "ar", marketingConsent: consent, requestId: requestId.current,
+                contact: parsed, language: i18n.resolvedLanguage ?? "ar", marketingConsent: true, requestId: requestId.current,
                 answers: { ...answers, wish: wish || undefined } as Record<string, string>,
             });
             remember("done");
@@ -184,8 +183,6 @@ export default function SurveyPopup() {
                 <TextField fullWidth autoFocus value={contact} disabled={busy} error={error === "invalid"} label={t("الإيميل أو رقم الهاتف")}
                     onChange={(event) => { setContact(event.target.value); setError(null); }}
                     slotProps={{ htmlInput: { dir: "ltr", maxLength: 254, "data-clarity-mask": "true" } }} />
-                <FormControlLabel sx={{ mt: 1, mx: 0, alignItems: "flex-start", gap: 0.5 }} control={<Checkbox size="small" disabled={busy} checked={consent} onChange={(event) => setConsent(event.target.checked)} />}
-                    label={<Typography variant="body2" sx={{ pt: 0.9, fontSize: "0.78rem" }}>{t("أوافق على التواصل معي حول خدمات Clinova (اختياري).")}</Typography>} />
                 {error && <Alert severity="error" sx={{ mt: 1 }}>{error === "invalid" ? t("أدخل إيميلاً صحيحاً أو رقم هاتف صحيحاً مع رمز الدولة.") : t("تعذر حفظ بياناتك. حاول مرة أخرى.")}</Alert>}
                 <Button type="submit" fullWidth variant="contained" disabled={busy} startIcon={<CardGiftcardRoundedIcon />} className="clinova-shine" sx={{ mt: 2, borderRadius: "999px", py: 1.2, fontWeight: 700 }}>
                     {busy ? t("جارٍ الحفظ…") : t("احصل على 7 أيام مجانية")}

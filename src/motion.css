@@ -1400,3 +1400,175 @@ footer a:hover .MuiSvgIcon-root {
     width: min(340px, 84vw);
   }
 }
+
+/* ======================================================================
+   Gold accent (from the ad design): a warm break in the blue-grey palette, used sparingly:
+   every main call-to-action button, the key promise in the hero, the big result number, and a few small signals of progress.
+   ====================================================================== */
+:root {
+  --clinova-gold: #e6bc70;
+  --clinova-gold-2: #c99a4b;
+  --clinova-gold-ink: #121722;
+  --clinova-gold-glow: rgba(230, 188, 112, 0.45);
+}
+
+:root[data-theme="light"] {
+  --clinova-gold: #b5822a;
+  --clinova-gold-2: #946614;
+  --clinova-gold-glow: rgba(181, 130, 42, 0.38);
+}
+
+/* ---- Call-to-action buttons: every button that shines (booking, free trial, strategy call) ---- */
+html .clinova-shine.clinova-shine {
+  background: linear-gradient(135deg, #f3d28f, #e6bc70 52%, #c99a4b);
+  color: var(--clinova-gold-ink);
+  box-shadow: 0 6px 24px rgba(201, 154, 75, 0.32);
+}
+
+html .clinova-shine.clinova-shine:hover {
+  background: linear-gradient(135deg, #f8dda0, #eec57a 52%, #d3a355);
+  box-shadow: 0 8px 30px rgba(201, 154, 75, 0.48);
+}
+
+html .clinova-shine.clinova-shine .MuiSvgIcon-root {
+  color: inherit;
+}
+
+#contact-cta .clinova-shine {
+  animation-name: clinova-gold-pulse;
+}
+
+@keyframes clinova-gold-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(230, 188, 112, 0.5), 0 6px 24px rgba(201, 154, 75, 0.32); }
+  70%, 100% { box-shadow: 0 0 0 22px transparent, 0 6px 24px rgba(201, 154, 75, 0.32); }
+}
+
+/* ---- Hero: the promise ("we add 15 new patients") shines in gold, the guarantee ("or we work for free") is underlined in gold ---- */
+.gold-shine {
+  font-weight: inherit;
+  background: linear-gradient(100deg, var(--clinova-gold-2) 10%, #f7dfa6 30%, #fff6dc 42%, var(--clinova-gold) 56%, var(--clinova-gold-2) 90%);
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 16px var(--clinova-gold-glow));
+  animation: gold-glint 4.2s ease-in-out infinite;
+}
+
+@keyframes gold-glint {
+  0%, 100% { background-position: 100% 0; }
+  50% { background-position: 0% 0; }
+}
+
+.gold-underline {
+  text-decoration: none;
+  padding-bottom: 0.12em;
+  background: linear-gradient(90deg, var(--clinova-gold-2), #f3d28f, var(--clinova-gold)) no-repeat 100% 100% / 100% 0.07em;
+  animation: gold-draw 1000ms var(--clinova-ease-out) 1.4s backwards;
+}
+
+[dir="ltr"] .gold-underline {
+  background-position: 0 100%;
+}
+
+@keyframes gold-draw {
+  from { background-size: 0 0.07em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gold-shine, .gold-underline { animation: none; }
+}
+
+/* ---- Small signals ---- */
+.clinova-scroll-progress > div {
+  background: linear-gradient(90deg, var(--clinova-color-7894d2), var(--clinova-color-b8c8ef) 70%, var(--clinova-gold));
+  box-shadow: 0 0 12px var(--clinova-gold-glow);
+}
+
+.clinova-top-fill {
+  stroke: var(--clinova-gold);
+}
+
+.case-big > p:first-of-type {
+  color: var(--clinova-gold) !important;
+}
+
+@keyframes case-glow {
+  50% { text-shadow: 0 0 24px var(--clinova-gold-glow); }
+}
+
+.story-line b {
+  background: var(--clinova-gold);
+  box-shadow: 0 0 18px var(--clinova-gold-glow);
+}
+
+.story-stop.is-on .story-stop-dot,
+html .svc-tab.is-active .svc-num {
+  background: linear-gradient(135deg, #f3d28f, #c99a4b);
+  color: var(--clinova-gold-ink);
+  border-color: transparent;
+}
+
+.story-line i {
+  background: linear-gradient(90deg, var(--clinova-color-5f78b5), var(--clinova-color-b8c8ef) 65%, var(--clinova-gold));
+}
+
+[dir="rtl"] .story-line i {
+  background: linear-gradient(270deg, var(--clinova-color-5f78b5), var(--clinova-color-b8c8ef) 65%, var(--clinova-gold));
+}
+
+.queue-row.is-live > div:first-child > p:first-child {
+  color: var(--clinova-gold) !important;
+  border-color: var(--clinova-gold-glow) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #contact-cta .clinova-shine { animation: none; }
+}
+
+/* Short wide screens (a laptop with browser bars): a slightly smaller headline so the ticker below the hero stays in the first view. */
+@media (min-width: 1200px) and (max-height: 720px) {
+  html #home h1 {
+    font-size: 3.1rem;
+  }
+
+  html #home h1 + p {
+    margin-top: 20px;
+  }
+}
+
+/* ---- Hero label: the dot is gold and blinks like a live signal ---- */
+html .hero-dot {
+  background-color: var(--clinova-gold);
+  box-shadow: 0 0 12px var(--clinova-gold-glow);
+  animation: hero-dot-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes hero-dot-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 14px var(--clinova-gold-glow), 0 0 4px var(--clinova-gold); }
+  50% { opacity: 0.12; box-shadow: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html .hero-dot { animation: none; }
+}
+
+/* ---- Hero: the three promises under the button, and a faster glint on the main button ---- */
+html .hero-check {
+  color: var(--clinova-gold);
+  filter: drop-shadow(0 0 6px var(--clinova-gold-glow));
+}
+
+#home .clinova-shine::after {
+  animation: clinova-shine-fast 2.2s ease-in-out 0.8s infinite;
+}
+
+@keyframes clinova-shine-fast {
+  0%, 35% { translate: -130% 0; }
+  75%, 100% { translate: 130% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home .clinova-shine::after { animation: none; }
+}

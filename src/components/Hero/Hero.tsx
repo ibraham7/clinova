@@ -3,9 +3,14 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import { bookingLinkProps } from "../../config/contact";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import ProfileDownloadButton from "../layout/ProfileDownloadButton";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import HeroVisual from "./HeroVisual";
 import HeroCanvas from "../../motion/HeroCanvas";
+
+// The three promises under the booking button.
+const C1 = "30 دقيقة";
+const C2 = "بدون أي التزام";
+const C3 = "جيب شريكك معك";
 
 function Hero() {
     const { direction, t, isRtl } = useSiteTranslation();
@@ -17,20 +22,25 @@ function Hero() {
             dir={isRtl ? "ltr" : "rtl"}
             sx={{
                 position: "relative",
-                minHeight: "100vh",
+                // A little shorter than the screen, so the moving ticker under the hero is already visible in the first view.
+                minHeight: "calc(100vh - 66px)",
+                "@supports (height: 100svh)": { minHeight: "calc(100svh - 66px)" },
                 display: "flex",
                 alignItems: "center",
                 overflow: "hidden",
 
+                // On a wide screen the padding follows the screen height, so on a short laptop screen the headline
+                // block still fits above the ticker.
                 pt: {
                     xs: 16,
-                    md: 18,
-                    lg: 20,
+                    md: 16,
+                    lg: "clamp(92px, calc(100vh - 740px), 120px)",
                 },
 
                 pb: {
                     xs: 10,
                     md: 12,
+                    lg: "clamp(8px, calc(100vh - 760px), 96px)",
                 },
 
                 background:
@@ -70,7 +80,7 @@ function Hero() {
                         alignItems: "center",
 
                         minHeight: {
-                            lg: "calc(100vh - 140px)",
+                            lg: "calc(100vh - 290px)",
                         },
 
                         gap: {
@@ -92,7 +102,7 @@ function Hero() {
                             minHeight: {
                                 xs: 220,
                                 md: 320,
-                                lg: 520,
+                                lg: 300,
                             },
 
                             order: {
@@ -154,11 +164,7 @@ function Hero() {
                                 backdropFilter: "blur(10px)",
                             }}
                         >
-                            <Box
-                                sx={{
-                                    width: 6,
-                                    height: 6,
-                                    flexShrink: 0,
+                            <Box className="hero-dot" sx={{ width: 6, height: 6, flexShrink: 0,
 
                                     borderRadius: "50%",
 
@@ -180,7 +186,7 @@ function Hero() {
                                     fontWeight: 500,
                                 }}
                             >
-                                {t("رعاية طبية أكثر وضوحًا وثقة")}
+                                {t("أرقام حقيقية مش وعود 💯")}
                         </Typography>
                         </Box>
 
@@ -199,11 +205,11 @@ function Hero() {
                                     "var(--clinova-font-family)",
 
                                 fontSize: {
-                                    xs: "3rem",
-                                    sm: "4rem",
-                                    md: "5rem",
-                                    lg: "6rem",
-                                    xl: "6.5rem",
+                                    xs: "2.2rem",
+                                    sm: "2.9rem",
+                                    md: "3.5rem",
+                                    lg: "3.9rem",
+                                    xl: "4.4rem",
                                 },
 
                                 fontWeight: 600,
@@ -240,7 +246,7 @@ function Hero() {
                                     color: "var(--clinova-color-f5f7fa)",
                                 }}
                             >
-                                {t("نرتقي")}
+                                <Box component="b" className="gold-shine">{t("نضيف 15 مريضاً جديداً")}</Box>
                         </Typography>
 
                             {/* السطر الثاني */}
@@ -269,7 +275,7 @@ function Hero() {
                                     backgroundClip: "text",
                                 }}
                             >
-                                {t("بتجربة")}
+                                {t("إلى عيادتك")}{" "}{t("خلال 45 يوماً.")}
                         </Typography>
 
                             {/* السطر الثالث */}
@@ -289,7 +295,7 @@ function Hero() {
                                     color: "primary.main",
                                 }}
                             >
-                                {t("الرعاية الطبية")}
+                                {t("أو")}{" "}<Box component="u" className="gold-underline">{t("نشتغلك مجاناً.")}</Box>
                         </Typography>
                         </Box>
 
@@ -325,7 +331,7 @@ function Hero() {
                                 direction: direction,
                             }}
                         >
-                            {t("في Clinova نساعد العيادات والأطباء على بناء حضور رقمي احترافي، وتجربة طبية أكثر سهولة ووضوحًا للمرضى، من خلال حلول رقمية مصممة بعناية.")}
+                            {t("في Clinova نقدم لك Clinic Growth Engine؛ منظومة نمو متكاملة تجمع بين التسويق الرقمي، والذكاء الاصطناعي، وفريق المبيعات وإدارة السمعة الرقمية، لندير رحلة المريض كاملة.")}
                         </Typography>
 
                         {/* =========================
@@ -378,7 +384,7 @@ function Hero() {
                                         "var(--clinova-font-family)",
                                 }}
                             >
-                                {t("احجز موعدًا")}
+                                {t("احجز مكالمة التقييم المجانية")}
                         </Button>
 
                             <Button
@@ -409,8 +415,13 @@ function Hero() {
                                 {t("جرّب نظام الـ CRM")}
                             </Button>
                         </Stack>
-                        <Box className="hero-in" style={{ "--i": 6 } as React.CSSProperties} sx={{ mt: 1.5, display: "flex", justifyContent: { xs: "center", lg: "flex-start" } }}>
-                            <ProfileDownloadButton />
+                        <Box className="hero-in" style={{ "--i": 6 } as React.CSSProperties} sx={{ mt: 2.5, display: "flex", flexWrap: "wrap", justifyContent: { xs: "center", lg: "flex-start" }, columnGap: { xs: 2, md: 3 }, rowGap: 1 }}>
+                            {[C1, C2, C3].map((point) => (
+                                <Box key={point} sx={{ display: "inline-flex", alignItems: "center", gap: 0.8, fontFamily: "var(--clinova-font-family)", fontSize: "0.9rem", color: "text.secondary" }}>
+                                    <CheckCircleRoundedIcon className="hero-check" sx={{ fontSize: 20 }} />
+                                    {t(point)}
+                                </Box>
+                            ))}
                         </Box>
                     </Box>
                 </Box>

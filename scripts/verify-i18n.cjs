@@ -8,6 +8,7 @@ const workspace = fs.mkdtempSync(path.join(root, 'node_modules', '.clinova-i18n-
 const locales = ['ar', 'en', 'tr', 'fr'];
 const resources = Object.fromEntries(locales.map((locale) => [locale, JSON.parse(fs.readFileSync(path.join(root, 'src/i18n/locales', locale + '.json'), 'utf8'))]));
 const baseKeys = Object.keys(resources.ar).sort();
+const partnersOn = /showPartners\s*=\s*true/.test(fs.readFileSync(path.join(root, 'src/config/sections.ts'), 'utf8'));
 for (const locale of locales) {
     assert.deepEqual(Object.keys(resources[locale]).sort(), baseKeys, locale + ': missing translations');
     for (const [key, value] of Object.entries(resources[locale])) {
@@ -82,9 +83,10 @@ function compile(directory) {
             assert.equal(saved.get('clinova.language'), locale);
             const html = renderToStaticMarkup(React.createElement(ThemeProvider, { theme: createTheme(mode === "dark" ? darkTheme : lightTheme, { direction }) }, React.createElement(ColorModeProvider, { initialMode: mode }, React.createElement(App))));
             const content = html.replace(/<style\b[^>]*>[\s\S]*?<\/style>/g, '').replace(/<[^>]*>/g, ' ');
-            assert.ok(content.includes(resources[locale]['احجز موعدًا']), locale + ': booking CTA');
+            assert.ok(content.includes(resources[locale]['احجز مكالمة التقييم المجانية']), locale + ': booking CTA');
             assert.ok(content.includes(resources[locale]['استجابة فورية']), locale + ': revised journey');
-            assert.ok(content.includes(resources[locale]['مناطق جغرافية']), locale + ': revised regions');
+            // The "regions" figure lives in the partners section, which can be switched off (src/config/sections.ts).
+            if (partnersOn) assert.ok(content.includes(resources[locale]['مناطق جغرافية']), locale + ': revised regions');
             assert.ok(html.includes('https://wa.me/905516886988'), locale + ': WhatsApp link');
             const expectedBottom = 'https://wa.me/905516886988?text=' + encodeURIComponent(resources[locale]['مرحباً، أود الحصول على معلومات حول خدمات Clinova. هل يمكنكم مساعدتي؟']);
             assert.ok(html.includes(expectedBottom), locale + ': bottom WhatsApp message');
@@ -93,8 +95,8 @@ function compile(directory) {
             assert.ok(html.includes('https://www.instagram.com/' + instagram + '/'), locale + ': Instagram account');
             assert.ok(!html.includes('https://www.instagram.com/' + (locale === 'tr' ? 'clinova0' : 'clinova_tr') + '/'), locale + ': wrong Instagram account');
             assert.ok(html.includes('https://www.linkedin.com/in/3nkrch/'), locale + ': LinkedIn profile');
-            assert.equal((html.match(/href="\/documents\/clinova-profile.pdf"/g) || []).length, 2, locale + ': two profile download links');
-            assert.equal((html.match(/download="Clinova-Company-Profile.pdf"/g) || []).length, 2, locale + ': download attributes');
+            assert.equal((html.match(/href="\/documents\/clinova-profile.pdf"/g) || []).length, 1, locale + ': one profile download link (the hero has promises instead)');
+            assert.equal((html.match(/download="Clinova-Company-Profile.pdf"/g) || []).length, 1, locale + ': download attributes');
             assert.ok(content.includes(resources[locale]['الملف التعريفي']), locale + ': translated download label');
             if (locale !== 'ar') { assert.ok(!/[\u0600-\u06ff]/.test(content), locale + ': Arabic text leaked'); }
             assert.ok(html.includes(resources[locale][mode === 'dark' ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن']), 'Theme toggle label');

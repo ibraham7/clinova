@@ -116,7 +116,7 @@ function StorySection() {
                     className="story-track"
                     data-animated={animated ? "" : undefined}
                     style={{ "--p": animated ? 0 : 1 } as CSSProperties}
-                    sx={{ position: "relative", height: animated ? { md: "280vh" } : "auto" }}
+                    sx={{ position: "relative", height: animated ? { md: "190vh" } : "auto" }}
                 >
                     <Box
                         className="story-stage"

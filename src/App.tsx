@@ -16,6 +16,7 @@ import MedicalTicker from "./components/MedicalTicker/MedicalTicker";
 import AboutSection from "./components/AboutSection/AboutSection";
 import { siteContent } from "./content/siteContent";
 import { displayedReviews } from "./config/clientReviews";
+import { showPartners } from "./config/sections";
 
 // Each section below the first screen is its own file, loaded right after the first paint (see components/motion/Deferred.tsx).
 const loaders = {
@@ -68,7 +69,7 @@ function App() {
       <Deferred id="services" load={loaders.services} height={960} />
       <Deferred id="specialties" load={loaders.specialties} height={960} />
       <Deferred id="case-studies" load={loaders["case-studies"]} height={1290} />
-      <Deferred id="partners" load={loaders.partners} height={775} />
+      {showPartners && <Deferred id="partners" load={loaders.partners} height={775} />}
       {siteContent.videos.length > 0 && <Deferred id="videos" load={loaders.videos} height={700} />}
       {displayedReviews.length > 0 && <Deferred id="reviews" load={loaders.reviews} height={830} />}
       <Deferred id="faq" load={loaders.faq} height={1345} />
