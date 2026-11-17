@@ -1404,3 +1404,103 @@ footer a:hover .MuiSvgIcon-root {
     width: min(340px, 84vw);
   }
 }
+
+/* ======================================================================
+   Gold accent (from the ad design): a warm break in the blue-grey palette, used sparingly:
+   every main call-to-action button, the key promise in the hero, the big result number, and a few small signals of progress.
+   ====================================================================== */
+:root {
+  --clinova-gold: #e6bc70;
+  --clinova-gold-2: #c99a4b;
+  --clinova-gold-ink: #121722;
+  --clinova-gold-glow: rgba(230, 188, 112, 0.45);
+}
+
+:root[data-theme="light"] {
+  --clinova-gold: #b5822a;
+  --clinova-gold-2: #946614;
+  --clinova-gold-glow: rgba(181, 130, 42, 0.38);
+}
+
+/* ---- Call-to-action buttons: every button that shines (booking, free trial, strategy call) ---- */
+html .clinova-shine.clinova-shine {
+  background: linear-gradient(135deg, #f3d28f, #e6bc70 52%, #c99a4b);
+  color: var(--clinova-gold-ink);
+  box-shadow: 0 6px 24px rgba(201, 154, 75, 0.32);
+}
+
+html .clinova-shine.clinova-shine:hover {
+  background: linear-gradient(135deg, #f8dda0, #eec57a 52%, #d3a355);
+  box-shadow: 0 8px 30px rgba(201, 154, 75, 0.48);
+}
+
+html .clinova-shine.clinova-shine .MuiSvgIcon-root {
+  color: inherit;
+}
+
+#contact-cta .clinova-shine {
+  animation-name: clinova-gold-pulse;
+}
+
+@keyframes clinova-gold-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(230, 188, 112, 0.5), 0 6px 24px rgba(201, 154, 75, 0.32); }
+  70%, 100% { box-shadow: 0 0 0 22px transparent, 0 6px 24px rgba(201, 154, 75, 0.32); }
+}
+
+/* ---- Hero: the promise itself ("within 45 days") in gold ---- */
+html #home h1 > span:nth-child(3),
+html #home h1 > span[data-accent]:nth-child(3) {
+  background: linear-gradient(100deg, var(--clinova-gold-2) 15%, #f5d99a 45%, var(--clinova-gold) 62%, var(--clinova-gold-2) 90%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ---- Small signals ---- */
+.clinova-scroll-progress > div {
+  background: linear-gradient(90deg, var(--clinova-color-7894d2), var(--clinova-color-b8c8ef) 70%, var(--clinova-gold));
+  box-shadow: 0 0 12px var(--clinova-gold-glow);
+}
+
+.clinova-top-fill {
+  stroke: var(--clinova-gold);
+}
+
+.case-big > p:first-of-type {
+  color: var(--clinova-gold) !important;
+}
+
+@keyframes case-glow {
+  50% { text-shadow: 0 0 24px var(--clinova-gold-glow); }
+}
+
+.story-line b {
+  background: var(--clinova-gold);
+  box-shadow: 0 0 18px var(--clinova-gold-glow);
+}
+
+.story-stop.is-on .story-stop-dot,
+html .svc-tab.is-active .svc-num {
+  background: linear-gradient(135deg, #f3d28f, #c99a4b);
+  color: var(--clinova-gold-ink);
+  border-color: transparent;
+}
+
+.story-line i {
+  background: linear-gradient(90deg, var(--clinova-color-5f78b5), var(--clinova-color-b8c8ef) 65%, var(--clinova-gold));
+}
+
+[dir="rtl"] .story-line i {
+  background: linear-gradient(270deg, var(--clinova-color-5f78b5), var(--clinova-color-b8c8ef) 65%, var(--clinova-gold));
+}
+
+.queue-row.is-live > div:first-child > p:first-child {
+  color: var(--clinova-gold) !important;
+  border-color: var(--clinova-gold-glow) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #contact-cta .clinova-shine { animation: none; }
+}
