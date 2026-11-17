@@ -83,7 +83,7 @@ function compile(directory) {
             assert.equal(saved.get('clinova.language'), locale);
             const html = renderToStaticMarkup(React.createElement(ThemeProvider, { theme: createTheme(mode === "dark" ? darkTheme : lightTheme, { direction }) }, React.createElement(ColorModeProvider, { initialMode: mode }, React.createElement(App))));
             const content = html.replace(/<style\b[^>]*>[\s\S]*?<\/style>/g, '').replace(/<[^>]*>/g, ' ');
-            assert.ok(content.includes(resources[locale]['احجز موعدًا']), locale + ': booking CTA');
+            assert.ok(content.includes(resources[locale]['احجز مكالمة التقييم المجانية']), locale + ': booking CTA');
             assert.ok(content.includes(resources[locale]['استجابة فورية']), locale + ': revised journey');
             // The "regions" figure lives in the partners section, which can be switched off (src/config/sections.ts).
             if (partnersOn) assert.ok(content.includes(resources[locale]['مناطق جغرافية']), locale + ': revised regions');
@@ -95,8 +95,8 @@ function compile(directory) {
             assert.ok(html.includes('https://www.instagram.com/' + instagram + '/'), locale + ': Instagram account');
             assert.ok(!html.includes('https://www.instagram.com/' + (locale === 'tr' ? 'clinova0' : 'clinova_tr') + '/'), locale + ': wrong Instagram account');
             assert.ok(html.includes('https://www.linkedin.com/in/3nkrch/'), locale + ': LinkedIn profile');
-            assert.equal((html.match(/href="\/documents\/clinova-profile.pdf"/g) || []).length, 2, locale + ': two profile download links');
-            assert.equal((html.match(/download="Clinova-Company-Profile.pdf"/g) || []).length, 2, locale + ': download attributes');
+            assert.equal((html.match(/href="\/documents\/clinova-profile.pdf"/g) || []).length, 1, locale + ': one profile download link (the hero has promises instead)');
+            assert.equal((html.match(/download="Clinova-Company-Profile.pdf"/g) || []).length, 1, locale + ': download attributes');
             assert.ok(content.includes(resources[locale]['الملف التعريفي']), locale + ': translated download label');
             if (locale !== 'ar') { assert.ok(!/[\u0600-\u06ff]/.test(content), locale + ': Arabic text leaked'); }
             assert.ok(html.includes(resources[locale][mode === 'dark' ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن']), 'Theme toggle label');

@@ -1557,3 +1557,22 @@ html .hero-dot {
 @media (prefers-reduced-motion: reduce) {
   html .hero-dot { animation: none; }
 }
+
+/* ---- Hero: the three promises under the button, and a faster glint on the main button ---- */
+html .hero-check {
+  color: var(--clinova-gold);
+  filter: drop-shadow(0 0 6px var(--clinova-gold-glow));
+}
+
+#home .clinova-shine::after {
+  animation: clinova-shine-fast 2.2s ease-in-out 0.8s infinite;
+}
+
+@keyframes clinova-shine-fast {
+  0%, 35% { translate: -130% 0; }
+  75%, 100% { translate: 130% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home .clinova-shine::after { animation: none; }
+}

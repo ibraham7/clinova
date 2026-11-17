@@ -3,9 +3,14 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import { bookingLinkProps } from "../../config/contact";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import ProfileDownloadButton from "../layout/ProfileDownloadButton";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import HeroVisual from "./HeroVisual";
 import HeroCanvas from "../../motion/HeroCanvas";
+
+// The three promises under the booking button.
+const C1 = "30 دقيقة";
+const C2 = "بدون أي التزام";
+const C3 = "جيب شريكك معك";
 
 function Hero() {
     const { direction, t, isRtl } = useSiteTranslation();
@@ -379,7 +384,7 @@ function Hero() {
                                         "var(--clinova-font-family)",
                                 }}
                             >
-                                {t("احجز موعدًا")}
+                                {t("احجز مكالمة التقييم المجانية")}
                         </Button>
 
                             <Button
@@ -410,8 +415,13 @@ function Hero() {
                                 {t("جرّب نظام الـ CRM")}
                             </Button>
                         </Stack>
-                        <Box className="hero-in" style={{ "--i": 6 } as React.CSSProperties} sx={{ mt: 1.5, display: "flex", justifyContent: { xs: "center", lg: "flex-start" } }}>
-                            <ProfileDownloadButton />
+                        <Box className="hero-in" style={{ "--i": 6 } as React.CSSProperties} sx={{ mt: 2.5, display: "flex", flexWrap: "wrap", justifyContent: { xs: "center", lg: "flex-start" }, columnGap: { xs: 2, md: 3 }, rowGap: 1 }}>
+                            {[C1, C2, C3].map((point) => (
+                                <Box key={point} sx={{ display: "inline-flex", alignItems: "center", gap: 0.8, fontFamily: "var(--clinova-font-family)", fontSize: "0.9rem", color: "text.secondary" }}>
+                                    <CheckCircleRoundedIcon className="hero-check" sx={{ fontSize: 20 }} />
+                                    {t(point)}
+                                </Box>
+                            ))}
                         </Box>
                     </Box>
                 </Box>
