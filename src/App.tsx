@@ -17,6 +17,7 @@ import ServicesSection from "./components/ServicesSection/ServicesSection";
 import SpecialtiesSection from "./components/SpecialtiesSection/SpecialtiesSection";
 import CaseStudiesSection from "./components/CaseStudiesSection/CaseStudiesSection";
 import PartnersSection from "./components/PartnersSection/PartnersSection";
+import { showPartners } from "./config/sections";
 import ClientVideosSection from "./components/ClientVideosSection/ClientVideosSection";
 import { siteContent } from "./content/siteContent";
 import ReviewsSection from "./components/ReviewsSection/ReviewsSection";
@@ -52,7 +53,7 @@ function App() {
       <ServicesSection />
       <SpecialtiesSection />
       <CaseStudiesSection />
-      <PartnersSection />
+      {showPartners && <PartnersSection />}
       {siteContent.videos.length > 0 && <ClientVideosSection />}
       {displayedReviews.length > 0 && <ReviewsSection />}
       <FAQSection />
