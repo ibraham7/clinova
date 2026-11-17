@@ -1504,3 +1504,14 @@ html .svc-tab.is-active .svc-num {
 @media (prefers-reduced-motion: reduce) {
   #contact-cta .clinova-shine { animation: none; }
 }
+
+/* Short wide screens (a laptop with browser bars): a slightly smaller headline so the ticker below the hero stays in the first view. */
+@media (min-width: 1200px) and (max-height: 720px) {
+  html #home h1 {
+    font-size: 3.1rem;
+  }
+
+  html #home h1 + p {
+    margin-top: 20px;
+  }
+}

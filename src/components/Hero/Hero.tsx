@@ -17,20 +17,25 @@ function Hero() {
             dir={isRtl ? "ltr" : "rtl"}
             sx={{
                 position: "relative",
-                minHeight: "100vh",
+                // A little shorter than the screen, so the moving ticker under the hero is already visible in the first view.
+                minHeight: "calc(100vh - 66px)",
+                "@supports (height: 100svh)": { minHeight: "calc(100svh - 66px)" },
                 display: "flex",
                 alignItems: "center",
                 overflow: "hidden",
 
+                // On a wide screen the padding follows the screen height, so on a short laptop screen the headline
+                // block still fits above the ticker.
                 pt: {
                     xs: 16,
-                    md: 18,
-                    lg: 20,
+                    md: 16,
+                    lg: "clamp(92px, calc(100vh - 740px), 120px)",
                 },
 
                 pb: {
                     xs: 10,
                     md: 12,
+                    lg: "clamp(8px, calc(100vh - 760px), 96px)",
                 },
 
                 background:
@@ -70,7 +75,7 @@ function Hero() {
                         alignItems: "center",
 
                         minHeight: {
-                            lg: "calc(100vh - 140px)",
+                            lg: "calc(100vh - 290px)",
                         },
 
                         gap: {
@@ -92,7 +97,7 @@ function Hero() {
                             minHeight: {
                                 xs: 220,
                                 md: 320,
-                                lg: 520,
+                                lg: 300,
                             },
 
                             order: {

@@ -30,7 +30,7 @@ export default function HeroVisual() {
             className="clinova-parallax"
             sx={{
                 width: "100%",
-                maxWidth: { xs: 350, md: 440, lg: 520 },
+                maxWidth: { xs: 350, md: 440, lg: "clamp(300px, calc(100vh - 330px), 520px)" },
                 aspectRatio: "1",
                 mx: "auto",
                 pointerEvents: "none",
