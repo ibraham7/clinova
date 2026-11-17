@@ -7,7 +7,7 @@ import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
 import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
-import clinovaLogo from "../../../public/logo/logo.png";
+import { logoSmall as clinovaLogo } from "../../config/logo";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 
 // Two chapters of the same story. On a large screen the section is a scroll-driven story: the picture keeps still while

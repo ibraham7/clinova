@@ -13,7 +13,7 @@ import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
-import clinovaLogo from "../../../public/logo/logo.png";
+import { logoSmall as clinovaLogo } from "../../config/logo";
 import { bookingLinkProps } from "../../config/contact";
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { showPartners } from "../../config/sections";
@@ -48,7 +48,7 @@ const bookingStyle = {
 
 function Logo({ compact = false }: { compact?: boolean }) {
     return <Box component="a" href="#home" sx={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-        <Box component="img" src={clinovaLogo} alt="Clinova Healthcare" sx={{ width: compact ? { xs: 108, sm: 130 } : 145, height: "auto", display: "block", filter: "var(--clinova-logo-filter)" }} />
+        <Box component="img" src={clinovaLogo} alt="Clinova Healthcare" width={440} height={147} sx={{ width: compact ? { xs: 108, sm: 130 } : 145, height: "auto", display: "block", filter: "var(--clinova-logo-filter)" }} />
     </Box>;
 }
 

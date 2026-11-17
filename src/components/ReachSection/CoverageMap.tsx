@@ -9,6 +9,13 @@ const pulse = keyframes`
     25%, 40% { opacity: 0.8; transform: scale(1.3); }
 `;
 
+// Phone version of the pin glow: drawn by plain HTML spans on top of the map, so only opacity and scale change and the browser
+// can run them on the compositor instead of redrawing the whole SVG on every frame.
+const fxPulse = keyframes`
+    0%, 65%, 100% { opacity: 0.12; scale: 0.8; }
+    25%, 40% { opacity: 0.8; scale: 1.3; }
+`;
+
 export const coverageLight = keyframes`
     0%, 65%, 100% { opacity: 0.25; }
     25%, 40% { opacity: 1; }
@@ -85,6 +92,7 @@ export default function CoverageMap({ focus, onFocus }: { focus: string | null; 
     const activeCodes = new Set<string>(coverageLocations.map((location) => location.code));
 
     return (
+        <>
         <Box
             component="svg"
             ref={ref}
@@ -154,6 +162,17 @@ export default function CoverageMap({ focus, onFocus }: { focus: string | null; 
                 },
                 "&.is-drawn .coverage-location": { animation: `${pinIn} 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards`, transformBox: "fill-box", transformOrigin: "center" },
                 "&.is-drawn .coverage-link": { animation: `${pinIn} 900ms ease backwards` },
+                // Phones: the map keeps its pulsing pins, the drawing-in, the ripples and the travelling dashes of the focused route; the
+                // glow of every region, the scan line, the dashes on all the other routes and the drop shadows are left out. Every running
+                // animation inside an SVG makes the browser redo the whole picture on each frame, and that is what slowed the phone down.
+                "@media (max-width: 899px), (pointer: coarse)": {
+                    "& .coverage-pulse, & .coverage-light": { display: "none" },
+                    "& .coverage-region": { animation: "none" },
+                    "&.is-drawn .coverage-country.coverage-region": { animation: `${draw} 1.8s ease-out both` },
+                    "& .coverage-link:not(.is-focus) .coverage-link-flow": { animation: "none" },
+                    "& .coverage-scan": { display: "none" },
+                    "& .coverage-highlight": { filter: "none" },
+                },
                 "@media (prefers-reduced-motion: reduce)": {
                     "& .coverage-pulse, & .coverage-light, & .coverage-region, & .coverage-link-flow, & .coverage-scan, & .coverage-location.is-focus .coverage-ripple": { animation: "none" },
                     "& .coverage-scan": { display: "none" },
@@ -273,5 +292,73 @@ export default function CoverageMap({ focus, onFocus }: { focus: string | null; 
             );
             })}
         </Box>
+        <Box
+            aria-hidden="true"
+            className={[drawn ? "is-drawn" : "is-waiting", focus ? "has-focus" : ""].join(" ")}
+            sx={{
+                display: "none",
+                position: "absolute",
+                width: "94%",
+                height: "94%",
+                left: "3%",
+                pointerEvents: "none",
+                containerType: "size",
+                "@media (max-width: 899px), (pointer: coarse)": { display: "block" },
+                "&.is-waiting": { visibility: "hidden" },
+                "& .fx-map": {
+                    position: "absolute",
+                    inset: 0,
+                    margin: "auto",
+                    width: "min(100cqw, calc(100cqh * 600 / 560))",
+                    height: "min(100cqh, calc(100cqw * 560 / 600))",
+                    containerType: "size",
+                },
+                "& .fx-pin": { position: "absolute", width: 0, height: 0, transition: "scale 600ms ease, opacity 600ms ease", scale: "1" },
+                "& .fx-pin.is-focus": { scale: "1.45" },
+                "&.has-focus .fx-pin:not(.is-focus)": { opacity: 0.4 },
+                "& .fx-ring": {
+                    position: "absolute",
+                    width: "3.667cqw",
+                    aspectRatio: "1",
+                    left: 0,
+                    top: 0,
+                    translate: "-50% -50%",
+                    borderRadius: "50%",
+                    border: "1px solid var(--clinova-color-8ea8e8)",
+                    background: "var(--clinova-rgba-142-168-232-0_15)",
+                    animation: `${fxPulse} 5s ease-in-out infinite`,
+                },
+                "& .fx-dot": {
+                    position: "absolute",
+                    width: "1.167cqw",
+                    aspectRatio: "1",
+                    left: 0,
+                    top: 0,
+                    translate: "-50% -50%",
+                    borderRadius: "50%",
+                    background: "var(--clinova-color-dce6ff)",
+                    boxShadow: "0 0 6px var(--clinova-color-8ea8e8)",
+                    animation: `${coverageLight} 5s ease-in-out infinite`,
+                },
+                "@media (prefers-reduced-motion: reduce)": {
+                    "& .fx-ring, & .fx-dot": { animation: "none" },
+                    "& .fx-ring": { opacity: 0.4 },
+                },
+            }}
+        >
+            <div className="fx-map">
+                {coverageLocations.map((location, index) => (
+                    <span
+                        key={location.code}
+                        className={focus === location.code ? "fx-pin is-focus" : "fx-pin"}
+                        style={{ left: `${(location.x / 600) * 100}%`, top: `${(location.y / 560) * 100}%` }}
+                    >
+                        <span className="fx-ring" style={{ animationDelay: `${index * -0.8}s` }} />
+                        <span className="fx-dot" style={{ animationDelay: `${index * -0.8}s` }} />
+                    </span>
+                ))}
+            </div>
+        </Box>
+        </>
     );
 }

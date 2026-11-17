@@ -25,12 +25,14 @@ function Counter({ value, duration }: { value: string; duration: number }) {
         const [, prefix, digits, suffix] = match;
         const target = Number(digits.replace(/,/g, ""));
         let frame = 0;
+        // With "reduce motion" the numbers still count, just faster: counting is not movement.
+        const length = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? Math.min(duration, 700) : duration;
         const observer = new IntersectionObserver(([entry]) => {
             if (!entry?.isIntersecting) return;
             observer.disconnect();
             const start = performance.now();
             const tick = (now: number) => {
-                const progress = Math.min((now - start) / duration, 1);
+                const progress = Math.min((now - start) / length, 1);
                 const eased = 1 - Math.pow(1 - progress, 3);
                 setDisplay(progress < 1 ? `${prefix}${format(target * eased, digits)}${suffix}` : value);
                 if (progress < 1) frame = requestAnimationFrame(tick);

@@ -1,13 +1,18 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import { Box, Container, Typography } from "@mui/material";
+import { useOffscreenPause, usePointerStage } from "../../motion/usePointerStage";
 
 function AboutSection() {
     const { direction, t } = useSiteTranslation();
+    const stage = usePointerStage<HTMLElement>();
+    useOffscreenPause(stage);
 
     return (
         <Box
             component="section"
             id="about"
+            ref={stage}
+            className="about-stage"
             sx={{
                 position: "relative",
                 overflow: "hidden",
@@ -19,7 +24,7 @@ function AboutSection() {
                     lg: 20,
                 },
 
-                pb: { xs: 4, md: 6 },
+                pb: { xs: 7, md: 12 },
 
                 background:
                     "radial-gradient(circle at 50% 0%, var(--clinova-rgba-95-120-181-0_1), transparent 38%), var(--clinova-color-0b111b)",
@@ -58,8 +63,20 @@ function AboutSection() {
                 }}
             />
 
+            {/* Three orbits around the headline: they lean toward the mouse, a light travels along each (interactive.css). */}
+            <Box aria-hidden="true" className="about-gyro">
+                <div className="about-gyro-tilt">
+                    <span className="gyro-ring gyro-ring-a"><i /></span>
+                    <span className="gyro-ring gyro-ring-b"><i /></span>
+                    <span className="gyro-ring gyro-ring-c"><i /></span>
+                </div>
+                {[0, 1, 2, 3, 4, 5, 6].map((index) => <span key={index} className="about-star" />)}
+            </Box>
+            <Box component="span" aria-hidden="true" className="about-lens" />
+
             <Container>
                 <Box
+                    className="about-copy"
                     sx={{
                         position: "relative",
                         zIndex: 1,

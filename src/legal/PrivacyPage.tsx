@@ -3,7 +3,7 @@ import type { SiteLanguage } from "../i18n";
 import { useSiteTranslation } from "../i18n/useSiteTranslation";
 import BlogLayout from "../blog/BlogLayout";
 import InlineText from "../blog/InlineText";
-import { formatDate } from "../blog/articles";
+import { formatDate } from "../blog/format";
 import { contactEmail, contactPhone } from "../seo/site";
 import { openConsentSettings } from "./ConsentBanner";
 import { privacy, privacyUpdated } from "./privacy";

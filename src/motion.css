@@ -492,12 +492,34 @@ html.fx-hover [data-fx~="tilt"] {
 
 /* ---- Story: the arrow between the two cards pulses, a new case study eases in ---- */
 .clinova-pulse-ring {
-  animation: clinova-ring-pulse 2.8s ease-out infinite;
+  position: relative;
+  box-shadow: 0 0 35px var(--clinova-rgba-142-168-232-0_18);
+}
+
+.clinova-pulse-ring::after,
+.svc-live::after,
+.svc-tab.is-active .svc-num::after,
+.story-stop.is-on .story-stop-dot::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid var(--clinova-color-8ea8e8);
+  pointer-events: none;
+  opacity: 0;
+  animation: clinova-ring-out 2.6s ease-out infinite;
 }
 
 @keyframes clinova-ring-pulse {
   0% { box-shadow: 0 0 0 0 var(--clinova-rgba-142-168-232-0_4), 0 0 35px var(--clinova-rgba-142-168-232-0_18); }
   70%, 100% { box-shadow: 0 0 0 22px transparent, 0 0 35px var(--clinova-rgba-142-168-232-0_18); }
+}
+
+/* A ring that spreads and fades: the same picture as the old box-shadow pulse, but only scale and opacity change, which the
+   graphics chip does without repainting. */
+@keyframes clinova-ring-out {
+  0% { opacity: 0.6; scale: 1; }
+  70%, 100% { opacity: 0; scale: var(--ring-to, 1.8); }
 }
 
 .clinova-swap {
@@ -771,7 +793,12 @@ footer a:hover .MuiSvgIcon-root {
 }
 
 #contact-cta .clinova-shine {
-  animation: clinova-ring-pulse 2.8s ease-out infinite;
+  animation: clinova-cta-ring 2.8s ease-out infinite;
+}
+
+@keyframes clinova-cta-ring {
+  0% { outline: 2px solid var(--clinova-rgba-142-168-232-0_4); outline-offset: 0; }
+  70%, 100% { outline: 2px solid transparent; outline-offset: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -803,7 +830,7 @@ footer a:hover .MuiSvgIcon-root {
 }
 
 @keyframes clinova-chip {
-  50% { box-shadow: 0 0 12px var(--clinova-rgba-142-168-232-0_3); border-color: var(--clinova-rgba-142-168-232-0_6); }
+  50% { scale: 1.06; opacity: 0.85; }
 }
 
 .queue-panel::after {
@@ -883,11 +910,13 @@ footer a:hover .MuiSvgIcon-root {
 }
 
 .svc-live {
-  animation: clinova-ring-pulse 2s ease-out infinite;
+  position: relative;
+  --ring-to: 4;
 }
 
 .svc-tab.is-active .svc-num {
-  animation: svc-num-ring 2.4s ease-out infinite;
+  position: relative;
+  --ring-to: 1.7;
 }
 
 @keyframes svc-num-ring {
@@ -961,61 +990,6 @@ footer a:hover .MuiSvgIcon-root {
   .clinova-swap .MuiSvgIcon-root { animation: none; }
 }
 
-/* ---- Specialties: the lit card breathes (icon, number ring, light along the top, tags popping in) ---- */
-.spec-icon {
-  position: relative;
-}
-
-.spec-icon::before {
-  content: "";
-  position: absolute;
-  inset: -12px;
-  border-radius: 50%;
-  border: 1px solid var(--clinova-color-8ea8e8);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.spec-card.is-active .spec-icon > svg {
-  animation: spec-float 3.4s ease-in-out infinite;
-}
-
-.spec-card.is-active .spec-icon::before {
-  animation: spec-halo 2.6s ease-out infinite;
-}
-
-@keyframes spec-float {
-  50% { translate: 0 -6px; rotate: -4deg; }
-}
-
-@keyframes spec-halo {
-  from { opacity: 0.55; scale: 0.7; }
-  to { opacity: 0; scale: 1.6; }
-}
-
-.spec-card.is-active .spec-num {
-  animation: svc-num-ring 2.4s ease-out infinite;
-}
-
-.spec-card.is-active::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(90deg, transparent, var(--clinova-color-dce6ff), transparent) no-repeat;
-  background-size: 35% 2px;
-  pointer-events: none;
-  animation: svc-sweep 3s linear infinite;
-}
-
-.spec-card.is-active .spec-tag {
-  animation: spec-tag-in 650ms var(--clinova-ease-out) calc(var(--t, 0) * 100ms + 150ms) backwards;
-}
-
-@keyframes spec-tag-in {
-  from { opacity: 0; translate: 0 12px; scale: 0.8; }
-}
-
 /* The same slow ring behind the headings of Specialties and Case studies. */
 :is(#specialties, #case-studies) .MuiContainer-root {
   position: relative;
@@ -1038,8 +1012,6 @@ footer a:hover .MuiSvgIcon-root {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .spec-card.is-active .spec-icon > svg, .spec-card.is-active .spec-icon::before,
-  .spec-card.is-active .spec-num, .spec-card.is-active::after, .spec-card.is-active .spec-tag,
   :is(#specialties, #case-studies) .MuiContainer-root::before { animation: none; }
 }
 
@@ -1091,12 +1063,23 @@ footer a:hover .MuiSvgIcon-root {
   100% { translate: 360% 0; }
 }
 
-.case-big > p:first-of-type {
+.case-big {
+  isolation: isolate;
+}
+
+.case-big::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(60% 90% at 50% 45%, var(--clinova-rgba-142-168-232-0_22), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
   animation: case-glow 3.4s ease-in-out infinite;
 }
 
 @keyframes case-glow {
-  50% { text-shadow: 0 0 22px var(--clinova-rgba-142-168-232-0_45); }
+  50% { opacity: 1; }
 }
 
 .case-result .case-stat {
@@ -1108,10 +1091,12 @@ footer a:hover .MuiSvgIcon-root {
 }
 
 /* The light is the top 2 px of a box that copies the card's rounded corners, so it bends with them instead of poking out. */
+/* Only the top 64 px (twice the card's corner radius) is repainted as the light moves, not the whole card. */
 .case-result::after {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 0 0 auto 0;
+  height: 64px;
   border-radius: inherit;
   background: linear-gradient(90deg, transparent, var(--clinova-color-dce6ff), transparent) no-repeat;
   background-size: 30% 2px;
@@ -1121,7 +1106,7 @@ footer a:hover .MuiSvgIcon-root {
 
 @media (prefers-reduced-motion: reduce) {
   .case-item.is-active::after { animation: none; }
-  .case-item.is-active > .MuiSvgIcon-root, .case-big::after, .case-big > p:first-of-type,
+  .case-item.is-active > .MuiSvgIcon-root, .case-big::after, .case-big::before,
   .case-result .case-stat, .case-result::after { animation: none; }
 }
 
@@ -1227,11 +1212,21 @@ footer a:hover .MuiSvgIcon-root {
   border: 1px solid var(--clinova-rgba-142-168-232-0_4);
   background: radial-gradient(circle at 35% 30%, var(--clinova-color-24344f), var(--clinova-color-101925));
   box-shadow: 0 0 40px var(--clinova-rgba-142-168-232-0_28);
+}
+
+.story-core::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 78px var(--clinova-rgba-142-168-232-0_45);
+  opacity: 0;
+  pointer-events: none;
   animation: story-core 4s ease-in-out infinite;
 }
 
 @keyframes story-core {
-  50% { box-shadow: 0 0 78px var(--clinova-rgba-142-168-232-0_45); }
+  50% { opacity: 1; }
 }
 
 /* Chapters: in the scroll story they sit on top of each other and swap; otherwise both are simply shown. */
@@ -1317,7 +1312,8 @@ footer a:hover .MuiSvgIcon-root {
 .story-stop.is-on .story-stop-dot {
   background: var(--clinova-color-8ea8e8);
   color: var(--clinova-color-0b111b);
-  animation: svc-num-ring 2.4s ease-out infinite;
+  position: relative;
+  --ring-to: 1.55;
 }
 
 .story-line {

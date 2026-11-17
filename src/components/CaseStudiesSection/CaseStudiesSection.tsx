@@ -1,6 +1,6 @@
 import { useSiteTranslation } from "../../i18n/useSiteTranslation";
 import CountUp from "../motion/CountUp";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from "react";
 import {
     Box,
     Container,
@@ -171,6 +171,50 @@ function CaseStudiesSection() {
         return () => { observer.disconnect(); stop(); };
     }, []);
 
+    // Which way the result card comes in: 1 when moving to a later clinic, -1 to an earlier one.
+    const [from, setFrom] = useState(1);
+    const select = (id: string) => {
+        touched.current = Date.now();
+        const delta = caseStudies.findIndex((item) => item.id === id) - caseStudies.findIndex((item) => item.id === activeId);
+        if (!delta) return;
+        setFrom(delta > 0 ? 1 : -1);
+        setActiveId(id);
+    };
+    const step = (delta: number) => {
+        const index = caseStudies.findIndex((item) => item.id === activeId);
+        touched.current = Date.now();
+        setFrom(delta > 0 ? 1 : -1);
+        setActiveId(caseStudies[(index + delta + caseStudies.length) % caseStudies.length].id);
+    };
+    // The light behind the list follows the chosen clinic.
+    const list = useRef<HTMLDivElement>(null);
+    useLayoutEffect(() => {
+        const element = list.current;
+        const place = () => {
+            const item = element?.querySelector<HTMLElement>(".case-item.is-active");
+            if (!element || !item) return;
+            element.style.setProperty("--csx-y", `${item.offsetTop}px`);
+            element.style.setProperty("--csx-h", `${item.offsetHeight}px`);
+        };
+        place();
+        if (!element || typeof ResizeObserver === "undefined") return;
+        const observer = new ResizeObserver(place);
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, [activeId]);
+    // Arrow keys, Home and End move through the clinics.
+    const onListKey = (event: KeyboardEvent<HTMLElement>) => {
+        const move = { ArrowDown: 1, ArrowUp: -1, Home: -99, End: 99 }[event.key];
+        if (move === undefined) return;
+        const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(".case-item"));
+        const index = items.indexOf(document.activeElement as HTMLElement);
+        if (index < 0) return;
+        const next = Math.max(0, Math.min(items.length - 1, index + move));
+        if (next === index) return;
+        event.preventDefault();
+        items[next].focus();
+        select(caseStudies[next].id);
+    };
     const activeCase =
         caseStudies.find(
             (caseStudy) => caseStudy.id === activeId,
@@ -361,23 +405,27 @@ function CaseStudiesSection() {
                     ================================== */}
 
                     <Stack
+                        ref={list}
+                        className="csx-list"
+                        onKeyDown={onListKey}
                         sx={{
+                            position: "relative",
                             gap: 1.2,
-
                             direction: direction,
-
                             order: {
                                 xs: 2,
                                 lg: 1,
                             },
                         }}
                     >
+                        {/* A light that slides to the chosen clinic (interactive.css, "Case studies"). */}
+                        <span aria-hidden="true" className="csx-glider" />
                         {caseStudies.map((caseStudy) => {
                             const active =
                                 activeId === caseStudy.id;
 
                             return (
-                                <CaseItem key={caseStudy.id} caseStudy={caseStudy} active={active} onHover={() => { touched.current = Date.now(); }} onClick={() => { touched.current = Date.now(); setActiveId( caseStudy.id, ); }} />
+                                <CaseItem key={caseStudy.id} caseStudy={caseStudy} active={active} onHover={() => { touched.current = Date.now(); }} onClick={() => select(caseStudy.id)} />
                             );
                         })}
                     </Stack>
@@ -386,7 +434,7 @@ function CaseStudiesSection() {
                         RESULT CARD
                     ================================== */}
 
-                    <ResultCard key={activeCase.number} caseStudy={activeCase} />
+                    <ResultCard key={activeCase.number} caseStudy={activeCase} from={from} onPick={select} onStep={step} />
                 </Box>
             </Container>
         </Box>
@@ -546,8 +594,31 @@ function CaseItem({ caseStudy, active, onClick, onHover, }: { caseStudy: CaseStu
    RESULT CARD
 ========================================= */
 
-function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
-    const { direction, t } = useSiteTranslation();
+function ResultCard({ caseStudy, from, onPick, onStep }: { caseStudy: CaseStudy; from: number; onPick: (id: string) => void; onStep: (delta: number) => void }) {
+    const { direction, t, isRtl } = useSiteTranslation();
+    // On touch screens a sideways swipe moves to the next or the previous clinic; the card follows the finger.
+    const swipe = useRef<{ x: number; y: number; id: number } | null>(null);
+    const onPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
+        if (event.pointerType === "mouse") return;
+        swipe.current = { x: event.clientX, y: event.clientY, id: event.pointerId };
+    };
+    const onPointerMove = (event: ReactPointerEvent<HTMLElement>) => {
+        const start = swipe.current;
+        if (!start || start.id !== event.pointerId) return;
+        const dx = event.clientX - start.x;
+        if (Math.abs(event.clientY - start.y) > Math.abs(dx) + 12) { swipe.current = null; event.currentTarget.style.removeProperty("--csx-drag"); return; }
+        event.currentTarget.style.setProperty("--csx-drag", `${(dx * 0.35).toFixed(0)}px`);
+    };
+    const onPointerEnd = (event: ReactPointerEvent<HTMLElement>) => {
+        const start = swipe.current;
+        swipe.current = null;
+        event.currentTarget.style.removeProperty("--csx-drag");
+        if (!start || start.id !== event.pointerId) return;
+        const dx = event.clientX - start.x;
+        if (Math.abs(dx) < 64) return;
+        // Dragging toward the start of the line brings the next clinic, like turning a page.
+        onStep((dx < 0) !== isRtl ? 1 : -1);
+    };
 
     const bookedAppointments = caseStudy.stats.find(
         (stat) => stat.label === "موعد محجوز",
@@ -555,7 +626,8 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
 
     return (
         <Box
-            component="article" data-fx="spot" className="clinova-swap case-result" aria-label={t("تجربة {{name}}", { name: t(caseStudy.name) })}
+            component="article" data-fx="spot" className={`case-result csx-card ${from > 0 ? "is-next" : "is-prev"}`} aria-label={t("تجربة {{name}}", { name: t(caseStudy.name) })}
+            onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerEnd} onPointerCancel={onPointerEnd}
             sx={{
                 order: { xs: 1, lg: 2 },
                 minWidth: 0,
@@ -673,7 +745,7 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                     gap: 1.5,
                 }}
             >
-                {caseStudy.stats.map((stat, statIndex) => ( <Box key={stat.label} data-fx="spot" className="case-stat" style={{ "--i": statIndex } as React.CSSProperties} sx={{ p: 2,
+                {caseStudy.stats.map((stat, statIndex) => ( <Box key={stat.label} data-fx="spot" className="case-stat csx-tile" style={{ "--i": statIndex } as CSSProperties} sx={{ p: 2,
                             textAlign: "center",
                             borderRadius: 2,
                             border: "1px solid var(--clinova-rgba-142-168-232-0_1)",
@@ -693,11 +765,48 @@ function ResultCard({ caseStudy }: { caseStudy: CaseStudy }) {
                         <Typography sx={{ mt: 0.7, fontSize: "0.7rem", color: "text.secondary" }}>
                             {t(stat.label)}
                         </Typography>
+                        {stat.label === "موعد محجوز" && <AppointmentBars activeId={caseStudy.id} onPick={onPick} />}
+                        {stat.label === "العائد على الاستثمار" && <ReturnGauge value={stat.value} />}
+                        {stat.label === "متوسط إيراد الموعد" && <span aria-hidden="true" className="csx-coin"><i /><i /><i /></span>}
                     </Box>
                 ))}
             </Box>
         </Box>
     );
+}
+
+const statOf = (caseStudy: CaseStudy, label: string) => Number.parseFloat((caseStudy.stats.find((stat) => stat.label === label)?.value ?? "0").replace(/[^\d.]/g, "")) || 0;
+const mostAppointments = Math.max(...caseStudies.map((item) => statOf(item, "موعد محجوز")));
+
+/**
+ * Booked appointments of all five clinics side by side, the shown clinic lit. A bar under the mouse names its clinic,
+ * a click shows it. A picture of numbers that are already on the page, so it is hidden from screen readers.
+ */
+function AppointmentBars({ activeId, onPick }: { activeId: string; onPick: (id: string) => void }) {
+    const { t } = useSiteTranslation();
+    return <div aria-hidden="true" className="csx-bars" dir="ltr">
+        {caseStudies.map((item, index) => {
+            const count = statOf(item, "موعد محجوز");
+            return <button key={item.id} type="button" tabIndex={-1} className={item.id === activeId ? "is-current" : undefined} onClick={() => onPick(item.id)}
+                style={{ "--h": `${Math.round((count / mostAppointments) * 100)}%`, "--i": index } as CSSProperties}>
+                <i />
+                <span>{t(item.name)} · {count}</span>
+            </button>;
+        })}
+    </div>;
+}
+
+const gaugeLength = Math.PI * 40;
+const gaugeTop = 8;
+
+/** The return on investment as a half-circle gauge that sweeps up to its value (decoration: the figure is written above it). */
+function ReturnGauge({ value }: { value: string }) {
+    const share = Math.max(0, Math.min(1, (Number.parseFloat(value.replace(/[^\d.]/g, "")) || 0) / gaugeTop));
+    return <svg aria-hidden="true" focusable="false" className="csx-gauge" viewBox="0 0 100 56">
+        <path className="csx-gauge-track" d="M10 50 A40 40 0 0 1 90 50" />
+        <path className="csx-gauge-fill" d="M10 50 A40 40 0 0 1 90 50" style={{ "--len": gaugeLength, "--off": gaugeLength * (1 - share) } as CSSProperties} />
+        <g className="csx-gauge-needle" style={{ "--turn": `${share * 180 - 90}deg` } as CSSProperties}><line x1="50" y1="50" x2="50" y2="20" /><circle cx="50" cy="50" r="3.2" /></g>
+    </svg>;
 }
 
 export default CaseStudiesSection;

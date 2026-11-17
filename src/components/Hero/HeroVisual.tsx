@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { keyframes } from "@emotion/react";
-import clinovaLogo from "../../../public/logo/logo.png";
+import { logoSmall as clinovaLogo } from "../../config/logo";
 
 const float = keyframes`
     0%, 100% { transform: translateY(0); }
@@ -46,6 +46,12 @@ export default function HeroVisual() {
                 "& .hero-d1": { translate: "calc(var(--clinova-px, 0) * -16px) calc(var(--clinova-py, 0) * -12px)", transition: "translate 900ms cubic-bezier(0.22, 1, 0.36, 1)" },
                 "& .hero-d2": { translate: "calc(var(--clinova-px, 0) * 22px) calc(var(--clinova-py, 0) * 16px)", transition: "translate 900ms cubic-bezier(0.22, 1, 0.36, 1)" },
                 "& .hero-d3": { translate: "calc(var(--clinova-px, 0) * -30px) calc(var(--clinova-py, 0) * 20px)", transition: "translate 900ms cubic-bezier(0.22, 1, 0.36, 1)" },
+                // Phones keep the four floating cards and the travelling signal; the breathing halo and the turning dashed ring stay still,
+                // since several animations running inside one SVG make the browser redo the whole picture on every frame.
+                "@media (max-width: 899px), (pointer: coarse)": {
+                    "& .hero-halo": { animation: "none", opacity: 0.5 },
+                    "& .hero-spin": { animation: "none" },
+                },
                 "@media (prefers-reduced-motion: reduce)": {
                     "& .hero-float": { animationName: `${gentleFloat}`, animationDuration: "12s" },
                     "& .hero-halo": { animationDuration: "16s" },
