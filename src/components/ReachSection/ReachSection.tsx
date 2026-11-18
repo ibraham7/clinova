@@ -685,6 +685,7 @@ function ReachStat({
         <Box>
             <Typography
                 dir="ltr"
+                className="gold-num"
                 sx={{
                     fontFamily:
                         '"Plus Jakarta Sans", sans-serif',

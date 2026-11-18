@@ -1616,3 +1616,50 @@ footer button:hover {
 html {
   accent-color: var(--clinova-gold);
 }
+
+/* ---- Gold in the "why us" section: the coverage map's flowing routes, lights, rings and scan line, the two figures, and the section rail ---- */
+.gold-num {
+  color: var(--clinova-gold) !important;
+}
+
+svg:has(.coverage-scan) stop {
+  stop-color: var(--clinova-gold);
+}
+
+.coverage-link-flow {
+  stroke: color-mix(in srgb, var(--clinova-gold) 70%, transparent) !important;
+}
+
+.coverage-light {
+  fill: #fff1c8 !important;
+  filter: drop-shadow(0 0 5px var(--clinova-gold-glow));
+}
+
+.coverage-pulse {
+  stroke: var(--clinova-gold) !important;
+  fill: color-mix(in srgb, var(--clinova-gold) 16%, transparent) !important;
+}
+
+.coverage-ripple {
+  stroke: var(--clinova-gold) !important;
+}
+
+.fx-ring {
+  border-color: var(--clinova-gold) !important;
+  background: color-mix(in srgb, var(--clinova-gold) 16%, transparent) !important;
+}
+
+.fx-dot {
+  background: #fff1c8 !important;
+  box-shadow: 0 0 6px var(--clinova-gold) !important;
+}
+
+.section-rail-line > i {
+  background: linear-gradient(180deg, transparent, var(--clinova-gold));
+}
+
+.section-rail > button.is-current > b {
+  background: var(--clinova-gold);
+  border-color: #fff1c8;
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--clinova-gold) 18%, transparent), 0 0 18px var(--clinova-gold);
+}
