@@ -1663,3 +1663,41 @@ svg:has(.coverage-scan) stop {
   border-color: #fff1c8;
   box-shadow: 0 0 0 5px color-mix(in srgb, var(--clinova-gold) 18%, transparent), 0 0 18px var(--clinova-gold);
 }
+
+/* ---- FAQ dial in gold: the filling ring, the ticks, the needle light, the number on hover and the numbered keys ---- */
+html .faq-dial-progress {
+  stroke: var(--clinova-gold);
+  filter: drop-shadow(0 0 6px var(--clinova-gold-glow));
+}
+
+html .faq-dial-tick.is-done {
+  stroke: var(--clinova-gold);
+}
+
+html .faq-dial-tick.is-point {
+  stroke: #fff1c8;
+}
+
+html .faq-dial-needle > i {
+  background: #fff1c8;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--clinova-gold) 22%, transparent), 0 0 22px var(--clinova-gold);
+}
+
+html .faq-dial-face {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--clinova-gold) 22%, transparent), 0 24px 60px var(--clinova-rgba-0-0-0-0_2);
+}
+
+html .faq-dial-face.is-peek .faq-dial-num > span {
+  color: var(--clinova-gold);
+}
+
+html .faq-dial-keys > button:hover,
+html .faq-dial-keys > button.is-peek {
+  border-color: color-mix(in srgb, var(--clinova-gold) 55%, transparent);
+}
+
+html .faq-dial-keys > button.is-active {
+  border-color: var(--clinova-gold);
+  background: color-mix(in srgb, var(--clinova-gold) 16%, transparent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--clinova-gold) 22%, transparent);
+}
