@@ -46,7 +46,7 @@ function Counter({ value, duration }: { value: string; duration: number }) {
         };
     }, [match, value, duration]);
 
-    return <span ref={ref} style={{ fontVariantNumeric: "tabular-nums" }}>{display}</span>;
+    return <span ref={ref} className="count-gold" style={{ fontVariantNumeric: "tabular-nums" }}>{display}</span>;
 }
 
 // Counts the first number inside a label ("385K", "AED 475", "6.4×") up from zero once it scrolls into view.

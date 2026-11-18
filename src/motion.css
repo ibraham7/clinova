@@ -1586,3 +1586,33 @@ html section h2 > .MuiBox-root {
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
+
+/* ---- Even more gold: pointer light and borders on cards, icons, counters, footer links, text selection ---- */
+.fx-spot {
+  background: radial-gradient(340px circle at var(--fx-mx, 50%) var(--fx-my, 50%), color-mix(in srgb, var(--clinova-gold) 15%, transparent), transparent 72%);
+}
+
+html [data-fx~="spot"]:hover {
+  border-color: color-mix(in srgb, var(--clinova-gold) 45%, transparent) !important;
+}
+
+[data-fx~="spot"]:hover .MuiSvgIcon-root {
+  color: var(--clinova-gold);
+}
+
+.count-gold {
+  color: var(--clinova-gold);
+}
+
+footer a:hover,
+footer button:hover {
+  color: var(--clinova-gold) !important;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--clinova-gold) 40%, transparent);
+}
+
+html {
+  accent-color: var(--clinova-gold);
+}
