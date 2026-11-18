@@ -1579,12 +1579,20 @@ html .sec-dot {
   box-shadow: 0 0 12px var(--clinova-gold-glow);
 }
 
-html section h2 > .MuiBox-root {
+/* Section headings: the first (white) line is gold; the coloured second line keeps its own blue gradient. */
+html section h2 {
   background: linear-gradient(100deg, var(--clinova-gold-2) 5%, #f3d28f 45%, var(--clinova-gold) 70%, var(--clinova-gold-2));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+}
+
+html section h2 > [data-accent] {
+  background: linear-gradient(100deg, var(--clinova-color-7894d2) 20%, var(--clinova-color-b8c8ef) 40%, var(--clinova-color-8ea8e8) 50%, var(--clinova-color-7894d2) 80%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 /* ---- Even more gold: pointer light and borders on cards, icons, counters, footer links, text selection ---- */
