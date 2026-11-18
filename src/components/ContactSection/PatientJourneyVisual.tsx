@@ -124,19 +124,19 @@ export default function PatientJourneyVisual() {
                 <circle className="journey-ring" cx="250" cy="215" r="196" stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.14" strokeDasharray="3 11" />
 
                 <path d={arc} stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.18" strokeWidth="2" />
-                <path className="journey-signal" d={arc} stroke="var(--clinova-color-bdcef5)" strokeWidth="2" strokeLinecap="round" strokeDasharray="6 94" />
+                <path className="journey-signal" d={arc} stroke="var(--clinova-gold)" strokeWidth="2" strokeLinecap="round" strokeDasharray="6 94" />
                 <path d={lowerArc} stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.12" strokeDasharray="3 8" />
 
                 {/* Lights travelling the journey: a comet along the arc, packets along the lower curve. */}
                 {[0, 0.16, 0.32].map((lag, index) => (
-                    <circle key={lag} r={4 - index * 1.1} fill="var(--clinova-color-dce6ff)" opacity={1 - index * 0.32}>
+                    <circle key={lag} r={4 - index * 1.1} fill="#fff1c8" opacity={1 - index * 0.32}>
                         <animateMotion dur="5.5s" begin={`${lag}s`} repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines="0.45 0 0.55 1">
                             <mpath href="#clinova-journey-arc" />
                         </animateMotion>
                     </circle>
                 ))}
                 {[0, -2, -4].map((begin) => (
-                    <rect key={begin} x="-7" y="-4" width="14" height="8" rx="3" fill="var(--clinova-color-8ea8e8)" fillOpacity="0.8">
+                    <rect key={begin} x="-7" y="-4" width="14" height="8" rx="3" fill="var(--clinova-gold)" fillOpacity="0.85">
                         <animateMotion dur="6s" begin={`${begin}s`} repeatCount="indefinite" rotate="auto">
                             <mpath href="#clinova-journey-lower" />
                         </animateMotion>
@@ -148,8 +148,8 @@ export default function PatientJourneyVisual() {
                     <path d="M62 247H111A8 8 0 0 1 119 255V279A8 8 0 0 1 111 287H87L73 298V287H62A8 8 0 0 1 54 279V255A8 8 0 0 1 62 247Z" stroke="var(--clinova-color-bdcef5)" strokeWidth="2" strokeLinejoin="round" />
                     <path className="journey-type" d="M67 262H105" stroke="var(--clinova-color-8ea8e8)" strokeWidth="3" strokeLinecap="round" />
                     <path className="journey-type" style={{ animationDelay: "-1.2s" }} d="M67 272H92" stroke="var(--clinova-color-8ea8e8)" strokeWidth="3" strokeLinecap="round" />
-                    <circle className="journey-ripple" cx="130" cy="237" r="4" stroke="var(--clinova-color-8ea8e8)" />
-                    <circle className="journey-glow" cx="130" cy="237" r="4" fill="var(--clinova-color-8ea8e8)" />
+                    <circle className="journey-ripple" cx="130" cy="237" r="4" stroke="var(--clinova-gold)" />
+                    <circle className="journey-glow" cx="130" cy="237" r="4" fill="var(--clinova-gold)" />
                 </g>
 
                 <g className="journey-card journey-card-middle">
@@ -159,31 +159,31 @@ export default function PatientJourneyVisual() {
                     <path d="M232 141V137C232 129 240 125 250 125S268 129 268 137V141" stroke="var(--clinova-color-bdcef5)" strokeWidth="2" strokeLinecap="round" />
                     <path className="journey-type" d="M209 172H267" stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.4" strokeWidth="5" strokeLinecap="round" />
                     <path className="journey-type" style={{ animationDelay: "-0.9s" }} d="M209 187H249" stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.4" strokeWidth="5" strokeLinecap="round" />
-                    <circle className="journey-ripple" cx="284" cy="180" r="13" stroke="var(--clinova-color-8ea8e8)" style={{ animationDelay: "-1.5s" }} />
-                    <circle cx="284" cy="180" r="13" fill="var(--clinova-color-8ea8e8)" fillOpacity="0.14" />
-                    <path className="journey-tick" d="M278 180L282 184L290 175" stroke="var(--clinova-color-bdcef5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle className="journey-ripple" cx="284" cy="180" r="13" stroke="var(--clinova-gold)" style={{ animationDelay: "-1.5s" }} />
+                    <circle cx="284" cy="180" r="13" fill="var(--clinova-gold)" fillOpacity="0.16" />
+                    <path className="journey-tick" d="M278 180L282 184L290 175" stroke="var(--clinova-gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </g>
 
                 <g className="journey-card journey-card-last">
                     <rect x="351" y="222" width="124" height="108" rx="25" fill="url(#clinova-journey-panel)" stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.3" />
                     <rect x="386" y="247" width="55" height="57" rx="9" stroke="var(--clinova-color-bdcef5)" strokeWidth="2" />
                     <path d="M399 241V253M428 241V253M387 264H440" stroke="var(--clinova-color-bdcef5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path className="journey-tick" style={{ animationDelay: "-2s" }} d="M401 282L409 290L426 274" stroke="var(--clinova-color-bdcef5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <circle className="journey-ripple" cx="456" cy="237" r="4" stroke="var(--clinova-color-8ea8e8)" style={{ animationDelay: "-1s" }} />
-                    <circle className="journey-glow" cx="456" cy="237" r="4" fill="var(--clinova-color-8ea8e8)" />
+                    <path className="journey-tick" style={{ animationDelay: "-2s" }} d="M401 282L409 290L426 274" stroke="var(--clinova-gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle className="journey-ripple" cx="456" cy="237" r="4" stroke="var(--clinova-gold)" style={{ animationDelay: "-1s" }} />
+                    <circle className="journey-glow" cx="456" cy="237" r="4" fill="var(--clinova-gold)" />
                 </g>
 
                 <path d="M166 353H334" stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.2" />
-                <path className="journey-fill" d="M166 353H334" stroke="var(--clinova-color-bdcef5)" strokeWidth="2" strokeLinecap="round" />
+                <path className="journey-fill" d="M166 353H334" stroke="var(--clinova-gold)" strokeWidth="2" strokeLinecap="round" />
                 {[166, 250, 334].map((x, index) => (
                     <g key={x}>
                         <circle cx={x} cy="353" r="9" fill="var(--clinova-color-121e30)" stroke="var(--clinova-color-8ea8e8)" strokeOpacity="0.5" />
-                        <circle className="journey-step" cx={x} cy="353" r="3" fill="var(--clinova-color-bdcef5)" style={{ animationDelay: `${index * -1.2}s` }} />
+                        <circle className="journey-step" cx={x} cy="353" r="3" fill="var(--clinova-gold)" style={{ animationDelay: `${index * -1.2}s` }} />
                     </g>
                 ))}
 
                 {[[60, 120], [440, 110], [110, 395], [405, 385], [250, 25]].map(([x, y], index) => (
-                    <circle key={`${x}-${y}`} className="journey-spark" cx={x} cy={y} r="2.5" fill="var(--clinova-color-bdcef5)" style={{ animationDelay: `${index * -0.7}s` }} />
+                    <circle key={`${x}-${y}`} className="journey-spark" cx={x} cy={y} r="2.5" fill="var(--clinova-gold)" style={{ animationDelay: `${index * -0.7}s` }} />
                 ))}
             </svg>
         </Box>
