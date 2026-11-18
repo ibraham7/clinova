@@ -39,7 +39,7 @@ export default function ClientVideosSection() {
         <Container>
             <Box sx={{ maxWidth: 680, mb: { xs: 5, md: 7 }, textAlign: { xs: "center", lg: "start" } }}>
                 <Box sx={{ display: "inline-flex", alignItems: "center", gap: 1, px: 2, py: 0.8, mb: 3, borderRadius: "999px", border: "1px solid var(--clinova-rgba-142-168-232-0_18)", backgroundColor: "var(--clinova-rgba-142-168-232-0_04)" }}>
-                    <Box sx={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "primary.main", boxShadow: "0 0 12px var(--clinova-rgba-142-168-232-0_7)" }} />
+                    <Box className="sec-dot" sx={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "primary.main", boxShadow: "0 0 12px var(--clinova-rgba-142-168-232-0_7)" }} />
                     <Typography sx={{ fontSize: "0.72rem", color: "text.secondary" }}>{t("ماذا يقول أصحاب العيادات؟")}</Typography>
                 </Box>
                 <Typography component="h2" sx={{ m: 0, fontSize: { xs: "2.4rem", sm: "3.2rem", md: "4.2rem" }, fontWeight: 600, lineHeight: 1.25, color: "var(--clinova-color-f5f7fa)" }}>

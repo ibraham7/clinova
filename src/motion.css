@@ -1572,3 +1572,47 @@ html .hero-check {
 @media (prefers-reduced-motion: reduce) {
   #home .clinova-shine::after { animation: none; }
 }
+
+/* ---- More gold: the dot before every section label, the coloured second line of every section heading, and the footer logo glow ---- */
+html .sec-dot {
+  background-color: var(--clinova-gold);
+  box-shadow: 0 0 12px var(--clinova-gold-glow);
+}
+
+html section h2 > .MuiBox-root {
+  background: linear-gradient(100deg, var(--clinova-gold-2) 5%, #f3d28f 45%, var(--clinova-gold) 70%, var(--clinova-gold-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ---- Even more gold: pointer light and borders on cards, icons, counters, footer links, text selection ---- */
+.fx-spot {
+  background: radial-gradient(340px circle at var(--fx-mx, 50%) var(--fx-my, 50%), color-mix(in srgb, var(--clinova-gold) 15%, transparent), transparent 72%);
+}
+
+html [data-fx~="spot"]:hover {
+  border-color: color-mix(in srgb, var(--clinova-gold) 45%, transparent) !important;
+}
+
+[data-fx~="spot"]:hover .MuiSvgIcon-root {
+  color: var(--clinova-gold);
+}
+
+.count-gold {
+  color: var(--clinova-gold);
+}
+
+footer a:hover,
+footer button:hover {
+  color: var(--clinova-gold) !important;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--clinova-gold) 40%, transparent);
+}
+
+html {
+  accent-color: var(--clinova-gold);
+}

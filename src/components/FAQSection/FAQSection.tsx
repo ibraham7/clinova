@@ -102,7 +102,7 @@ function FAQSection() {
                                 "var(--clinova-rgba-142-168-232-0_04)",
                         }}
                     >
-                        <Box
+                        <Box className="sec-dot"
                             sx={{
                                 width: 6,
                                 height: 6,

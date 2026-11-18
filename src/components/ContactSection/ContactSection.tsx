@@ -128,7 +128,7 @@ function ContactSection() {
                                 backdropFilter: "blur(10px)",
                             }}
                         >
-                            <Box
+                            <Box className="sec-dot"
                                 sx={{
                                     width: 6,
                                     height: 6,
@@ -416,7 +416,7 @@ function ContactSection() {
                                     {t("LIVE QUEUE")}
                         </Typography>
 
-                                <Box
+                                <Box className="sec-dot"
                                     sx={{
                                         width: 6,
                                         height: 6,

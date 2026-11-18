@@ -148,7 +148,7 @@ function ReachSection() {
                                         gap: 0.7,
                                     }}
                                 >
-                                    <Box
+                                    <Box className="sec-dot"
                                         sx={{
                                             width: 6,
                                             height: 6,
@@ -480,7 +480,7 @@ function ReachSection() {
                                 backdropFilter: "blur(10px)",
                             }}
                         >
-                            <Box
+                            <Box className="sec-dot"
                                 sx={{
                                     width: 6,
                                     height: 6,
