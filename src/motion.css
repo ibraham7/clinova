@@ -1572,3 +1572,17 @@ html .hero-check {
 @media (prefers-reduced-motion: reduce) {
   #home .clinova-shine::after { animation: none; }
 }
+
+/* ---- More gold: the dot before every section label, the coloured second line of every section heading, and the footer logo glow ---- */
+html .sec-dot {
+  background-color: var(--clinova-gold);
+  box-shadow: 0 0 12px var(--clinova-gold-glow);
+}
+
+html section h2 > .MuiBox-root {
+  background: linear-gradient(100deg, var(--clinova-gold-2) 5%, #f3d28f 45%, var(--clinova-gold) 70%, var(--clinova-gold-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
