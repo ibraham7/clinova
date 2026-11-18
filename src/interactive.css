@@ -52,7 +52,7 @@
   inset: -1px;
   border-radius: 50%;
   padding: 1.5px;
-  background: conic-gradient(from 0deg, transparent 0 74%, var(--clinova-rgba-142-168-232-0_45) 96%, var(--clinova-color-dce6ff) 100%);
+  background: conic-gradient(from 0deg, transparent 0 74%, color-mix(in srgb, var(--clinova-gold) 45%, transparent) 96%, #fff1c8 100%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
@@ -67,7 +67,8 @@
   inset: -1px;
   border-radius: 50%;
   animation: clinova-spin var(--gyro-time, 28s) linear infinite;
-  background: radial-gradient(circle 5px at 50% 1px, var(--clinova-color-dce6ff) 0 2.5px, var(--clinova-rgba-142-168-232-0_45) 3px, transparent 5px);
+  background: radial-gradient(circle 6px at 50% 1px, #fff1c8 0 2.5px, color-mix(in srgb, var(--clinova-gold) 70%, transparent) 3.5px, transparent 6px);
+  filter: drop-shadow(0 0 5px var(--clinova-gold-glow));
 }
 
 .gyro-ring-b::after { animation-direction: reverse; }
