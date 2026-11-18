@@ -1709,3 +1709,35 @@ html .faq-dial-keys > button.is-active {
   background: color-mix(in srgb, var(--clinova-gold) 16%, transparent);
   box-shadow: 0 0 18px color-mix(in srgb, var(--clinova-gold) 22%, transparent);
 }
+
+/* ---- Coverage map: gold borders on the served countries, gold labels, corner marks and live dots ---- */
+html .coverage-region {
+  stroke: color-mix(in srgb, var(--clinova-gold) 75%, transparent) !important;
+}
+
+html .coverage-highlight {
+  fill: color-mix(in srgb, var(--clinova-gold) 16%, transparent) !important;
+  stroke: var(--clinova-gold) !important;
+  filter: drop-shadow(0 0 10px var(--clinova-gold-glow)) !important;
+}
+
+html .coverage-link-base {
+  stroke: color-mix(in srgb, var(--clinova-gold) 28%, transparent) !important;
+}
+
+html .coverage-label rect {
+  stroke: color-mix(in srgb, var(--clinova-gold) 40%, transparent) !important;
+}
+
+html .coverage-location.is-focus .coverage-label rect {
+  stroke: var(--clinova-gold) !important;
+}
+
+html .map-corner {
+  border-color: color-mix(in srgb, var(--clinova-gold) 60%, transparent) !important;
+}
+
+html .gold-live {
+  background-color: var(--clinova-gold) !important;
+  box-shadow: 0 0 7px var(--clinova-gold-glow) !important;
+}

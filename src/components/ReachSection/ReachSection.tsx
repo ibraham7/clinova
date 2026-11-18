@@ -380,7 +380,7 @@ function ReachSection() {
                                                         "primary.main",
                                                 }}
                                             >
-                                                <Box component="span" aria-hidden="true" sx={{
+                                                <Box component="span" aria-hidden="true" className="gold-live" sx={{
                                                     display: "inline-block", width: 5, height: 5,
                                                     borderRadius: "50%", backgroundColor: "primary.main",
                                                     marginInlineEnd: "6px", boxShadow: "0 0 7px var(--clinova-rgba-142-168-232-0_8)",
@@ -646,6 +646,7 @@ function Corner({
 }) {
     return (
         <Box
+            className="map-corner"
             sx={{
                 position: "absolute",
 
