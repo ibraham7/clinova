@@ -14,6 +14,7 @@ export default function MobileMotion() {
         root.classList.add("fx-touch");
         let card: HTMLElement | null = null;
         let tilt: HTMLElement | null = null;
+        let mega: HTMLElement | null = null;
         let release = 0;
 
         const ensureSpot = (el: HTMLElement) => {
@@ -30,6 +31,12 @@ export default function MobileMotion() {
                 const rect = card.getBoundingClientRect();
                 card.style.setProperty("--fx-mx", `${(event.clientX - rect.left).toFixed(0)}px`);
                 card.style.setProperty("--fx-my", `${(event.clientY - rect.top).toFixed(0)}px`);
+            }
+            // The big faint logo in the footer lights up under the finger, like it does under the mouse.
+            if (mega) {
+                const rect = mega.getBoundingClientRect();
+                mega.style.setProperty("--fx-mx", `${(event.clientX - rect.left).toFixed(0)}px`);
+                mega.style.setProperty("--fx-my", `${(event.clientY - rect.top).toFixed(0)}px`);
             }
             if (tilt) {
                 const rect = tilt.getBoundingClientRect();
@@ -56,14 +63,15 @@ export default function MobileMotion() {
             if (button && "vibrate" in navigator) { try { navigator.vibrate(8); } catch { /* not allowed: fine */ } }
             card = target?.closest<HTMLElement>('[data-fx~="spot"]') ?? null;
             tilt = target?.closest<HTMLElement>('[data-fx~="tilt"]') ?? null;
+            mega = target?.closest<HTMLElement>(".clinova-mega") ?? null;
             if (card) { ensureSpot(card); card.classList.add("is-touched"); }
             if (tilt) tilt.classList.add("is-touched");
             aim(event);
         };
-        const move = (event: PointerEvent) => { if (event.pointerType !== "mouse" && (card || tilt)) aim(event); };
+        const move = (event: PointerEvent) => { if (event.pointerType !== "mouse" && (card || tilt || mega)) aim(event); };
         const up = () => {
             const [a, b] = [card, tilt];
-            card = tilt = null;
+            card = tilt = mega = null;
             // The light stays a moment after the finger lifts, then fades with the card settling back.
             window.clearTimeout(release);
             release = window.setTimeout(() => {

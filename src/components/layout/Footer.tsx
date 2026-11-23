@@ -67,6 +67,7 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
                 ====================================== */}
 
                 <Box
+                    className="footer-main"
                     sx={{
                         display: "grid",
 
@@ -93,6 +94,7 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
                     ================================== */}
 
                     <Stack
+                        className="footer-brand"
                         sx={{
                             alignItems: {
                                 xs: "center",
@@ -219,6 +221,7 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
                     ================================== */}
 
                     <Stack
+                        className="footer-contact"
                         sx={{
                             alignItems: {
                                 xs: "center",
@@ -252,6 +255,8 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
 
                         <Typography
                             component="a"
+                            className="footer-mail"
+                            data-fx="spot"
                             href={`mailto:${contactEmail}`}
                             sx={{
                                 fontFamily:
@@ -291,6 +296,7 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
                 ====================================== */}
 
                 <Box
+                    className="footer-bottom"
                     sx={{
                         pt: 2.5,
 
@@ -332,7 +338,7 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
                         {t("All rights reserved.")}
                     </Typography>
 
-                    <Stack direction="row" sx={{ gap: 2, justifyContent: "center", fontSize: "0.72rem", "& a, & button": { color: "var(--clinova-rgba-245-247-250-0_42)", textDecoration: "none", font: "inherit", "&:hover": { color: "primary.light" } } }}>
+                    <Stack direction="row" className="footer-legal" sx={{ gap: 2, justifyContent: "center", fontSize: "0.72rem", "& a, & button": { color: "var(--clinova-rgba-245-247-250-0_42)", textDecoration: "none", font: "inherit", "&:hover": { color: "primary.light" } } }}>
                         <a href={`/${language}/privacy`}>{t("سياسة الخصوصية")}</a>
                         <Box component="button" type="button" onClick={openConsentSettings} sx={{ p: 0, border: 0, background: "none", cursor: "pointer" }}>{t("إعدادات الكوكيز")}</Box>
                     </Stack>
@@ -372,6 +378,7 @@ function FooterColumn({
 
     return (
         <Stack
+            className="footer-col"
             sx={{
                 alignItems: {
                     xs: "center",
@@ -404,6 +411,7 @@ function FooterColumn({
             </Typography>
 
             <Stack
+                className="footer-links"
                 sx={{
                     gap: 1.4,
 
@@ -417,6 +425,8 @@ function FooterColumn({
                     <Typography
                         key={item.href}
                         component="a"
+                        className="footer-link"
+                        data-fx="spot"
                         href={item.href}
                         sx={{
                             fontFamily:
@@ -465,6 +475,7 @@ function SocialButton({
     return (
         <Box
             component="a"
+            className="footer-social"
             href={href}
             aria-label={label}
             target="_blank"
