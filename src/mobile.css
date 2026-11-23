@@ -51,7 +51,7 @@ html.fx-touch [data-fx~="tilt"].is-touched { --fx-s: 0.985; }
 @supports (animation-timeline: view()) {
   @media (max-width: 899px), (pointer: coarse) {
     @media (prefers-reduced-motion: no-preference) {
-      .story-visual, .svc-panel, .queue-panel, .case-big, .about-stage {
+      :is(.story-visual, .svc-panel, .queue-panel, .case-big, .about-stage):not([data-reveal]) {
         animation: m-depth linear both;
         animation-timeline: view();
         animation-range: entry 0% exit 100%;
@@ -96,16 +96,17 @@ html.fx-touch [data-fx~="tilt"].is-touched { --fx-s: 0.985; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  height: 52px;
-  width: calc(100vw - 100px);
-  max-width: 320px;
-  padding: 0 20px;
+  gap: 8px;
+  height: 42px;
+  width: auto;
+  max-width: calc(100vw - 100px);
+  padding: 0 18px;
   border-radius: 999px;
   overflow: hidden;
   text-decoration: none;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.84rem;
+  white-space: nowrap;
   color: var(--clinova-gold-ink);
   background: linear-gradient(135deg, #f3d28f, #e6bc70 52%, #c99a4b);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 4px 22px rgba(201, 154, 75, 0.45);
@@ -122,7 +123,7 @@ html.fx-touch [data-fx~="tilt"].is-touched { --fx-s: 0.985; }
 }
 
 .clinova-cta-dock:active { scale: 0.96; }
-.clinova-cta-dock svg { font-size: 22px; flex-shrink: 0; }
+.clinova-cta-dock svg { font-size: 18px; flex-shrink: 0; }
 
 /* A bright band sweeps across now and then; a ring pulses out of the pill. */
 .clinova-cta-dock::before {
@@ -235,4 +236,116 @@ body:has(.MuiModal-root, .MuiDrawer-root) .clinova-cta-dock { opacity: 0; transl
   /* The header slides away while reading down; when it is showing, the strip sits just under it. */
   html:not([data-header="hide"]) #services .MuiContainer-root > div:has(> .svc-tab),
   html:not([data-header="hide"]) #case-studies .csx-list { top: 74px; }
+}
+
+/* ======================================================================
+   Phones: services and success stories fit in ONE phone frame (strip + content together), so nothing needs scrolling to see a change.
+   Same text, tighter spacing; the decorative mini-charts that cost the most height shrink or fold away.
+   ====================================================================== */
+@media (max-width: 899px) {
+  /* ---- Services ---- */
+  #services .svc-panel { padding: 12px 14px !important; gap: 8px !important; height: auto !important; min-height: 0 !important; aspect-ratio: auto !important; }
+  #services .svc-panel > :nth-last-child(-n + 2):not(:first-child) { display: none; }
+  #services .svc-panel > div:nth-child(2) { gap: 6px !important; }
+  #services .MuiContainer-root > div:has(> .svc-tab) + div { margin-top: 0 !important; }
+  #services .MuiContainer-root > div:has(> .svc-tab) + div > div { padding: 14px 16px !important; gap: 12px !important; }
+  #services .clinova-swap { gap: 6px !important; }
+  #services .clinova-swap h3 { font-size: 1.3rem !important; line-height: 1.45 !important; margin: 0 !important; }
+  #services .clinova-swap h3 + p { font-size: 0.84rem !important; line-height: 1.7 !important; margin: 0 !important; }
+  #services .clinova-swap > div:last-child {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 10px !important;
+    margin-top: 6px !important;
+  }
+  #services .clinova-swap > div:last-child p { font-size: 0.72rem !important; }
+
+  /* ---- Success stories ---- */
+  #case-studies .case-result { padding: 14px 16px !important; }
+  #case-studies .case-result > p:first-child { margin-bottom: 0 !important; }
+  #case-studies .case-result h3 { font-size: 1.3rem !important; margin: 2px 0 8px !important; }
+  #case-studies .case-result > div:first-of-type {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px !important;
+    margin: 0 0 10px !important;
+  }
+  #case-studies .case-result > div:first-of-type > div { padding: 8px 12px !important; min-height: 0 !important; }
+  #case-studies .case-result h4 { font-size: 0.95rem; margin: 0 0 2px !important; }
+  #case-studies .case-result h4 + p { font-size: 0.8rem !important; line-height: 1.7 !important; margin: 0 !important; }
+  #case-studies .case-big { margin-top: 10px !important; padding: 10px 14px !important; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  #case-studies .case-big > p:first-child { font-size: 2rem !important; }
+  #case-studies .case-big > p + p { margin: 0 !important; font-size: 0.72rem !important; text-align: end; }
+  #case-studies .case-result > div:has(> .case-stat) {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+  }
+  #case-studies .case-stat { padding: 10px 6px !important; }
+  #case-studies .case-stat > p:first-child { font-size: 0.95rem !important; }
+  #case-studies .case-stat > p + p { font-size: 0.62rem !important; margin-top: 2px !important; }
+  #case-studies .case-stat :is(.csx-bars, .csx-coin, .csx-gauge) { display: none !important; }
+}
+
+/* ======================================================================
+   Story on phones: tap a chapter or swipe the picture sideways. The dot grows into the whole system under the finger,
+   the chapter text cross-fades, and a tap on any circle turns it gold (StorySection.tsx drives --p).
+   ====================================================================== */
+@media (max-width: 899px) {
+  .story-track[data-compact] .story-panels > .story-panel {
+    grid-area: 1 / 1;
+    padding-inline-start: 0;
+    min-height: 0;
+    transition: opacity 600ms ease, translate 800ms var(--clinova-ease-out, ease);
+  }
+  .story-track[data-compact] .story-panel::after { display: none; }
+  .story-track[data-compact] .story-big {
+    direction: ltr;
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    top: -0.3em;
+    z-index: -1;
+    width: auto;
+    height: auto;
+    display: block;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    color: transparent;
+    font-size: 6rem;
+    -webkit-text-stroke: 1px var(--clinova-rgba-142-168-232-0_22);
+  }
+  .story-track[data-compact] .story-visual,
+  .story-track[data-compact] .story-panels { touch-action: pan-y; cursor: grab; -webkit-user-select: none; user-select: none; }
+  .story-track[data-compact] .story-visual { width: min(340px, 86vw); }
+  .story-track[data-compact] .story-timeline { margin-top: 4px; }
+  .story-track[data-compact] .story-stop { width: 120px; min-height: 64px; }
+
+  /* The circles are big enough to tap, and light up in gold when tapped. */
+  .story-track[data-compact] .story-node {
+    pointer-events: auto;
+    transition: background 350ms ease, border-color 350ms ease, color 350ms ease, box-shadow 350ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .story-track[data-compact] .story-node::before {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+  }
+  .story-track[data-compact] .story-node.is-gold {
+    border-color: var(--clinova-gold);
+    color: var(--clinova-gold-ink);
+    background: linear-gradient(135deg, #f3d28f, #e6bc70 52%, #c99a4b);
+    box-shadow: 0 0 0 5px var(--clinova-gold-glow), 0 0 30px var(--clinova-gold-glow);
+    animation: story-counter var(--dur) linear infinite var(--dir), m-node-pop 520ms cubic-bezier(0.2, 0.9, 0.3, 1.4);
+  }
+  .story-track[data-compact] .story-node:active { filter: brightness(1.2); }
+}
+
+@keyframes m-node-pop {
+  0% { scale: 1; }
+  40% { scale: 1.35; }
+  100% { scale: 1; }
 }

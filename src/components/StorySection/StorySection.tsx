@@ -51,15 +51,19 @@ function StorySection() {
     const { direction, t } = useSiteTranslation();
     const track = useRef<HTMLDivElement>(null);
     const [animated, setAnimated] = useState(false);
+    // Phones: no scroll story, but the same picture is driven by a finger instead (tap a chapter, swipe the picture).
+    const [compact, setCompact] = useState(false);
     const [stage, setStage] = useState(0);
+    const progress = useRef(0.3);
+    const tween = useRef(0);
 
     // The scroll story needs room, a calm visitor and the text editor out of the way.
     useEffect(() => {
-        const decide = () => setAnimated(
-            !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-            && !new URLSearchParams(window.location.search).has("edit")
-            && window.innerWidth >= 900 && window.innerHeight >= 680,
-        );
+        const decide = () => {
+            const calm = !window.matchMedia("(prefers-reduced-motion: reduce)").matches && !new URLSearchParams(window.location.search).has("edit");
+            setAnimated(calm && window.innerWidth >= 900 && window.innerHeight >= 680);
+            setCompact(calm && window.innerWidth < 900);
+        };
         decide();
         window.addEventListener("resize", decide);
         return () => window.removeEventListener("resize", decide);
@@ -89,9 +93,76 @@ function StorySection() {
         };
     }, [animated]);
 
+    // Phone version. `--p` is the same 0..1 value the scroll story uses (0.3 = chapter one, 1 = chapter two); here it is eased
+    // towards a target after a tap, or follows the finger while the picture is dragged sideways. Only custom properties on the track move.
+    const setProgress = (value: number) => {
+        progress.current = value;
+        track.current?.style.setProperty("--p", value.toFixed(3));
+        setStage(value >= 0.65 ? 1 : 0);
+    };
+    const easeTo = (target: number, ms = 900) => {
+        cancelAnimationFrame(tween.current);
+        const from = progress.current;
+        const start = performance.now();
+        const step = (now: number) => {
+            const k = Math.min((now - start) / ms, 1);
+            setProgress(from + (target - from) * (1 - Math.pow(1 - k, 3)));
+            if (k < 1) tween.current = requestAnimationFrame(step);
+        };
+        tween.current = requestAnimationFrame(step);
+    };
+
+    useEffect(() => {
+        const element = track.current;
+        if (!compact || !element) return;
+        const parts = [element.querySelector<HTMLElement>(".story-visual"), element.querySelector<HTMLElement>(".story-panels")].filter(Boolean) as HTMLElement[];
+        const sign = direction === "rtl" ? -1 : 1;
+        let startX = 0;
+        let startP = 0;
+        let live = false;
+        let moved = false;
+        const down = (event: PointerEvent) => {
+            if ((event.target as Element).closest(".story-node")) return;
+            live = true; moved = false; startX = event.clientX; startP = progress.current;
+            cancelAnimationFrame(tween.current);
+        };
+        const move = (event: PointerEvent) => {
+            if (!live) return;
+            const dx = event.clientX - startX;
+            if (!moved && Math.abs(dx) < 8) return;
+            moved = true;
+            setProgress(clamp(startP + (sign * dx) / 260, 0.08, 1));
+        };
+        const up = (event: PointerEvent) => {
+            if (!live) return;
+            live = false;
+            if ((event.target as Element).closest(".story-node")) return;
+            easeTo(moved ? (progress.current >= 0.65 ? 1 : 0.3) : (progress.current >= 0.65 ? 0.3 : 1), moved ? 500 : 900);
+        };
+        parts.forEach((part) => { part.addEventListener("pointerdown", down); part.addEventListener("pointermove", move); part.addEventListener("pointerup", up); part.addEventListener("pointercancel", up); });
+
+        // The first time the picture is seen, the single dot grows into its first ring.
+        setProgress(0.02);
+        const seen = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { seen.disconnect(); easeTo(0.3, 1400); } }, { threshold: 0.35 });
+        seen.observe(element);
+
+        // A finger on a circle lights it in gold; another tap puts it out.
+        const light = (event: MouseEvent) => (event.target as Element).closest(".story-node")?.classList.toggle("is-gold");
+        element.addEventListener("click", light);
+
+        return () => {
+            cancelAnimationFrame(tween.current);
+            seen.disconnect();
+            element.removeEventListener("click", light);
+            parts.forEach((part) => { part.removeEventListener("pointerdown", down); part.removeEventListener("pointermove", move); part.removeEventListener("pointerup", up); part.removeEventListener("pointercancel", up); });
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [compact, direction]);
+
     const go = (index: number) => {
         const element = track.current;
         if (!element) return;
+        if (compact) { easeTo(index ? 1 : 0.3); return; }
         const top = element.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({ top: top + (index ? element.offsetHeight - window.innerHeight : 0), behavior: "smooth" });
     };
@@ -115,7 +186,8 @@ function StorySection() {
                     ref={track}
                     className="story-track"
                     data-animated={animated ? "" : undefined}
-                    style={{ "--p": animated ? 0 : 1 } as CSSProperties}
+                    data-compact={compact ? "" : undefined}
+                    style={{ "--p": animated ? 0 : compact ? 0.3 : 1 } as CSSProperties}
                     sx={{ position: "relative", height: animated ? { md: "190vh" } : "auto" }}
                 >
                     <Box
@@ -153,8 +225,8 @@ function StorySection() {
                                     {stages.map((item, index) => (
                                         <Box
                                             key={item.number}
-                                            className={`story-panel${animated ? (stage === index ? " is-on" : " is-off") : ""}`}
-                                            aria-hidden={animated && stage !== index ? true : undefined}
+                                            className={`story-panel${animated || compact ? (stage === index ? " is-on" : " is-off") : ""}`}
+                                            aria-hidden={(animated || compact) && stage !== index ? true : undefined}
                                             sx={{ position: "relative", minWidth: 0, textAlign: "start" }}
                                         >
                                             <Box className="story-big" aria-hidden="true">{item.number}</Box>
@@ -174,7 +246,7 @@ function StorySection() {
                                     ))}
                                 </Box>
 
-                                {animated && (
+                                {(animated || compact) && (
                                     <Box className="story-timeline" role="group">
                                         {stages.map((item, index) => (
                                             <Box
@@ -198,7 +270,7 @@ function StorySection() {
                             </Box>
 
                             {/* One dot grows into a system */}
-                            <Box className="story-visual" data-fx={animated ? "tilt" : undefined} aria-hidden="true">
+                            <Box className="story-visual" data-fx={animated || compact ? "tilt" : undefined} aria-hidden="true">
                                 {rings.map((ring, index) => (
                                     <Box
                                         key={ring.size}
