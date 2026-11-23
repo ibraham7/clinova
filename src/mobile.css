@@ -51,7 +51,7 @@ html.fx-touch [data-fx~="tilt"].is-touched { --fx-s: 0.985; }
 @supports (animation-timeline: view()) {
   @media (max-width: 899px), (pointer: coarse) {
     @media (prefers-reduced-motion: no-preference) {
-      .story-visual, .svc-panel, .queue-panel, .case-big, .about-stage {
+      :is(.story-visual, .svc-panel, .queue-panel, .case-big, .about-stage):not([data-reveal]) {
         animation: m-depth linear both;
         animation-timeline: view();
         animation-range: entry 0% exit 100%;
@@ -96,16 +96,17 @@ html.fx-touch [data-fx~="tilt"].is-touched { --fx-s: 0.985; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  height: 52px;
-  width: calc(100vw - 100px);
-  max-width: 320px;
-  padding: 0 20px;
+  gap: 8px;
+  height: 42px;
+  width: auto;
+  max-width: calc(100vw - 100px);
+  padding: 0 18px;
   border-radius: 999px;
   overflow: hidden;
   text-decoration: none;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.84rem;
+  white-space: nowrap;
   color: var(--clinova-gold-ink);
   background: linear-gradient(135deg, #f3d28f, #e6bc70 52%, #c99a4b);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 4px 22px rgba(201, 154, 75, 0.45);
@@ -122,7 +123,7 @@ html.fx-touch [data-fx~="tilt"].is-touched { --fx-s: 0.985; }
 }
 
 .clinova-cta-dock:active { scale: 0.96; }
-.clinova-cta-dock svg { font-size: 22px; flex-shrink: 0; }
+.clinova-cta-dock svg { font-size: 18px; flex-shrink: 0; }
 
 /* A bright band sweeps across now and then; a ring pulses out of the pill. */
 .clinova-cta-dock::before {
