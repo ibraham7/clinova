@@ -38,6 +38,16 @@ export default function MobileMotion() {
             }
         };
 
+        // The selector strips (success stories) scroll sideways: the tapped item glides to the middle of its strip.
+        const centre = (event: MouseEvent) => {
+            const item = event.target instanceof Element ? event.target.closest<HTMLElement>(".csx-list .case-item") : null;
+            const strip = item?.parentElement;
+            if (!item || !strip) return;
+            const a = item.getBoundingClientRect();
+            const b = strip.getBoundingClientRect();
+            strip.scrollBy({ left: a.left + a.width / 2 - (b.left + b.width / 2), behavior: "smooth" });
+        };
+
         const down = (event: PointerEvent) => {
             if (event.pointerType === "mouse") return;
             window.clearTimeout(release);
@@ -62,12 +72,14 @@ export default function MobileMotion() {
             }, 450);
         };
 
+        window.addEventListener("click", centre);
         window.addEventListener("pointerdown", down, { passive: true });
         window.addEventListener("pointermove", move, { passive: true });
         window.addEventListener("pointerup", up, { passive: true });
         window.addEventListener("pointercancel", up, { passive: true });
         return () => {
             window.clearTimeout(release);
+            window.removeEventListener("click", centre);
             window.removeEventListener("pointerdown", down);
             window.removeEventListener("pointermove", move);
             window.removeEventListener("pointerup", up);
