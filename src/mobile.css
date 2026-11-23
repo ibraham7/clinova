@@ -164,3 +164,75 @@ body:has(.MuiModal-root, .MuiDrawer-root) .clinova-cta-dock { opacity: 0; transl
   .clinova-cta-dock { transition: opacity 300ms ease; translate: 0 0; }
   html.fx-touch [data-fx~="tilt"] { transform: none !important; }
 }
+
+/* ======================================================================
+   Phones: the two tabbed sections (services, success stories) used to put their selector far below the content, so every tap
+   meant scrolling back up to see the change. The selector is now a compact strip that sticks under the header, and the content
+   changes right beneath it, inside the same phone frame.
+   ====================================================================== */
+@media (max-width: 899px) {
+  /* "overflow: clip" looks the same as hidden but lets a child stick to the top. */
+  #services, #case-studies { overflow: clip; }
+
+  /* Services: the three tabs become one row; the duplicate numbered nav at the bottom goes. */
+  #services .svc-steps { display: none; }
+  #services .MuiContainer-root > div:has(> .svc-tab) {
+    position: sticky;
+    top: 10px;
+    z-index: 20;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px !important;
+    padding: 6px;
+    margin-bottom: 18px !important;
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--clinova-color-0b111b) 94%, transparent);
+    border: 1px solid color-mix(in srgb, var(--clinova-gold) 22%, transparent);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+    transition: top 320ms var(--clinova-ease-out, ease);
+  }
+  #services .svc-tab {
+    min-height: 52px !important;
+    padding: 8px 6px !important;
+    justify-content: center !important;
+    border-radius: 16px !important;
+    text-align: center;
+  }
+  #services .svc-tab .svc-num, #services .svc-tab p:nth-of-type(2) { display: none !important; }
+  #services .svc-tab p:first-of-type { font-size: 0.78rem !important; line-height: 1.3 !important; text-align: center; }
+  #services .svc-tab.is-active { background: color-mix(in srgb, var(--clinova-gold) 16%, transparent) !important; border-color: var(--clinova-gold) !important; }
+
+  /* Success stories: the list of five becomes a swipeable strip above the result card. */
+  #case-studies .csx-list {
+    order: -1 !important;
+    position: sticky;
+    top: 10px;
+    z-index: 20;
+    flex-direction: row !important;
+    gap: 8px !important;
+    padding: 6px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--clinova-color-0b111b) 94%, transparent);
+    border: 1px solid color-mix(in srgb, var(--clinova-gold) 22%, transparent);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+    transition: top 320ms var(--clinova-ease-out, ease);
+  }
+  #case-studies .csx-list::-webkit-scrollbar { display: none; }
+  #case-studies .csx-glider { display: none; }
+  #case-studies .case-item {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 138px;
+    scroll-snap-align: center;
+    border-radius: 16px !important;
+  }
+  #case-studies .case-item.is-active { background: color-mix(in srgb, var(--clinova-gold) 16%, transparent) !important; border-color: var(--clinova-gold) !important; }
+
+  /* The header slides away while reading down; when it is showing, the strip sits just under it. */
+  html:not([data-header="hide"]) #services .MuiContainer-root > div:has(> .svc-tab),
+  html:not([data-header="hide"]) #case-studies .csx-list { top: 74px; }
+}
