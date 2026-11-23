@@ -1,0 +1,166 @@
+/* ======================================================================
+   Phones and touch screens: the same "alive" feel as the laptop, made for a finger.
+   Loaded after motion.css and interactive.css. Only transform, translate, scale and opacity animate here (they run on the
+   graphics chip, not the main thread), and every effect is switched off again for reduced motion.
+   ====================================================================== */
+
+/* ---- Touch light and lean (see MobileMotion): the card under the fingertip lights up in gold and leans toward it ---- */
+html.fx-touch [data-fx~="spot"].is-touched > .fx-spot.is-live { opacity: 1; }
+html.fx-touch [data-fx~="spot"].is-touched { border-color: color-mix(in srgb, var(--clinova-gold) 55%, transparent) !important; }
+html.fx-touch [data-fx~="spot"].is-touched .MuiSvgIcon-root { color: var(--clinova-gold); }
+
+html.fx-touch [data-fx~="tilt"] {
+  transform: perspective(900px) rotateX(var(--fx-rx, 0deg)) rotateY(var(--fx-ry, 0deg)) scale(var(--fx-s, 1)) !important;
+  transition: transform 420ms var(--clinova-ease-out, ease), box-shadow 500ms ease, border-color 500ms ease !important;
+}
+html.fx-touch [data-fx~="tilt"].is-touched { --fx-s: 0.985; }
+
+@media (hover: none), (pointer: coarse), (max-width: 899px) {
+  /* ---- Press feedback: everything tappable sinks under the finger and springs back ---- */
+  .MuiButtonBase-root:not(.MuiTab-root):not(.MuiAccordionSummary-root),
+  [data-fx~="spot"],
+  .clinova-top,
+  .clinova-cta-dock {
+    transition-property: scale, background, box-shadow, border-color, color, opacity, translate, transform;
+    transition-duration: 260ms;
+    transition-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1.25);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .MuiButtonBase-root:not(.MuiTab-root):active,
+  [data-fx~="spot"]:active,
+  .clinova-top:active { scale: 0.955; transition-duration: 90ms; transition-timing-function: ease-out; }
+
+  /* Gold flash on the main buttons while pressed. */
+  html .clinova-shine.clinova-shine:active { box-shadow: 0 0 0 6px var(--clinova-gold-glow), 0 10px 34px rgba(201, 154, 75, 0.55); }
+
+  /* ---- The thin progress line at the top turns gold, thicker and glowing ---- */
+  .clinova-scroll-progress { height: 4px; }
+  .clinova-scroll-progress > div {
+    background: linear-gradient(90deg, var(--clinova-gold-2), #f7dfa6, var(--clinova-gold));
+    box-shadow: 0 0 14px var(--clinova-gold-glow);
+  }
+
+  /* ---- The hero's soft blue glow drifts; the ticker keeps leaning with the scroll speed (engine) ---- */
+  .clinova-ticker-wrap { will-change: transform; }
+
+  /* ---- A gold halo breathes behind the numbers that count up ---- */
+  .count-gold, .gold-num { text-shadow: 0 0 22px var(--clinova-gold-glow); }
+}
+
+/* ---- Scroll-linked depth: the big visuals drift and settle as they cross the screen (compositor-driven, no JavaScript) ---- */
+@supports (animation-timeline: view()) {
+  @media (max-width: 899px), (pointer: coarse) {
+    @media (prefers-reduced-motion: no-preference) {
+      .story-visual, .svc-panel, .queue-panel, .case-big, .about-stage {
+        animation: m-depth linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+      /* A thin gold line grows under each section while it crosses the screen. */
+      section[id]:not(#home)::after {
+        content: "";
+        position: absolute;
+        inset-inline: 18% 18%;
+        bottom: 0;
+        height: 1px;
+        pointer-events: none;
+        background: linear-gradient(90deg, transparent, var(--clinova-gold), transparent);
+        transform-origin: center;
+        animation: m-line linear both;
+        animation-timeline: view();
+        animation-range: exit -60% exit 20%;
+      }
+    }
+  }
+}
+
+@keyframes m-depth {
+  from { translate: 0 34px; scale: 0.94; }
+  45%, 55% { translate: 0 0; scale: 1; }
+  to { translate: 0 -26px; scale: 0.97; }
+}
+
+@keyframes m-line {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 0.9; }
+}
+
+/* ======================================================================
+   Sticky booking pill (StickyCta): rises after the first screen, shines, and pulses in gold
+   ====================================================================== */
+.clinova-cta-dock {
+  position: fixed;
+  inset-inline-start: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 1240;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 52px;
+  width: calc(100vw - 100px);
+  max-width: 320px;
+  padding: 0 20px;
+  border-radius: 999px;
+  overflow: hidden;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--clinova-gold-ink);
+  background: linear-gradient(135deg, #f3d28f, #e6bc70 52%, #c99a4b);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 4px 22px rgba(201, 154, 75, 0.45);
+  opacity: 0;
+  translate: 0 90px;
+  pointer-events: none;
+  transition: opacity 400ms ease, translate 650ms cubic-bezier(0.2, 0.9, 0.3, 1.2), scale 200ms ease;
+}
+
+.clinova-cta-dock.is-shown {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+.clinova-cta-dock:active { scale: 0.96; }
+.clinova-cta-dock svg { font-size: 22px; flex-shrink: 0; }
+
+/* A bright band sweeps across now and then; a ring pulses out of the pill. */
+.clinova-cta-dock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  translate: -130% 0;
+  animation: m-dock-shine 4.4s ease-in-out 1.2s infinite;
+  pointer-events: none;
+}
+
+.clinova-cta-dock-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 var(--clinova-gold-glow);
+  animation: m-dock-ping 2.6s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes m-dock-shine {
+  0%, 55% { translate: -130% 0; }
+  85%, 100% { translate: 130% 0; }
+}
+
+@keyframes m-dock-ping {
+  0% { box-shadow: 0 0 0 0 var(--clinova-gold-glow); }
+  70%, 100% { box-shadow: 0 0 0 16px transparent; }
+}
+
+/* Out of view the loops are not running; with a menu, dialog or the cookie sheet open the pill steps aside. */
+body:has(.MuiModal-root, .MuiDrawer-root) .clinova-cta-dock { opacity: 0; translate: 0 90px; pointer-events: none; }
+
+@media (min-width: 900px) { .clinova-cta-dock { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .clinova-cta-dock::before, .clinova-cta-dock-ping { animation: none; }
+  .clinova-cta-dock { transition: opacity 300ms ease; translate: 0 0; }
+  html.fx-touch [data-fx~="tilt"] { transform: none !important; }
+}

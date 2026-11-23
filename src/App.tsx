@@ -8,6 +8,8 @@ import PointerParallax from "./components/motion/PointerParallax";
 import ScrollProgress from "./components/motion/ScrollProgress";
 import ScrollReveal from "./components/motion/ScrollReveal";
 import MotionEngine from "./motion/MotionEngine";
+import MobileMotion from "./components/motion/MobileMotion";
+import StickyCta from "./components/motion/StickyCta";
 import ScrollTopRing from "./motion/ScrollTopRing";
 import SectionRail from "./components/motion/SectionRail";
 import Header from "./components/layout/Header";
@@ -58,6 +60,7 @@ function App() {
       <ScrollReveal />
       <MotionEngine key={`motion-${sections}`} />
       <PointerParallax />
+      <MobileMotion />
       <MouseGlow />
       <Header />
       <Hero />
@@ -76,6 +79,7 @@ function App() {
       <Deferred id="contact-cta" load={loaders["contact-cta"]} height={590} />
       <Deferred id="footer" load={loaders.footer} height={730} />
       <ScrollTopRing />
+      <StickyCta />
       <OffscreenPause key={`pause-${sections}`} />
       <SectionRail key={`rail-${sections}`} />
       {survey && <Suspense fallback={null}><SurveyPopup /></Suspense>}

@@ -1579,12 +1579,20 @@ html .sec-dot {
   box-shadow: 0 0 12px var(--clinova-gold-glow);
 }
 
-html section h2 > .MuiBox-root {
+/* Section headings: the first (white) line is gold; the coloured second line keeps its own blue gradient. */
+html section h2 {
   background: linear-gradient(100deg, var(--clinova-gold-2) 5%, #f3d28f 45%, var(--clinova-gold) 70%, var(--clinova-gold-2));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+}
+
+html section h2 > [data-accent] {
+  background: linear-gradient(100deg, var(--clinova-color-7894d2) 20%, var(--clinova-color-b8c8ef) 40%, var(--clinova-color-8ea8e8) 50%, var(--clinova-color-7894d2) 80%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 /* ---- Even more gold: pointer light and borders on cards, icons, counters, footer links, text selection ---- */
@@ -1700,4 +1708,36 @@ html .faq-dial-keys > button.is-active {
   border-color: var(--clinova-gold);
   background: color-mix(in srgb, var(--clinova-gold) 16%, transparent);
   box-shadow: 0 0 18px color-mix(in srgb, var(--clinova-gold) 22%, transparent);
+}
+
+/* ---- Coverage map: gold borders on the served countries, gold labels, corner marks and live dots ---- */
+html .coverage-region {
+  stroke: color-mix(in srgb, var(--clinova-gold) 75%, transparent) !important;
+}
+
+html .coverage-highlight {
+  fill: color-mix(in srgb, var(--clinova-gold) 16%, transparent) !important;
+  stroke: var(--clinova-gold) !important;
+  filter: drop-shadow(0 0 10px var(--clinova-gold-glow)) !important;
+}
+
+html .coverage-link-base {
+  stroke: color-mix(in srgb, var(--clinova-gold) 28%, transparent) !important;
+}
+
+html .coverage-label rect {
+  stroke: color-mix(in srgb, var(--clinova-gold) 40%, transparent) !important;
+}
+
+html .coverage-location.is-focus .coverage-label rect {
+  stroke: var(--clinova-gold) !important;
+}
+
+html .map-corner {
+  border-color: color-mix(in srgb, var(--clinova-gold) 60%, transparent) !important;
+}
+
+html .gold-live {
+  background-color: var(--clinova-gold) !important;
+  box-shadow: 0 0 7px var(--clinova-gold-glow) !important;
 }

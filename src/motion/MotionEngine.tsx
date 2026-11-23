@@ -19,16 +19,16 @@ export default function MotionEngine() {
         const root = document.documentElement;
         const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-        // Phones: no scroll-painted text, no parallax of blurred glows, no ticker skew. Those repaint large areas on every scroll
-        // frame, which is what makes a phone stutter. The rest (reveals, header hiding) is cheap and stays.
+        // Phones: no scroll-painted text (it repaints on every scroll frame). Everything that only moves a layer (glow parallax,
+        // ticker lean, hero drift) is a compositor-only translate and stays on, so the phone is as alive as the laptop.
         const light = window.matchMedia("(max-width: 899px), (pointer: coarse)").matches;
         const undo: (() => void)[] = [];
 
         /* ---------- Scroll ---------- */
         const hero = document.getElementById("home");
         const heroBox = hero?.querySelector<HTMLElement>(":scope > .MuiContainer-root") ?? null;
-        const ticker = light ? null : document.querySelector<HTMLElement>(".clinova-ticker-wrap");
-        const glows = light ? [] : Array.from(document.querySelectorAll<HTMLElement>("section[id] > div")).filter((el) => {
+        const ticker = document.querySelector<HTMLElement>(".clinova-ticker-wrap");
+        const glows = Array.from(document.querySelectorAll<HTMLElement>("section[id] > div")).filter((el) => {
             const style = getComputedStyle(el);
             return style.position === "absolute" && style.pointerEvents === "none";
         }).map((el, index) => ({ el, section: el.parentElement as HTMLElement, speed: (index % 2 ? 1 : -1) * (0.05 + (index % 4) * 0.025) }));
@@ -77,7 +77,7 @@ export default function MotionEngine() {
                 if (rect.bottom < -200 || rect.top > vh + 200) return;
                 glow.el.style.translate = `0 ${((rect.top + rect.height / 2 - vh / 2) * glow.speed).toFixed(0)}px`;
             });
-            if (!light && heroBox && heroHeight && y < heroHeight) heroBox.style.translate = `0 ${(clamp(y / (heroHeight * 0.8), 0, 1) * 60).toFixed(0)}px`;
+            if (heroBox && heroHeight && y < heroHeight) heroBox.style.translate = `0 ${(clamp(y / (heroHeight * 0.8), 0, 1) * 60).toFixed(0)}px`;
             fills.forEach((el, index) => {
                 const rect = fillRects[index];
                 const value = rect.bottom < 0 ? 1 : rect.top > vh ? 0 : clamp((vh * 0.88 - rect.top) / (rect.height + vh * 0.32), 0, 1);
