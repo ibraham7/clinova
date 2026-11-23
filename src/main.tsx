@@ -4,6 +4,7 @@ import "./index.css";
 import "./theme/tokens.css";
 import "./motion.css";
 import "./interactive.css";
+import "./mobile.css";
 import { ColorModeProvider } from "./theme/ColorMode";
 import "./i18n";
 import Root from "./Root";
