@@ -236,3 +236,53 @@ body:has(.MuiModal-root, .MuiDrawer-root) .clinova-cta-dock { opacity: 0; transl
   html:not([data-header="hide"]) #services .MuiContainer-root > div:has(> .svc-tab),
   html:not([data-header="hide"]) #case-studies .csx-list { top: 74px; }
 }
+
+/* ======================================================================
+   Phones: services and success stories fit in ONE phone frame (strip + content together), so nothing needs scrolling to see a change.
+   Same text, tighter spacing; the decorative mini-charts that cost the most height shrink or fold away.
+   ====================================================================== */
+@media (max-width: 899px) {
+  /* ---- Services ---- */
+  #services .svc-panel { padding: 12px 14px !important; gap: 8px !important; height: auto !important; min-height: 0 !important; aspect-ratio: auto !important; }
+  #services .svc-panel > :nth-last-child(-n + 2):not(:first-child) { display: none; }
+  #services .svc-panel > div:nth-child(2) { gap: 6px !important; }
+  #services .MuiContainer-root > div:has(> .svc-tab) + div { margin-top: 0 !important; }
+  #services .MuiContainer-root > div:has(> .svc-tab) + div > div { padding: 14px 16px !important; gap: 12px !important; }
+  #services .clinova-swap { gap: 6px !important; }
+  #services .clinova-swap h3 { font-size: 1.3rem !important; line-height: 1.45 !important; margin: 0 !important; }
+  #services .clinova-swap h3 + p { font-size: 0.84rem !important; line-height: 1.7 !important; margin: 0 !important; }
+  #services .clinova-swap > div:last-child {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 10px !important;
+    margin-top: 6px !important;
+  }
+  #services .clinova-swap > div:last-child p { font-size: 0.72rem !important; }
+
+  /* ---- Success stories ---- */
+  #case-studies .case-result { padding: 14px 16px !important; }
+  #case-studies .case-result > p:first-child { margin-bottom: 0 !important; }
+  #case-studies .case-result h3 { font-size: 1.3rem !important; margin: 2px 0 8px !important; }
+  #case-studies .case-result > div:first-of-type {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px !important;
+    margin: 0 0 10px !important;
+  }
+  #case-studies .case-result > div:first-of-type > div { padding: 8px 12px !important; min-height: 0 !important; }
+  #case-studies .case-result h4 { font-size: 0.95rem; margin: 0 0 2px !important; }
+  #case-studies .case-result h4 + p { font-size: 0.8rem !important; line-height: 1.7 !important; margin: 0 !important; }
+  #case-studies .case-big { margin-top: 10px !important; padding: 10px 14px !important; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  #case-studies .case-big > p:first-child { font-size: 2rem !important; }
+  #case-studies .case-big > p + p { margin: 0 !important; font-size: 0.72rem !important; text-align: end; }
+  #case-studies .case-result > div:has(> .case-stat) {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+  }
+  #case-studies .case-stat { padding: 10px 6px !important; }
+  #case-studies .case-stat > p:first-child { font-size: 0.95rem !important; }
+  #case-studies .case-stat > p + p { font-size: 0.62rem !important; margin-top: 2px !important; }
+  #case-studies .case-stat :is(.csx-bars, .csx-coin, .csx-gauge) { display: none !important; }
+}
