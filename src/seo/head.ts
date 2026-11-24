@@ -10,6 +10,7 @@ import type { Route } from "../routes";
 import { routePath } from "../routes";
 import { blogMeta, homeMeta } from "./meta";
 import { privacy } from "../legal/privacy";
+import { legalDocs } from "../legal/docs";
 import { services } from "./services";
 import { localized, siteContent, videoPoster, youtubeId } from "../content/siteContent";
 import { areaServed, bingSiteVerification, contactEmail, contactPhone, googleSiteVerification, siteName, siteUrl, socialProfiles } from "./site";
@@ -184,6 +185,21 @@ export function buildHead(route: Route, lang: SiteLanguage): PageHead {
                     })),
                 },
                 breadcrumbs([{ name: siteName, url: `${siteUrl}/${lang}` }, { name: blogLabels[lang], url: canonical }]),
+                organization(lang),
+            ],
+        };
+    }
+
+    if (route.kind === "legal") {
+        const doc = legalDocs[route.slug][lang];
+        return {
+            ...base,
+            title: `${doc.title} | ${siteName}`,
+            description: doc.description,
+            ogType: "website",
+            jsonLd: [
+                { "@type": route.slug === "about" ? "AboutPage" : "WebPage", "@id": `${canonical}#webpage`, url: canonical, name: doc.title, inLanguage: lang, isPartOf: { "@id": `${siteUrl}/#website` } },
+                breadcrumbs([{ name: siteName, url: `${siteUrl}/${lang}` }, { name: doc.title, url: canonical }]),
                 organization(lang),
             ],
         };

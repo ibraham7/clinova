@@ -19,6 +19,7 @@ for (const lang of languages) {
     pages.push({ path: `/${lang}`, lastmod: today, route: { kind: "home" } });
     pages.push({ path: `/${lang}/blog`, lastmod: today, route: { kind: "blog" } });
     pages.push({ path: `/${lang}/privacy`, lastmod: today, route: { kind: "privacy" } });
+    for (const slug of ["about", "delivery-returns", "distance-sales"]) pages.push({ path: `/${lang}/${slug}`, lastmod: today, route: { kind: "legal", slug } });
     for (const article of articles) {
         const translation = article.translations[lang];
         if (translation) pages.push({ path: `/${lang}/blog/${article.slug}`, lastmod: translation.updated ?? translation.date, route: { kind: "article", slug: article.slug } });

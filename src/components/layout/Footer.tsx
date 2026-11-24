@@ -339,9 +339,20 @@ function Footer({ linkBase = "" }: { linkBase?: string }) {
                     </Typography>
 
                     <Stack direction="row" className="footer-legal" sx={{ gap: 2, justifyContent: "center", fontSize: "0.72rem", "& a, & button": { color: "var(--clinova-rgba-245-247-250-0_42)", textDecoration: "none", font: "inherit", "&:hover": { color: "primary.light" } } }}>
+                        <a href={`/${language}/about`}>{t("من نحن")}</a>
                         <a href={`/${language}/privacy`}>{t("سياسة الخصوصية")}</a>
+                        <a href={`/${language}/delivery-returns`}>{t("شروط التسليم والإرجاع")}</a>
+                        <a href={`/${language}/distance-sales`}>{t("اتفاقية البيع عن بُعد")}</a>
                         <Box component="button" type="button" onClick={openConsentSettings} sx={{ p: 0, border: 0, background: "none", cursor: "pointer" }}>{t("إعدادات الكوكيز")}</Box>
                     </Stack>
+
+                    <Box className="footer-payments" sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+                        <Typography sx={{ fontSize: "0.62rem", color: "var(--clinova-rgba-245-247-250-0_42)" }}>{t("طرق الدفع الآمنة")}</Typography>
+                        {/* The official iyzico band: "iyzico ile Öde" with Mastercard, Visa, American Express and Troy. Always on a white pill so it reads on dark and light themes. */}
+                        <Box sx={{ bgcolor: "#fff", borderRadius: "12px", px: 1.75, py: 1, lineHeight: 0, boxShadow: "0 0 0 1px rgba(255,255,255,0.12)" }}>
+                            <Box component="img" src="/payments/iyzico-band-colored.svg" alt="iyzico ile Öde — Mastercard, Visa, American Express, Troy" width={456} height={32} loading="lazy" sx={{ display: "block", width: { xs: 280, md: 360 }, maxWidth: "100%", height: "auto" }} />
+                        </Box>
+                    </Box>
 
                     <Typography
                         sx={{
