@@ -6,7 +6,7 @@ import type { SiteLanguage } from "../i18n";
 // Have it reviewed by a lawyer for each country you advertise in, and update `updated` when the text changes.
 export type PrivacyText = { title: string; description: string; updated: string; sections: { heading: string; paragraphs: string[] }[] };
 
-export const privacyUpdated = "2026-10-29";
+export const privacyUpdated = "2026-11-24";
 
 export const privacy: Record<SiteLanguage, PrivacyText> = {
     ar: {
@@ -28,6 +28,7 @@ export const privacy: Record<SiteLanguage, PrivacyText> = {
                 "يمكنك طلب الاطلاع على بياناتك أو تصحيحها أو حذفها، أو سحب موافقتك على الرسائل التسويقية، بالتواصل معنا. وحسب بلدك قد تكون لك حقوق إضافية وفق قوانين مثل KVKK في تركيا أو GDPR في أوروبا.",
                 "الكوكيز التي تضعها Meta أو Google أو Microsoft على نطاقاتها الخاصة لا يستطيع هذا الموقع حذفها. يمكنك حذفها من إعدادات متصفحك، وبدون موافقتك لا يرسل موقعنا أي طلب إلى هذه الشركات.",
             ] },
+            { heading: "الدفع", paragraphs: ["عند شراء خدمة يتم الدفع على صفحة iyzico الآمنة. تُعالَج بيانات البطاقة لدى iyzico وحدها، ولا نراها ولا نحتفظ بها؛ نستلم فقط نتيجة العملية واسم الدافع وبيانات الفاتورة."] },
             { heading: "التغييرات", paragraphs: ["قد نحدّث هذه السياسة، ونذكر تاريخ آخر تحديث أعلاها."] },
         ],
     },
@@ -50,6 +51,7 @@ export const privacy: Record<SiteLanguage, PrivacyText> = {
                 "You can ask to see, correct or delete your data, or withdraw your consent to marketing messages, by contacting us. Depending on your country you may have additional rights under laws such as KVKK in Türkiye or the GDPR in Europe.",
                 "Cookies that Meta, Google or Microsoft set on their own domains cannot be deleted by this site. You can remove them in your browser settings, and without your consent our site sends no request to those companies.",
             ] },
+            { heading: "Payments", paragraphs: ["When you buy a service, payment is made on the secure iyzico page. Card data is processed by iyzico alone; we never see or store it, and we only receive the result of the payment, the payer's name and invoice details."] },
             { heading: "Changes", paragraphs: ["We may update this policy and will show the date of the latest update at the top."] },
         ],
     },
@@ -72,6 +74,7 @@ export const privacy: Record<SiteLanguage, PrivacyText> = {
                 "Bizimle iletişime geçerek verilerinizi görmeyi, düzeltmeyi veya silmeyi ya da pazarlama mesajlarına verdiğiniz izni geri çekmeyi isteyebilirsiniz. Ülkenize göre Türkiye'de KVKK veya Avrupa'da GDPR gibi yasalar kapsamında ek haklarınız olabilir.",
                 "Meta, Google veya Microsoft'un kendi alan adlarına yerleştirdiği çerezleri bu site silemez. Bunları tarayıcı ayarlarınızdan kaldırabilirsiniz; izniniz olmadan sitemiz bu şirketlere hiçbir istek göndermez.",
             ] },
+            { heading: "Ödemeler", paragraphs: ["Bir hizmet satın aldığınızda ödeme, iyzico'nun güvenli sayfasında yapılır. Kart bilgileri yalnızca iyzico tarafından işlenir; biz görmeyiz ve saklamayız, yalnızca ödemenin sonucunu, ödeyenin adını ve fatura bilgilerini alırız."] },
             { heading: "Değişiklikler", paragraphs: ["Bu politikayı güncelleyebiliriz; son güncelleme tarihini sayfanın üstünde gösteririz."] },
         ],
     },
@@ -94,6 +97,7 @@ export const privacy: Record<SiteLanguage, PrivacyText> = {
                 "Vous pouvez demander à consulter, corriger ou supprimer vos données, ou retirer votre accord aux messages marketing, en nous contactant. Selon votre pays, vous pouvez disposer de droits supplémentaires au titre de lois comme le RGPD en Europe ou la KVKK en Turquie.",
                 "Les cookies que Meta, Google ou Microsoft déposent sur leurs propres domaines ne peuvent pas être supprimés par ce site. Vous pouvez les supprimer dans les paramètres de votre navigateur, et sans votre accord notre site n'envoie aucune requête à ces sociétés.",
             ] },
+            { heading: "Paiements", paragraphs: ["Lorsque vous achetez un service, le paiement s'effectue sur la page sécurisée d'iyzico. Les données de carte sont traitées par iyzico seul ; nous ne les voyons ni ne les conservons, et ne recevons que le résultat du paiement, le nom du payeur et les informations de facturation."] },
             { heading: "Modifications", paragraphs: ["Nous pouvons mettre à jour cette politique et indiquerons la date de la dernière mise à jour en haut de la page."] },
         ],
     },

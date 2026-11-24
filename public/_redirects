@@ -12,6 +12,12 @@
 /fr/  /fr/index.html  200!
 /:lang/privacy  /:lang/privacy/index.html  200!
 /:lang/privacy/  /:lang/privacy/index.html  200!
+/:lang/about  /:lang/about/index.html  200!
+/:lang/about/  /:lang/about/index.html  200!
+/:lang/delivery-returns  /:lang/delivery-returns/index.html  200!
+/:lang/delivery-returns/  /:lang/delivery-returns/index.html  200!
+/:lang/distance-sales  /:lang/distance-sales/index.html  200!
+/:lang/distance-sales/  /:lang/distance-sales/index.html  200!
 /:lang/blog  /:lang/blog/index.html  200!
 /:lang/blog/  /:lang/blog/index.html  200!
 /:lang/blog/:slug  /:lang/blog/:slug/index.html  200!

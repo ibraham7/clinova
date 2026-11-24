@@ -15,6 +15,7 @@ import ConsentBanner from "./legal/ConsentBanner";
 const BlogIndex = import.meta.env.SSR ? (await import("./blog/BlogIndex")).default : lazy(() => import("./blog/BlogIndex"));
 const BlogArticle = import.meta.env.SSR ? (await import("./blog/BlogArticle")).default : lazy(() => import("./blog/BlogArticle"));
 const PrivacyPage = import.meta.env.SSR ? (await import("./legal/PrivacyPage")).default : lazy(() => import("./legal/PrivacyPage"));
+const LegalPage = import.meta.env.SSR ? (await import("./legal/LegalPage")).default : lazy(() => import("./legal/LegalPage"));
 const AdminApp = lazy(() => import("./admin/AdminApp"));
 const EditMode = lazy(() => import("./admin/EditMode"));
 
@@ -46,6 +47,7 @@ export default function Root({ route }: { route: Route }) {
             : route.kind === "home" ? <App />
             : <Suspense fallback={null}>{route.kind === "blog" ? <BlogIndex />
                 : route.kind === "privacy" ? <PrivacyPage />
+                : route.kind === "legal" ? <LegalPage slug={route.slug} />
                 : <BlogArticle slug={route.slug} />}</Suspense>}
         {editing && <Suspense fallback={null}><EditMode /></Suspense>}
         {!admin && !editing && <ConsentBanner />}
