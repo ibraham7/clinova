@@ -1,6 +1,8 @@
 import { Box } from "@mui/material";
 import { keyframes } from "@emotion/react";
 import { logoSmall as clinovaLogo } from "../../config/logo";
+import { useSiteTranslation } from "../../i18n/useSiteTranslation";
+import CountUp from "../motion/CountUp";
 
 const float = keyframes`
     0%, 100% { transform: translateY(0); }
@@ -22,13 +24,21 @@ const travel = keyframes`
     to { stroke-dashoffset: -240; }
 `;
 
-/** Decorative illustration: no timers, network requests, or live metrics. */
+const draw = keyframes`
+    to { stroke-dashoffset: 0; }
+`;
+
+/**
+ * Decorative illustration (the SVG is hidden from screen readers), plus one real client result on a floating card,
+ * which is read out. The figure is a fixed example, not a live metric.
+ */
 export default function HeroVisual() {
+    const { t } = useSiteTranslation();
     return (
         <Box
-            aria-hidden="true"
             className="clinova-parallax"
             sx={{
+                position: "relative",
                 width: "100%",
                 maxWidth: { xs: 350, md: 440, lg: "clamp(300px, calc(100vh - 330px), 520px)" },
                 aspectRatio: "1",
@@ -42,6 +52,7 @@ export default function HeroVisual() {
                     animation: `${breathe} 8s ease-in-out infinite`,
                 },
                 "& .hero-signal": { animation: `${travel} 16s linear infinite` },
+                "& .hero-result-line": { strokeDasharray: 1, strokeDashoffset: 1, animation: `${draw} 1.8s 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards` },
                 // Each floating card sits at its own depth, so they slide against each other as the pointer moves.
                 "& .hero-d1": { translate: "calc(var(--clinova-px, 0) * -16px) calc(var(--clinova-py, 0) * -12px)", transition: "translate 900ms cubic-bezier(0.22, 1, 0.36, 1)" },
                 "& .hero-d2": { translate: "calc(var(--clinova-px, 0) * 22px) calc(var(--clinova-py, 0) * 16px)", transition: "translate 900ms cubic-bezier(0.22, 1, 0.36, 1)" },
@@ -59,7 +70,7 @@ export default function HeroVisual() {
                 },
             }}
         >
-            <svg viewBox="0 0 520 520" fill="none" focusable="false">
+            <svg viewBox="0 0 520 520" fill="none" focusable="false" aria-hidden="true">
                 <defs>
                     <radialGradient id="clinova-hero-glow">
                         <stop stopColor="var(--clinova-color-8ea8e8)" stopOpacity="0.3" />
@@ -116,6 +127,43 @@ export default function HeroVisual() {
                 <circle cx="271" cy="56" r="3" fill="var(--clinova-color-b8c8ef)" fillOpacity="0.65" />
                 <circle cx="205" cy="457" r="3" fill="var(--clinova-color-8ea8e8)" fillOpacity="0.4" />
             </svg>
+
+            {/* A real result of one client: more than $13K in the first 30 days. */}
+            <Box className="hero-d3" role="note" sx={{ position: "absolute", left: { xs: "-2%", md: "-6%" }, bottom: { xs: "6%", md: "8%" }, width: { xs: 168, md: 204 } }}>
+                <Box className="hero-float hero-float-delayed" sx={{
+                    p: { xs: 1.4, md: 1.75 }, borderRadius: "18px",
+                    background: "linear-gradient(150deg, var(--clinova-rgba-26-38-59-0_94), var(--clinova-rgba-11-17-27-0_94))",
+                    border: "1px solid color-mix(in srgb, var(--clinova-gold) 45%, transparent)",
+                    boxShadow: "0 18px 40px rgba(3, 7, 14, 0.45), 0 0 0 1px rgba(255,255,255,0.03) inset, 0 0 32px -10px var(--clinova-gold-glow)",
+                    backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
+                }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, fontSize: { xs: "0.66rem", md: "0.72rem" }, color: "var(--clinova-rgba-245-247-250-0_72)" }}>
+                        <Box component="span" sx={{ width: 7, height: 7, borderRadius: "50%", bgcolor: "var(--clinova-gold)", boxShadow: "0 0 10px var(--clinova-gold-glow)", flexShrink: 0 }} />
+                        {t("من نتائج عملائنا")}
+                    </Box>
+                    <Box component="bdi" dir="ltr" sx={{ display: "block", mt: 0.5, fontSize: { xs: "1.75rem", md: "2.1rem" }, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.02em", fontFamily: '"Plus Jakarta Sans", var(--clinova-font-family)', textAlign: "start" }}>
+                        <CountUp value="+$13K" duration={1600} />
+                    </Box>
+                    <Box sx={{ mt: 0.25, fontSize: { xs: "0.7rem", md: "0.78rem" }, lineHeight: 1.5, color: "var(--clinova-color-f5f7fa)" }}>
+                        {t("لعيادة واحدة خلال أول 30 يوماً")}
+                    </Box>
+                    {/* Rising line to day 30; the last point is the result. */}
+                    <Box component="svg" viewBox="0 0 160 40" aria-hidden="true" sx={{ display: "block", width: "100%", height: { xs: 28, md: 34 }, mt: 1, overflow: "visible" }}>
+                        <defs>
+                            <linearGradient id="clinova-hero-result-fill" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stopColor="var(--clinova-gold)" stopOpacity="0.32" />
+                                <stop offset="1" stopColor="var(--clinova-gold)" stopOpacity="0" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M2 36 C30 34 44 30 62 27 S98 18 116 13 S142 6 156 4 L156 40 L2 40 Z" fill="url(#clinova-hero-result-fill)" />
+                        <path className="hero-result-line" d="M2 36 C30 34 44 30 62 27 S98 18 116 13 S142 6 156 4" stroke="var(--clinova-gold)" strokeWidth="2" strokeLinecap="round" fill="none" pathLength="1" />
+                        <circle cx="156" cy="4" r="3.5" fill="#fff1c8" stroke="var(--clinova-gold)" strokeWidth="1.5" />
+                    </Box>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.25, fontSize: "0.6rem", color: "var(--clinova-rgba-245-247-250-0_42)", direction: "ltr" }}>
+                        <span>{t("اليوم 1")}</span><span>{t("اليوم 30")}</span>
+                    </Box>
+                </Box>
+            </Box>
         </Box>
     );
 }
