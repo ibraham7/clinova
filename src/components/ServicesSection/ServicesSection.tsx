@@ -10,7 +10,6 @@ import {
 
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
-import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 
 type Service = {
     id: string;
@@ -27,219 +26,147 @@ type Service = {
     }[];
 };
 
+// Six services: the first three are the core services (top tabs), the last three the supporting ones (bottom row).
+// subtitle is the English name of the service, shown as it is in every language; categoryTitle / navLabel are its Arabic name (translated).
 const services: Service[] = [
     {
-        id: "ads",
+        id: "marketing",
         number: "01",
-        navLabel: "جذب المريض",
+        navLabel: "التسويق وجذب المرضى",
         title: "نوصل عيادتك إلى المرضى المناسبين",
-        categoryTitle: "إدارة المحتوى والتسويق",
-        subtitle: "جذب المرضى",
+        categoryTitle: "التسويق وجذب المرضى",
+        subtitle: "Medical Marketing & Lead Generation",
         description:
-            "Google + Meta + SEO وحملات موجهة لجذب استفسارات حقيقية من أشخاص يبحثون عن خدمات عيادتك.",
+            "إدارة الحملات الإعلانية على منصات مثل Meta وGoogle وSnapchat وTikTok، واستهداف المرضى المحتملين المهتمين بالخدمات الطبية التي تقدمها العيادة، بهدف توليد استفسارات وفرص حجز جديدة بشكل مستمر.",
         features: [
-            "استراتيجية الحملات",
-            "استهداف الجمهور",
-            "تحسين التحويل",
+            "إدارة الحملات الإعلانية",
+            "استهداف المرضى المحتملين",
+            "توليد استفسارات وفرص حجز",
             "تقارير أداء واضحة",
         ],
         stats: [
-            {
-                label: "META",
-                value: "82%",
-            },
-            {
-                label: "GOOGLE",
-                value: "65%",
-            },
-            {
-                label: "TIKTOK",
-                value: "48%",
-            },
-            {
-                label: "SNAP",
-                value: "28%",
-            },
+            { label: "META", value: "82%" },
+            { label: "GOOGLE", value: "65%" },
+            { label: "TIKTOK", value: "48%" },
+            { label: "SNAP", value: "28%" },
         ],
     },
-
     {
-        id: "content",
+        id: "sales",
         number: "02",
-        navLabel: "استجابة فورية",
-        title: "نضمن استجابة فورية لكل استفسار",
-        categoryTitle: "تأهيل ومتابعة المرضى",
-        subtitle: "التواصل الذكي",
+        navLabel: "المبيعات والكول سنتر الطبي",
+        title: "نحوّل اهتمام المريض إلى موعد فعلي",
+        categoryTitle: "المبيعات والكول سنتر الطبي",
+        subtitle: "Medical Sales & Call Center",
         description:
-            "AI يستجيب للمرضى على مدار الساعة عبر WhatsApp، مع انتقال المتابعة إلى فريقنا البشري خلال أوقات العمل.",
+            "فريق متخصص في التواصل مع المرضى المحتملين، والرد على استفساراتهم، ومتابعتهم، والتعامل مع اعتراضاتهم، وتحويل اهتمامهم إلى مواعيد وحجوزات فعلية مع العيادة.",
         features: [
-            "استراتيجية المحتوى",
-            "كتابة المحتوى الطبي",
-            "تصميم المنشورات",
-            "إدارة الهوية البصرية",
+            "التواصل مع المرضى المحتملين",
+            "الرد على الاستفسارات والمتابعة",
+            "التعامل مع اعتراضات المريض",
+            "تحويل الاهتمام إلى حجوزات",
         ],
         stats: [
-            {
-                label: "EDUCATION",
-                value: "90%",
-            },
-            {
-                label: "TRUST",
-                value: "78%",
-            },
-            {
-                label: "REACH",
-                value: "64%",
-            },
-            {
-                label: "ENGAGE",
-                value: "52%",
-            },
+            { label: "RESPONSE", value: "84%" },
+            { label: "FOLLOW UP", value: "88%" },
+            { label: "BOOKING", value: "72%" },
+            { label: "CONVERT", value: "63%" },
         ],
     },
-
-    {
-        id: "growth",
-        number: "03",
-        navLabel: "تأهيل المريض",
-        title: "نحوّل الاستفسارات إلى مواعيد",
-        categoryTitle: "نمو العيادة",
-        subtitle: "تأهيل وحجز",
-        description:
-            "نفهم احتياج المريض، نجيب عن استفساراته، نؤهله ونساعده على الوصول إلى حجز الموعد المناسب.",
-        features: [
-            "تحليل رحلة المريض",
-            "تحسين تجربة الحجز",
-            "قياس النتائج",
-            "استراتيجية النمو",
-        ],
-        stats: [
-            {
-                label: "LEADS",
-                value: "86%",
-            },
-            {
-                label: "BOOKING",
-                value: "73%",
-            },
-            {
-                label: "RETENTION",
-                value: "61%",
-            },
-            {
-                label: "GROWTH",
-                value: "54%",
-            },
-        ],
-    },
-
     {
         id: "crm",
-        number: "04",
-        navLabel: "حجز الموعد",
+        number: "03",
+        navLabel: "أنظمة إدارة المرضى CRM",
         title: "كل مريض وفرصة في مكان واحد",
-        subtitle: "إدارة ونمو العيادة",
+        categoryTitle: "أنظمة إدارة المرضى CRM",
+        subtitle: "Clinic Management & CRM",
         description:
-            "CRM يجمع الاستفسارات والمواعيد والمتابعات، ويمنحك رؤية واضحة لمسار كل مريض وفرصة داخل عيادتك.",
+            "توفير نظام رقمي متكامل لإدارة رحلة المريض داخل العيادة، من أول استفسار وحتى إتمام العلاج، مع أتمتة المتابعة والتذكير بالمواعيد، وإعادة التواصل مع المرضى، بهدف زيادة التحويلات وتقليل حالات عدم الحضور (No-Show).",
         features: [
-            "إدارة بيانات المرضى",
-            "متابعة الاستفسارات",
-            "تنظيم الحجوزات",
-            "تقارير دورية",
+            "إدارة رحلة المريض",
+            "أتمتة المتابعة والتذكير بالمواعيد",
+            "إعادة التواصل مع المرضى",
+            "تقليل حالات عدم الحضور",
         ],
         stats: [
-            {
-                label: "FOLLOW UP",
-                value: "91%",
-            },
-            {
-                label: "RESPONSE",
-                value: "84%",
-            },
-            {
-                label: "BOOKING",
-                value: "76%",
-            },
-            {
-                label: "RETENTION",
-                value: "69%",
-            },
+            { label: "FOLLOW UP", value: "91%" },
+            { label: "RESPONSE", value: "84%" },
+            { label: "BOOKING", value: "76%" },
+            { label: "RETENTION", value: "69%" },
         ],
     },
-
     {
-        id: "booking",
+        id: "web",
+        number: "04",
+        navLabel: "الحضور الرقمي ومحركات البحث",
+        title: "نُظهر عيادتك حيث يبحث المرضى",
+        categoryTitle: "الحضور الرقمي ومحركات البحث",
+        subtitle: "Website & Search Engine Optimization",
+        description:
+            "تصميم وتطوير مواقع إلكترونية احترافية للعيادات، وتحسين ظهورها في نتائج بحث Google، والعمل على تحسين فرص ظهور محتواها في إجابات محركات الذكاء الاصطناعي مثل ChatGPT.",
+        features: [
+            "تصميم وتطوير موقع احترافي",
+            "تحسين الظهور في نتائج Google",
+            "ظهور المحتوى في إجابات الذكاء الاصطناعي",
+            "محتوى يجيب عن أسئلة المرضى",
+        ],
+        stats: [
+            { label: "SEO", value: "86%" },
+            { label: "SPEED", value: "78%" },
+            { label: "VISIBILITY", value: "64%" },
+            { label: "AI SEARCH", value: "52%" },
+        ],
+    },
+    {
+        id: "reputation",
         number: "05",
-        navLabel: "متابعة وتحويل",
-        title: "نساعد المريض على اتخاذ القرار",
-        subtitle: "تنسيق علاجي ومبيعات",
+        navLabel: "إدارة السمعة والتقييمات",
+        title: "نبني ثقة المريض قبل أن يزورك",
+        categoryTitle: "إدارة السمعة والتقييمات",
+        subtitle: "Online Reputation Management",
         description:
-            "فريق متخصص يتولى التواصل والمتابعة، ويفهم احتياج المريض ويشرح له الخيارات العلاجية المناسبة باحترافية وإنسانية.",
+            "إدارة وتحسين السمعة الرقمية للعيادة من خلال متابعة تقييمات Google Maps، والرد على مراجعات المرضى، وإدارة الانطباع الرقمي، وتعزيز ثقة المريض المحتمل بالعيادة.",
         features: [
-            "تتبع مصادر المرضى",
-            "متابعة الحجوزات",
-            "تنبيهات المتابعة",
-            "تحليل التحويلات",
+            "متابعة تقييمات Google Maps",
+            "الرد على مراجعات المرضى",
+            "إدارة الانطباع الرقمي",
+            "تعزيز ثقة المريض المحتمل",
         ],
         stats: [
-            {
-                label: "TRACKED",
-                value: "95%",
-            },
-            {
-                label: "FOLLOW UP",
-                value: "88%",
-            },
-            {
-                label: "BOOKING",
-                value: "72%",
-            },
-            {
-                label: "CONVERT",
-                value: "63%",
-            },
+            { label: "RATING", value: "92%" },
+            { label: "REVIEWS", value: "81%" },
+            { label: "REPLIES", value: "88%" },
+            { label: "TRUST", value: "78%" },
         ],
     },
-
     {
-        id: "creative",
+        id: "social",
         number: "06",
-        navLabel: "إعادة تنشيط",
-        title: "نستعيد الفرص التي لم تكتمل",
-        subtitle: "إعادة تنشيط المرضى",
+        navLabel: "السوشيال ميديا والهوية",
+        title: "حضور احترافي يعزز الثقة والوعي بعيادتك",
+        categoryTitle: "إدارة السوشيال ميديا والهوية",
+        subtitle: "Social Media & Branding",
         description:
-            "نعيد التواصل مع المرضى السابقين والاستفسارات غير المكتملة عبر حملات متابعة وتنشيط مدروسة.",
+            "إدارة حسابات التواصل الاجتماعي، وإعداد المحتوى الطبي والتصاميم والمنشورات، وتطوير الهوية البصرية للعيادة، لبناء حضور احترافي وتعزيز الثقة والوعي بالعلامة التجارية.",
         features: [
-            "الهوية البصرية",
-            "التصميم الإبداعي",
-            "تصميم الحملات",
-            "تجربة المستخدم",
+            "إدارة حسابات التواصل الاجتماعي",
+            "المحتوى الطبي والتصاميم",
+            "تصميم المنشورات",
+            "تطوير الهوية البصرية",
         ],
         stats: [
-            {
-                label: "BRAND",
-                value: "92%",
-            },
-            {
-                label: "DESIGN",
-                value: "87%",
-            },
-            {
-                label: "UX",
-                value: "81%",
-            },
-            {
-                label: "IDENTITY",
-                value: "76%",
-            },
+            { label: "BRAND", value: "92%" },
+            { label: "DESIGN", value: "87%" },
+            { label: "CONTENT", value: "81%" },
+            { label: "REACH", value: "76%" },
         ],
     },
 ];
 
 function ServicesSection() {
-    const { direction, t, isRtl } = useSiteTranslation();
+    const { direction, t } = useSiteTranslation();
 
-    const [activeService, setActiveService] = useState("ads");
+    const [activeService, setActiveService] = useState("marketing");
 
     const active =
         services.find((service) => service.id === activeService) ??
@@ -267,8 +194,10 @@ function ServicesSection() {
         >
             <Container>
                 {/* =========================================
-                    TOP TABS
+                    TOP TABS: the three core services
                 ========================================== */}
+
+                <GroupTitle text={t("الخدمات الرئيسية")} />
 
                 <Box
                     sx={{
@@ -548,135 +477,50 @@ function ServicesSection() {
                 </Box>
 
                 {/* =========================================
-                    BOTTOM SERVICES NAV
+                    BOTTOM ROW: the three supporting services
                 ========================================== */}
 
-                <Box className="svc-steps" sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)", md: "repeat(6, 1fr)",
-                        },
-
-                        columnGap: 3, mt: 3, borderTop: "1px solid var(--clinova-rgba-142-168-232-0_1)", }}
-                >
-                    {services.map((service, index) => {
-                        const isActive =
-                            activeService === service.id;
-
-                        return (
-                            <Box key={service.id} component="button" className={isActive ? "svc-step is-active" : "svc-step"} onClick={() => setActiveService( service.id, ) } sx={{ position: "relative", border: 0,
-
-                                    background:
-                                        "transparent",
-
-                                    cursor: "pointer",
-
-                                    px: 1,
-
-                                    py: 2,
-
-                                    textAlign: "center",
-
-                                    color: isActive
-                                        ? "primary.main"
-                                        : "text.secondary",
-
-                                    "&::before": {
-                                        content: '""',
-
-                                        position:
-                                            "absolute",
-
-                                        top: -1,
-
-                                        left: 0,
-                                        right: 0,
-
-                                        height: 2,
-
-                                        backgroundColor:
-                                            isActive
-                                                ? "primary.main"
-                                                : "transparent",
-
-                                        boxShadow:
-                                            isActive
-                                                ? "0 0 12px var(--clinova-rgba-142-168-232-0_45)"
-                                                : "none",
-
-                                        transition:
-                                            "background-color 0.25s ease",
-                                    },
-
-                                    "&:hover": {
-                                        color:
-                                            "primary.light",
-                                    },
-                                }}
-                            >
-                                <Typography
+                <Box sx={{ mt: { xs: 4, md: 5 } }}>
+                    <GroupTitle text={t("الخدمات المساندة")} />
+                    <Box className="svc-steps" sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(3, 1fr)" }, columnGap: 3, borderTop: "1px solid var(--clinova-rgba-142-168-232-0_1)" }}>
+                        {services.slice(3).map((service) => {
+                            const isActive = activeService === service.id;
+                            return (
+                                <Box key={service.id} component="button" className={isActive ? "svc-step is-active" : "svc-step"} onClick={() => setActiveService(service.id)}
                                     sx={{
-                                        fontFamily:
-                                            '"Plus Jakarta Sans", sans-serif',
-
-                                        fontSize:
-                                            "0.5rem",
-
-                                        letterSpacing:
-                                            "0.12em",
-
-                                        mb: 0.6,
-
-                                        color:
-                                            isActive
-                                                ? "primary.main"
-                                                : "var(--clinova-rgba-245-247-250-0_3)",
-                                    }}
-                                >
-                                    {service.number}
-                                </Typography>
-
-                                <Typography
-                                    sx={{
-                                        fontFamily:
-                                            "var(--clinova-font-family)",
-
-                                        fontSize: {
-                                            xs: "0.68rem",
-                                            md: "0.72rem",
+                                        position: "relative", border: 0, background: "transparent", cursor: "pointer", px: 1, py: 2, textAlign: "center",
+                                        color: isActive ? "primary.main" : "text.secondary",
+                                        "&::before": {
+                                            content: '""', position: "absolute", top: -1, left: 0, right: 0, height: 2,
+                                            backgroundColor: isActive ? "primary.main" : "transparent",
+                                            boxShadow: isActive ? "0 0 12px var(--clinova-rgba-142-168-232-0_45)" : "none",
+                                            transition: "background-color 0.25s ease",
                                         },
-
-                                        whiteSpace: "normal",
+                                        "&:hover": { color: "primary.light" },
                                     }}
                                 >
-                                    {t(service.navLabel)}
-                                </Typography>
-                                {index < services.length - 1 && (
-                                    <ArrowBackRoundedIcon
-                                        aria-hidden="true"
-                                        sx={{
-                                            position: "absolute",
-                                            insetInlineEnd: -12,
-                                            top: "50%",
-                                            transform: isRtl
-                                                ? "translate(-50%, -50%)"
-                                                : "translate(50%, -50%) rotate(180deg)",
-                                            fontSize: 18,
-                                            color: isActive
-                                                ? "primary.main"
-                                                : "var(--clinova-rgba-142-168-232-0_45)",
-                                            pointerEvents: "none",
-                                            display: {
-                                                xs: (index + 1) % 2 === 0 ? "none" : "block",
-                                                sm: (index + 1) % 3 === 0 ? "none" : "block",
-                                                md: "block",
-                                            },
-                                        }}
-                                    />
-                                )}
-                            </Box>
-                        );
-                    })}
+                                    <Typography sx={{ fontFamily: '"Plus Jakarta Sans", sans-serif', fontSize: "0.5rem", letterSpacing: "0.12em", mb: 0.6, color: isActive ? "primary.main" : "var(--clinova-rgba-245-247-250-0_3)" }}>
+                                        {service.number}
+                                    </Typography>
+                                    <Typography sx={{ fontFamily: "var(--clinova-font-family)", fontSize: { xs: "0.78rem", md: "0.82rem" }, whiteSpace: "normal" }}>
+                                        {t(service.navLabel)}
+                                    </Typography>
+                                </Box>
+                            );
+                        })}
+                    </Box>
                 </Box>
             </Container>
         </Box>
+    );
+}
+
+/** Small heading above a group of services ("Core services", "Supporting services"). */
+function GroupTitle({ text }: { text: string }) {
+    return (
+        <Typography sx={{ mb: 1.5, fontFamily: "var(--clinova-font-family)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", color: "primary.main" }}>
+            {text}
+        </Typography>
     );
 }
 
