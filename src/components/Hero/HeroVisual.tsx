@@ -28,6 +28,52 @@ const draw = keyframes`
     to { stroke-dashoffset: 0; }
 `;
 
+const fadeIn = keyframes`
+    to { opacity: 1; }
+`;
+
+const pop = keyframes`
+    0% { opacity: 0; transform: scale(0.2); }
+    70% { opacity: 1; transform: scale(1.35); }
+    100% { opacity: 1; transform: scale(1); }
+`;
+
+// Everything below moves only transform and opacity, so the browser can animate it without redrawing the card.
+const cardGlow = keyframes`
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.95; }
+`;
+
+const shine = keyframes`
+    0% { transform: translateX(-130%); }
+    32%, 100% { transform: translateX(130%); }
+`;
+
+const numberPulse = keyframes`
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+`;
+
+const numberAura = keyframes`
+    0%, 100% { opacity: 0.25; transform: scale(0.85); }
+    50% { opacity: 0.8; transform: scale(1.15); }
+`;
+
+const twinkle = keyframes`
+    0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1) rotate(90deg); }
+`;
+
+const ring = keyframes`
+    0% { opacity: 0.85; transform: scale(1); }
+    100% { opacity: 0; transform: scale(3.4); }
+`;
+
+const lineGlow = keyframes`
+    0%, 100% { opacity: 0.12; }
+    50% { opacity: 0.4; }
+`;
+
 /**
  * Decorative illustration (the SVG is hidden from screen readers), plus one real client result on a floating card,
  * which is read out. The figure is a fixed example, not a live metric.
@@ -52,7 +98,20 @@ export default function HeroVisual() {
                     animation: `${breathe} 8s ease-in-out infinite`,
                 },
                 "& .hero-signal": { animation: `${travel} 16s linear infinite` },
-                "& .hero-result-line": { strokeDasharray: 1, strokeDashoffset: 1, animation: `${draw} 1.8s 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards` },
+                // The story of the chart, in order: a flat line (before Clinova), the start point on day 1, then the climb.
+                "& .hero-before-line": { strokeDasharray: 1, strokeDashoffset: 1, animation: `${draw} 0.7s 0.3s ease-out forwards` },
+                "& .hero-start": { opacity: 0, transformBox: "fill-box", transformOrigin: "center", animation: `${pop} 0.5s 1s cubic-bezier(0.22, 1, 0.36, 1) forwards` },
+                "& .hero-result-line": { strokeDasharray: 1, strokeDashoffset: 1, animation: `${draw} 1.8s 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards` },
+                "& .hero-result-fill": { opacity: 0, animation: `${fadeIn} 0.9s 2s ease-out forwards` },
+                "& .hero-end": { opacity: 0, animation: `${fadeIn} 0.3s 2.8s forwards` },
+                "& .hero-line-glow": { opacity: 0.12, animation: `${lineGlow} 2.4s 3s ease-in-out infinite` },
+                "& .hero-ring": { opacity: 0, transformBox: "fill-box", transformOrigin: "center", animation: `${ring} 1.9s 3s ease-out infinite` },
+                // What catches the eye on the result card: the glowing edge, a light sweeping over it, a number that swells and shrinks, and twinkling stars.
+                "& .hero-card-glow": { animation: `${cardGlow} 2.6s ease-in-out infinite` },
+                "& .hero-card-shine": { animation: `${shine} 5s 1.5s ease-in-out infinite` },
+                "& .hero-number": { display: "inline-block", transformOrigin: "left center", animation: `${numberPulse} 2.4s 1.8s ease-in-out infinite` },
+                "& .hero-number-aura": { animation: `${numberAura} 2.4s 1.8s ease-in-out infinite` },
+                "& .hero-spark": { opacity: 0, animation: `${twinkle} 2.2s ease-in-out infinite` },
                 // Each floating card sits at its own depth, so they slide against each other as the pointer moves.
                 "& .hero-d1": { translate: "calc(var(--clinova-px, 0) * -16px) calc(var(--clinova-py, 0) * -12px)", transition: "translate 900ms cubic-bezier(0.22, 1, 0.36, 1)" },
                 "& .hero-d2": { translate: "calc(var(--clinova-px, 0) * 22px) calc(var(--clinova-py, 0) * 16px)", transition: "translate 900ms cubic-bezier(0.22, 1, 0.36, 1)" },
@@ -62,8 +121,14 @@ export default function HeroVisual() {
                 "@media (max-width: 899px), (pointer: coarse)": {
                     "& .hero-halo": { animation: "none", opacity: 0.5 },
                     "& .hero-spin": { animation: "none" },
+                    // The result card keeps its glow, the sweeping light, the swelling number, the stars and the pulse at the end of the line; only the line's own glow stays still.
+                    "& .hero-line-glow": { animation: "none", opacity: 0.2 },
                 },
                 "@media (prefers-reduced-motion: reduce)": {
+                    "& .hero-card-glow": { animation: "none", opacity: 0.55 },
+                    "& .hero-card-shine, & .hero-number, & .hero-number-aura, & .hero-spark, & .hero-ring, & .hero-line-glow": { animation: "none" },
+                    "& .hero-number-aura": { opacity: 0.4 },
+                    "& .hero-spark": { opacity: 0.7 },
                     "& .hero-float": { animationName: `${gentleFloat}`, animationDuration: "12s" },
                     "& .hero-halo": { animationDuration: "16s" },
                     "& .hero-signal": { animationDuration: "24s" },
@@ -128,39 +193,69 @@ export default function HeroVisual() {
                 <circle cx="205" cy="457" r="3" fill="var(--clinova-color-8ea8e8)" fillOpacity="0.4" />
             </svg>
 
-            {/* A real result of one client: more than $13K in the first 30 days. */}
-            <Box className="hero-d3" role="note" sx={{ position: "absolute", left: { xs: "-2%", md: "-6%" }, bottom: { xs: "6%", md: "8%" }, width: { xs: 168, md: 204 } }}>
-                <Box className="hero-float hero-float-delayed" sx={{
-                    p: { xs: 1.4, md: 1.75 }, borderRadius: "18px",
-                    background: "linear-gradient(150deg, var(--clinova-rgba-26-38-59-0_94), var(--clinova-rgba-11-17-27-0_94))",
-                    border: "1px solid color-mix(in srgb, var(--clinova-gold) 45%, transparent)",
-                    boxShadow: "0 18px 40px rgba(3, 7, 14, 0.45), 0 0 0 1px rgba(255,255,255,0.03) inset, 0 0 32px -10px var(--clinova-gold-glow)",
-                    backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
-                }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, fontSize: { xs: "0.66rem", md: "0.72rem" }, color: "var(--clinova-rgba-245-247-250-0_72)" }}>
-                        <Box component="span" sx={{ width: 7, height: 7, borderRadius: "50%", bgcolor: "var(--clinova-gold)", boxShadow: "0 0 10px var(--clinova-gold-glow)", flexShrink: 0 }} />
-                        {t("من نتائج عملائنا")}
-                    </Box>
-                    <Box component="bdi" dir="ltr" sx={{ display: "block", mt: 0.5, fontSize: { xs: "1.75rem", md: "2.1rem" }, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.02em", fontFamily: '"Plus Jakarta Sans", var(--clinova-font-family)', textAlign: "start" }}>
-                        <CountUp value="+$13K" duration={1600} />
-                    </Box>
-                    <Box sx={{ mt: 0.25, fontSize: { xs: "0.7rem", md: "0.78rem" }, lineHeight: 1.5, color: "var(--clinova-color-f5f7fa)" }}>
-                        {t("لعيادة واحدة خلال أول 30 يوماً")}
-                    </Box>
-                    {/* Rising line to day 30; the last point is the result. */}
-                    <Box component="svg" viewBox="0 0 160 40" aria-hidden="true" sx={{ display: "block", width: "100%", height: { xs: 28, md: 34 }, mt: 1, overflow: "visible" }}>
-                        <defs>
-                            <linearGradient id="clinova-hero-result-fill" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0" stopColor="var(--clinova-gold)" stopOpacity="0.32" />
-                                <stop offset="1" stopColor="var(--clinova-gold)" stopOpacity="0" />
-                            </linearGradient>
-                        </defs>
-                        <path d="M2 36 C30 34 44 30 62 27 S98 18 116 13 S142 6 156 4 L156 40 L2 40 Z" fill="url(#clinova-hero-result-fill)" />
-                        <path className="hero-result-line" d="M2 36 C30 34 44 30 62 27 S98 18 116 13 S142 6 156 4" stroke="var(--clinova-gold)" strokeWidth="2" strokeLinecap="round" fill="none" pathLength="1" />
-                        <circle cx="156" cy="4" r="3.5" fill="#fff1c8" stroke="var(--clinova-gold)" strokeWidth="1.5" />
-                    </Box>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.25, fontSize: "0.6rem", color: "var(--clinova-rgba-245-247-250-0_42)", direction: "ltr" }}>
-                        <span>{t("اليوم 1")}</span><span>{t("اليوم 30")}</span>
+            {/* One client's result: more than $13K in the first 30 days. The chart is a drawing of the idea: flat before Clinova, climbing from day 1. */}
+            <Box className="hero-d3" role="note" sx={{ position: "absolute", left: { xs: "-2%", md: "-6%" }, bottom: { xs: "6%", md: "8%" }, width: { xs: 188, md: 232 } }}>
+                <Box className="hero-float hero-float-delayed" sx={{ position: "relative" }}>
+                    {/* A gold glow around the edge that breathes. */}
+                    <Box className="hero-card-glow" aria-hidden="true" sx={{ position: "absolute", inset: "-2px", borderRadius: "20px", boxShadow: "0 0 26px 3px var(--clinova-gold-glow), 0 0 0 1px color-mix(in srgb, var(--clinova-gold) 70%, transparent)" }} />
+                    <Box sx={{
+                        position: "relative", p: { xs: 1.4, md: 1.75 }, borderRadius: "18px", overflow: "hidden",
+                        background: "linear-gradient(150deg, var(--clinova-rgba-26-38-59-0_94), var(--clinova-rgba-11-17-27-0_94))",
+                        border: "1px solid color-mix(in srgb, var(--clinova-gold) 55%, transparent)",
+                        boxShadow: "0 18px 40px rgba(3, 7, 14, 0.45), 0 0 0 1px rgba(255,255,255,0.03) inset",
+                        backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
+                    }}>
+                        {/* A band of light that sweeps across the card every few seconds. */}
+                        <Box aria-hidden="true" sx={{ position: "absolute", inset: 0, overflow: "hidden", borderRadius: "inherit", pointerEvents: "none" }}>
+                            <Box className="hero-card-shine" sx={{ position: "absolute", top: 0, bottom: 0, left: "-55%", width: "55%", transform: "translateX(-130%)" }}>
+                                <Box sx={{ position: "absolute", inset: 0, transform: "skewX(-18deg)", background: "linear-gradient(90deg, transparent 0%, rgba(255, 241, 200, 0.05) 25%, rgba(255, 241, 200, 0.22) 50%, rgba(255, 241, 200, 0.05) 75%, transparent 100%)" }} />
+                            </Box>
+                        </Box>
+                        <Box sx={{ position: "relative", display: "flex", alignItems: "center", gap: 0.75, fontSize: { xs: "0.66rem", md: "0.72rem" }, color: "var(--clinova-rgba-245-247-250-0_72)" }}>
+                            <Box component="span" sx={{ width: 7, height: 7, borderRadius: "50%", bgcolor: "var(--clinova-gold)", boxShadow: "0 0 10px var(--clinova-gold-glow)", flexShrink: 0 }} />
+                            {t("من نتائج عملائنا")}
+                        </Box>
+                        <Box sx={{ position: "relative", mt: 0.5 }}>
+                            <Box className="hero-number-aura" aria-hidden="true" sx={{ position: "absolute", left: "-6%", top: "-10%", width: "75%", height: "120%", borderRadius: "50%", background: "radial-gradient(closest-side, var(--clinova-gold-glow), transparent)", opacity: 0.25 }} />
+                            <Box component="bdi" dir="ltr" sx={{ position: "relative", display: "block", fontSize: { xs: "1.9rem", md: "2.35rem" }, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.02em", fontFamily: '"Plus Jakarta Sans", var(--clinova-font-family)', textAlign: "start", color: "#fff1c8" }}>
+                                <Box component="span" className="hero-number"><CountUp value="+$13K" duration={1600} /></Box>
+                            </Box>
+                            {/* Stars that twinkle around the number. */}
+                            {[{ top: "-14%", left: "62%", size: 11, delay: "0.4s" }, { top: "58%", left: "78%", size: 8, delay: "1.2s" }, { top: "-6%", left: "92%", size: 7, delay: "1.9s" }].map((star) => (
+                                <Box key={star.left} component="svg" className="hero-spark" viewBox="0 0 24 24" aria-hidden="true" sx={{ position: "absolute", top: star.top, left: star.left, width: star.size, height: star.size, animationDelay: star.delay }}>
+                                    <path d="M12 0C12.8 7 17 11.2 24 12C17 12.8 12.8 17 12 24C11.2 17 7 12.8 0 12C7 11.2 11.2 7 12 0Z" fill="#fff1c8" />
+                                </Box>
+                            ))}
+                        </Box>
+                        <Box sx={{ position: "relative", mt: 0.25, fontSize: { xs: "0.7rem", md: "0.78rem" }, lineHeight: 1.5, color: "var(--clinova-color-f5f7fa)" }}>
+                            {t("لعيادة واحدة خلال أول 30 يوماً")}
+                        </Box>
+                        {/* Flat line before day 1, the start point, then the climb to day 30; the last point is the result. */}
+                        <Box component="svg" viewBox="0 0 200 44" aria-hidden="true" sx={{ position: "relative", display: "block", width: "100%", height: { xs: 34, md: 42 }, mt: 1, overflow: "visible" }}>
+                            <defs>
+                                <linearGradient id="clinova-hero-result-fill" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0" stopColor="var(--clinova-gold)" stopOpacity="0.34" />
+                                    <stop offset="1" stopColor="var(--clinova-gold)" stopOpacity="0" />
+                                </linearGradient>
+                            </defs>
+                            <path className="hero-before-line" d="M2 34 H76" stroke="var(--clinova-rgba-245-247-250-0_42)" strokeWidth="2" strokeLinecap="round" fill="none" pathLength="1" />
+                            <path className="hero-result-fill" d="M76 34 C94 33 108 30 126 25 S160 14 178 9 S192 5 196 4 L196 44 L76 44 Z" fill="url(#clinova-hero-result-fill)" />
+                            <path className="hero-line-glow" d="M76 34 C94 33 108 30 126 25 S160 14 178 9 S192 5 196 4" stroke="var(--clinova-gold)" strokeWidth="7" strokeLinecap="round" fill="none" />
+                            <path className="hero-result-line" d="M76 34 C94 33 108 30 126 25 S160 14 178 9 S192 5 196 4" stroke="var(--clinova-gold)" strokeWidth="2.2" strokeLinecap="round" fill="none" pathLength="1" />
+                            <g className="hero-start">
+                                <path d="M76 6V42" stroke="var(--clinova-gold)" strokeOpacity="0.4" strokeDasharray="2 3" />
+                                <circle cx="76" cy="34" r="3.2" fill="var(--clinova-color-101925)" stroke="var(--clinova-gold)" strokeWidth="1.6" />
+                            </g>
+                            <g className="hero-end">
+                                <circle className="hero-ring" cx="196" cy="4" r="3.5" fill="none" stroke="var(--clinova-gold)" strokeWidth="1.4" />
+                                <circle cx="196" cy="4" r="3.8" fill="#fff1c8" stroke="var(--clinova-gold)" strokeWidth="1.5" />
+                            </g>
+                        </Box>
+                        <Box sx={{ position: "relative", height: "0.9rem", mt: 0.25, fontSize: "0.6rem", color: "var(--clinova-rgba-245-247-250-0_42)", direction: "ltr", whiteSpace: "nowrap" }}>
+                            <Box component="span" sx={{ position: "absolute", left: 0 }}>{t("قبل كلينوفا")}</Box>
+                            <Box component="span" sx={{ position: "absolute", left: "38%", transform: "translateX(-50%)", color: "var(--clinova-gold)" }}>{t("اليوم 1")}</Box>
+                            <Box component="span" sx={{ position: "absolute", right: 0 }}>{t("اليوم 30")}</Box>
+                        </Box>
                     </Box>
                 </Box>
             </Box>
