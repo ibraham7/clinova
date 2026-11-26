@@ -44,9 +44,11 @@ const cardGlow = keyframes`
     50% { opacity: 0.95; }
 `;
 
+// The band is 55% of the card wide and slanted, so it must travel from fully outside the left edge (-200%) to fully outside the
+// right edge (+260%); at both ends it is out of sight, so the loop restarts without a visible jump. (A shorter travel stops it half-way across the card.)
 const shine = keyframes`
-    0% { transform: translateX(-130%); }
-    32%, 100% { transform: translateX(130%); }
+    0% { transform: translateX(-200%); }
+    55%, 100% { transform: translateX(260%); }
 `;
 
 const numberPulse = keyframes`
@@ -108,7 +110,7 @@ export default function HeroVisual() {
                 "& .hero-ring": { opacity: 0, transformBox: "fill-box", transformOrigin: "center", animation: `${ring} 1.9s 3s ease-out infinite` },
                 // What catches the eye on the result card: the glowing edge, a light sweeping over it, a number that swells and shrinks, and twinkling stars.
                 "& .hero-card-glow": { animation: `${cardGlow} 2.6s ease-in-out infinite` },
-                "& .hero-card-shine": { animation: `${shine} 5s 1.5s ease-in-out infinite` },
+                "& .hero-card-shine": { animation: `${shine} 3.6s 1.5s ease-in-out infinite` },
                 "& .hero-number": { display: "inline-block", transformOrigin: "left center", animation: `${numberPulse} 2.4s 1.8s ease-in-out infinite` },
                 "& .hero-number-aura": { animation: `${numberAura} 2.4s 1.8s ease-in-out infinite` },
                 "& .hero-spark": { opacity: 0, animation: `${twinkle} 2.2s ease-in-out infinite` },
@@ -207,7 +209,7 @@ export default function HeroVisual() {
                     }}>
                         {/* A band of light that sweeps across the card every few seconds. */}
                         <Box aria-hidden="true" sx={{ position: "absolute", inset: 0, overflow: "hidden", borderRadius: "inherit", pointerEvents: "none" }}>
-                            <Box className="hero-card-shine" sx={{ position: "absolute", top: 0, bottom: 0, left: "-55%", width: "55%", transform: "translateX(-130%)" }}>
+                            <Box className="hero-card-shine" sx={{ position: "absolute", top: 0, bottom: 0, left: 0, width: "55%", transform: "translateX(-200%)" }}>
                                 <Box sx={{ position: "absolute", inset: 0, transform: "skewX(-18deg)", background: "linear-gradient(90deg, transparent 0%, rgba(255, 241, 200, 0.05) 25%, rgba(255, 241, 200, 0.22) 50%, rgba(255, 241, 200, 0.05) 75%, transparent 100%)" }} />
                             </Box>
                         </Box>
