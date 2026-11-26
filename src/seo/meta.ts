@@ -4,19 +4,19 @@ import type { SiteLanguage } from "../i18n";
 export const homeMeta: Record<SiteLanguage, { title: string; description: string }> = {
     ar: {
         title: "Clinova | تسويق العيادات ونظام CRM ومتابعة المرضى",
-        description: "Clinova تساعد العيادات على جذب مرضى جدد عبر Google وMeta وSEO، وإدارة الاستفسارات والمواعيد بنظام CRM، والرد على المرضى 24/7 عبر WhatsApp بالذكاء الاصطناعي وفريق بشري.",
+        description: "Clinova شريكك في نمو العيادات: تسويق وجذب مرضى، ومبيعات وكول سنتر طبي، ونظام CRM، إضافة إلى الحضور الرقمي وSEO، وإدارة السمعة والتقييمات، والسوشيال ميديا والهوية.",
     },
     en: {
         title: "Clinova | Clinic Marketing, CRM & Patient Follow-Up",
-        description: "Clinova helps medical clinics attract new patients with Google, Meta and SEO, manage inquiries and appointments in one CRM, and answer patients 24/7 on WhatsApp with AI and a human team.",
+        description: "Clinova grows clinics: patient marketing, medical sales and call center, patient CRM, website and SEO, reputation and reviews, social media and branding.",
     },
     tr: {
         title: "Clinova | Klinik Pazarlama, CRM ve Hasta Takibi",
-        description: "Clinova, kliniklerin Google, Meta ve SEO ile yeni hastalara ulaşmasını, talepleri ve randevuları tek bir CRM'de yönetmesini ve WhatsApp'ta yapay zekâ ile ekip desteğiyle 7/24 yanıt vermesini sağlar.",
+        description: "Clinova klinikleri büyütür: hasta pazarlaması, tıbbi satış ve çağrı merkezi, hasta CRM'i, web sitesi ve SEO, itibar ve yorum yönetimi, sosyal medya.",
     },
     fr: {
         title: "Clinova | Marketing médical, CRM et suivi des patients",
-        description: "Clinova aide les cliniques à attirer de nouveaux patients avec Google, Meta et le SEO, à gérer demandes et rendez-vous dans un CRM et à répondre 24h/24 sur WhatsApp grâce à l'IA et à une équipe humaine.",
+        description: "Clinova fait croître les cliniques : marketing patients, centre d'appels médical, CRM, site web et SEO, réputation et avis, réseaux sociaux et marque.",
     },
 };
 

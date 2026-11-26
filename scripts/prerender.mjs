@@ -108,7 +108,7 @@ fs.writeFileSync(path.join(dist, "llms.txt"), [
     "",
     `> ${homeMeta.en.description}`,
     "",
-    "Clinova is a growth partner for medical clinics (dentistry, dermatology and aesthetics, plastic surgery, hair transplant and other selected specialties). It combines patient acquisition, a clinic CRM, 24/7 WhatsApp response by AI plus a human team, patient qualification and booking, treatment coordination, reactivation of past patients, and reputation building.",
+    "Clinova is a growth partner for medical clinics (dentistry, dermatology and aesthetics, plastic surgery, hair transplant and other selected specialties). It offers three core services (medical marketing and patient acquisition, medical sales and call center, patient management CRM) and three supporting services (website and search engine optimization including visibility in AI answers, online reputation and Google reviews management, social media and branding).",
     "",
     `- Website: ${siteUrl} (Arabic, English, Turkish, French)`,
     `- Countries served: ${areaServed.join(", ")}`,
